@@ -1,0 +1,516 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
+package com.rayaurelius.studybuddy.ui.today
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material.icons.outlined.EditCalendar
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rayaurelius.studybuddy.data.Snapshot
+import com.rayaurelius.studybuddy.data.db.LearningItem
+import com.rayaurelius.studybuddy.data.db.StudySession
+import com.rayaurelius.studybuddy.domain.GoalMath
+import com.rayaurelius.studybuddy.domain.GoalProgress
+import com.rayaurelius.studybuddy.domain.Milestones
+import com.rayaurelius.studybuddy.domain.StudyMath
+import com.rayaurelius.studybuddy.timer.TimerMode
+import com.rayaurelius.studybuddy.timer.TimerState
+import com.rayaurelius.studybuddy.timer.TimerStatus
+import com.rayaurelius.studybuddy.ui.components.Confetti
+import com.rayaurelius.studybuddy.ui.components.FocusRating
+import com.rayaurelius.studybuddy.ui.components.LinearMeter
+import com.rayaurelius.studybuddy.ui.components.NumberField
+import com.rayaurelius.studybuddy.ui.components.ProgressRing
+import com.rayaurelius.studybuddy.ui.components.SectionCard
+import com.rayaurelius.studybuddy.ui.components.StatTile
+import com.rayaurelius.studybuddy.ui.components.SubjectPicker
+import com.rayaurelius.studybuddy.ui.components.appViewModel
+import com.rayaurelius.studybuddy.ui.theme.Brand
+import com.rayaurelius.studybuddy.ui.theme.TimerDigits
+import kotlinx.coroutines.delay
+import java.time.Instant
+import java.time.LocalTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+
+@Composable
+fun TodayScreen(
+    contentPadding: PaddingValues,
+    onOpenSettings: () -> Unit,
+    onOpenGoals: () -> Unit,
+    onOpenBadges: () -> Unit,
+) {
+    val vm = appViewModel { TodayViewModel(it) }
+    val snap = vm.snapshot.collectAsStateWithLifecycle().value
+    val timer = vm.timer.collectAsStateWithLifecycle().value
+    val reflect by vm.reflect.collectAsStateWithLifecycle()
+    var showManual by rememberSaveable { mutableStateOf(false) }
+
+    if (snap == null || timer == null) return
+
+    LazyColumn(
+        contentPadding = PaddingValues(
+            start = 16.dp, end = 16.dp,
+            top = contentPadding.calculateTopPadding() + 8.dp,
+            bottom = contentPadding.calculateBottomPadding() + 24.dp,
+        ),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        item { Header(snap, onOpenSettings, onOpenBadges) }
+        item { TimerCard(snap, timer, vm) }
+        item { QuickStats(snap) }
+        item { GoalsGlance(snap.goalProgress, onOpenGoals) }
+        if (snap.activeItems.isNotEmpty()) item { ContinueLearning(snap, timer, vm) }
+        item { TipCard(snap) }
+        item {
+            TextButton(onClick = { showManual = true }, modifier = Modifier.fillMaxWidth()) {
+                Icon(Icons.Outlined.EditCalendar, null)
+                Spacer(Modifier.width(8.dp))
+                Text("Log a session I forgot to time")
+            }
+        }
+    }
+
+    reflect?.let { session -> ReflectionSheet(session, snap, timer, vm) }
+    if (showManual) ManualSessionDialog(snap, onDismiss = { showManual = false }) { subj, item, start, mins, note ->
+        vm.addManual(subj, item, start, mins, note); showManual = false
+    }
+    MilestoneCelebration(snap, onSeen = vm::markSeen)
+}
+
+@Composable
+private fun Header(snap: Snapshot, onOpenSettings: () -> Unit, onOpenBadges: () -> Unit) {
+    val hour = LocalTime.now().hour
+    val greeting = when (hour) { in 4..11 -> "Good morning"; in 12..16 -> "Good afternoon"; else -> "Good evening" }
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Column(Modifier.weight(1f)) {
+            Text(snap.today.format(DateTimeFormatter.ofPattern("EEEE, MMMM d")), style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(greeting, style = MaterialTheme.typography.headlineMedium)
+        }
+        Surface(onClick = onOpenBadges, shape = MaterialTheme.shapes.small, color = MaterialTheme.colorScheme.primaryContainer) {
+            Text(
+                "Lv ${snap.level.level} · ${snap.level.title}",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+            )
+        }
+        IconButton(onClick = onOpenSettings) { Icon(Icons.Outlined.Settings, "Settings") }
+    }
+}
+
+@Composable
+private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
+    var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(timer.status) {
+        while (timer.status == TimerStatus.RUNNING || timer.status == TimerStatus.BREAK) {
+            now = System.currentTimeMillis()
+            if (timer.focusDue(now)) vm.completeIfDue()
+            if (timer.status == TimerStatus.BREAK && now >= timer.breakEndsAt) vm.skipBreak()
+            delay(250)
+        }
+        now = System.currentTimeMillis()
+    }
+
+    var mode by rememberSaveable { mutableStateOf(TimerMode.STOPWATCH) }
+    var subjectId by rememberSaveable { mutableStateOf(snap.settings.lastSubjectId?.takeIf { it in snap.subjectsById }) }
+    var itemId by rememberSaveable { mutableStateOf<Long?>(null) }
+
+    ElevatedCard(Modifier.fillMaxWidth()) {
+        Column(Modifier.fillMaxWidth().padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            when (timer.status) {
+                TimerStatus.IDLE -> {
+                    SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+                        SegmentedButton(mode == TimerMode.STOPWATCH, { mode = TimerMode.STOPWATCH }, SegmentedButtonDefaults.itemShape(0, 2)) {
+                            Text("Open session")
+                        }
+                        SegmentedButton(mode == TimerMode.FOCUS, { mode = TimerMode.FOCUS }, SegmentedButtonDefaults.itemShape(1, 2)) {
+                            Text("Focus ${snap.settings.focusMinutes}m")
+                        }
+                    }
+                    Spacer(Modifier.height(20.dp))
+                    ProgressRing(0f, Modifier.size(200.dp)) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                if (mode == TimerMode.FOCUS) "%02d:00".format(snap.settings.focusMinutes) else "00:00",
+                                style = TimerDigits,
+                            )
+                            Text(
+                                if (mode == TimerMode.FOCUS) "then a ${snap.settings.breakMinutes}-min break" else "count up, stop anytime",
+                                style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+                    Spacer(Modifier.height(20.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                        SubjectPicker(snap.activeSubjects, subjectId, { subjectId = it; itemId = null })
+                        ItemPicker(snap.activeItems, itemId) { id ->
+                            itemId = id
+                            snap.itemsById[id]?.subjectId?.let { subjectId = it }
+                        }
+                    }
+                    Spacer(Modifier.height(16.dp))
+                    Button(onClick = { vm.start(mode, subjectId, itemId) }, modifier = Modifier.fillMaxWidth().height(56.dp)) {
+                        Icon(Icons.Default.PlayArrow, null)
+                        Spacer(Modifier.width(8.dp))
+                        Text("Start studying", style = MaterialTheme.typography.titleMedium)
+                    }
+                }
+
+                TimerStatus.RUNNING, TimerStatus.PAUSED -> {
+                    val focus = timer.mode == TimerMode.FOCUS
+                    val elapsed = timer.elapsedMs(now)
+                    val progress = if (focus) elapsed.toFloat() / timer.targetMs else (elapsed % 3_600_000L) / 3_600_000f
+                    val subject = timer.subjectId?.let { snap.subjectsById[it] }
+                    Text(
+                        listOfNotNull(subject?.let { "${it.emoji} ${it.name}" }, timer.itemId?.let { snap.itemsById[it]?.title })
+                            .joinToString(" · ").ifEmpty { "Studying" },
+                        style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    ProgressRing(progress, Modifier.size(220.dp), color = subject?.let { androidx.compose.ui.graphics.Color(it.color) } ?: MaterialTheme.colorScheme.primary) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(StudyMath.formatClock(if (focus) timer.remainingMs(now) else elapsed), style = TimerDigits)
+                            Text(
+                                when {
+                                    timer.status == TimerStatus.PAUSED -> "Paused"
+                                    focus -> "focus · ${StudyMath.formatDuration(elapsed / 1000)} done"
+                                    else -> "in the zone"
+                                },
+                                style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+                    Spacer(Modifier.height(20.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                        FilledTonalIconButton(onClick = { vm.discard() }, modifier = Modifier.size(52.dp)) { Icon(Icons.Default.Close, "Discard session") }
+                        if (timer.status == TimerStatus.RUNNING) {
+                            FilledTonalButton(onClick = { vm.pause() }, modifier = Modifier.height(52.dp)) {
+                                Icon(Icons.Default.Pause, null); Spacer(Modifier.width(6.dp)); Text("Pause")
+                            }
+                        } else {
+                            FilledTonalButton(onClick = { vm.resume() }, modifier = Modifier.height(52.dp)) {
+                                Icon(Icons.Default.PlayArrow, null); Spacer(Modifier.width(6.dp)); Text("Resume")
+                            }
+                        }
+                        Button(onClick = { vm.finish() }, modifier = Modifier.height(52.dp)) {
+                            Icon(Icons.Default.Stop, null); Spacer(Modifier.width(6.dp)); Text("Finish")
+                        }
+                    }
+                }
+
+                TimerStatus.BREAK -> {
+                    Text("Break time ☕", style = MaterialTheme.typography.titleMedium)
+                    Spacer(Modifier.height(16.dp))
+                    val total = snap.settings.breakMinutes * 60_000f
+                    val left = (timer.breakEndsAt - now).coerceAtLeast(0)
+                    ProgressRing(1f - left / total, Modifier.size(200.dp), color = Brand.Mint) {
+                        Text(StudyMath.formatClock(left), style = TimerDigits)
+                    }
+                    Spacer(Modifier.height(12.dp))
+                    Text("Stand up, stretch, look at something far away.", style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+                    Spacer(Modifier.height(12.dp))
+                    FilledTonalButton(onClick = { vm.skipBreak() }) { Text("Skip break") }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ItemPicker(items: List<LearningItem>, selectedId: Long?, onSelect: (Long?) -> Unit) {
+    if (items.isEmpty()) return
+    var open by remember { mutableStateOf(false) }
+    val sel = items.firstOrNull { it.id == selectedId }
+    Box {
+        AssistChip(
+            onClick = { open = true },
+            label = { Text(sel?.let { "${it.type.emoji} ${it.title}" } ?: "＋ What are you learning?", maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            modifier = Modifier.width(170.dp),
+        )
+        DropdownMenu(open, { open = false }) {
+            DropdownMenuItem(text = { Text("Nothing specific") }, onClick = { onSelect(null); open = false })
+            items.forEach { item ->
+                DropdownMenuItem(text = { Text("${item.type.emoji}  ${item.title}", maxLines = 1) }, onClick = { onSelect(item.id); open = false })
+            }
+        }
+    }
+}
+
+@Composable
+private fun QuickStats(snap: Snapshot) {
+    val streak = snap.streak
+    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        StatTile("⏱️", StudyMath.formatDuration(snap.todaySeconds, true), "today", Modifier.weight(1f))
+        StatTile(
+            "🔥", "${streak.current} day${if (streak.current == 1) "" else "s"}",
+            if (!streak.studiedToday && streak.current > 0) "study to extend" else "streak",
+            Modifier.weight(1f),
+            container = MaterialTheme.colorScheme.secondaryContainer,
+        )
+        StatTile("📅", StudyMath.formatDuration(snap.weekSeconds, true), "this week", Modifier.weight(1f))
+    }
+}
+
+@Composable
+private fun GoalsGlance(progress: List<GoalProgress>, onOpenGoals: () -> Unit) {
+    SectionCard(title = "Goals", action = { TextButton(onClick = onOpenGoals) { Text(if (progress.isEmpty()) "Set one" else "All goals") } }) {
+        if (progress.isEmpty()) {
+            Text(
+                "People who set a specific, challenging goal reliably outperform those told to \"do their best.\" Try 3 hours a week to start.",
+                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        } else {
+            progress.take(3).forEachIndexed { i, p ->
+                if (i > 0) Spacer(Modifier.height(14.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(p.goal.title, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(
+                        if (p.met) "Done ✓" else goalAmount(p),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = if (p.met) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                Spacer(Modifier.height(6.dp))
+                LinearMeter(p.fraction, Modifier.fillMaxWidth(), color = if (p.met) Brand.Mint else MaterialTheme.colorScheme.primary)
+            }
+        }
+    }
+}
+
+fun goalAmount(p: GoalProgress): String = when (p.goal.kind) {
+    com.rayaurelius.studybuddy.data.db.GoalKind.TIME ->
+        "${StudyMath.formatDuration(p.current * 60L, true)} / ${StudyMath.formatDuration(p.target * 60L, true)}"
+    com.rayaurelius.studybuddy.data.db.GoalKind.ITEMS -> "${p.current} / ${p.target}"
+}
+
+@Composable
+private fun ContinueLearning(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
+    Column {
+        Text("Continue learning", style = MaterialTheme.typography.titleMedium)
+        Spacer(Modifier.height(10.dp))
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            items(snap.activeItems, key = { it.id }) { item ->
+                OutlinedCard(Modifier.width(200.dp)) {
+                    Column(Modifier.padding(14.dp)) {
+                        Text(item.type.emoji, style = MaterialTheme.typography.headlineSmall)
+                        Spacer(Modifier.height(4.dp))
+                        Text(item.title, style = MaterialTheme.typography.titleSmall, maxLines = 2, overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.height(40.dp))
+                        val total = item.totalUnits
+                        if (total != null && total > 0) {
+                            Spacer(Modifier.height(6.dp))
+                            LinearMeter(item.progressUnits.toFloat() / total, Modifier.fillMaxWidth())
+                            Text("${item.progressUnits}/$total ${item.type.unitLabel}", style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        } else {
+                            Text(StudyMath.formatDuration(snap.secondsForItem(item.id)) + " logged", style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Spacer(Modifier.height(8.dp))
+                        FilledTonalButton(
+                            onClick = { if (timer.isActive) vm.setSubject(item.subjectId, item.id) else vm.start(TimerMode.STOPWATCH, item.subjectId, item.id) },
+                            modifier = Modifier.fillMaxWidth(),
+                        ) { Text(if (timer.isActive) "Switch to this" else "Study this") }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun TipCard(snap: Snapshot) {
+    val tip = LearningTips.forDay(snap.today)
+    Surface(shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.tertiaryContainer, modifier = Modifier.fillMaxWidth()) {
+        Row(Modifier.padding(16.dp)) {
+            Text(tip.emoji, style = MaterialTheme.typography.headlineSmall)
+            Spacer(Modifier.width(12.dp))
+            Column {
+                Text("Today's learning tip · ${tip.title}", style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onTertiaryContainer)
+                Spacer(Modifier.height(2.dp))
+                Text(tip.body, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onTertiaryContainer)
+            }
+        }
+    }
+}
+
+@Composable
+private fun ReflectionSheet(session: StudySession, snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
+    val sheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var note by rememberSaveable(session.id) { mutableStateOf(session.note) }
+    var focus by rememberSaveable(session.id) { mutableStateOf(session.focus) }
+    val subject = session.subjectId?.let { snap.subjectsById[it] }
+    ModalBottomSheet(onDismissRequest = { vm.saveReflection(session, note, focus) }, sheetState = sheet) {
+        Column(Modifier.padding(horizontal = 24.dp).padding(bottom = 24.dp)) {
+            Text("Nice work! 🎉", style = MaterialTheme.typography.headlineSmall)
+            Text(
+                "${StudyMath.formatDuration(session.durationSec)}${subject?.let { " of ${it.name}" } ?: ""} saved.",
+                style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(Modifier.height(20.dp))
+            Text("How focused were you?", style = MaterialTheme.typography.titleSmall)
+            Spacer(Modifier.height(8.dp))
+            FocusRating(focus) { focus = it }
+            Spacer(Modifier.height(20.dp))
+            Text("One thing you learned", style = MaterialTheme.typography.titleSmall)
+            Text("Recalling it now, without looking, helps it stick.", style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Spacer(Modifier.height(8.dp))
+            OutlinedTextField(note, { note = it }, Modifier.fillMaxWidth(), placeholder = { Text("e.g. Spaced repetition beats cramming") }, minLines = 2)
+            Spacer(Modifier.height(20.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                if (timer.status == TimerStatus.IDLE && session.durationSec >= (snap.settings.focusMinutes * 60L) - 5) {
+                    FilledTonalButton(onClick = { vm.saveReflection(session, note, focus); vm.startBreak() }, Modifier.weight(1f)) {
+                        Text("Save + break")
+                    }
+                }
+                Button(onClick = { vm.saveReflection(session, note, focus) }, Modifier.weight(1f)) { Text("Save") }
+            }
+        }
+    }
+}
+
+@Composable
+fun ManualSessionDialog(
+    snap: Snapshot,
+    onDismiss: () -> Unit,
+    onSave: (subjectId: Long?, itemId: Long?, startedAt: Long, minutes: Int, note: String) -> Unit,
+) {
+    var subjectId by remember { mutableStateOf<Long?>(snap.settings.lastSubjectId) }
+    var hours by remember { mutableStateOf<Int?>(0) }
+    var minutes by remember { mutableStateOf<Int?>(30) }
+    var note by remember { mutableStateOf("") }
+    var dateMillis by remember { mutableLongStateOf(snap.today.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()) }
+    var pickDate by remember { mutableStateOf(false) }
+    val total = (hours ?: 0) * 60 + (minutes ?: 0)
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Log a past session") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                val date = Instant.ofEpochMilli(dateMillis).atZone(ZoneOffset.UTC).toLocalDate()
+                OutlinedCard(onClick = { pickDate = true }, modifier = Modifier.fillMaxWidth()) {
+                    Text("📅  ${date.format(DateTimeFormatter.ofPattern("EEE, MMM d, yyyy"))}", Modifier.padding(14.dp))
+                }
+                SubjectPicker(snap.activeSubjects, subjectId, { subjectId = it })
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    NumberField("Hours", hours, { hours = it?.coerceAtMost(16) }, Modifier.weight(1f))
+                    NumberField("Minutes", minutes, { minutes = it?.coerceAtMost(59) }, Modifier.weight(1f))
+                }
+                OutlinedTextField(note, { note = it }, label = { Text("What did you learn? (optional)") }, modifier = Modifier.fillMaxWidth())
+            }
+        },
+        confirmButton = {
+            TextButton(enabled = total > 0, onClick = {
+                val date = Instant.ofEpochMilli(dateMillis).atZone(ZoneOffset.UTC).toLocalDate()
+                val noon = date.atTime(12, 0).atZone(snap.zone).toInstant().toEpochMilli()
+                onSave(subjectId, null, noon, total, note)
+            }) { Text("Save") }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
+    )
+
+    if (pickDate) {
+        val state = rememberDatePickerState(
+            initialSelectedDateMillis = dateMillis,
+            selectableDates = object : androidx.compose.material3.SelectableDates {
+                override fun isSelectableDate(utcTimeMillis: Long) =
+                    utcTimeMillis <= snap.today.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+            },
+        )
+        DatePickerDialog(
+            onDismissRequest = { pickDate = false },
+            confirmButton = { TextButton(onClick = { state.selectedDateMillis?.let { dateMillis = it }; pickDate = false }) { Text("OK") } },
+            dismissButton = { TextButton(onClick = { pickDate = false }) { Text("Cancel") } },
+        ) { DatePicker(state) }
+    }
+}
+
+@Composable
+private fun MilestoneCelebration(snap: Snapshot, onSeen: (List<String>) -> Unit) {
+    val fresh = snap.unlocked.filter { !it.seen }.mapNotNull { Milestones.byKey[it.key] }
+    if (fresh.isEmpty()) return
+    Box(Modifier.fillMaxSize()) {
+        AlertDialog(
+            onDismissRequest = { onSeen(fresh.map { it.key }) },
+            icon = { Text(fresh.first().emoji, style = MaterialTheme.typography.displayMedium) },
+            title = { Text(if (fresh.size == 1) "Milestone unlocked!" else "${fresh.size} milestones unlocked!", textAlign = TextAlign.Center) },
+            text = {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+                    fresh.take(5).forEach { m ->
+                        Text("${m.emoji}  ${m.title}", style = MaterialTheme.typography.titleMedium)
+                        Text(m.description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center)
+                        Spacer(Modifier.height(10.dp))
+                    }
+                    if (fresh.size > 5) Text("…and ${fresh.size - 5} more on the Badges tab")
+                }
+            },
+            confirmButton = { Button(onClick = { onSeen(fresh.map { it.key }) }) { Text("Keep going") } },
+        )
+        Confetti()
+    }
+}
