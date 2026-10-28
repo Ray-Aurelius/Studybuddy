@@ -1,5 +1,6 @@
 package com.rayaurelius.sophinity
 
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.res.stringResource
 import android.content.Intent
 import android.os.Bundle
@@ -150,7 +151,7 @@ private fun AppShell(settings: AppSettings) {
                     selected = selected,
                     onClick = { go(t.route) },
                     icon = { Icon(if (selected) t.on else t.off, contentDescription = if (settings.navLabels) null else stringResource(t.label)) },
-                    label = if (settings.navLabels) ({ Text(stringResource(t.label)) }) else null,
+                    label = if (settings.navLabels) ({ Text(stringResource(t.label), maxLines = 1, overflow = TextOverflow.Ellipsis) }) else null,
                     alwaysShowLabel = settings.navLabels,
                 )
             }
@@ -180,7 +181,7 @@ private fun AppShell(settings: AppSettings) {
                                             selected = selected,
                                             onClick = { go(t.route) },
                                             icon = { Icon(if (selected) t.on else t.off, contentDescription = if (settings.navLabels) null else stringResource(t.label)) },
-                                            label = if (settings.navLabels) ({ Text(stringResource(t.label)) }) else null,
+                                            label = if (settings.navLabels) ({ Text(stringResource(t.label), maxLines = 1, overflow = TextOverflow.Ellipsis) }) else null,
                                             alwaysShowLabel = settings.navLabels,
                                         )
                                     }

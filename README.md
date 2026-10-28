@@ -10,7 +10,11 @@ Native Android, Kotlin + Jetpack Compose, Material 3, targeting **Android 17 (AP
 |---|---|---|---|---|---|---|
 | ![](docs/screenshots/1_today.png) | ![](docs/screenshots/2_stats.png) | ![](docs/screenshots/3_library.png) | ![](docs/screenshots/4_goals.png) | ![](docs/screenshots/5_laurels.png) | ![](docs/screenshots/6_today_dark.png) | ![](docs/screenshots/7_timer_audiobook.png) |
 
-*Screenshots are rendered from the real app with demo data by `ScreenshotTest`.*
+| Olive, dark | Marble background | Left rail, starry night | Readable + high contrast | Arabic (RTL) | Japanese | Greek |
+|---|---|---|---|---|---|---|
+| ![](docs/screenshots/personalize/theme_olive_dark.png) | ![](docs/screenshots/personalize/theme_terracotta_marble.png) | ![](docs/screenshots/personalize/tyrian_night_left_rail.png) | ![](docs/screenshots/personalize/a11y_large_readable_hc.png) | ![](docs/screenshots/languages/ar_laurels.png) | ![](docs/screenshots/languages/ja_today.png) | ![](docs/screenshots/languages/el_laurels.png) |
+
+*Screenshots are rendered from the real app with demo data by `ScreenshotTest`, `PersonalizationScreenshotTest` and `LocaleScreenshotTest`.*
 
 ## Features
 
@@ -25,6 +29,10 @@ Native Android, Kotlin + Jetpack Compose, Material 3, targeting **Android 17 (AP
 - **Daily wisdom** — a verified line from Greek thinkers (Socrates, Aristotle, Epictetus, Marcus Aurelius…) with its source, plus an evidence-based learning tip.
 - **Home-screen widget** — today's time, streak, weekly goal, live ticking timer, one-tap start/pause.
 - **Daily reminder** — set *when and where* you'll learn; skipped automatically on days you already have.
+- **Make it yours** — seven Greek-inspired color themes (Aegean, Olive Grove, Terracotta, Tyrian Purple, Delphi Dawn, Starlit Agora, Marble), your phone's wallpaper colors, or any custom hue. Every theme is generated so text meets WCAG AA contrast in light and dark. Built-in backgrounds or your own photo, with dim and blur controls.
+- **Accessibility** — text size up to 160%, bold text, a high-contrast mode (AAA-level text), reduce motion, and an optional Atkinson Hyperlegible font for low-vision readers. TalkBack, Switch Access and system font size are respected.
+- **Toolbar your way** — at the bottom or as a rail on the left or right side; show or hide Stats, Library, Goals and Laurels; labels on or off.
+- **21 languages** — English, Spanish, Brazilian Portuguese, French, German, Italian, Dutch, Polish, Russian, Ukrainian, Greek, Turkish, Arabic (full right-to-left layout), Hindi, Indonesian, Vietnamese, Thai, Japanese, Korean, and Simplified and Traditional Chinese. Follows the phone's language or can be picked in Settings (per-app language on Android 13+). Dates, durations and plurals use each language's own rules.
 - **Private by design** — no accounts, ads, or trackers. Data stays on device, in Android Backup, and in JSON export/import. Database upgrades are covered by a migration test so existing data always carries over.
 
 ## The learning science behind it
@@ -37,7 +45,7 @@ Native Android, Kotlin + Jetpack Compose, Material 3, targeting **Android 17 (AP
 | Reminder asks *when and where* | Implementation intentions substantially increase follow-through. |
 | Goal presets are specific and a bit ambitious | Specific, challenging goals beat "do your best" (Locke & Latham). |
 | Weekly goals as the default | They flex around busy days, supporting autonomy. |
-| "vs same point last week" | Fair comparisons — never a partial week against a full one. |
+| Comparisons use the same point last week | Fair comparisons — never a partial week against a full one. |
 | Earned titles need breadth | Each title requires time, reading, consistency *and* reflection, rewarding well-rounded learning over raw hours. |
 | Daily learning tip | Spacing, interleaving, self-explanation, sleep, etc. — taught in small doses. |
 
@@ -66,7 +74,24 @@ app/src/main/java/com/rayaurelius/sophinity/
   widget/      Glance home-screen widget
   ui/          Compose screens: today, stats, library, goals, laurels, settings, onboarding
 tools/         icon generator (make_icon.py) and store-asset renderer
+tools/i18n/    translation pipeline and one plain-text file per language
 ```
+
+### Translations
+
+Every on-screen phrase lives in `app/src/main/res/values/strings.xml`. Translations are kept as simple `key = text` files in `tools/i18n/translations/` (one per language), which reviewers can edit without touching Android XML. Workflow:
+
+```bash
+python3 tools/i18n/i18n.py export       # after adding English strings: refresh translations/en.txt
+python3 tools/i18n/i18n.py build        # check every language and regenerate res/values-*/strings.xml
+python3 tools/i18n/i18n.py build de     # just one language
+```
+
+`build` fails if a key is missing, a placeholder (`%1$s`, `%d`) was changed or dropped, or a plural form that language needs is missing. That includes Arabic's six forms, and the rule that French, Portuguese, Hindi, Russian and Ukrainian must print the number in their "one" form. Never edit `res/values-*/strings.xml` by hand: they're regenerated.
+
+The 20 non-English translations are machine-assisted. **Have a native speaker review each before launch** (start with your biggest markets). Each file opens with this note.
+
+Fonts: the classical Marcellus headings and Atkinson Hyperlegible cover Latin-script languages. Greek, Cyrillic and Vietnamese switch to the system serif, and other scripts use the system font, so no word ever mixes typefaces.
 
 ## Releasing on Google Play
 
@@ -101,6 +126,8 @@ Then `./gradlew :app:bundleRelease` produces a signed `.aab`. Enroll in **Play A
 - [ ] **Content rating questionnaire** — educational/productivity, no user-generated content shared.
 - [ ] **Exact alarm permission** — the app declares `SCHEDULE_EXACT_ALARM` (user-grantable, off by default) only so focus/break alerts ring on time, and falls back to inexact alarms otherwise. If Play review pushes back, delete the permission line from the manifest; nothing else needs to change.
 - [ ] Screenshots: start from `docs/screenshots/`, ideally retaken on a device with your own data.
+- [ ] **Localized listings** — Play lets you add a translated title, description and screenshots per language. The in-app translations are a good source; have them reviewed along with the app strings.
+- [x] Language splits are disabled in the bundle (`bundle { language { enableSplit = false } }`), so a language picked in Settings always has its strings installed.
 - [x] Feature graphic (1024×500) and 512×512 icon: `docs/brand/`. Listing copy: `docs/brand/BRAND.md`.
 
 ## Roadmap ideas

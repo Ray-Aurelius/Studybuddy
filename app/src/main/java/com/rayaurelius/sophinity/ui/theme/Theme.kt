@@ -20,6 +20,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -86,6 +87,28 @@ val Readable = FontFamily(Font(R.font.atkinson_regular, FontWeight.Normal), Font
 /** Heading font in use: Marcellus by default, Atkinson in readable-font mode. */
 val LocalHeadingFont = staticCompositionLocalOf { Classical }
 
+/**
+ * Marcellus and Atkinson only carry Latin glyphs (no Vietnamese stacked diacritics either), and
+ * Android fills missing glyphs one by one from system fonts, which would mix typefaces inside a word.
+ * So each language gets the bundled fonts only when they cover its script; otherwise the system serif
+ * (Noto Serif, which covers Greek, Cyrillic and Vietnamese) keeps the classical feel for headings,
+ * and scripts with no serif tradition on Android use the default system font.
+ */
+internal enum class ScriptFonts { BUNDLED, SYSTEM_SERIF, SYSTEM }
+
+internal fun scriptFontsFor(language: String): ScriptFonts = when (language) {
+    "en", "es", "pt", "fr", "de", "it", "nl", "pl", "tr", "id", "in" -> ScriptFonts.BUNDLED
+    "el", "ru", "uk", "vi" -> ScriptFonts.SYSTEM_SERIF
+    else -> ScriptFonts.SYSTEM
+}
+
+internal fun headingAndBody(script: ScriptFonts, readable: Boolean): Pair<FontFamily, FontFamily?> = when (script) {
+    ScriptFonts.BUNDLED -> if (readable) Readable to Readable else Classical to null
+    // System sans is the most legible option these scripts have, so readable mode uses it for headings too.
+    ScriptFonts.SYSTEM_SERIF -> if (readable) FontFamily.SansSerif to null else FontFamily.Serif to null
+    ScriptFonts.SYSTEM -> FontFamily.Default to null
+}
+
 private fun typography(heading: FontFamily, body: FontFamily?, bold: Boolean): Typography {
     val base = Typography()
     fun TextStyle.w(default: FontWeight?, family: FontFamily?): TextStyle {
@@ -125,9 +148,11 @@ fun SophinityTheme(settings: AppSettings = AppSettings(), content: @Composable (
             else -> (ColorThemes.byId(settings.colorTheme) ?: ColorThemes.byId(ColorThemes.DEFAULT)!!).roles(dark, hc).toScheme(dark)
         }
     }
-    val heading = if (settings.readableFont) Readable else Classical
-    val typography = remember(settings.readableFont, settings.boldText) {
-        typography(heading, if (settings.readableFont) Readable else null, settings.boldText)
+    val language = LocalConfiguration.current.locales[0].language
+    val script = scriptFontsFor(language)
+    val (heading, body) = headingAndBody(script, settings.readableFont)
+    val typography = remember(script, settings.readableFont, settings.boldText) {
+        typography(heading, body, settings.boldText)
     }
     val systemNoAnimations = remember {
         runCatching { Settings.Global.getFloat(ctx.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f }.getOrDefault(false)

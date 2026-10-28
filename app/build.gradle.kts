@@ -21,8 +21,8 @@ android {
         applicationId = "com.rayaurelius.sophinity"
         minSdk = 26
         targetSdk = 37
-        versionCode = 4
-        versionName = "1.3.0"
+        versionCode = 5
+        versionName = "1.4.0"
     }
 
     signingConfigs {
@@ -55,6 +55,11 @@ android {
 
     buildFeatures {
         compose = true
+    }
+
+    // Languages can be changed inside the app, so every install needs every language's strings.
+    bundle {
+        language { enableSplit = false }
     }
 
     androidResources {
