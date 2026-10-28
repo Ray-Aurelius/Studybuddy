@@ -29,7 +29,7 @@ import com.rayaurelius.sophinity.AppContainer
 import com.rayaurelius.sophinity.data.Snapshot
 import com.rayaurelius.sophinity.domain.Titles
 import com.rayaurelius.sophinity.ui.components.GreekKeyBand
-import com.rayaurelius.sophinity.ui.theme.Classical
+import com.rayaurelius.sophinity.ui.theme.LocalHeadingFont
 import com.rayaurelius.sophinity.ui.theme.LocalGold
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -92,7 +92,7 @@ private fun TitleCard(snap: Snapshot) {
                 Text(t.current.name, style = MaterialTheme.typography.displaySmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
                 Text(
                     "${t.current.greek} · “${t.current.meaning}”",
-                    style = MaterialTheme.typography.titleMedium.copy(fontFamily = Classical),
+                    style = MaterialTheme.typography.titleMedium.copy(fontFamily = LocalHeadingFont.current),
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
                 val next = t.next
@@ -160,7 +160,7 @@ private fun TitleLadder(snap: Snapshot) {
                 Column(Modifier.weight(1f)) {
                     Text(
                         t.name + if (isCurrent) "  · you are here" else "",
-                        style = MaterialTheme.typography.titleSmall.copy(fontFamily = Classical),
+                        style = MaterialTheme.typography.titleSmall.copy(fontFamily = LocalHeadingFont.current),
                         color = if (isCurrent) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                     )
                     Text("${t.greek} · ${t.meaning}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

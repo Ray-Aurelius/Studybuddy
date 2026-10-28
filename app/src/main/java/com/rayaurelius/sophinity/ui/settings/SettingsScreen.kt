@@ -27,6 +27,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.AccessibilityNew
+import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.ViewSidebar
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -122,7 +125,12 @@ class SettingsViewModel(private val c: AppContainer) : ViewModel() {
 }
 
 @Composable
-fun SettingsScreen(onBack: () -> Unit) {
+fun SettingsScreen(
+    onBack: () -> Unit,
+    onOpenAppearance: () -> Unit = {},
+    onOpenAccessibility: () -> Unit = {},
+    onOpenToolbar: () -> Unit = {},
+) {
     val vm = appViewModel { SettingsViewModel(it) }
     val s = vm.settings.collectAsStateWithLifecycle().value ?: return
     val subjects by vm.subjects.collectAsStateWithLifecycle()
@@ -153,6 +161,33 @@ fun SettingsScreen(onBack: () -> Unit) {
         snackbarHost = { SnackbarHost(snackbar) },
     ) { pad ->
         LazyColumn(contentPadding = pad, modifier = Modifier.fillMaxSize()) {
+            item { Header("Make it yours") }
+            item {
+                ListItem(
+                    headlineContent = { Text("Appearance") },
+                    supportingContent = { Text("Color themes, light or dark, backgrounds") },
+                    leadingContent = { Icon(Icons.Outlined.Palette, null) },
+                    modifier = Modifier.clickable(onClick = onOpenAppearance),
+                )
+            }
+            item {
+                ListItem(
+                    headlineContent = { Text("Accessibility") },
+                    supportingContent = { Text("Text size, bold text, contrast, motion, readable font") },
+                    leadingContent = { Icon(Icons.Outlined.AccessibilityNew, null) },
+                    modifier = Modifier.clickable(onClick = onOpenAccessibility),
+                )
+            }
+            item {
+                ListItem(
+                    headlineContent = { Text("Toolbar") },
+                    supportingContent = { Text("Bottom, left or right; choose which tabs to show") },
+                    leadingContent = { Icon(Icons.Outlined.ViewSidebar, null) },
+                    modifier = Modifier.clickable(onClick = onOpenToolbar),
+                )
+            }
+            item { HorizontalDivider() }
+
             item { Header("Subjects") }
             subjects.forEach { sub ->
                 item(key = "s${sub.id}") {
@@ -277,30 +312,6 @@ fun SettingsScreen(onBack: () -> Unit) {
             }
             item { HorizontalDivider(Modifier.padding(top = 8.dp)) }
 
-            item { Header("Appearance") }
-            item {
-                ListItem(
-                    headlineContent = { Text("Theme") },
-                    trailingContent = {
-                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                            ThemeMode.entries.forEach { m ->
-                                FilterChip(s.themeMode == m, { vm.update { it.copy(themeMode = m) } }, { Text(m.name.lowercase().replaceFirstChar { c -> c.uppercase() }) })
-                            }
-                        }
-                    },
-                )
-            }
-            if (Build.VERSION.SDK_INT >= 31) {
-                item {
-                    ListItem(
-                        headlineContent = { Text("Match my wallpaper") },
-                        supportingContent = { Text("Use Material You colors") },
-                        trailingContent = { Switch(s.dynamicColor, { on -> vm.update { it.copy(dynamicColor = on) } }) },
-                    )
-                }
-            }
-            item { HorizontalDivider() }
-
             item { Header("Your data") }
             item {
                 ListItem(
@@ -365,13 +376,13 @@ fun SettingsScreen(onBack: () -> Unit) {
 }
 
 @Composable
-private fun Header(text: String) {
+internal fun Header(text: String) {
     Text(text, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary,
         modifier = Modifier.padding(start = 16.dp, top = 20.dp, bottom = 4.dp))
 }
 
 @Composable
-private fun Stepper(title: String, subtitle: String, value: Int, min: Int, max: Int, step: Int = 1, onChange: (Int) -> Unit) {
+internal fun Stepper(title: String, subtitle: String, value: Int, min: Int, max: Int, step: Int = 1, onChange: (Int) -> Unit) {
     ListItem(
         headlineContent = { Text(title) },
         supportingContent = { Text(subtitle) },

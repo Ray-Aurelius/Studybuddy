@@ -49,6 +49,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
@@ -100,8 +101,10 @@ fun StatTile(
         Column(Modifier.padding(horizontal = 12.dp, vertical = 14.dp)) {
             Text(emoji, style = MaterialTheme.typography.titleLarge)
             Spacer(Modifier.height(6.dp))
-            Text(value, style = MaterialTheme.typography.titleLarge, maxLines = 1)
-            Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+            // Shrinks to fit rather than truncating (narrow layouts, large text, long translations).
+            Text(value, style = MaterialTheme.typography.titleLarge, maxLines = 1,
+                autoSize = androidx.compose.foundation.text.TextAutoSize.StepBased(minFontSize = 12.sp, maxFontSize = MaterialTheme.typography.titleLarge.fontSize))
+            Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2)
         }
     }
 }
@@ -219,6 +222,7 @@ private data class Particle(
 /** A short celebratory burst. Small, honest celebrations reinforce effort. */
 @Composable
 fun Confetti(modifier: Modifier = Modifier, durationMs: Long = 2600) {
+    if (com.rayaurelius.sophinity.ui.theme.LocalReduceMotion.current) return
     val colors = listOf(Brand.Aegean, Brand.Flame, Brand.Laurel, Brand.Gold, Color(0xFFE5487A), Color(0xFF2B9AE8))
     val particles = remember {
         List(90) {

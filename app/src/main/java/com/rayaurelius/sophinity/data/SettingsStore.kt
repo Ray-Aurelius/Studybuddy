@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.floatPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -14,6 +16,12 @@ import kotlinx.coroutines.flow.map
 import java.time.DayOfWeek
 
 enum class ThemeMode { SYSTEM, LIGHT, DARK }
+
+/** Where the main toolbar lives. Left/right show a vertical rail. */
+enum class NavPosition { BOTTOM, LEFT, RIGHT }
+
+/** Tabs that can be hidden from the toolbar. Today is always shown. */
+enum class TabId { STATS, LIBRARY, GOALS, LAURELS }
 
 data class AppSettings(
     val onboarded: Boolean = false,
@@ -30,7 +38,30 @@ data class AppSettings(
     /** Implementation intention: where the person plans to study. */
     val reminderPlace: String = "",
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
-    val dynamicColor: Boolean = false,
+    /** Color theme id from ColorThemes ("aegean", "olive", …, "wallpaper", "custom"). */
+    val colorTheme: String = "aegean",
+    /** Seed color for the "custom" theme. */
+    val customSeed: Int = 0xFF2F9BFF.toInt(),
+    // --- Background
+    /** "none", a built-in background id, or "photo" for the person's own image. */
+    val background: String = "none",
+    /** 0 = background at full strength, 0.9 = mostly covered (keeps text readable). */
+    val backgroundDim: Float = 0.35f,
+    /** Blur radius in dp for photo backgrounds (Android 12+). */
+    val backgroundBlur: Float = 0f,
+    // --- Accessibility
+    /** Multiplies the system font size: 0.85 … 1.6. */
+    val textScale: Float = 1f,
+    val boldText: Boolean = false,
+    val highContrast: Boolean = false,
+    /** null = follow the system "remove animations" setting. */
+    val reduceMotion: Boolean? = null,
+    /** Atkinson Hyperlegible everywhere instead of the decorative serif. */
+    val readableFont: Boolean = false,
+    // --- Toolbar
+    val navPosition: NavPosition = NavPosition.BOTTOM,
+    val hiddenTabs: Set<TabId> = emptySet(),
+    val navLabels: Boolean = true,
     val lastSubjectId: Long? = null,
     /** Highest title rank already celebrated, so each new title is celebrated once. */
     val seenTitleRank: Int = 1,
@@ -51,7 +82,20 @@ class SettingsStore(private val context: Context) {
         val remM = intPreferencesKey("reminder_minute")
         val remPlace = stringPreferencesKey("reminder_place")
         val theme = stringPreferencesKey("theme")
-        val dynamic = booleanPreferencesKey("dynamic_color")
+        val dynamic = booleanPreferencesKey("dynamic_color") // legacy: became colorTheme "wallpaper"
+        val colorTheme = stringPreferencesKey("color_theme")
+        val customSeed = intPreferencesKey("custom_seed")
+        val background = stringPreferencesKey("background")
+        val bgDim = floatPreferencesKey("background_dim")
+        val bgBlur = floatPreferencesKey("background_blur")
+        val textScale = floatPreferencesKey("text_scale")
+        val bold = booleanPreferencesKey("bold_text")
+        val contrast = booleanPreferencesKey("high_contrast")
+        val motion = stringPreferencesKey("reduce_motion")
+        val readable = booleanPreferencesKey("readable_font")
+        val navPos = stringPreferencesKey("nav_position")
+        val hidden = stringSetPreferencesKey("hidden_tabs")
+        val navLabels = booleanPreferencesKey("nav_labels")
         val lastSubject = longPreferencesKey("last_subject")
         val seenTitle = intPreferencesKey("seen_title_rank")
     }
@@ -74,7 +118,20 @@ class SettingsStore(private val context: Context) {
             prefs[K.remM] = s.reminderMinute
             prefs[K.remPlace] = s.reminderPlace
             prefs[K.theme] = s.themeMode.name
-            prefs[K.dynamic] = s.dynamicColor
+            prefs.remove(K.dynamic)
+            prefs[K.colorTheme] = s.colorTheme
+            prefs[K.customSeed] = s.customSeed
+            prefs[K.background] = s.background
+            prefs[K.bgDim] = s.backgroundDim
+            prefs[K.bgBlur] = s.backgroundBlur
+            prefs[K.textScale] = s.textScale
+            prefs[K.bold] = s.boldText
+            prefs[K.contrast] = s.highContrast
+            prefs[K.motion] = when (s.reduceMotion) { null -> "system"; true -> "on"; false -> "off" }
+            prefs[K.readable] = s.readableFont
+            prefs[K.navPos] = s.navPosition.name
+            prefs[K.hidden] = s.hiddenTabs.map { it.name }.toSet()
+            prefs[K.navLabels] = s.navLabels
             prefs[K.seenTitle] = s.seenTitleRank
             if (s.lastSubjectId != null) prefs[K.lastSubject] = s.lastSubjectId else prefs.remove(K.lastSubject)
         }
@@ -94,7 +151,19 @@ class SettingsStore(private val context: Context) {
             reminderMinute = this[K.remM] ?: d.reminderMinute,
             reminderPlace = this[K.remPlace] ?: d.reminderPlace,
             themeMode = this[K.theme]?.let { runCatching { ThemeMode.valueOf(it) }.getOrNull() } ?: d.themeMode,
-            dynamicColor = this[K.dynamic] ?: d.dynamicColor,
+            colorTheme = this[K.colorTheme] ?: if (this[K.dynamic] == true) "wallpaper" else d.colorTheme,
+            customSeed = this[K.customSeed] ?: d.customSeed,
+            background = this[K.background] ?: d.background,
+            backgroundDim = this[K.bgDim] ?: d.backgroundDim,
+            backgroundBlur = this[K.bgBlur] ?: d.backgroundBlur,
+            textScale = this[K.textScale] ?: d.textScale,
+            boldText = this[K.bold] ?: d.boldText,
+            highContrast = this[K.contrast] ?: d.highContrast,
+            reduceMotion = when (this[K.motion]) { "on" -> true; "off" -> false; else -> null },
+            readableFont = this[K.readable] ?: d.readableFont,
+            navPosition = this[K.navPos]?.let { runCatching { NavPosition.valueOf(it) }.getOrNull() } ?: d.navPosition,
+            hiddenTabs = this[K.hidden]?.mapNotNull { runCatching { TabId.valueOf(it) }.getOrNull() }?.toSet() ?: d.hiddenTabs,
+            navLabels = this[K.navLabels] ?: d.navLabels,
             lastSubjectId = this[K.lastSubject],
             seenTitleRank = this[K.seenTitle] ?: d.seenTitleRank,
         )

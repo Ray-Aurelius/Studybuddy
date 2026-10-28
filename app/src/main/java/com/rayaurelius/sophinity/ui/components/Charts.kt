@@ -58,7 +58,8 @@ fun StudyBarChart(
     if (bars.isEmpty()) return
     var selected by remember(bars) { mutableIntStateOf(bars.indexOfLast { it.highlight }.takeIf { it >= 0 } ?: -1) }
     val grow = remember(bars) { Animatable(0f) }
-    LaunchedEffect(bars) { grow.animateTo(1f, tween(600)) }
+    val still = com.rayaurelius.sophinity.ui.theme.LocalReduceMotion.current
+    LaunchedEffect(bars) { if (still) grow.snapTo(1f) else grow.animateTo(1f, tween(600)) }
     val max = maxOf(bars.maxOf { it.seconds }, goalLineSeconds ?: 0L, 60L)
     val primary = MaterialTheme.colorScheme.primary
     val muted = MaterialTheme.colorScheme.primaryContainer
@@ -192,7 +193,8 @@ fun ProgressRing(
 @Composable
 fun LinearMeter(fraction: Float, modifier: Modifier = Modifier, color: Color = MaterialTheme.colorScheme.primary) {
     val anim = remember { Animatable(0f) }
-    LaunchedEffect(fraction) { anim.animateTo(fraction.coerceIn(0f, 1f), tween(500)) }
+    val still = com.rayaurelius.sophinity.ui.theme.LocalReduceMotion.current
+    LaunchedEffect(fraction) { if (still) anim.snapTo(fraction.coerceIn(0f, 1f)) else anim.animateTo(fraction.coerceIn(0f, 1f), tween(500)) }
     Box(modifier.height(10.dp).clip(RoundedCornerShape(5.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest)) {
         Box(Modifier.fillMaxWidth(anim.value).height(10.dp).clip(RoundedCornerShape(5.dp)).background(color))
     }

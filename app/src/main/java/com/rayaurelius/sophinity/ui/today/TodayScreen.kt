@@ -86,7 +86,7 @@ import com.rayaurelius.sophinity.ui.components.SubjectPicker
 import com.rayaurelius.sophinity.ui.components.appViewModel
 import com.rayaurelius.sophinity.ui.theme.Brand
 import com.rayaurelius.sophinity.ui.theme.TimerDigits
-import com.rayaurelius.sophinity.ui.theme.Classical
+import com.rayaurelius.sophinity.ui.theme.LocalHeadingFont
 import com.rayaurelius.sophinity.ui.components.GreekKeyBand
 import androidx.compose.ui.text.font.FontWeight
 import com.rayaurelius.sophinity.ui.theme.MediaDigits
@@ -151,12 +151,15 @@ fun TodayScreen(
 private fun Header(snap: Snapshot, onOpenSettings: () -> Unit, onOpenBadges: () -> Unit) {
     val hour = LocalTime.now().hour
     val greeting = when (hour) { in 4..11 -> "Good morning"; in 12..16 -> "Good afternoon"; else -> "Good evening" }
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Column(Modifier.weight(1f)) {
+    // Stacked so it never truncates: narrow screens, side toolbar, large text, long translations.
+    Column {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Text(snap.today.format(DateTimeFormatter.ofPattern("EEEE, MMMM d")), style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(greeting, style = MaterialTheme.typography.headlineSmall, maxLines = 1)
+                color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f))
+            IconButton(onClick = onOpenSettings) { Icon(Icons.Outlined.Settings, "Settings") }
         }
+        Text(greeting, style = MaterialTheme.typography.headlineMedium)
+        Spacer(Modifier.height(8.dp))
         Surface(onClick = onOpenBadges, shape = MaterialTheme.shapes.small, color = MaterialTheme.colorScheme.primaryContainer) {
             Text(
                 "🏛️ ${snap.title.current.name} · Lv ${snap.level.level}",
@@ -165,7 +168,6 @@ private fun Header(snap: Snapshot, onOpenSettings: () -> Unit, onOpenBadges: () 
                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
             )
         }
-        IconButton(onClick = onOpenSettings) { Icon(Icons.Outlined.Settings, "Settings") }
     }
 }
 
@@ -447,7 +449,7 @@ private fun TipCard(snap: Snapshot) {
                 Spacer(Modifier.height(6.dp))
                 Text(
                     "“${wisdom.text}”",
-                    style = MaterialTheme.typography.titleLarge.copy(fontFamily = Classical, fontWeight = FontWeight.Normal),
+                    style = MaterialTheme.typography.titleLarge.copy(fontFamily = LocalHeadingFont.current, fontWeight = FontWeight.Normal),
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
                 Spacer(Modifier.height(6.dp))
@@ -625,7 +627,7 @@ private fun TitleCelebration(title: com.rayaurelius.sophinity.domain.LearnerTitl
             },
             text = {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-                    Text("${title.greek} · “${title.meaning}”", style = MaterialTheme.typography.titleMedium.copy(fontFamily = Classical),
+                    Text("${title.greek} · “${title.meaning}”", style = MaterialTheme.typography.titleMedium.copy(fontFamily = LocalHeadingFont.current),
                         textAlign = TextAlign.Center)
                     Spacer(Modifier.height(8.dp))
                     Text(

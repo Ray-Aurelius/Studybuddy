@@ -1,6 +1,14 @@
 package com.rayaurelius.sophinity.ui.theme
 
 import android.os.Build
+import android.provider.Settings
+import androidx.compose.material3.ColorScheme
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
+import com.rayaurelius.sophinity.data.AppSettings
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
@@ -41,109 +49,111 @@ object Brand {
     ).map { it.toInt() }
 }
 
-private val Light = lightColorScheme(
-    primary = Color(0xFF0A6FD8),
-    onPrimary = Color.White,
-    primaryContainer = Color(0xFFD6E9FF),
-    onPrimaryContainer = Color(0xFF002A52),
-    secondary = Color(0xFF00696A),
-    onSecondary = Color.White,
-    secondaryContainer = Color(0xFFCDEFEE),
-    onSecondaryContainer = Color(0xFF002020),
-    tertiary = Color(0xFF1F7A47),
-    onTertiary = Color.White,
-    tertiaryContainer = Color(0xFFCFF2DC),
-    onTertiaryContainer = Color(0xFF00210E),
-    background = Color(0xFFF7FBFF),
-    onBackground = Color(0xFF13294B),
-    surface = Color(0xFFF7FBFF),
-    onSurface = Color(0xFF13294B),
-    onSurfaceVariant = Color(0xFF4A5A73),
-    outline = Color(0xFF7B8BA3),
-    outlineVariant = Color(0xFFC9D4E3),
-    surfaceContainerLowest = Color.White,
-    surfaceContainerLow = Color(0xFFF0F6FD),
-    surfaceContainer = Color(0xFFEAF1FA),
-    surfaceContainerHigh = Color(0xFFE3ECF7),
-    surfaceContainerHighest = Color(0xFFDCE6F2),
-)
-
-private val Dark = darkColorScheme(
-    primary = Color(0xFF8FCBFF),
-    onPrimary = Color(0xFF00315C),
-    primaryContainer = Color(0xFF0D4F8F),
-    onPrimaryContainer = Color(0xFFD4E8FF),
-    secondary = Color(0xFF6FD6D4),
-    onSecondary = Color(0xFF003737),
-    secondaryContainer = Color(0xFF0F4A4A),
-    onSecondaryContainer = Color(0xFFCDEFEE),
-    tertiary = Color(0xFF7FD9A2),
-    onTertiary = Color(0xFF00391C),
-    tertiaryContainer = Color(0xFF0E5A32),
-    onTertiaryContainer = Color(0xFFCFF2DC),
-    background = Color(0xFF0D1626),
-    onBackground = Color(0xFFE3ECF7),
-    surface = Color(0xFF0D1626),
-    onSurface = Color(0xFFE3ECF7),
-    onSurfaceVariant = Color(0xFFA9B7CC),
-    outline = Color(0xFF6E7D94),
-    outlineVariant = Color(0xFF2E3B52),
-    surfaceContainerLowest = Color(0xFF08101D),
-    surfaceContainerLow = Color(0xFF121D2E),
-    surfaceContainer = Color(0xFF172235),
-    surfaceContainerHigh = Color(0xFF1F2B40),
-    surfaceContainerHighest = Color(0xFF29364B),
-)
+private fun ColorEngine.Roles.toScheme(dark: Boolean): ColorScheme {
+    fun c(v: Int) = Color(v)
+    val base = if (dark) darkColorScheme() else lightColorScheme()
+    return base.copy(
+        primary = c(primary), onPrimary = c(onPrimary), primaryContainer = c(primaryContainer), onPrimaryContainer = c(onPrimaryContainer),
+        inversePrimary = c(if (dark) primaryContainer else primaryContainer),
+        secondary = c(secondary), onSecondary = c(onSecondary), secondaryContainer = c(secondaryContainer), onSecondaryContainer = c(onSecondaryContainer),
+        tertiary = c(tertiary), onTertiary = c(onTertiary), tertiaryContainer = c(tertiaryContainer), onTertiaryContainer = c(onTertiaryContainer),
+        background = c(background), onBackground = c(onBackground), surface = c(surface), onSurface = c(onSurface),
+        surfaceVariant = c(surfaceContainerHighest), onSurfaceVariant = c(onSurfaceVariant),
+        surfaceTint = c(primary), outline = c(outline), outlineVariant = c(outlineVariant),
+        surfaceBright = c(if (dark) surfaceContainerHighest else surfaceContainerLowest), surfaceDim = c(if (dark) surface else surfaceContainerHighest),
+        surfaceContainerLowest = c(surfaceContainerLowest), surfaceContainerLow = c(surfaceContainerLow), surfaceContainer = c(surfaceContainer),
+        surfaceContainerHigh = c(surfaceContainerHigh), surfaceContainerHighest = c(surfaceContainerHighest),
+    )
+}
 
 /** Laurel gold, reserved for achievement: earned laurels, titles and the streak. */
 data class GoldColors(val container: Color, val onContainer: Color)
 private val LightGold = GoldColors(Color(0xFFFFF0B8), Color(0xFF3A2C00))
 private val DarkGold = GoldColors(Color(0xFF4A3B00), Color(0xFFFFE9A8))
-val LocalGold = androidx.compose.runtime.staticCompositionLocalOf { LightGold }
+private val LightGoldHc = GoldColors(Color(0xFFFFF4C9), Color(0xFF1F1700))
+private val DarkGoldHc = GoldColors(Color(0xFF2E2400), Color(0xFFFFF4C9))
+val LocalGold = staticCompositionLocalOf { LightGold }
+
+/** True when animations should be skipped (setting, or the system "remove animations" option). */
+val LocalReduceMotion = staticCompositionLocalOf { false }
 
 /** Marcellus: a flared classical serif, used for display and headings only. Body text stays system sans for readability. */
 val Classical = FontFamily(Font(R.font.marcellus))
 
-private val base = Typography()
-private val AppTypography = Typography(
-    displayLarge = base.displayLarge.copy(fontFamily = Classical),
-    displayMedium = base.displayMedium.copy(fontFamily = Classical),
-    displaySmall = base.displaySmall.copy(fontFamily = Classical),
-    headlineLarge = base.headlineLarge.copy(fontFamily = Classical),
-    headlineMedium = base.headlineMedium.copy(fontFamily = Classical),
-    headlineSmall = base.headlineSmall.copy(fontFamily = Classical),
-    titleLarge = base.titleLarge.copy(fontWeight = FontWeight.SemiBold),
-    titleMedium = base.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-    labelLarge = base.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-)
+/** Atkinson Hyperlegible: designed by the Braille Institute for low-vision readers. */
+val Readable = FontFamily(Font(R.font.atkinson_regular, FontWeight.Normal), Font(R.font.atkinson_bold, FontWeight.Bold))
+
+/** Heading font in use: Marcellus by default, Atkinson in readable-font mode. */
+val LocalHeadingFont = staticCompositionLocalOf { Classical }
+
+private fun typography(heading: FontFamily, body: FontFamily?, bold: Boolean): Typography {
+    val base = Typography()
+    fun TextStyle.w(default: FontWeight?, family: FontFamily?): TextStyle {
+        val weight = (default ?: fontWeight ?: FontWeight.Normal).let { if (bold) FontWeight((it.weight + 300).coerceAtMost(900)) else it }
+        return copy(fontWeight = weight, fontFamily = family ?: fontFamily)
+    }
+    return Typography(
+        displayLarge = base.displayLarge.w(null, heading), displayMedium = base.displayMedium.w(null, heading),
+        displaySmall = base.displaySmall.w(null, heading), headlineLarge = base.headlineLarge.w(null, heading),
+        headlineMedium = base.headlineMedium.w(null, heading), headlineSmall = base.headlineSmall.w(null, heading),
+        titleLarge = base.titleLarge.w(FontWeight.SemiBold, body), titleMedium = base.titleMedium.w(FontWeight.SemiBold, body),
+        titleSmall = base.titleSmall.w(null, body), bodyLarge = base.bodyLarge.w(null, body),
+        bodyMedium = base.bodyMedium.w(null, body), bodySmall = base.bodySmall.w(null, body),
+        labelLarge = base.labelLarge.w(FontWeight.SemiBold, body), labelMedium = base.labelMedium.w(null, body),
+        labelSmall = base.labelSmall.w(null, body),
+    )
+}
 
 val TimerDigits = TextStyle(fontSize = 56.sp, fontWeight = FontWeight.Bold, letterSpacing = (-1).sp)
 /** Slightly smaller so h:mm:ss media positions fit inside the ring. */
 val MediaDigits = TextStyle(fontSize = 44.sp, fontWeight = FontWeight.Bold, letterSpacing = (-1).sp)
 
 @Composable
-fun SophinityTheme(mode: ThemeMode = ThemeMode.SYSTEM, dynamic: Boolean = false, content: @Composable () -> Unit) {
-    val dark = when (mode) {
+fun SophinityTheme(settings: AppSettings = AppSettings(), content: @Composable () -> Unit) {
+    val dark = when (settings.themeMode) {
         ThemeMode.SYSTEM -> isSystemInDarkTheme()
         ThemeMode.LIGHT -> false
         ThemeMode.DARK -> true
     }
+    val hc = settings.highContrast
     val ctx = LocalContext.current
-    val scheme = when {
-        dynamic && Build.VERSION.SDK_INT >= 31 -> if (dark) dynamicDarkColorScheme(ctx) else dynamicLightColorScheme(ctx)
-        dark -> Dark
-        else -> Light
+    val scheme = remember(settings.colorTheme, settings.customSeed, dark, hc) {
+        when {
+            settings.colorTheme == ColorThemes.WALLPAPER && Build.VERSION.SDK_INT >= 31 ->
+                if (dark) dynamicDarkColorScheme(ctx) else dynamicLightColorScheme(ctx)
+            settings.colorTheme == ColorThemes.CUSTOM -> ColorThemes.fromSeed(settings.customSeed).roles(dark, hc).toScheme(dark)
+            else -> (ColorThemes.byId(settings.colorTheme) ?: ColorThemes.byId(ColorThemes.DEFAULT)!!).roles(dark, hc).toScheme(dark)
+        }
     }
-    androidx.compose.runtime.CompositionLocalProvider(LocalGold provides if (dark) DarkGold else LightGold) {
-    MaterialTheme(
-        colorScheme = scheme,
-        typography = AppTypography,
-        shapes = Shapes(
-            small = RoundedCornerShape(10.dp),
-            medium = RoundedCornerShape(16.dp),
-            large = RoundedCornerShape(24.dp),
-        ),
-        content = content,
-    )
+    val heading = if (settings.readableFont) Readable else Classical
+    val typography = remember(settings.readableFont, settings.boldText) {
+        typography(heading, if (settings.readableFont) Readable else null, settings.boldText)
+    }
+    val systemNoAnimations = remember {
+        runCatching { Settings.Global.getFloat(ctx.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f }.getOrDefault(false)
+    }
+    val density = LocalDensity.current
+    val gold = when {
+        dark && hc -> DarkGoldHc
+        dark -> DarkGold
+        hc -> LightGoldHc
+        else -> LightGold
+    }
+    CompositionLocalProvider(
+        LocalGold provides gold,
+        LocalReduceMotion provides (settings.reduceMotion ?: systemNoAnimations),
+        LocalHeadingFont provides heading,
+        LocalDensity provides Density(density.density, density.fontScale * settings.textScale),
+    ) {
+        MaterialTheme(
+            colorScheme = scheme,
+            typography = typography,
+            shapes = Shapes(
+                small = RoundedCornerShape(10.dp),
+                medium = RoundedCornerShape(16.dp),
+                large = RoundedCornerShape(24.dp),
+            ),
+            content = content,
+        )
     }
 }
