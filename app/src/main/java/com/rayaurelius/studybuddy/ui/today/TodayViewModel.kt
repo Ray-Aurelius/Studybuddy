@@ -55,6 +55,16 @@ class TodayViewModel(private val c: AppContainer) : ViewModel() {
         _reflect.value = null
     }
 
+    fun markFinished(item: com.rayaurelius.studybuddy.data.db.LearningItem) = viewModelScope.launch {
+        c.repo.saveItem(
+            item.copy(
+                status = com.rayaurelius.studybuddy.data.db.ItemStatus.DONE,
+                completedAt = System.currentTimeMillis(),
+                progressUnits = item.totalUnits ?: item.progressUnits,
+            )
+        )
+    }
+
     fun dismissReflection() { _reflect.value = null }
 
     fun addManual(subjectId: Long?, itemId: Long?, startedAt: Long, minutes: Int, note: String) = viewModelScope.launch {

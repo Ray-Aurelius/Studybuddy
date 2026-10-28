@@ -54,6 +54,9 @@ data class Snapshot(
     val activeSubjects: List<Subject> get() = subjects.filter { !it.archived }
     val activeItems: List<LearningItem> get() = items.filter { it.status == ItemStatus.ACTIVE }
     fun secondsForItem(itemId: Long) = sessions.filter { it.itemId == itemId }.sumOf { it.durationSec }
+    /** Progress through timed media, or null if the item has no run time. */
+    fun mediaProgress(item: LearningItem, liveSec: Long = 0) =
+        com.rayaurelius.studybuddy.domain.MediaTime.progress(item, secondsForItem(item.id), liveSec)
 }
 
 class StudyRepository(private val db: AppDatabase, val settingsStore: SettingsStore) {

@@ -100,13 +100,23 @@ class TimerController(
             it[K.item] = s.itemId ?: -1
             it[K.breakEnds] = s.breakEndsAt
         }
-        notifier.show(s, subjectName(s.subjectId))
+        notifier.show(s, subjectName(s.subjectId), mediaLine(s))
         when {
             s.status == TimerStatus.RUNNING && s.mode == TimerMode.FOCUS ->
                 TimerAlarms.schedule(context, System.currentTimeMillis() + s.remainingMs(), TimerAlarms.ACTION_FOCUS_DONE)
             s.status == TimerStatus.BREAK -> TimerAlarms.schedule(context, s.breakEndsAt, TimerAlarms.ACTION_BREAK_DONE)
             else -> TimerAlarms.cancel(context)
         }
+    }
+
+    /** e.g. "Habits of Curious People · from 34% of 9h 30m" — fixed text, so it never goes stale. */
+    private suspend fun mediaLine(s: TimerState): String? {
+        val id = s.itemId ?: return null
+        val item = repo.items.first().firstOrNull { it.id == id } ?: return null
+        val logged = repo.sessions.first().filter { it.itemId == id }.sumOf { it.durationSec }
+        val p = com.rayaurelius.studybuddy.domain.MediaTime.progress(item, logged, liveSec = s.accumulatedMs / 1000)
+            ?: return item.title
+        return "${item.title} · from ${p.percent}% of ${com.rayaurelius.studybuddy.domain.StudyMath.formatDuration(p.totalSec, true)}"
     }
 
     private suspend fun subjectName(id: Long?): String? =

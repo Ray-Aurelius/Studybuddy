@@ -26,7 +26,7 @@ data class BackupData(
     val restDaysPerWeek: Int = 1,
 ) {
     companion object {
-        const val CURRENT_VERSION = 2
+        const val CURRENT_VERSION = 3
         val json = Json { prettyPrint = true; ignoreUnknownKeys = true; encodeDefaults = true }
 
         fun encode(data: BackupData): String = json.encodeToString(serializer(), data)

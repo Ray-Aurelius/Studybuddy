@@ -49,4 +49,33 @@ class MigrationTest {
         db.query("SELECT name FROM categories").use { c -> c.moveToFirst(); assertEquals("Workshop", c.getString(0)) }
         db.close()
     }
+
+    @Test
+    fun v2ToV3AddsMediaRuntimeWithSafeDefaults() {
+        helper.createDatabase(dbName, 2).apply {
+            execSQL("INSERT INTO items (id, type, title, creator, status, progressUnits, takeaway, notes, addedAt) VALUES (1, 'AUDIOBOOK', 'Old Audiobook', '', 'ACTIVE', 3, '', '', 0)")
+            close()
+        }
+        val db = helper.runMigrationsAndValidate(dbName, 3, true)
+        db.query("SELECT title, progressUnits, runtimeMin, priorSec, playbackSpeed FROM items").use { c ->
+            assertTrue(c.moveToFirst())
+            assertEquals("Old Audiobook", c.getString(0))
+            assertEquals(3, c.getInt(1))
+            assertTrue(c.isNull(2))
+            assertEquals(0L, c.getLong(3))
+            assertEquals(1.0f, c.getFloat(4), 0f)
+        }
+        db.close()
+    }
+
+    @Test
+    fun v1AllTheWayToCurrent() {
+        helper.createDatabase(dbName, 1).apply {
+            execSQL("INSERT INTO items (id, type, title, creator, status, progressUnits, takeaway, notes, addedAt) VALUES (1, 'BOOK', 'B', '', 'DONE', 0, '', '', 0)")
+            close()
+        }
+        helper.runMigrationsAndValidate(dbName, 3, true).use { db ->
+            db.query("SELECT COUNT(*) FROM items").use { c -> c.moveToFirst(); assertEquals(1, c.getInt(0)) }
+        }
+    }
 }

@@ -64,10 +64,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rayaurelius.studybuddy.data.Snapshot
+import com.rayaurelius.studybuddy.data.db.ItemStatus
 import com.rayaurelius.studybuddy.data.db.LearningItem
 import com.rayaurelius.studybuddy.data.db.StudySession
 import com.rayaurelius.studybuddy.domain.GoalMath
 import com.rayaurelius.studybuddy.domain.GoalProgress
+import com.rayaurelius.studybuddy.domain.MediaTime
 import com.rayaurelius.studybuddy.domain.Milestones
 import com.rayaurelius.studybuddy.domain.StudyMath
 import com.rayaurelius.studybuddy.timer.TimerMode
@@ -84,6 +86,8 @@ import com.rayaurelius.studybuddy.ui.components.SubjectPicker
 import com.rayaurelius.studybuddy.ui.components.appViewModel
 import com.rayaurelius.studybuddy.ui.theme.Brand
 import com.rayaurelius.studybuddy.ui.theme.TimerDigits
+import com.rayaurelius.studybuddy.ui.theme.MediaDigits
+import com.rayaurelius.studybuddy.ui.components.MediaMeter
 import kotlinx.coroutines.delay
 import java.time.Instant
 import java.time.LocalTime
@@ -219,8 +223,16 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                 TimerStatus.RUNNING, TimerStatus.PAUSED -> {
                     val focus = timer.mode == TimerMode.FOCUS
                     val elapsed = timer.elapsedMs(now)
-                    val progress = if (focus) elapsed.toFloat() / timer.targetMs else (elapsed % 3_600_000L) / 3_600_000f
                     val subject = timer.subjectId?.let { snap.subjectsById[it] }
+                    // Media being studied, with this session's time added live (× playback speed).
+                    val media = timer.itemId?.let { snap.itemsById[it] }?.let { snap.mediaProgress(it, liveSec = elapsed / 1000) }
+                    // Open sessions on timed media show your place in the media; focus blocks keep the countdown.
+                    val showMediaInRing = media != null && !focus
+                    val progress = when {
+                        focus -> elapsed.toFloat() / timer.targetMs
+                        showMediaInRing -> media!!.fraction
+                        else -> (elapsed % 3_600_000L) / 3_600_000f
+                    }
                     Text(
                         listOfNotNull(subject?.let { "${it.emoji} ${it.name}" }, timer.itemId?.let { snap.itemsById[it]?.title })
                             .joinToString(" · ").ifEmpty { "Studying" },
@@ -229,15 +241,48 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                     Spacer(Modifier.height(16.dp))
                     ProgressRing(progress, Modifier.size(220.dp), color = subject?.let { androidx.compose.ui.graphics.Color(it.color) } ?: MaterialTheme.colorScheme.primary) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(StudyMath.formatClock(if (focus) timer.remainingMs(now) else elapsed), style = TimerDigits)
+                            if (showMediaInRing) {
+                                Text(StudyMath.formatClock(media!!.completedSec * 1000), style = MediaDigits)
+                                Text(
+                                    "of ${StudyMath.formatClock(media.totalSec * 1000)} · ${media.percent}%",
+                                    style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                                Text(
+                                    if (timer.status == TimerStatus.PAUSED) "Paused" else "completed",
+                                    style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            } else {
+                                Text(StudyMath.formatClock(if (focus) timer.remainingMs(now) else elapsed), style = TimerDigits)
+                                Text(
+                                    when {
+                                        timer.status == TimerStatus.PAUSED -> "Paused"
+                                        focus -> "focus · ${StudyMath.formatDuration(elapsed / 1000)} done"
+                                        else -> "in the zone"
+                                    },
+                                    style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                        }
+                    }
+                    if (media != null) {
+                        Spacer(Modifier.height(12.dp))
+                        if (showMediaInRing) {
                             Text(
-                                when {
-                                    timer.status == TimerStatus.PAUSED -> "Paused"
-                                    focus -> "focus · ${StudyMath.formatDuration(elapsed / 1000)} done"
-                                    else -> "in the zone"
-                                },
-                                style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                "This session ${StudyMath.formatClock(elapsed)}" +
+                                    (if (media.speed != 1f) " at ${MediaTime.formatSpeed(media.speed)}" else "") +
+                                    if (!media.isComplete) " · ${StudyMath.formatDuration(media.remainingAtSpeedSec, true)} to go" else " · finished! 🎉",
+                                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
+                        } else {
+                            Column(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+                                LinearMeter(media.fraction, Modifier.fillMaxWidth(), color = if (media.isComplete) Brand.Mint else MaterialTheme.colorScheme.primary)
+                                Spacer(Modifier.height(4.dp))
+                                Text(
+                                    "${StudyMath.formatClock(media.completedSec * 1000)} of ${StudyMath.formatClock(media.totalSec * 1000)} · ${media.percent}%" +
+                                        if (media.speed != 1f) " · ${MediaTime.formatSpeed(media.speed)}" else "",
+                                    style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
                         }
                     }
                     Spacer(Modifier.height(20.dp))
@@ -358,7 +403,11 @@ private fun ContinueLearning(snap: Snapshot, timer: TimerState, vm: TodayViewMod
                         Text(item.title, style = MaterialTheme.typography.titleSmall, maxLines = 2, overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.height(40.dp))
                         val total = item.totalUnits
-                        if (total != null && total > 0) {
+                        val media = snap.mediaProgress(item)
+                        if (media != null) {
+                            Spacer(Modifier.height(6.dp))
+                            MediaMeter(media, compact = true)
+                        } else if (total != null && total > 0) {
                             Spacer(Modifier.height(6.dp))
                             LinearMeter(item.progressUnits.toFloat() / total, Modifier.fillMaxWidth())
                             Text("${item.progressUnits}/$total ${snap.categoryOf(item).unit}", style = MaterialTheme.typography.labelSmall,
@@ -419,6 +468,24 @@ private fun ReflectionSheet(session: StudySession, snap: Snapshot, timer: TimerS
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(8.dp))
             OutlinedTextField(note, { note = it }, Modifier.fillMaxWidth(), placeholder = { Text("e.g. Spaced repetition beats cramming") }, minLines = 2)
+            val item = session.itemId?.let { snap.itemsById[it] }
+            val media = item?.let { snap.mediaProgress(it) }
+            if (item != null && media != null && item.status != ItemStatus.DONE) {
+                Spacer(Modifier.height(20.dp))
+                Surface(shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.surfaceContainerHigh, modifier = Modifier.fillMaxWidth()) {
+                    Column(Modifier.padding(14.dp)) {
+                        Text("${snap.categoryOf(item).emoji} ${item.title}", style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Spacer(Modifier.height(6.dp))
+                        MediaMeter(media)
+                        if (media.isComplete) {
+                            Spacer(Modifier.height(8.dp))
+                            FilledTonalButton(onClick = { vm.markFinished(item) }, modifier = Modifier.fillMaxWidth()) {
+                                Text("You've reached the end — mark as finished 🎉")
+                            }
+                        }
+                    }
+                }
+            }
             Spacer(Modifier.height(20.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 if (timer.status == TimerStatus.IDLE && session.durationSec >= (snap.settings.focusMinutes * 60L) - 5) {
@@ -439,6 +506,7 @@ fun ManualSessionDialog(
     onSave: (subjectId: Long?, itemId: Long?, startedAt: Long, minutes: Int, note: String) -> Unit,
 ) {
     var subjectId by remember { mutableStateOf<Long?>(snap.settings.lastSubjectId) }
+    var itemId by remember { mutableStateOf<Long?>(null) }
     var hours by remember { mutableStateOf<Int?>(0) }
     var minutes by remember { mutableStateOf<Int?>(30) }
     var note by remember { mutableStateOf("") }
@@ -456,6 +524,10 @@ fun ManualSessionDialog(
                     Text("📅  ${date.format(DateTimeFormatter.ofPattern("EEE, MMM d, yyyy"))}", Modifier.padding(14.dp))
                 }
                 SubjectPicker(snap.activeSubjects, subjectId, { subjectId = it })
+                ItemPicker(snap.activeItems, itemId, { snap.categoryOf(it).emoji }) { id ->
+                    itemId = id
+                    snap.itemsById[id]?.subjectId?.let { subjectId = it }
+                }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     NumberField("Hours", hours, { hours = it?.coerceAtMost(16) }, Modifier.weight(1f))
                     NumberField("Minutes", minutes, { minutes = it?.coerceAtMost(59) }, Modifier.weight(1f))
@@ -467,7 +539,7 @@ fun ManualSessionDialog(
             TextButton(enabled = total > 0, onClick = {
                 val date = Instant.ofEpochMilli(dateMillis).atZone(ZoneOffset.UTC).toLocalDate()
                 val noon = date.atTime(12, 0).atZone(snap.zone).toInstant().toEpochMilli()
-                onSave(subjectId, null, noon, total, note)
+                onSave(subjectId, itemId, noon, total, note)
             }) { Text("Save") }
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },

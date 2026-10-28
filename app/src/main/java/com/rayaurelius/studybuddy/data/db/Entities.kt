@@ -1,5 +1,6 @@
 package com.rayaurelius.studybuddy.data.db
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -89,6 +90,12 @@ data class LearningItem(
     val subjectId: Long? = null,
     val totalUnits: Int? = null,
     val progressUnits: Int = 0,
+    /** Total run time of the media in minutes (audiobook, podcast series, video course, seminar…). */
+    val runtimeMin: Int? = null,
+    /** Media time already completed before it was tracked in the app. */
+    @ColumnInfo(defaultValue = "0") val priorSec: Long = 0,
+    /** Listening/watching speed; 1 hour logged at 1.5× covers 1.5 hours of media. */
+    @ColumnInfo(defaultValue = "1.0") val playbackSpeed: Float = 1f,
     val rating: Int? = null,
     val takeaway: String = "",
     val notes: String = "",

@@ -124,10 +124,14 @@ interface MilestoneDao {
         Subject::class, StudySession::class, LearningItem::class, Goal::class, UnlockedMilestone::class,
         CustomCategory::class,
     ],
-    version = 2,
+    version = 3,
     exportSchema = true,
-    // v2: custom library categories (new table + categoryId on items and goals).
-    autoMigrations = [AutoMigration(from = 1, to = 2)],
+    autoMigrations = [
+        // v2: custom library categories (new table + categoryId on items and goals).
+        AutoMigration(from = 1, to = 2),
+        // v3: media run time, prior progress and playback speed on library items.
+        AutoMigration(from = 2, to = 3),
+    ],
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun subjects(): SubjectDao

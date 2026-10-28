@@ -60,7 +60,10 @@ import com.rayaurelius.studybuddy.data.db.LearningItem
 import com.rayaurelius.studybuddy.domain.StudyMath
 import com.rayaurelius.studybuddy.domain.CategoryInfo
 import com.rayaurelius.studybuddy.ui.components.CategoryDialog
+import com.rayaurelius.studybuddy.domain.MediaTime
+import com.rayaurelius.studybuddy.ui.components.DurationFields
 import com.rayaurelius.studybuddy.ui.components.EmptyState
+import com.rayaurelius.studybuddy.ui.components.MediaMeter
 import com.rayaurelius.studybuddy.ui.components.LinearMeter
 import com.rayaurelius.studybuddy.ui.components.NumberField
 import com.rayaurelius.studybuddy.ui.components.StarRating
@@ -202,7 +205,11 @@ private fun ItemCard(snap: Snapshot, item: LearningItem, onClick: () -> Unit) {
                 if (meta.isNotEmpty()) Text(meta.joinToString(" · "), style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 val total = item.totalUnits
-                if (item.status == ItemStatus.ACTIVE && total != null && total > 0) {
+                val media = snap.mediaProgress(item)
+                if (item.status == ItemStatus.ACTIVE && media != null) {
+                    Spacer(Modifier.height(8.dp))
+                    MediaMeter(media)
+                } else if (item.status == ItemStatus.ACTIVE && total != null && total > 0) {
                     Spacer(Modifier.height(8.dp))
                     LinearMeter(item.progressUnits.toFloat() / total, Modifier.fillMaxWidth())
                     Spacer(Modifier.height(2.dp))
@@ -259,6 +266,27 @@ private fun ItemEditorSheet(
                 ItemStatus.entries.forEach { st -> FilterChip(item.status == st, { item = item.copy(status = st) }, { Text(st.label) }) }
             }
             SubjectPicker(snap.activeSubjects, item.subjectId, { item = item.copy(subjectId = it) })
+            if (MediaTime.supportsRuntime(item.type)) {
+                Text("Run time", style = MaterialTheme.typography.titleSmall)
+                Text(
+                    "Total length of the ${cat.label.lowercase()}. Time you study it with the timer counts toward it.",
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                DurationFields("Total", item.runtimeMin?.times(60L), { sec -> item = item.copy(runtimeMin = sec?.let { (it / 60).toInt() }?.takeIf { it > 0 }) })
+                if (item.runtimeMin != null && item.status == ItemStatus.ACTIVE) {
+                    Text("Already completed before tracking", style = MaterialTheme.typography.labelLarge)
+                    DurationFields("Done", item.priorSec.takeIf { it > 0 }, { sec -> item = item.copy(priorSec = sec ?: 0) })
+                }
+                if (item.runtimeMin != null && MediaTime.supportsSpeed(item.type)) {
+                    Text("Playback speed", style = MaterialTheme.typography.labelLarge)
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        MediaTime.SPEEDS.forEach { sp ->
+                            FilterChip(item.playbackSpeed == sp, { item = item.copy(playbackSpeed = sp) }, { Text(MediaTime.formatSpeed(sp)) })
+                        }
+                    }
+                }
+                if (!isNew) snap.mediaProgress(item)?.let { MediaMeter(it) }
+            }
             if (item.status != ItemStatus.WANT) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     NumberField("Done", item.progressUnits, { item = item.copy(progressUnits = it ?: 0) }, Modifier.weight(1f))

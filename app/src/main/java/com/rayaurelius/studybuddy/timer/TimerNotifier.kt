@@ -67,7 +67,7 @@ class TimerNotifier(private val context: Context) {
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
 
-    fun show(s: TimerState, subjectName: String?) {
+    fun show(s: TimerState, subjectName: String?, mediaLine: String? = null) {
         if (!Channels.canPost(context)) return
         if (s.status == TimerStatus.IDLE) { nm.cancel(ID_TIMER); return }
         val now = System.currentTimeMillis()
@@ -86,16 +86,16 @@ class TimerNotifier(private val context: Context) {
                     .setUsesChronometer(true)
                     .setShowWhen(true)
                 if (focus) {
-                    b.setWhen(now + s.remainingMs(now)).setChronometerCountDown(true).setContentText("until your break")
+                    b.setWhen(now + s.remainingMs(now)).setChronometerCountDown(true).setContentText(mediaLine ?: "until your break")
                 } else {
-                    b.setWhen(now - s.elapsedMs(now)).setContentText("Every minute counts")
+                    b.setWhen(now - s.elapsedMs(now)).setContentText(mediaLine ?: "Every minute counts")
                 }
                 b.addAction(0, "Pause", action(TimerActionReceiver.PAUSE, 1))
                 b.addAction(0, "Finish", action(TimerActionReceiver.FINISH, 2))
             }
             TimerStatus.PAUSED -> {
                 b.setContentTitle("Paused · ${StudyMath.formatClock(s.elapsedMs(now))}")
-                    .setContentText(subjectName ?: "Tap resume when you're ready")
+                    .setContentText(mediaLine ?: subjectName ?: "Tap resume when you're ready")
                     .setShowWhen(false)
                 b.addAction(0, "Resume", action(TimerActionReceiver.RESUME, 3))
                 b.addAction(0, "Finish", action(TimerActionReceiver.FINISH, 2))

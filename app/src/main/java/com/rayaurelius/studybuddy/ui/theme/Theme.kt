@@ -86,6 +86,8 @@ private val AppTypography = Typography(
 )
 
 val TimerDigits = TextStyle(fontSize = 56.sp, fontWeight = FontWeight.Bold, letterSpacing = (-1).sp)
+/** Slightly smaller so h:mm:ss media positions fit inside the ring. */
+val MediaDigits = TextStyle(fontSize = 44.sp, fontWeight = FontWeight.Bold, letterSpacing = (-1).sp)
 
 @Composable
 fun StudybuddyTheme(mode: ThemeMode = ThemeMode.SYSTEM, dynamic: Boolean = false, content: @Composable () -> Unit) {

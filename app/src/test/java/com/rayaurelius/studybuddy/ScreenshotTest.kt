@@ -41,6 +41,8 @@ import kotlin.random.Random
 @Config(sdk = [36], qualifiers = "w411dp-h891dp-xxhdpi")
 class ScreenshotTest {
 
+    private var audiobookId = 0L
+
     init { seed() }
 
     @get:Rule val compose = createAndroidComposeRule<MainActivity>()
@@ -70,7 +72,12 @@ class ScreenshotTest {
         repo.saveItem(LearningItem(type = ItemType.BOOK, title = "The Curious Learner's Handbook", creator = "M. Alvarez", subjectId = subjects[3], totalUnits = 320, progressUnits = 212))
         repo.saveItem(LearningItem(type = ItemType.COURSE, title = "Intro to Data Structures", creator = "Open University", subjectId = subjects[1], totalUnits = 12, progressUnits = 5))
         val workshop = repo.saveCategory(CustomCategory(name = "Workshop", emoji = "🛠️", unitLabel = "sessions"))
-        repo.saveItem(LearningItem(type = ItemType.AUDIOBOOK, title = "Habits of Curious People", creator = "L. Park", subjectId = subjects[3], totalUnits = 24, progressUnits = 9))
+        audiobookId = repo.saveItem(LearningItem(type = ItemType.AUDIOBOOK, title = "Habits of Curious People", creator = "L. Park", subjectId = subjects[3],
+            totalUnits = 24, progressUnits = 9, runtimeMin = 9 * 60 + 30, priorSec = 2 * 3600L, playbackSpeed = 1.5f))
+        repeat(3) { d ->
+            repo.addSession(StudySession(subjectId = subjects[3], itemId = audiobookId,
+                startedAt = today.minusDays(d + 1L).atTime(8, 0).atZone(zone).toInstant().toEpochMilli(), durationSec = 40 * 60L))
+        }
         repo.saveItem(LearningItem(type = ItemType.CUSTOM, categoryId = workshop, title = "Weekend Pottery Workshop", creator = "Clay Studio", totalUnits = 6, progressUnits = 4))
         repo.saveItem(LearningItem(type = ItemType.AUDIOBOOK, title = "A Short History of Numbers", status = ItemStatus.DONE, rating = 4, completedAt = now - 86_400_000L * 6))
         repo.saveItem(LearningItem(type = ItemType.PODCAST, title = "Money Matters Weekly", creator = "J. Chen", subjectId = subjects[2], totalUnits = 40, progressUnits = 18))
@@ -102,6 +109,13 @@ class ScreenshotTest {
         tab("Library"); shot("3_library")
         tab("Goals"); shot("4_goals")
         tab("Badges"); shot("5_badges")
+    }
+
+    @Test fun timerOnAudiobook() {
+        val app = ApplicationProvider.getApplicationContext<StudyBuddyApp>()
+        runBlocking { app.container.timer.start(com.rayaurelius.studybuddy.timer.TimerMode.STOPWATCH, null, audiobookId) }
+        compose.mainClock.advanceTimeBy(1_000)
+        shot("7_timer_audiobook")
     }
 
     @Config(qualifiers = "w411dp-h891dp-night-xxhdpi")

@@ -2,9 +2,9 @@
 
 A study and learning tracker for everything you learn **outside formal schooling** — books, podcasts, seminars, courses, and self-directed study. Native Android, Kotlin + Jetpack Compose, Material 3, targeting **Android 17 (API 37)**.
 
-| Today | Stats | Library | Goals | Badges | Dark |
-|---|---|---|---|---|---|
-| ![](docs/screenshots/1_today.png) | ![](docs/screenshots/2_stats.png) | ![](docs/screenshots/3_library.png) | ![](docs/screenshots/4_goals.png) | ![](docs/screenshots/5_badges.png) | ![](docs/screenshots/6_today_dark.png) |
+| Today | Stats | Library | Goals | Badges | Dark | Timer on an audiobook |
+|---|---|---|---|---|---|---|
+| ![](docs/screenshots/1_today.png) | ![](docs/screenshots/2_stats.png) | ![](docs/screenshots/3_library.png) | ![](docs/screenshots/4_goals.png) | ![](docs/screenshots/5_badges.png) | ![](docs/screenshots/6_today_dark.png) | ![](docs/screenshots/7_timer_audiobook.png) |
 
 *Screenshots are rendered from the real app with demo data by `ScreenshotTest`.*
 
@@ -15,6 +15,7 @@ A study and learning tracker for everything you learn **outside formal schooling
 - **Stats** — day / week / month / year views, tap-to-inspect bar charts, subject breakdown, 18-week consistency heatmap, session history.
 - **Streaks with rest days** — configurable minimum minutes per day and rest days per week.
 - **Goals** — study-time goals (daily / weekly / monthly) and "finish things" goals (e.g. 2 books a month, 12 books by Dec 31), with a hit-rate history.
+- **Media run time** — enter the total length of audiobooks, podcasts, video courses and seminars, plus time already completed and playback speed. The timer shows live progress ("5:00:00 of 9:30:00 · 52%"), and time studied at 1.5× counts as 1.5× of the media.
 - **Library** — books, audiobooks, podcasts, seminars, courses, videos, articles, plus **your own categories** (name, emoji, and progress unit — e.g. "Workshop" tracked in sessions). Ratings and takeaways.
 - **Levels & 51 milestones** — time invested (up to 5,000 hours), books (up to 1,000, audiobooks included), consistency, library, learning craft, goals. Celebrations with confetti.
 - **Home-screen widget** — today's time, streak, weekly goal, live ticking timer, one-tap start/pause.
