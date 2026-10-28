@@ -1,5 +1,6 @@
 package com.rayaurelius.sophinity.timer
 
+import com.rayaurelius.sophinity.ui.i18n.AppLocale
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -20,19 +21,20 @@ object Channels {
     const val ALERTS = "alerts"
     const val REMINDERS = "reminders"
 
-    fun create(context: Context) {
-        val nm = context.getSystemService(NotificationManager::class.java)
+    fun create(base: Context) {
+        val context = AppLocale.localized(base)
+        val nm = base.getSystemService(NotificationManager::class.java)
         nm.createNotificationChannels(
             listOf(
-                NotificationChannel(TIMER, "Learning timer", NotificationManager.IMPORTANCE_LOW).apply {
-                    description = "Shows your running learning session"
+                NotificationChannel(TIMER, context.getString(R.string.ch_timer), NotificationManager.IMPORTANCE_LOW).apply {
+                    description = context.getString(R.string.ch_timer_desc)
                     setShowBadge(false)
                 },
-                NotificationChannel(ALERTS, "Focus & break alerts", NotificationManager.IMPORTANCE_HIGH).apply {
-                    description = "Tells you when a focus block or break ends"
+                NotificationChannel(ALERTS, context.getString(R.string.ch_alerts), NotificationManager.IMPORTANCE_HIGH).apply {
+                    description = context.getString(R.string.ch_alerts_desc)
                 },
-                NotificationChannel(REMINDERS, "Learning reminders", NotificationManager.IMPORTANCE_DEFAULT).apply {
-                    description = "Your daily nudge to learn"
+                NotificationChannel(REMINDERS, context.getString(R.string.ch_reminders), NotificationManager.IMPORTANCE_DEFAULT).apply {
+                    description = context.getString(R.string.ch_reminders_desc)
                 },
             )
         )
@@ -42,8 +44,10 @@ object Channels {
         ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
 }
 
-class TimerNotifier(private val context: Context) {
-    private val nm = NotificationManagerCompat.from(context)
+class TimerNotifier(private val base: Context) {
+    /** Resources in the app language (matters on Android 12 and below). */
+    private val context: Context get() = AppLocale.localized(base)
+    private val nm = NotificationManagerCompat.from(base)
 
     companion object {
         const val ID_TIMER = 1001
@@ -52,26 +56,26 @@ class TimerNotifier(private val context: Context) {
     }
 
     private fun openApp(sessionId: Long? = null): PendingIntent {
-        val intent = Intent(context, MainActivity::class.java).apply {
+        val intent = Intent(base, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             sessionId?.let { putExtra(EXTRA_REFLECT_SESSION, it) }
         }
         return PendingIntent.getActivity(
-            context, sessionId?.toInt() ?: 0, intent,
+            base, sessionId?.toInt() ?: 0, intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
     }
 
     private fun action(action: String, req: Int): PendingIntent = PendingIntent.getBroadcast(
-        context, req, Intent(context, TimerActionReceiver::class.java).setAction(action),
+        base, req, Intent(base, TimerActionReceiver::class.java).setAction(action),
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
 
     fun show(s: TimerState, subjectName: String?, mediaLine: String? = null) {
-        if (!Channels.canPost(context)) return
+        if (!Channels.canPost(base)) return
         if (s.status == TimerStatus.IDLE) { nm.cancel(ID_TIMER); return }
         val now = System.currentTimeMillis()
-        val b = NotificationCompat.Builder(context, Channels.TIMER)
+        val b = NotificationCompat.Builder(base, Channels.TIMER)
             .setSmallIcon(R.drawable.ic_stat_timer)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
@@ -82,29 +86,29 @@ class TimerNotifier(private val context: Context) {
         when (s.status) {
             TimerStatus.RUNNING -> {
                 val focus = s.mode == TimerMode.FOCUS
-                b.setContentTitle(if (focus) "Focus block · ${subjectName ?: "Learning"}" else "Learning ${subjectName ?: ""}".trim())
+                b.setContentTitle(if (focus) context.getString(R.string.notif_focus_title, subjectName ?: context.getString(R.string.common_learning)) else context.getString(R.string.notif_learning_title, subjectName ?: "").trim())
                     .setUsesChronometer(true)
                     .setShowWhen(true)
                 if (focus) {
-                    b.setWhen(now + s.remainingMs(now)).setChronometerCountDown(true).setContentText(mediaLine ?: "until your break")
+                    b.setWhen(now + s.remainingMs(now)).setChronometerCountDown(true).setContentText(mediaLine ?: context.getString(R.string.notif_until_break))
                 } else {
-                    b.setWhen(now - s.elapsedMs(now)).setContentText(mediaLine ?: "Every minute counts")
+                    b.setWhen(now - s.elapsedMs(now)).setContentText(mediaLine ?: context.getString(R.string.notif_every_minute))
                 }
-                b.addAction(0, "Pause", action(TimerActionReceiver.PAUSE, 1))
-                b.addAction(0, "Finish", action(TimerActionReceiver.FINISH, 2))
+                b.addAction(0, context.getString(R.string.common_pause), action(TimerActionReceiver.PAUSE, 1))
+                b.addAction(0, context.getString(R.string.common_finish), action(TimerActionReceiver.FINISH, 2))
             }
             TimerStatus.PAUSED -> {
-                b.setContentTitle("Paused · ${StudyMath.formatClock(s.elapsedMs(now))}")
-                    .setContentText(mediaLine ?: subjectName ?: "Tap resume when you're ready")
+                b.setContentTitle(context.getString(R.string.notif_paused_title, StudyMath.formatClock(s.elapsedMs(now))))
+                    .setContentText(mediaLine ?: subjectName ?: context.getString(R.string.notif_tap_resume))
                     .setShowWhen(false)
-                b.addAction(0, "Resume", action(TimerActionReceiver.RESUME, 3))
-                b.addAction(0, "Finish", action(TimerActionReceiver.FINISH, 2))
+                b.addAction(0, context.getString(R.string.common_resume), action(TimerActionReceiver.RESUME, 3))
+                b.addAction(0, context.getString(R.string.common_finish), action(TimerActionReceiver.FINISH, 2))
             }
             TimerStatus.BREAK -> {
-                b.setContentTitle("Break time ☕")
-                    .setContentText("Stretch, hydrate, look far away")
+                b.setContentTitle(context.getString(R.string.notif_break_title))
+                    .setContentText(context.getString(R.string.notif_break_text))
                     .setUsesChronometer(true).setChronometerCountDown(true).setWhen(s.breakEndsAt).setShowWhen(true)
-                b.addAction(0, "Skip break", action(TimerActionReceiver.SKIP_BREAK, 4))
+                b.addAction(0, context.getString(R.string.notif_skip_break), action(TimerActionReceiver.SKIP_BREAK, 4))
             }
             TimerStatus.IDLE -> Unit
         }
@@ -112,25 +116,25 @@ class TimerNotifier(private val context: Context) {
     }
 
     fun alertFocusDone(sessionId: Long, minutes: Long) {
-        if (!Channels.canPost(context)) return
-        val n = NotificationCompat.Builder(context, Channels.ALERTS)
+        if (!Channels.canPost(base)) return
+        val n = NotificationCompat.Builder(base, Channels.ALERTS)
             .setSmallIcon(R.drawable.ic_stat_timer)
-            .setContentTitle("Focus block complete 🎉")
-            .setContentText("$minutes min logged. Tap to note one thing you learned.")
+            .setContentTitle(context.getString(R.string.notif_focus_done_title))
+            .setContentText(context.getString(R.string.notif_focus_done_text, StudyMath.formatDuration(minutes * 60)))
             .setContentIntent(openApp(sessionId))
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .addAction(0, "Start break", action(TimerActionReceiver.START_BREAK, 5))
+            .addAction(0, context.getString(R.string.notif_start_break), action(TimerActionReceiver.START_BREAK, 5))
             .build()
         try { nm.notify(ID_ALERT, n) } catch (_: SecurityException) { }
     }
 
     fun alertBreakDone() {
-        if (!Channels.canPost(context)) return
-        val n = NotificationCompat.Builder(context, Channels.ALERTS)
+        if (!Channels.canPost(base)) return
+        val n = NotificationCompat.Builder(base, Channels.ALERTS)
             .setSmallIcon(R.drawable.ic_stat_timer)
-            .setContentTitle("Break's over")
-            .setContentText("Ready for another focus block?")
+            .setContentTitle(context.getString(R.string.notif_break_over))
+            .setContentText(context.getString(R.string.notif_break_over_text))
             .setContentIntent(openApp())
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -139,11 +143,11 @@ class TimerNotifier(private val context: Context) {
     }
 
     fun savedNotice(sessionId: Long, minutes: Long) {
-        if (!Channels.canPost(context)) return
-        val n = NotificationCompat.Builder(context, Channels.ALERTS)
+        if (!Channels.canPost(base)) return
+        val n = NotificationCompat.Builder(base, Channels.ALERTS)
             .setSmallIcon(R.drawable.ic_stat_timer)
-            .setContentTitle("$minutes min saved")
-            .setContentText("Tap to add a quick reflection")
+            .setContentTitle(context.getString(R.string.notif_saved_title, StudyMath.formatDuration(minutes * 60)))
+            .setContentText(context.getString(R.string.notif_saved_text))
             .setContentIntent(openApp(sessionId))
             .setAutoCancel(true)
             .setSilent(true)

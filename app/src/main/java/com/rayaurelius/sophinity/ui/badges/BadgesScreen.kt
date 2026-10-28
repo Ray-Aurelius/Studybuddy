@@ -1,5 +1,9 @@
 package com.rayaurelius.sophinity.ui.badges
 
+import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
+import com.rayaurelius.sophinity.domain.str
+import com.rayaurelius.sophinity.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -62,16 +66,16 @@ fun BadgesScreen(contentPadding: PaddingValues) {
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier.fillMaxSize(),
     ) {
-        item(span = { GridItemSpan(maxLineSpan) }) { Text("Laurels", style = MaterialTheme.typography.headlineMedium) }
+        item(span = { GridItemSpan(maxLineSpan) }) { Text(stringResource(R.string.laurels_title), style = MaterialTheme.typography.headlineMedium) }
         item(span = { GridItemSpan(maxLineSpan) }) { TitleCard(snap) }
         item(span = { GridItemSpan(maxLineSpan) }) { TitleLadder(snap) }
         item(span = { GridItemSpan(maxLineSpan) }) {
-            Text("${unlocked.size} of ${Milestones.all.size} laurels earned", style = MaterialTheme.typography.labelLarge,
+            Text(stringResource(R.string.laurels_count, unlocked.size, Milestones.all.size), style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         MilestoneCategory.entries.forEach { cat ->
             item(span = { GridItemSpan(maxLineSpan) }) {
-                Text(cat.label, style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp))
+                Text(stringResource(cat.labelRes), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp))
             }
             items(Milestones.all.filter { it.category == cat }, key = { it.key }) { m ->
                 BadgeTile(snap, m, unlocked[m.key]?.unlockedAt)
@@ -88,25 +92,25 @@ private fun TitleCard(snap: Snapshot) {
         Column {
             GreekKeyBand(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f))
             Column(Modifier.padding(20.dp)) {
-                Text("Your title", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
-                Text(t.current.name, style = MaterialTheme.typography.displaySmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                Text(stringResource(R.string.your_title), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                Text(t.current.name.str(), style = MaterialTheme.typography.displaySmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
                 Text(
-                    "${t.current.greek} · “${t.current.meaning}”",
+                    stringResource(R.string.title_greek_meaning, t.current.greek, t.current.meaning.str()),
                     style = MaterialTheme.typography.titleMedium.copy(fontFamily = LocalHeadingFont.current),
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
                 val next = t.next
                 if (next != null) {
                     Spacer(Modifier.height(16.dp))
-                    Text("To become ${next.name}", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Text(stringResource(R.string.to_become, next.name.str()), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
                     Spacer(Modifier.height(6.dp))
                     t.nextChecklist.forEach { (m, done) ->
                         val p = m.progress(snap.milestoneContext)
                         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(vertical = 3.dp)) {
                             Text(if (done) "✅" else m.emoji, modifier = Modifier.width(30.dp))
                             Column(Modifier.weight(1f)) {
-                                Text(m.title, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                                Text(m.description, style = MaterialTheme.typography.labelSmall,
+                                Text(m.title.str(), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                                Text(m.description.str(), style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.75f))
                             }
                             if (!done) Text("$p / ${m.target}", style = MaterialTheme.typography.labelMedium,
@@ -115,17 +119,17 @@ private fun TitleCard(snap: Snapshot) {
                     }
                 } else {
                     Spacer(Modifier.height(12.dp))
-                    Text("You've reached the highest title. The love of wisdom has no finish line.",
+                    Text(stringResource(R.string.highest_reached),
                         style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
                 Spacer(Modifier.height(18.dp))
-                Text("Level ${l.level}", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                Text(stringResource(R.string.level_n, l.level), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
                 Spacer(Modifier.height(4.dp))
                 LinearMeter(l.progress, Modifier.fillMaxWidth())
                 Spacer(Modifier.height(4.dp))
                 val left = ((l.hoursForLevel - l.hoursIntoLevel) * 3600).toLong()
                 Text(
-                    "${StudyMath.formatDuration(left, true)} to Level ${l.level + 1} · ${StudyMath.formatDuration(snap.totalSeconds, true)} invested in yourself",
+                    stringResource(R.string.level_progress, StudyMath.formatDuration(left, true), l.level + 1, StudyMath.formatDuration(snap.totalSeconds, true)),
                     style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f),
                 )
             }
@@ -138,7 +142,7 @@ private fun TitleCard(snap: Snapshot) {
 private fun TitleLadder(snap: Snapshot) {
     val rank = snap.title.current.rank
     Column {
-        Text("The path to Philosopher", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 4.dp, bottom = 8.dp))
+        Text(stringResource(R.string.path_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 4.dp, bottom = 8.dp))
         Titles.all.forEach { t ->
             val earned = t.rank <= rank
             val isCurrent = t.rank == rank
@@ -159,11 +163,11 @@ private fun TitleLadder(snap: Snapshot) {
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier.weight(1f)) {
                     Text(
-                        t.name + if (isCurrent) "  · you are here" else "",
+                        if (isCurrent) stringResource(R.string.you_are_here, t.name.str()) else t.name.str(),
                         style = MaterialTheme.typography.titleSmall.copy(fontFamily = LocalHeadingFont.current),
                         color = if (isCurrent) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                     )
-                    Text("${t.greek} · ${t.meaning}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.greek_dot_meaning, t.greek, t.meaning.str()), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }
@@ -181,13 +185,13 @@ private fun BadgeTile(snap: Snapshot, m: Milestone, unlockedAt: Long?) {
         Column(Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
             Text(m.emoji, style = MaterialTheme.typography.displaySmall, modifier = Modifier.alpha(if (done) 1f else 0.35f))
             Spacer(Modifier.height(6.dp))
-            Text(m.title, style = MaterialTheme.typography.titleSmall, textAlign = TextAlign.Center, maxLines = 2)
-            Text(m.description, style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Center,
+            Text(m.title.str(), style = MaterialTheme.typography.titleSmall, textAlign = TextAlign.Center, maxLines = 2)
+            Text(m.description.str(), style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2)
             Spacer(Modifier.height(6.dp))
             if (done) {
                 Text(
-                    Instant.ofEpochMilli(unlockedAt!!).atZone(snap.zone).format(DateTimeFormatter.ofPattern("MMM d, yyyy")),
+                    Instant.ofEpochMilli(unlockedAt!!).atZone(snap.zone).format(rememberDateFormat("yMMMd")),
                     style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.secondary,
                 )
             } else {

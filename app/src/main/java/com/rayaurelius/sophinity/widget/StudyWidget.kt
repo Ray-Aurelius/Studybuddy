@@ -1,5 +1,6 @@
 package com.rayaurelius.sophinity.widget
 
+import com.rayaurelius.sophinity.ui.i18n.AppLocale
 import android.content.Context
 import android.os.SystemClock
 import android.widget.RemoteViews
@@ -53,21 +54,27 @@ private data class WidgetData(
     val weekLabel: String,
     val weekFraction: Float?,
     val timer: TimerState,
+    val today: String, val paused: String, val focusBlock: String, val learning: String,
+    val pause: String, val resume: String, val start: String,
 )
 
 class StudyWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val c = (context.applicationContext as SophinityApp).container
+        val res = AppLocale.localized(context).resources
         val snap = c.repo.snapshot.first()
         val weekly = snap.goalProgress.firstOrNull { it.goal.kind == GoalKind.TIME && it.goal.period == GoalPeriod.WEEKLY }
         val data = WidgetData(
             todaySec = snap.todaySeconds,
             streak = snap.streak.current,
-            weekLabel = weekly?.let { "${StudyMath.formatDuration(it.current * 60L, true)} / ${StudyMath.formatDuration(it.target * 60L, true)} this week" }
-                ?: "${StudyMath.formatDuration(snap.weekSeconds, true)} this week",
+            weekLabel = weekly?.let { res.getString(R.string.widget_goal_week, StudyMath.formatDuration(it.current * 60L, true), StudyMath.formatDuration(it.target * 60L, true)) }
+                ?: res.getString(R.string.widget_this_week, StudyMath.formatDuration(snap.weekSeconds, true)),
             weekFraction = weekly?.fraction,
             timer = c.timer.current(),
+            today = res.getString(R.string.common_today_lower), paused = res.getString(R.string.common_paused),
+            focusBlock = res.getString(R.string.common_focus_block), learning = res.getString(R.string.common_learning),
+            pause = res.getString(R.string.common_pause), resume = res.getString(R.string.common_resume), start = res.getString(R.string.common_start),
         )
         provideContent { GlanceTheme { Content(context, data) } }
     }
@@ -88,7 +95,7 @@ class StudyWidget : GlanceAppWidget() {
             if (d.timer.isActive) {
                 AndroidRemoteViews(remoteViews = chronometer(context, d.timer))
                 Text(
-                    if (d.timer.status == TimerStatus.PAUSED) "Paused" else if (d.timer.mode == TimerMode.FOCUS) "Focus block" else "Learning",
+                    if (d.timer.status == TimerStatus.PAUSED) d.paused else if (d.timer.mode == TimerMode.FOCUS) d.focusBlock else d.learning,
                     style = TextStyle(color = colors.onSurfaceVariant, fontSize = 12.sp),
                 )
             } else {
@@ -96,7 +103,7 @@ class StudyWidget : GlanceAppWidget() {
                     StudyMath.formatDuration(d.todaySec),
                     style = TextStyle(color = colors.onSurface, fontSize = 30.sp, fontWeight = FontWeight.Bold),
                 )
-                Text("today", style = TextStyle(color = colors.onSurfaceVariant, fontSize = 12.sp))
+                Text(d.today, style = TextStyle(color = colors.onSurfaceVariant, fontSize = 12.sp))
             }
             Spacer(GlanceModifier.defaultWeight())
             if (d.weekFraction != null) {
@@ -111,9 +118,9 @@ class StudyWidget : GlanceAppWidget() {
                 Spacer(GlanceModifier.width(6.dp))
                 Button(
                     text = when (d.timer.status) {
-                        TimerStatus.RUNNING -> "Pause"
-                        TimerStatus.PAUSED -> "Resume"
-                        else -> "Start"
+                        TimerStatus.RUNNING -> d.pause
+                        TimerStatus.PAUSED -> d.resume
+                        else -> d.start
                     },
                     onClick = actionRunCallback<ToggleTimerAction>(),
                     colors = ButtonDefaults.buttonColors(backgroundColor = colors.primary, contentColor = colors.onPrimary),

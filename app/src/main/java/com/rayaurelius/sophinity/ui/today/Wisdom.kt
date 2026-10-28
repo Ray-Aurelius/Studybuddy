@@ -1,5 +1,7 @@
 package com.rayaurelius.sophinity.ui.today
 
+import androidx.annotation.StringRes
+import com.rayaurelius.sophinity.R
 import java.time.LocalDate
 
 /**
@@ -7,28 +9,28 @@ import java.time.LocalDate
  * in plain modern English. (Several famous "Greek" quotes are misattributed; e.g. "We are what
  * we repeatedly do" is Will Durant summarizing Aristotle, so it is not included.)
  */
-data class Wisdom(val text: String, val who: String, val source: String)
+data class Wisdom(@StringRes val text: Int, @StringRes val who: Int, @StringRes val source: Int)
 
 object Wisdoms {
     val all = listOf(
-        Wisdom("I grow old ever learning many things.", "Solon", "fragment, quoted by Plato and Plutarch"),
-        Wisdom("All people by nature desire to know.", "Aristotle", "Metaphysics, Book I"),
-        Wisdom("The unexamined life is not worth living.", "Socrates", "Plato, Apology"),
-        Wisdom("Wonder is the beginning of wisdom.", "Socrates", "Plato, Theaetetus"),
-        Wisdom("Know thyself.", "Inscription at Delphi", "Temple of Apollo"),
-        Wisdom("What we have to learn to do, we learn by doing.", "Aristotle", "Nicomachean Ethics, Book II"),
-        Wisdom("It is impossible to learn what you think you already know.", "Epictetus", "Discourses, Book II"),
-        Wisdom("No great thing is created suddenly, any more than a bunch of grapes or a fig.", "Epictetus", "Discourses, Book I"),
-        Wisdom("First say to yourself what you would be; then do what you have to do.", "Epictetus", "Discourses, Book III"),
-        Wisdom("The roots of education are bitter, but the fruit is sweet.", "Aristotle", "as quoted by Diogenes Laërtius"),
-        Wisdom("Education is the best provision for old age.", "Aristotle", "as quoted by Diogenes Laërtius"),
-        Wisdom("The mind is not a vessel to be filled, but wood to be kindled.", "Plutarch", "On Listening to Lectures"),
-        Wisdom("The beginning is half of the whole.", "Aristotle", "Politics, Book V"),
-        Wisdom("Practice is everything.", "Periander", "as quoted by Diogenes Laërtius"),
-        Wisdom("We have two ears and one mouth, so we may listen more and speak less.", "Zeno of Citium", "as quoted by Diogenes Laërtius"),
-        Wisdom("As are your habitual thoughts, so will be the character of your mind.", "Marcus Aurelius", "Meditations, Book V"),
-        Wisdom("Waste no more time arguing what a good person should be. Be one.", "Marcus Aurelius", "Meditations, Book X"),
-        Wisdom("You cannot step into the same river twice.", "Heraclitus", "as reported by Plato, Cratylus"),
+        Wisdom(R.string.wisdom_1, R.string.wisdom_1_who, R.string.wisdom_1_source),
+        Wisdom(R.string.wisdom_2, R.string.wisdom_2_who, R.string.wisdom_2_source),
+        Wisdom(R.string.wisdom_3, R.string.wisdom_3_who, R.string.wisdom_3_source),
+        Wisdom(R.string.wisdom_4, R.string.wisdom_4_who, R.string.wisdom_4_source),
+        Wisdom(R.string.wisdom_5, R.string.wisdom_5_who, R.string.wisdom_5_source),
+        Wisdom(R.string.wisdom_6, R.string.wisdom_6_who, R.string.wisdom_6_source),
+        Wisdom(R.string.wisdom_7, R.string.wisdom_7_who, R.string.wisdom_7_source),
+        Wisdom(R.string.wisdom_8, R.string.wisdom_8_who, R.string.wisdom_8_source),
+        Wisdom(R.string.wisdom_9, R.string.wisdom_9_who, R.string.wisdom_9_source),
+        Wisdom(R.string.wisdom_10, R.string.wisdom_10_who, R.string.wisdom_10_source),
+        Wisdom(R.string.wisdom_11, R.string.wisdom_11_who, R.string.wisdom_11_source),
+        Wisdom(R.string.wisdom_12, R.string.wisdom_12_who, R.string.wisdom_12_source),
+        Wisdom(R.string.wisdom_13, R.string.wisdom_13_who, R.string.wisdom_13_source),
+        Wisdom(R.string.wisdom_14, R.string.wisdom_14_who, R.string.wisdom_14_source),
+        Wisdom(R.string.wisdom_15, R.string.wisdom_15_who, R.string.wisdom_15_source),
+        Wisdom(R.string.wisdom_16, R.string.wisdom_16_who, R.string.wisdom_16_source),
+        Wisdom(R.string.wisdom_17, R.string.wisdom_17_who, R.string.wisdom_17_source),
+        Wisdom(R.string.wisdom_18, R.string.wisdom_18_who, R.string.wisdom_18_source),
     )
 
     fun forDay(day: LocalDate): Wisdom = all[(day.toEpochDay() % all.size).toInt()]

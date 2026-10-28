@@ -1,5 +1,9 @@
 package com.rayaurelius.sophinity.ui.stats
 
+import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
+import com.rayaurelius.sophinity.R
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -70,7 +74,7 @@ class StatsViewModel(private val c: AppContainer) : ViewModel() {
     fun delete(s: StudySession) = viewModelScope.launch { c.repo.deleteSession(s) }
 }
 
-enum class Period(val label: String) { DAY("Day"), WEEK("Week"), MONTH("Month"), YEAR("Year") }
+enum class Period(@androidx.annotation.StringRes val label: Int) { DAY(R.string.period_day), WEEK(R.string.period_week), MONTH(R.string.period_month), YEAR(R.string.period_year) }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -114,39 +118,39 @@ fun StatsScreen(contentPadding: PaddingValues) {
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxSize(),
     ) {
-        item { Text("Your progress", style = MaterialTheme.typography.headlineMedium) }
+        item { Text(stringResource(R.string.stats_title), style = MaterialTheme.typography.headlineMedium) }
         item {
             SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
                 Period.entries.forEachIndexed { i, p ->
-                    SegmentedButton(period == p, { period = p }, SegmentedButtonDefaults.itemShape(i, Period.entries.size)) { Text(p.label) }
+                    SegmentedButton(period == p, { period = p }, SegmentedButtonDefaults.itemShape(i, Period.entries.size)) { Text(stringResource(p.label)) }
                 }
             }
         }
         item {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { offset-- }) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, "Previous") }
+                IconButton(onClick = { offset-- }) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, stringResource(R.string.stats_prev)) }
                 Text(rangeLabel(period, range, offset), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f),
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center)
-                IconButton(onClick = { offset++ }, enabled = offset < 0) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, "Next") }
+                IconButton(onClick = { offset++ }, enabled = offset < 0) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, stringResource(R.string.stats_next)) }
             }
         }
         item { Summary(snap, period, range, total, prevTotal, sessions.size) }
         if (period != Period.DAY) item { ChartCard(snap, period, range) }
         item { SubjectBreakdown(snap, sessions, total) }
         item {
-            SectionCard(title = "Consistency") {
+            SectionCard(title = stringResource(R.string.stats_consistency)) {
                 StudyHeatmap(snap.daily, snap.today, snap.settings.weekStart)
                 Spacer(Modifier.height(12.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    StatTile("🔥", "${snap.streak.current}", "current streak", Modifier.weight(1f))
-                    StatTile("🏆", "${snap.streak.best}", "best streak", Modifier.weight(1f))
-                    StatTile("📚", StudyMath.formatDuration(snap.totalSeconds, true), "all time", Modifier.weight(1f))
+                    StatTile("🔥", "${snap.streak.current}", stringResource(R.string.stats_current_streak), Modifier.weight(1f))
+                    StatTile("🏆", "${snap.streak.best}", stringResource(R.string.stats_best_streak), Modifier.weight(1f))
+                    StatTile("📚", StudyMath.formatDuration(snap.totalSeconds, true), stringResource(R.string.stats_all_time), Modifier.weight(1f))
                 }
             }
         }
-        item { Text("Sessions", style = MaterialTheme.typography.titleMedium) }
+        item { Text(stringResource(R.string.stats_sessions), style = MaterialTheme.typography.titleMedium) }
         if (sessions.isEmpty()) {
-            item { EmptyState("🌱", "No sessions here yet", "Start the timer on Today, or log a session you forgot to time.") }
+            item { EmptyState("🌱", stringResource(R.string.stats_empty_title), stringResource(R.string.stats_empty_body)) }
         } else {
             items(sessions.take(100), key = { it.id }) { s -> SessionRow(snap, s, onDelete = { confirmDelete = s }) }
         }
@@ -155,19 +159,20 @@ fun StatsScreen(contentPadding: PaddingValues) {
     confirmDelete?.let { s ->
         AlertDialog(
             onDismissRequest = { confirmDelete = null },
-            title = { Text("Delete this session?") },
-            text = { Text("${StudyMath.formatDuration(s.durationSec)} will be removed from your stats.") },
-            confirmButton = { TextButton(onClick = { vm.delete(s); confirmDelete = null }) { Text("Delete") } },
-            dismissButton = { TextButton(onClick = { confirmDelete = null }) { Text("Cancel") } },
+            title = { Text(stringResource(R.string.stats_delete_title)) },
+            text = { Text(stringResource(R.string.stats_delete_body, StudyMath.formatDuration(s.durationSec))) },
+            confirmButton = { TextButton(onClick = { vm.delete(s); confirmDelete = null }) { Text(stringResource(R.string.common_delete)) } },
+            dismissButton = { TextButton(onClick = { confirmDelete = null }) { Text(stringResource(R.string.common_cancel)) } },
         )
     }
 }
 
+@Composable
 private fun rangeLabel(p: Period, r: DateRange, offset: Int): String = when (p) {
-    Period.DAY -> if (offset == 0) "Today" else if (offset == -1) "Yesterday" else r.start.format(DateTimeFormatter.ofPattern("EEE, MMM d"))
-    Period.WEEK -> if (offset == 0) "This week" else if (offset == -1) "Last week" else
-        "${r.start.format(DateTimeFormatter.ofPattern("MMM d"))} – ${r.endExclusive.minusDays(1).format(DateTimeFormatter.ofPattern("MMM d"))}"
-    Period.MONTH -> r.start.format(DateTimeFormatter.ofPattern("MMMM yyyy"))
+    Period.DAY -> if (offset == 0) stringResource(R.string.stats_today) else if (offset == -1) stringResource(R.string.stats_yesterday) else r.start.format(rememberDateFormat("EEEMMMd"))
+    Period.WEEK -> if (offset == 0) stringResource(R.string.stats_this_week) else if (offset == -1) stringResource(R.string.stats_last_week) else
+        stringResource(R.string.stats_range, r.start.format(rememberDateFormat("MMMd")), r.endExclusive.minusDays(1).format(rememberDateFormat("MMMd")))
+    Period.MONTH -> r.start.format(rememberDateFormat("MMMMyyyy"))
     Period.YEAR -> r.start.year.toString()
 }
 
@@ -177,17 +182,17 @@ private fun Summary(snap: Snapshot, period: Period, range: DateRange, total: Lon
     val studiedDays = range.days.count { (snap.daily[it] ?: 0) > 0 }
     val delta = if (prevTotal > 0) ((total - prevTotal) * 100 / prevTotal).toInt() else null
     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        StatTile("⏱️", StudyMath.formatDuration(total, true), "total", Modifier.weight(1f))
+        StatTile("⏱️", StudyMath.formatDuration(total, true), stringResource(R.string.stats_total), Modifier.weight(1f))
         if (period == Period.DAY) {
-            StatTile("🧩", "$count", if (count == 1) "session" else "sessions", Modifier.weight(1f))
+            StatTile("🧩", "$count", pluralStringResource(R.plurals.stats_sessions_count, count), Modifier.weight(1f))
             val focusAvg = snap.sessions.filter { StudyMath.dayOf(it.startedAt, snap.zone) in range }.mapNotNull { it.focus }.average()
-            StatTile("🎯", if (focusAvg.isNaN()) "–" else "%.1f/5".format(focusAvg), "avg focus", Modifier.weight(1f))
+            StatTile("🎯", if (focusAvg.isNaN()) "–" else "%.1f/5".format(focusAvg), stringResource(R.string.stats_avg_focus), Modifier.weight(1f))
         } else {
-            StatTile("📊", StudyMath.formatDuration(total / elapsedDays, true), "daily avg", Modifier.weight(1f))
+            StatTile("📊", StudyMath.formatDuration(total / elapsedDays, true), stringResource(R.string.stats_daily_avg), Modifier.weight(1f))
             StatTile(
                 if (delta == null) "✨" else if (delta >= 0) "📈" else "📉",
-                when { delta == null -> "$studiedDays d"; delta >= 0 -> "+$delta%"; else -> "$delta%" },
-                if (delta == null) "days learning" else if (period == Period.YEAR) "vs last year" else "vs same point last ${period.label.lowercase()}",
+                when { delta == null -> stringResource(R.string.stats_days_short, studiedDays); delta >= 0 -> "+$delta%"; else -> "$delta%" },
+                stringResource(when { delta == null -> R.string.stats_days_learning; period == Period.YEAR -> R.string.stats_vs_last_year; period == Period.MONTH -> R.string.stats_vs_same_month; period == Period.DAY -> R.string.stats_vs_yesterday; else -> R.string.stats_vs_same_week }),
                 Modifier.weight(1f),
             )
         }
@@ -196,6 +201,8 @@ private fun Summary(snap: Snapshot, period: Period, range: DateRange, total: Lon
 
 @Composable
 private fun ChartCard(snap: Snapshot, period: Period, range: DateRange) {
+    val dayFmt = rememberDateFormat("EEEMMMd")
+    val monthFmt = rememberDateFormat("MMMM")
     val locale = androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
     val bars: List<Bar>
     var goalLine: Long? = null
@@ -205,7 +212,7 @@ private fun ChartCard(snap: Snapshot, period: Period, range: DateRange) {
                 Bar(
                     label = if (period == Period.WEEK) d.dayOfWeek.getDisplayName(TextStyle.NARROW, locale) else d.dayOfMonth.toString(),
                     seconds = snap.daily[d] ?: 0,
-                    detail = d.format(DateTimeFormatter.ofPattern("EEE, MMM d")),
+                    detail = d.format(dayFmt),
                     highlight = d == snap.today,
                 )
             }
@@ -219,17 +226,17 @@ private fun ChartCard(snap: Snapshot, period: Period, range: DateRange) {
                 Bar(
                     label = start.month.getDisplayName(TextStyle.NARROW, locale),
                     seconds = StudyMath.secondsIn(r, snap.daily),
-                    detail = start.format(DateTimeFormatter.ofPattern("MMMM")),
+                    detail = start.format(monthFmt),
                     highlight = snap.today in r,
                 )
             }
         }
     }
-    SectionCard(title = if (period == Period.YEAR) "By month" else "By day") {
+    SectionCard(title = stringResource(if (period == Period.YEAR) R.string.stats_by_month else R.string.stats_by_day)) {
         StudyBarChart(bars, goalLineSeconds = goalLine, labelEvery = if (period == Period.MONTH) 5 else 1)
         if (goalLine != null) {
             Spacer(Modifier.height(8.dp))
-            Text("Dashed line: your daily goal", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.stats_goal_line), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }
@@ -239,15 +246,15 @@ private fun SubjectBreakdown(snap: Snapshot, sessions: List<StudySession>, total
     if (total <= 0) return
     val bySubject = sessions.groupBy { it.subjectId }.mapValues { (_, v) -> v.sumOf { it.durationSec } }
         .entries.sortedByDescending { it.value }
-    SectionCard(title = "By subject") {
+    SectionCard(title = stringResource(R.string.stats_by_subject)) {
         bySubject.forEachIndexed { i, (sid, sec) ->
             val subject = sid?.let { snap.subjectsById[it] }
             if (i > 0) Spacer(Modifier.height(12.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 SubjectDot(subject?.color ?: 0xFF9AA0A6.toInt())
                 Spacer(Modifier.width(8.dp))
-                Text(subject?.let { "${it.emoji} ${it.name}" } ?: "General", Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text("${StudyMath.formatDuration(sec, true)} · ${sec * 100 / total}%", style = MaterialTheme.typography.labelLarge,
+                Text(subject?.let { "${it.emoji} ${it.name}" } ?: stringResource(R.string.stats_general), Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(stringResource(R.string.stats_share, StudyMath.formatDuration(sec, true), (sec * 100 / total).toInt()), style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(Modifier.height(6.dp))
@@ -266,12 +273,14 @@ private fun SessionRow(snap: Snapshot, s: StudySession, onDelete: () -> Unit) {
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {
             Text(
-                listOfNotNull(subject?.name, item?.title).joinToString(" · ").ifEmpty { "Learning session" },
+                listOfNotNull(subject?.name, item?.title).joinToString(" · ").ifEmpty { stringResource(R.string.stats_learning_session) },
                 style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
             Text(
-                "${time.format(DateTimeFormatter.ofPattern("EEE MMM d · h:mm a"))} · ${StudyMath.formatDuration(s.durationSec)}" +
-                    (s.focus?.let { " · focus $it/5" } ?: ""),
+                listOfNotNull(
+                    time.format(rememberDateFormat("EEEMMMd")), time.format(rememberDateFormat("jmm")), StudyMath.formatDuration(s.durationSec),
+                    s.focus?.let { stringResource(R.string.stats_focus, it) },
+                ).joinToString(" · "),
                 style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             if (s.note.isNotBlank()) {
@@ -279,9 +288,7 @@ private fun SessionRow(snap: Snapshot, s: StudySession, onDelete: () -> Unit) {
                 Text("“${s.note}”", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
             }
         }
-        IconButton(onClick = onDelete) { Icon(Icons.Outlined.Delete, "Delete session", tint = MaterialTheme.colorScheme.outline) }
+        IconButton(onClick = onDelete) { Icon(Icons.Outlined.Delete, stringResource(R.string.stats_delete_session), tint = MaterialTheme.colorScheme.outline) }
     }
 }
 
-@Suppress("unused")
-private fun LocalDate.short() = format(DateTimeFormatter.ofPattern("MMM d"))

@@ -1,5 +1,7 @@
 package com.rayaurelius.sophinity.ui.components
 
+import com.rayaurelius.sophinity.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,13 +25,13 @@ fun MediaMeter(p: MediaProgress, modifier: Modifier = Modifier, compact: Boolean
         LinearMeter(p.fraction, Modifier.fillMaxWidth(), color = if (p.isComplete) Brand.Laurel else MaterialTheme.colorScheme.primary)
         Spacer(Modifier.height(2.dp))
         Text(
-            "${StudyMath.formatDuration(p.completedSec, true)} of ${StudyMath.formatDuration(p.totalSec, true)} · ${p.percent}%",
+            stringResource(R.string.media_progress, StudyMath.formatDuration(p.completedSec, true), StudyMath.formatDuration(p.totalSec, true), p.percent),
             style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1,
         )
         if (!compact && !p.isComplete) {
             Text(
-                "${StudyMath.formatDuration(p.remainingAtSpeedSec, true)} left" +
-                    if (p.speed != 1f) " at ${MediaTime.formatSpeed(p.speed)}" else "",
+                if (p.speed != 1f) stringResource(R.string.media_left_speed, StudyMath.formatDuration(p.remainingAtSpeedSec, true), MediaTime.formatSpeed(p.speed))
+                else stringResource(R.string.media_left, StudyMath.formatDuration(p.remainingAtSpeedSec, true)),
                 style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
@@ -49,9 +51,9 @@ fun DurationFields(
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         NumberField(hoursLabel, h, { nh ->
             onChange(if (nh == null && m == null) null else ((nh ?: 0) * 3600L + (m ?: 0) * 60L))
-        }, Modifier.weight(1f), suffix = "h")
-        NumberField("Minutes", m, { nm ->
+        }, Modifier.weight(1f))
+        NumberField(stringResource(R.string.field_minutes), m, { nm ->
             onChange(if (nm == null && h == null) null else ((h ?: 0) * 3600L + (nm ?: 0).coerceAtMost(59) * 60L))
-        }, Modifier.weight(1f), suffix = "m")
+        }, Modifier.weight(1f))
     }
 }

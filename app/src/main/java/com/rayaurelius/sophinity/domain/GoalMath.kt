@@ -1,5 +1,6 @@
 package com.rayaurelius.sophinity.domain
 
+import com.rayaurelius.sophinity.R
 import com.rayaurelius.sophinity.data.db.Goal
 import com.rayaurelius.sophinity.data.db.GoalKind
 import com.rayaurelius.sophinity.data.db.GoalPeriod
@@ -112,16 +113,16 @@ object GoalMath {
         }
     }
 
-    fun describe(goal: Goal, category: CategoryInfo? = goal.itemType?.let { Categories.builtIn(it) }): String {
-        val what = when (goal.kind) {
+    fun describe(goal: Goal, category: CategoryInfo? = goal.itemType?.let { Categories.builtIn(it) }): Txt {
+        val what: Any = when (goal.kind) {
             GoalKind.TIME -> StudyMath.formatDuration(goal.target * 60L, short = true)
-            GoalKind.ITEMS -> category?.count(goal.target) ?: "${goal.target} ${if (goal.target == 1) "item" else "items"}"
+            GoalKind.ITEMS -> category?.count(goal.target) ?: Txt.Plural(R.plurals.count_item, goal.target)
         }
         return when (goal.period) {
-            GoalPeriod.DAILY -> "$what a day"
-            GoalPeriod.WEEKLY -> "$what a week"
-            GoalPeriod.MONTHLY -> "$what a month"
-            GoalPeriod.BY_DATE -> "$what by ${goal.deadlineEpochDay?.let { LocalDate.ofEpochDay(it) } ?: "deadline"}"
+            GoalPeriod.DAILY -> Txt.Res(R.string.goal_desc_daily, listOf(what))
+            GoalPeriod.WEEKLY -> Txt.Res(R.string.goal_desc_weekly, listOf(what))
+            GoalPeriod.MONTHLY -> Txt.Res(R.string.goal_desc_monthly, listOf(what))
+            GoalPeriod.BY_DATE -> Txt.Res(R.string.goal_desc_by_date, listOf(what, LocalDate.ofEpochDay(goal.deadlineEpochDay ?: 0)))
         }
     }
 }

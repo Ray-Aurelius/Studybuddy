@@ -2,6 +2,10 @@
 
 package com.rayaurelius.sophinity.ui.onboarding
 
+import com.rayaurelius.sophinity.domain.StudyMath
+import com.rayaurelius.sophinity.R
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import android.Manifest
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -59,9 +63,9 @@ import com.rayaurelius.sophinity.ui.theme.Brand
 import kotlinx.coroutines.launch
 
 private val presetSubjects = listOf(
-    "🗣️" to "Languages", "💻" to "Programming", "💼" to "Business", "💰" to "Personal finance",
-    "🧪" to "Science", "📜" to "History", "🧠" to "Psychology", "🎨" to "Art & design",
-    "🎵" to "Music", "⚕️" to "Health", "✍️" to "Writing", "🌍" to "Philosophy",
+    "🗣️" to R.string.subj_languages, "💻" to R.string.subj_programming, "💼" to R.string.subj_business, "💰" to R.string.subj_finance,
+    "🧪" to R.string.subj_science, "📜" to R.string.subj_history, "🧠" to R.string.subj_psychology, "🎨" to R.string.subj_art,
+    "🎵" to R.string.subj_music, "⚕️" to R.string.subj_health, "✍️" to R.string.subj_writing, "🌍" to R.string.subj_philosophy,
 )
 
 class OnboardingViewModel(private val c: AppContainer) : ViewModel() {
@@ -71,7 +75,7 @@ class OnboardingViewModel(private val c: AppContainer) : ViewModel() {
                 c.repo.addSubject(Subject(name = name, emoji = emoji, color = Brand.subjectPalette[i % Brand.subjectPalette.size]))
             }
             if (weeklyHours > 0) {
-                c.repo.saveGoal(Goal(title = "$weeklyHours hours a week", kind = GoalKind.TIME, period = GoalPeriod.WEEKLY, target = weeklyHours * 60))
+                c.repo.saveGoal(Goal(title = "", kind = GoalKind.TIME, period = GoalPeriod.WEEKLY, target = weeklyHours * 60))
             }
             c.settingsStore.update {
                 it.copy(onboarded = true, reminderEnabled = reminder, reminderHour = hour, reminderMinute = minute, reminderPlace = place.trim())
@@ -107,61 +111,62 @@ fun OnboardingScreen(onDone: () -> Unit) {
                         Spacer(Modifier.height(40.dp))
                         Text("🏛️", style = MaterialTheme.typography.displayLarge, modifier = Modifier.align(Alignment.CenterHorizontally))
                         Spacer(Modifier.height(24.dp))
-                        Text("Welcome to Sophinity.", style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center,
+                        Text(stringResource(R.string.onb_welcome), style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth())
                         Spacer(Modifier.height(12.dp))
                         Text(
-                            "Sophia is Greek for wisdom. Sophinity tracks the books you read, the podcasts you learn from, the seminars you attend, and every minute you invest in yourself. Earn laurels and rise from Neophyte to Philosopher — learning never stops.",
+                            stringResource(R.string.onb_intro),
                             style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center,
                             color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.fillMaxWidth(),
                         )
                     }
                     1 -> {
-                        Text("What are you learning?", style = MaterialTheme.typography.headlineMedium)
+                        Text(stringResource(R.string.onb_what), style = MaterialTheme.typography.headlineMedium)
                         Spacer(Modifier.height(6.dp))
-                        Text("Pick a few. You can change these anytime.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(R.string.onb_pick), color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Spacer(Modifier.height(20.dp))
                         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            (presetSubjects + chosen.filter { it !in presetSubjects }).forEach { p ->
+                            val presets = presetSubjects.map { it.first to stringResource(it.second) }
+                            (presets + chosen.filter { it !in presets }).forEach { p ->
                                 FilterChip(p in chosen, { if (p in chosen) chosen.remove(p) else chosen.add(p) }, { Text("${p.first} ${p.second}") })
                             }
                         }
                         Spacer(Modifier.height(16.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            OutlinedTextField(custom, { custom = it }, label = { Text("Something else") }, singleLine = true, modifier = Modifier.weight(1f))
-                            TextButton(enabled = custom.isNotBlank(), onClick = { chosen.add("📘" to custom.trim()); custom = "" }) { Text("Add") }
+                            OutlinedTextField(custom, { custom = it }, label = { Text(stringResource(R.string.onb_something_else)) }, singleLine = true, modifier = Modifier.weight(1f))
+                            TextButton(enabled = custom.isNotBlank(), onClick = { chosen.add("📘" to custom.trim()); custom = "" }) { Text(stringResource(R.string.common_add)) }
                         }
                     }
                     2 -> {
-                        Text("Set a weekly target", style = MaterialTheme.typography.headlineMedium)
+                        Text(stringResource(R.string.onb_weekly), style = MaterialTheme.typography.headlineMedium)
                         Spacer(Modifier.height(6.dp))
                         Text(
-                            "Weekly goals flex around busy days. Start a bit above what feels easy — specific, challenging goals beat \"I'll do my best.\"",
+                            stringResource(R.string.onb_weekly_body),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         Spacer(Modifier.height(40.dp))
-                        Text("${hours.toInt()} hours / week", style = MaterialTheme.typography.displaySmall, modifier = Modifier.align(Alignment.CenterHorizontally))
-                        Text("≈ ${(hours * 60 / 7).toInt()} minutes a day", color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        Text(pluralStringResource(R.plurals.onb_hours_week, hours.toInt(), hours.toInt()), style = MaterialTheme.typography.displaySmall, modifier = Modifier.align(Alignment.CenterHorizontally))
+                        Text(stringResource(R.string.onb_minutes_day, StudyMath.formatDuration((hours * 3600 / 7).toLong())), color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.align(Alignment.CenterHorizontally))
                         Spacer(Modifier.height(16.dp))
                         Slider(hours, { hours = it }, valueRange = 1f..20f, steps = 18)
                     }
                     else -> {
-                        Text("When and where will you learn?", style = MaterialTheme.typography.headlineMedium)
+                        Text(stringResource(R.string.onb_when), style = MaterialTheme.typography.headlineMedium)
                         Spacer(Modifier.height(6.dp))
                         Text(
-                            "People who plan exactly when and where they'll act follow through far more often. We'll nudge you then — but only on days you haven't learned yet.",
+                            stringResource(R.string.onb_when_body),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         Spacer(Modifier.height(20.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("Daily reminder", style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                            Text(stringResource(R.string.onb_daily_reminder), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
                             Switch(reminder, { reminder = it })
                         }
                         if (reminder) {
                             Spacer(Modifier.height(12.dp))
                             TimeInput(time)
-                            OutlinedTextField(place, { place = it }, label = { Text("Where") }, placeholder = { Text("at the kitchen table") },
+                            OutlinedTextField(place, { place = it }, label = { Text(stringResource(R.string.onb_where)) }, placeholder = { Text(stringResource(R.string.onb_where_hint)) },
                                 singleLine = true, modifier = Modifier.fillMaxWidth())
                         }
                     }
@@ -169,7 +174,7 @@ fun OnboardingScreen(onDone: () -> Unit) {
             }
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
-            if (step > 0) TextButton(onClick = { step-- }) { Text("Back") }
+            if (step > 0) TextButton(onClick = { step-- }) { Text(stringResource(R.string.common_back)) }
             Spacer(Modifier.weight(1f))
             Button(
                 onClick = {
@@ -179,7 +184,7 @@ fun OnboardingScreen(onDone: () -> Unit) {
                     }
                 },
                 modifier = Modifier.height(52.dp),
-            ) { Text(when (step) { 0 -> "Let's begin"; 3 -> "Start learning"; else -> "Next" }) }
+            ) { Text(stringResource(when (step) { 0 -> R.string.onb_begin; 3 -> R.string.onb_start; else -> R.string.common_next })) }
         }
     }
 }

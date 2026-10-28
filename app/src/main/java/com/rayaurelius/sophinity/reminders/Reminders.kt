@@ -1,5 +1,7 @@
 package com.rayaurelius.sophinity.reminders
 
+import com.rayaurelius.sophinity.domain.StudyMath
+import com.rayaurelius.sophinity.ui.i18n.AppLocale
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -54,15 +56,14 @@ class ReminderWorker(context: Context, params: WorkerParameters) : CoroutineWork
         val snap = repo.snapshot.first()
         val streak = snap.streak.current
         val place = settings.reminderPlace.trim()
+        val ctx = AppLocale.localized(applicationContext)
         val title = when {
-            streak >= 2 -> "Keep your $streak-day streak going 🔥"
-            else -> "Time to learn something ✨"
+            streak >= 2 -> ctx.resources.getQuantityString(R.plurals.reminder_title_streak, streak, streak)
+            else -> ctx.getString(R.string.reminder_title)
         }
-        val body = buildString {
-            append("You planned to learn now")
-            if (place.isNotEmpty()) append(" at $place")
-            append(". Even ${settings.streakMinutes} minutes counts.")
-        }
+        val minimum = StudyMath.formatDuration(settings.streakMinutes * 60L)
+        val body = if (place.isNotEmpty()) ctx.getString(R.string.reminder_body_place, place, minimum)
+            else ctx.getString(R.string.reminder_body, minimum)
         val pi = PendingIntent.getActivity(
             applicationContext, 7, Intent(applicationContext, MainActivity::class.java),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,

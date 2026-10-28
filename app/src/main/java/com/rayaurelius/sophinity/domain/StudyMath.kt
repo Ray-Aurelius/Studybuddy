@@ -114,7 +114,11 @@ object StudyMath {
         )
     }
 
+    /** Set by the app to a localized formatter; the built-in English one is used in plain JVM tests. */
+    @Volatile var durationFormatter: ((Long, Boolean) -> String)? = null
+
     fun formatDuration(seconds: Long, short: Boolean = false): String {
+        durationFormatter?.let { return it(seconds, short) }
         val h = seconds / 3600
         val m = (seconds % 3600) / 60
         return when {

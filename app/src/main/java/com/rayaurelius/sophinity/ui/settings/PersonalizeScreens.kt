@@ -2,6 +2,10 @@
 
 package com.rayaurelius.sophinity.ui.settings
 
+import com.rayaurelius.sophinity.domain.StudyMath
+import androidx.annotation.StringRes
+import com.rayaurelius.sophinity.R
+import androidx.compose.ui.res.stringResource
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -84,7 +88,7 @@ private fun SubPage(title: String, onBack: () -> Unit, content: androidx.compose
         topBar = {
             TopAppBar(
                 title = { Text(title) },
-                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back") } },
+                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.common_back)) } },
             )
         },
     ) { pad ->
@@ -95,26 +99,28 @@ private fun SubPage(title: String, onBack: () -> Unit, content: androidx.compose
     }
 }
 
-private fun themeLabel(id: String) = when (id) {
-    "aegean" -> "Aegean"
-    "olive" -> "Olive Grove"
-    "terracotta" -> "Terracotta"
-    "tyrian" -> "Tyrian Purple"
-    "delphi" -> "Delphi Dawn"
-    "agora" -> "Starry Agora"
-    "marble" -> "Marble"
-    ColorThemes.WALLPAPER -> "Wallpaper"
-    else -> "Custom"
+@StringRes
+private fun themeLabel(id: String): Int = when (id) {
+    "aegean" -> R.string.theme_aegean
+    "olive" -> R.string.theme_olive
+    "terracotta" -> R.string.theme_terracotta
+    "tyrian" -> R.string.theme_tyrian
+    "delphi" -> R.string.theme_delphi
+    "agora" -> R.string.theme_agora
+    "marble" -> R.string.theme_marble
+    ColorThemes.WALLPAPER -> R.string.theme_wallpaper
+    else -> R.string.theme_custom
 }
 
-private fun backgroundLabel(id: String) = when (id) {
-    Backgrounds.NONE -> "None"
-    "marble" -> "Marble"
-    "aegean" -> "Aegean"
-    "dawn" -> "Dawn"
-    "night" -> "Starry night"
-    "keys" -> "Greek key"
-    else -> "Your photo"
+@StringRes
+private fun backgroundLabel(id: String): Int = when (id) {
+    Backgrounds.NONE -> R.string.bg_none
+    "marble" -> R.string.bg_marble
+    "aegean" -> R.string.bg_aegean
+    "dawn" -> R.string.bg_dawn
+    "night" -> R.string.bg_night
+    "keys" -> R.string.bg_keys
+    else -> R.string.bg_photo
 }
 
 // ---------------------------------------------------------------- Appearance
@@ -124,36 +130,37 @@ fun AppearanceScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var importError by remember { androidx.compose.runtime.mutableStateOf<String?>(null) }
-    SubPage("Appearance", onBack) { s, vm ->
-        item { Header("Light or dark") }
+    SubPage(stringResource(R.string.set_appearance), onBack) { s, vm ->
+        item { Header(stringResource(R.string.app_light_dark)) }
         item {
             Row(Modifier.padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 ThemeMode.entries.forEach { m ->
                     FilterChip(s.themeMode == m, { vm.update { it.copy(themeMode = m) } }, {
-                        Text(when (m) { ThemeMode.SYSTEM -> "Match phone"; ThemeMode.LIGHT -> "Light"; ThemeMode.DARK -> "Dark" })
+                        Text(stringResource(when (m) { ThemeMode.SYSTEM -> R.string.common_match_phone; ThemeMode.LIGHT -> R.string.mode_light; ThemeMode.DARK -> R.string.mode_dark }))
                     })
                 }
             }
         }
 
-        item { Header("Color theme") }
+        item { Header(stringResource(R.string.app_color_theme)) }
         item {
             FlowRow(Modifier.padding(horizontal = 12.dp), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 ColorThemes.presets.forEach { t ->
-                    ThemeSwatch(themeLabel(t.id), t, s.colorTheme == t.id) { vm.update { it.copy(colorTheme = t.id) } }
+                    ThemeSwatch(stringResource(themeLabel(t.id)), t, s.colorTheme == t.id) { vm.update { it.copy(colorTheme = t.id) } }
                 }
                 if (Build.VERSION.SDK_INT >= 31) {
                     WallpaperSwatch(s.colorTheme == ColorThemes.WALLPAPER) { vm.update { it.copy(colorTheme = ColorThemes.WALLPAPER) } }
                 }
-                ThemeSwatch("Custom", ColorThemes.fromSeed(s.customSeed), s.colorTheme == ColorThemes.CUSTOM) {
+                ThemeSwatch(stringResource(R.string.theme_custom), ColorThemes.fromSeed(s.customSeed), s.colorTheme == ColorThemes.CUSTOM) {
                     vm.update { it.copy(colorTheme = ColorThemes.CUSTOM) }
                 }
             }
         }
         if (s.colorTheme == ColorThemes.CUSTOM) {
             item {
+                val colorLabel = stringResource(R.string.app_color_n, "%06X")
                 Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-                    Text("Pick your color", style = MaterialTheme.typography.titleSmall)
+                    Text(stringResource(R.string.app_pick_color), style = MaterialTheme.typography.titleSmall)
                     Spacer(Modifier.height(8.dp))
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         ColorThemes.customSwatches.forEach { c ->
@@ -162,12 +169,12 @@ fun AppearanceScreen(onBack: () -> Unit) {
                                 Modifier.size(36.dp).clip(CircleShape).background(Color(c))
                                     .then(if (sel) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, CircleShape) else Modifier)
                                     .clickable(role = Role.RadioButton) { vm.update { it.copy(customSeed = c) } }
-                                    .semantics { selected = sel; contentDescription = "Color %06X".format(c and 0xFFFFFF) },
+                                    .semantics { selected = sel; contentDescription = colorLabel.format(c and 0xFFFFFF) },
                             )
                         }
                     }
                     Spacer(Modifier.height(12.dp))
-                    Text("Or fine-tune the hue", style = MaterialTheme.typography.labelLarge)
+                    Text(stringResource(R.string.app_fine_tune), style = MaterialTheme.typography.labelLarge)
                     val hue = ColorEngine.seedOf(s.customSeed).hue.toFloat()
                     Slider(hue, { h -> vm.update { it.copy(customSeed = ColorEngine.solve(h.toDouble(), 0.17, 0.22)) } }, valueRange = 0f..359f)
                 }
@@ -175,14 +182,14 @@ fun AppearanceScreen(onBack: () -> Unit) {
         }
         item {
             Text(
-                "Every theme is generated to meet WCAG AA contrast for text, in light and dark.",
+                stringResource(R.string.app_wcag_note),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
             )
         }
         item { HorizontalDivider(Modifier.padding(top = 8.dp)) }
 
-        item { Header("Background") }
+        item { Header(stringResource(R.string.app_background)) }
         item {
             val picker = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) scope.launch {
@@ -193,13 +200,13 @@ fun AppearanceScreen(onBack: () -> Unit) {
             }
             FlowRow(Modifier.padding(horizontal = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 (listOf(Backgrounds.NONE) + Backgrounds.builtIn).forEach { id ->
-                    BackgroundTile(backgroundLabel(id), s.background == id, { vm.update { it.copy(background = id) } }) {
+                    BackgroundTile(stringResource(backgroundLabel(id)), s.background == id, { vm.update { it.copy(background = id) } }) {
                         if (id == Backgrounds.NONE) Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background))
                         else BuiltInBackground(id, Modifier.fillMaxSize())
                     }
                 }
                 BackgroundTile(
-                    if (Backgrounds.isPhoto(s.background)) "Change photo" else "Your photo",
+                    stringResource(if (Backgrounds.isPhoto(s.background)) R.string.bg_change_photo else R.string.bg_photo),
                     Backgrounds.isPhoto(s.background),
                     { picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
                 ) {
@@ -217,13 +224,13 @@ fun AppearanceScreen(onBack: () -> Unit) {
         }
         if (s.background != Backgrounds.NONE) {
             item {
-                SliderRow("Soften background", "${(s.backgroundDim * 100).toInt()}%", s.backgroundDim, 0f..0.9f) { v ->
+                SliderRow(stringResource(R.string.app_soften), stringResource(R.string.percent, (s.backgroundDim * 100).toInt()), s.backgroundDim, 0f..0.9f) { v ->
                     vm.update { it.copy(backgroundDim = v) }
                 }
             }
             if (Backgrounds.isPhoto(s.background) && Build.VERSION.SDK_INT >= 31) {
                 item {
-                    SliderRow("Blur photo", if (s.backgroundBlur < 1f) "Off" else "${s.backgroundBlur.toInt()}", s.backgroundBlur, 0f..24f) { v ->
+                    SliderRow(stringResource(R.string.app_blur), if (s.backgroundBlur < 1f) stringResource(R.string.common_off) else "${s.backgroundBlur.toInt()}", s.backgroundBlur, 0f..24f) { v ->
                         vm.update { it.copy(backgroundBlur = v) }
                     }
                 }
@@ -255,7 +262,7 @@ private fun ThemeSwatch(label: String, theme: ColorTheme, selected: Boolean, onC
 @Composable
 private fun WallpaperSwatch(selected: Boolean, onClick: () -> Unit) {
     val cs = if (Build.VERSION.SDK_INT >= 31) androidx.compose.material3.dynamicLightColorScheme(LocalContext.current) else MaterialTheme.colorScheme
-    SwatchFrame("Wallpaper", selected, onClick) {
+    SwatchFrame(stringResource(R.string.theme_wallpaper), selected, onClick) {
         Box(Modifier.fillMaxSize().background(cs.surfaceContainerLow)) {
             Column(Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Box(Modifier.fillMaxWidth().height(14.dp).clip(RoundedCornerShape(7.dp)).background(cs.primary))
@@ -317,51 +324,51 @@ private fun SliderRow(title: String, value: String, current: Float, range: Close
 
 @Composable
 fun AccessibilityScreen(onBack: () -> Unit) {
-    SubPage("Accessibility", onBack) { s, vm ->
-        item { Header("Text") }
+    SubPage(stringResource(R.string.set_accessibility), onBack) { s, vm ->
+        item { Header(stringResource(R.string.a11y_text)) }
         item {
             val pct = (s.textScale * 100).toInt()
-            SliderRow("Text size", "$pct%", s.textScale, 0.85f..1.6f) { v ->
+            SliderRow(stringResource(R.string.a11y_text_size), stringResource(R.string.percent, pct), s.textScale, 0.85f..1.6f) { v ->
                 vm.update { it.copy(textScale = (v * 20).toInt() / 20f) }
             }
             Surface(color = MaterialTheme.colorScheme.surfaceContainerHigh, shape = MaterialTheme.shapes.medium, modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth()) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("Preview", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
-                    Text("“Wonder is the beginning of wisdom.”", style = MaterialTheme.typography.titleLarge)
-                    Text("5h of 9h 30m · 52% · 3h left at 1.5×", style = MaterialTheme.typography.bodyMedium)
+                    Text(stringResource(R.string.a11y_preview), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                    Text(stringResource(R.string.wisdom_quote, stringResource(R.string.wisdom_4)), style = MaterialTheme.typography.titleLarge)
+                    Text(stringResource(R.string.media_progress, StudyMath.formatDuration(5 * 3600L, true), StudyMath.formatDuration(9 * 3600L + 1800, true), 52), style = MaterialTheme.typography.bodyMedium)
                 }
             }
         }
-        item { ToggleRow("Bold text", "Heavier letters throughout the app", s.boldText) { on -> vm.update { it.copy(boldText = on) } } }
+        item { ToggleRow(stringResource(R.string.a11y_bold), stringResource(R.string.a11y_bold_sub), s.boldText) { on -> vm.update { it.copy(boldText = on) } } }
         item {
-            ToggleRow("Readable font", "Use Atkinson Hyperlegible, designed for low-vision readers, instead of the classical serif", s.readableFont) { on ->
+            ToggleRow(stringResource(R.string.a11y_readable), stringResource(R.string.a11y_readable_sub), s.readableFont) { on ->
                 vm.update { it.copy(readableFont = on) }
             }
         }
         item { HorizontalDivider() }
-        item { Header("Color and contrast") }
+        item { Header(stringResource(R.string.a11y_contrast_header)) }
         item {
-            ToggleRow("High contrast", "Stronger text and outlines (WCAG AAA-level text contrast)", s.highContrast) { on ->
+            ToggleRow(stringResource(R.string.a11y_contrast), stringResource(R.string.a11y_contrast_sub), s.highContrast) { on ->
                 vm.update { it.copy(highContrast = on) }
             }
         }
         item { HorizontalDivider() }
-        item { Header("Motion") }
+        item { Header(stringResource(R.string.a11y_motion)) }
         item {
             Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-                Text("Reduce motion", style = MaterialTheme.typography.bodyLarge)
-                Text("Turns off confetti and animated charts", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.a11y_reduce_motion), style = MaterialTheme.typography.bodyLarge)
+                Text(stringResource(R.string.a11y_reduce_motion_sub), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Spacer(Modifier.height(8.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(s.reduceMotion == null, { vm.update { it.copy(reduceMotion = null) } }, { Text("Match phone") })
-                    FilterChip(s.reduceMotion == true, { vm.update { it.copy(reduceMotion = true) } }, { Text("On") })
-                    FilterChip(s.reduceMotion == false, { vm.update { it.copy(reduceMotion = false) } }, { Text("Off") })
+                    FilterChip(s.reduceMotion == null, { vm.update { it.copy(reduceMotion = null) } }, { Text(stringResource(R.string.common_match_phone)) })
+                    FilterChip(s.reduceMotion == true, { vm.update { it.copy(reduceMotion = true) } }, { Text(stringResource(R.string.common_on)) })
+                    FilterChip(s.reduceMotion == false, { vm.update { it.copy(reduceMotion = false) } }, { Text(stringResource(R.string.common_off)) })
                 }
             }
         }
         item {
             Text(
-                "Sophinity also follows your phone's font size, display size, TalkBack and Switch Access.",
+                stringResource(R.string.a11y_system_note),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(16.dp),
             )
@@ -383,30 +390,30 @@ private fun ToggleRow(title: String, subtitle: String, checked: Boolean, onChang
 
 @Composable
 fun ToolbarScreen(onBack: () -> Unit) {
-    SubPage("Toolbar", onBack) { s, vm ->
-        item { Header("Position") }
+    SubPage(stringResource(R.string.set_toolbar), onBack) { s, vm ->
+        item { Header(stringResource(R.string.tb_position)) }
         item {
             Row(Modifier.padding(horizontal = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 NavPosition.entries.forEach { p ->
-                    val label = when (p) { NavPosition.BOTTOM -> "Bottom"; NavPosition.LEFT -> "Left side"; NavPosition.RIGHT -> "Right side" }
+                    val label = stringResource(when (p) { NavPosition.BOTTOM -> R.string.tb_bottom; NavPosition.LEFT -> R.string.tb_left; NavPosition.RIGHT -> R.string.tb_right })
                     SwatchFrame(label, s.navPosition == p, { vm.update { it.copy(navPosition = p) } }) { PositionPreview(p) }
                 }
             }
         }
-        item { ToggleRow("Show labels", "Text under each toolbar icon", s.navLabels) { on -> vm.update { it.copy(navLabels = on) } } }
+        item { ToggleRow(stringResource(R.string.tb_labels), stringResource(R.string.tb_labels_sub), s.navLabels) { on -> vm.update { it.copy(navLabels = on) } } }
         item { HorizontalDivider() }
-        item { Header("Tabs") }
+        item { Header(stringResource(R.string.tb_tabs)) }
         item {
             ListItem(
-                headlineContent = { Text("Today") },
-                supportingContent = { Text("Always shown: it's home") },
-                trailingContent = { Icon(Icons.Default.Lock, contentDescription = "Always on", tint = MaterialTheme.colorScheme.outline) },
+                headlineContent = { Text(stringResource(R.string.nav_today)) },
+                supportingContent = { Text(stringResource(R.string.tb_today_sub)) },
+                trailingContent = { Icon(Icons.Default.Lock, contentDescription = stringResource(R.string.tb_always_on), tint = MaterialTheme.colorScheme.outline) },
             )
         }
         TabId.entries.forEach { t ->
             item(key = t.name) {
-                val label = when (t) { TabId.STATS -> "Stats"; TabId.LIBRARY -> "Library"; TabId.GOALS -> "Goals"; TabId.LAURELS -> "Laurels" }
-                ToggleRow(label, "Still reachable from Today when hidden", t !in s.hiddenTabs) { on ->
+                val label = stringResource(when (t) { TabId.STATS -> R.string.nav_stats; TabId.LIBRARY -> R.string.nav_library; TabId.GOALS -> R.string.nav_goals; TabId.LAURELS -> R.string.nav_laurels })
+                ToggleRow(label, stringResource(R.string.tb_hidden_sub), t !in s.hiddenTabs) { on ->
                     vm.update { it.copy(hiddenTabs = if (on) it.hiddenTabs - t else it.hiddenTabs + t) }
                 }
             }
@@ -426,4 +433,3 @@ private fun PositionPreview(p: NavPosition) {
     }
 }
 
-@Suppress("unused") private val unusedLocale = Locale.ROOT

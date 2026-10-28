@@ -43,6 +43,7 @@ class SophinityApp : Application() {
     override fun onCreate() {
         super.onCreate()
         container = AppContainer(this)
+        com.rayaurelius.sophinity.ui.i18n.Formats.install()
         Channels.create(this)
         val c = container
 

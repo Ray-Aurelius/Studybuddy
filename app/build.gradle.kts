@@ -57,6 +57,12 @@ android {
         compose = true
     }
 
+    androidResources {
+        // Builds res/xml/_generated_res_locale_config.xml from the values-xx folders, so Android 13+
+        // lists every translation in the system per-app language settings.
+        generateLocaleConfig = true
+    }
+
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
@@ -84,6 +90,7 @@ android.sourceSets.getByName("debug").assets.directories.add("$projectDir/schema
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)

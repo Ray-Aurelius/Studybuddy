@@ -2,6 +2,12 @@
 
 package com.rayaurelius.sophinity.ui.goals
 
+import com.rayaurelius.sophinity.ui.i18n.goalTitle
+import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
+import com.rayaurelius.sophinity.domain.str
+import com.rayaurelius.sophinity.R
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -77,20 +83,21 @@ import java.time.format.DateTimeFormatter
 
 class GoalsViewModel(private val c: AppContainer) : ViewModel() {
     val snapshot = c.repo.snapshot.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
-    fun save(g: Goal, fallbackTitle: String) = viewModelScope.launch { c.repo.saveGoal(g.copy(title = g.title.ifBlank { fallbackTitle })) }
+    /** Untitled goals keep a blank title and are described in the current language when shown. */
+    fun save(g: Goal) = viewModelScope.launch { c.repo.saveGoal(g.copy(title = g.title.trim())) }
     fun delete(g: Goal) = viewModelScope.launch { c.repo.deleteGoal(g) }
 }
 
-private data class Preset(val label: String, val goal: () -> Goal)
+private data class Preset(val goal: () -> Goal)
 
 private fun presets(today: LocalDate) = listOf(
-    Preset("30 min a day") { Goal(title = "", kind = GoalKind.TIME, period = GoalPeriod.DAILY, target = 30) },
-    Preset("5 hours a week") { Goal(title = "", kind = GoalKind.TIME, period = GoalPeriod.WEEKLY, target = 300) },
-    Preset("2 books a month") { Goal(title = "", kind = GoalKind.ITEMS, period = GoalPeriod.MONTHLY, target = 2, itemType = ItemType.BOOK) },
-    Preset("2 audiobooks a month") { Goal(title = "", kind = GoalKind.ITEMS, period = GoalPeriod.MONTHLY, target = 2, itemType = ItemType.AUDIOBOOK) },
-    Preset("4 podcasts a month") { Goal(title = "", kind = GoalKind.ITEMS, period = GoalPeriod.MONTHLY, target = 4, itemType = ItemType.PODCAST) },
-    Preset("1 seminar a month") { Goal(title = "", kind = GoalKind.ITEMS, period = GoalPeriod.MONTHLY, target = 1, itemType = ItemType.SEMINAR) },
-    Preset("12 books this year") {
+    Preset { Goal(title = "", kind = GoalKind.TIME, period = GoalPeriod.DAILY, target = 30) },
+    Preset { Goal(title = "", kind = GoalKind.TIME, period = GoalPeriod.WEEKLY, target = 300) },
+    Preset { Goal(title = "", kind = GoalKind.ITEMS, period = GoalPeriod.MONTHLY, target = 2, itemType = ItemType.BOOK) },
+    Preset { Goal(title = "", kind = GoalKind.ITEMS, period = GoalPeriod.MONTHLY, target = 2, itemType = ItemType.AUDIOBOOK) },
+    Preset { Goal(title = "", kind = GoalKind.ITEMS, period = GoalPeriod.MONTHLY, target = 4, itemType = ItemType.PODCAST) },
+    Preset { Goal(title = "", kind = GoalKind.ITEMS, period = GoalPeriod.MONTHLY, target = 1, itemType = ItemType.SEMINAR) },
+    Preset {
         Goal(title = "", kind = GoalKind.ITEMS, period = GoalPeriod.BY_DATE, target = 12, itemType = ItemType.BOOK,
             deadlineEpochDay = today.withDayOfYear(today.lengthOfYear()).toEpochDay())
     },
@@ -108,20 +115,19 @@ fun GoalsScreen(contentPadding: PaddingValues) {
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.fillMaxSize(),
         ) {
-            item { Text("Goals", style = MaterialTheme.typography.headlineMedium) }
+            item { Text(stringResource(R.string.goals_title), style = MaterialTheme.typography.headlineMedium) }
             item {
                 Column {
-                    Text("Quick add", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.goals_quick_add), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.height(6.dp))
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        presets(snap.today).forEach { p -> AssistChip(onClick = { editing = p.goal() }, label = { Text(p.label) }) }
+                        presets(snap.today).forEach { p -> val g = p.goal(); AssistChip(onClick = { editing = g }, label = { Text(GoalMath.describe(g, snap.categoryOf(g)).str()) }) }
                     }
                 }
             }
             if (snap.goalProgress.isEmpty()) {
                 item {
-                    EmptyState("🎯", "No goals yet",
-                        "Pick something specific and a little ambitious. Weekly time goals are a great start: they flex around busy days.")
+                    EmptyState("🎯", stringResource(R.string.goals_empty_title), stringResource(R.string.goals_empty_body))
                 }
             } else {
                 items(snap.goalProgress, key = { it.goal.id }) { p -> GoalCard(snap, p) { editing = p.goal } }
@@ -129,13 +135,13 @@ fun GoalsScreen(contentPadding: PaddingValues) {
         }
         ExtendedFloatingActionButton(
             onClick = { editing = Goal(title = "", kind = GoalKind.TIME, period = GoalPeriod.WEEKLY, target = 180) },
-            icon = { Icon(Icons.Default.Add, null) }, text = { Text("New goal") },
+            icon = { Icon(Icons.Default.Add, null) }, text = { Text(stringResource(R.string.goals_new)) },
             modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = contentPadding.calculateBottomPadding() + 16.dp),
         )
     }
 
     editing?.let { g ->
-        GoalEditor(snap, g, onDismiss = { editing = null }, onSave = { g -> vm.save(g, GoalMath.describe(g, snap.categoryOf(g)).replaceFirstChar { it.uppercase() }); editing = null }, onDelete = { vm.delete(it); editing = null })
+        GoalEditor(snap, g, onDismiss = { editing = null }, onSave = { g -> vm.save(g); editing = null }, onDelete = { vm.delete(it); editing = null })
     }
 }
 
@@ -149,7 +155,7 @@ private fun GoalCard(snap: Snapshot, p: GoalProgress, onClick: () -> Unit) {
             }
             Spacer(Modifier.width(16.dp))
             Column(Modifier.weight(1f)) {
-                Text(g.title, style = MaterialTheme.typography.titleMedium)
+                Text(goalTitle(snap, g), style = MaterialTheme.typography.titleMedium)
                 val subject = g.subjectId?.let { snap.subjectsById[it] }
                 Text(
                     listOfNotNull(goalAmount(p), subject?.let { "${it.emoji} ${it.name}" }).joinToString(" · "),
@@ -157,20 +163,20 @@ private fun GoalCard(snap: Snapshot, p: GoalProgress, onClick: () -> Unit) {
                 )
                 Spacer(Modifier.height(4.dp))
                 val footer = when {
-                    p.met && g.period == GoalPeriod.BY_DATE -> "Achieved! 🎉"
+                    p.met && g.period == GoalPeriod.BY_DATE -> stringResource(R.string.goal_achieved)
                     p.met -> when (g.period) {
-                        GoalPeriod.DAILY -> "Done for today 🎉"
-                        GoalPeriod.WEEKLY -> "Done for this week 🎉"
-                        else -> "Done for this month 🎉"
+                        GoalPeriod.DAILY -> stringResource(R.string.goal_done_today)
+                        GoalPeriod.WEEKLY -> stringResource(R.string.goal_done_week)
+                        else -> stringResource(R.string.goal_done_month)
                     }
-                    p.daysLeft == 1 && g.period != GoalPeriod.DAILY -> "Last day"
-                    g.period == GoalPeriod.DAILY -> "Resets tonight"
-                    else -> "${p.daysLeft} days left"
+                    p.daysLeft == 1 && g.period != GoalPeriod.DAILY -> stringResource(R.string.goal_last_day)
+                    g.period == GoalPeriod.DAILY -> stringResource(R.string.goal_resets)
+                    else -> pluralStringResource(R.plurals.goal_days_left, p.daysLeft, p.daysLeft)
                 }
                 Text(footer, style = MaterialTheme.typography.labelMedium,
                     color = if (p.met) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.primary)
                 if (p.recentPeriods > 0) {
-                    Text("Hit ${p.recentHits} of the last ${p.recentPeriods}", style = MaterialTheme.typography.labelSmall,
+                    Text(stringResource(R.string.goal_hit_recent, p.recentHits, p.recentPeriods), style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
@@ -188,50 +194,50 @@ private fun GoalEditor(snap: Snapshot, initial: Goal, onDismiss: () -> Unit, onS
             Modifier.padding(horizontal = 24.dp).padding(bottom = 24.dp).verticalScroll(rememberScrollState()).imePadding(),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            Text(if (isNew) "New goal" else "Edit goal", style = MaterialTheme.typography.headlineSmall)
+            Text(stringResource(if (isNew) R.string.goals_new else R.string.goals_edit), style = MaterialTheme.typography.headlineSmall)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FilterChip(g.kind == GoalKind.TIME, { g = g.copy(kind = GoalKind.TIME, target = if (g.kind != GoalKind.TIME) 180 else g.target) }, { Text("⏱️ Learning time") })
-                FilterChip(g.kind == GoalKind.ITEMS, { g = g.copy(kind = GoalKind.ITEMS, target = if (g.kind != GoalKind.ITEMS) 1 else g.target) }, { Text("✅ Finish things") })
+                FilterChip(g.kind == GoalKind.TIME, { g = g.copy(kind = GoalKind.TIME, target = if (g.kind != GoalKind.TIME) 180 else g.target) }, { Text(stringResource(R.string.goal_kind_time)) })
+                FilterChip(g.kind == GoalKind.ITEMS, { g = g.copy(kind = GoalKind.ITEMS, target = if (g.kind != GoalKind.ITEMS) 1 else g.target) }, { Text(stringResource(R.string.goal_kind_items)) })
             }
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 GoalPeriod.entries.forEach { p ->
                     FilterChip(g.period == p, {
                         g = g.copy(period = p, deadlineEpochDay = if (p == GoalPeriod.BY_DATE) g.deadlineEpochDay ?: snap.today.plusMonths(3).toEpochDay() else null)
-                    }, { Text(p.label) })
+                    }, { Text(stringResource(p.labelRes)) })
                 }
             }
             if (g.kind == GoalKind.TIME) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    NumberField("Hours", g.target / 60, { g = g.copy(target = (it ?: 0) * 60 + g.target % 60) }, Modifier.weight(1f))
-                    NumberField("Minutes", g.target % 60, { g = g.copy(target = (g.target / 60) * 60 + (it ?: 0).coerceAtMost(59)) }, Modifier.weight(1f))
+                    NumberField(stringResource(R.string.field_hours), g.target / 60, { g = g.copy(target = (it ?: 0) * 60 + g.target % 60) }, Modifier.weight(1f))
+                    NumberField(stringResource(R.string.field_minutes), g.target % 60, { g = g.copy(target = (g.target / 60) * 60 + (it ?: 0).coerceAtMost(59)) }, Modifier.weight(1f))
                 }
-                SubjectPicker(snap.activeSubjects, g.subjectId, { g = g.copy(subjectId = it) }, noneLabel = "Any subject")
+                SubjectPicker(snap.activeSubjects, g.subjectId, { g = g.copy(subjectId = it) }, noneLabel = stringResource(R.string.goal_any_subject))
             } else {
-                NumberField("How many", g.target, { g = g.copy(target = it ?: 0) }, Modifier.fillMaxWidth())
+                NumberField(stringResource(R.string.goal_how_many), g.target, { g = g.copy(target = it ?: 0) }, Modifier.fillMaxWidth())
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(g.itemType == null, { g = g.copy(itemType = null, categoryId = null) }, { Text("Anything") })
+                    FilterChip(g.itemType == null, { g = g.copy(itemType = null, categoryId = null) }, { Text(stringResource(R.string.goal_anything)) })
                     snap.categories.forEach { c ->
-                        FilterChip(c.matchesGoal(g), { g = g.copy(itemType = c.type, categoryId = c.customId) }, { Text("${c.emoji} ${c.plural}") })
+                        FilterChip(c.matchesGoal(g), { g = g.copy(itemType = c.type, categoryId = c.customId) }, { Text("${c.emoji} ${c.plural.str()}") })
                     }
                 }
             }
             if (g.period == GoalPeriod.BY_DATE) {
                 val d = LocalDate.ofEpochDay(g.deadlineEpochDay ?: snap.today.toEpochDay())
                 OutlinedCard(onClick = { pickDate = true }, modifier = Modifier.fillMaxWidth()) {
-                    Text("📅  Due ${d.format(DateTimeFormatter.ofPattern("MMM d, yyyy"))}", Modifier.padding(14.dp))
+                    Text(stringResource(R.string.goal_due, d.format(rememberDateFormat("yMMMd"))), Modifier.padding(14.dp))
                 }
             }
             OutlinedTextField(
-                g.title, { g = g.copy(title = it) }, label = { Text("Name (optional)") },
-                placeholder = { Text(GoalMath.describe(g, snap.categoryOf(g)).replaceFirstChar { it.uppercase() }) },
+                g.title, { g = g.copy(title = it) }, label = { Text(stringResource(R.string.goal_name)) },
+                placeholder = { Text(GoalMath.describe(g, snap.categoryOf(g)).str().replaceFirstChar { it.titlecase() }) },
                 singleLine = true, modifier = Modifier.fillMaxWidth(),
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
-                if (!isNew) TextButton(onClick = { onDelete(initial) }) { Text("Delete", color = MaterialTheme.colorScheme.error) }
+                if (!isNew) TextButton(onClick = { onDelete(initial) }) { Text(stringResource(R.string.common_delete), color = MaterialTheme.colorScheme.error) }
                 Spacer(Modifier.weight(1f))
-                TextButton(onClick = onDismiss) { Text("Cancel") }
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
                 Spacer(Modifier.width(8.dp))
-                Button(enabled = g.target > 0, onClick = { onSave(g) }) { Text("Save") }
+                Button(enabled = g.target > 0, onClick = { onSave(g) }) { Text(stringResource(R.string.common_save)) }
             }
         }
     }
@@ -246,9 +252,9 @@ private fun GoalEditor(snap: Snapshot, initial: Goal, onDismiss: () -> Unit, onS
                 TextButton(onClick = {
                     state.selectedDateMillis?.let { g = g.copy(deadlineEpochDay = Instant.ofEpochMilli(it).atZone(ZoneOffset.UTC).toLocalDate().toEpochDay()) }
                     pickDate = false
-                }) { Text("OK") }
+                }) { Text(stringResource(R.string.common_ok)) }
             },
-            dismissButton = { TextButton(onClick = { pickDate = false }) { Text("Cancel") } },
+            dismissButton = { TextButton(onClick = { pickDate = false }) { Text(stringResource(R.string.common_cancel)) } },
         ) { DatePicker(state) }
     }
 }

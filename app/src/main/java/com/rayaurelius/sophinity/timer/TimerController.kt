@@ -116,7 +116,8 @@ class TimerController(
         val logged = repo.sessions.first().filter { it.itemId == id }.sumOf { it.durationSec }
         val p = com.rayaurelius.sophinity.domain.MediaTime.progress(item, logged, liveSec = s.accumulatedMs / 1000)
             ?: return item.title
-        return "${item.title} · from ${p.percent}% of ${com.rayaurelius.sophinity.domain.StudyMath.formatDuration(p.totalSec, true)}"
+        return com.rayaurelius.sophinity.ui.i18n.AppLocale.localized(context).getString(
+            com.rayaurelius.sophinity.R.string.notif_media_line, item.title, p.percent, com.rayaurelius.sophinity.domain.StudyMath.formatDuration(p.totalSec, true))
     }
 
     private suspend fun subjectName(id: Long?): String? =

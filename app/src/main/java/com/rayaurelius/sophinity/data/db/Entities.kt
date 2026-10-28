@@ -1,5 +1,8 @@
 package com.rayaurelius.sophinity.data.db
 
+import com.rayaurelius.sophinity.R
+import androidx.annotation.StringRes
+import androidx.annotation.PluralsRes
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
@@ -8,16 +11,22 @@ import kotlinx.serialization.Serializable
 
 /** Kinds of learning material a person can log outside formal schooling. */
 @Serializable
-enum class ItemType(val label: String, val plural: String, val emoji: String, val unitLabel: String) {
-    BOOK("Book", "Books", "📚", "pages"),
-    AUDIOBOOK("Audiobook", "Audiobooks", "🎧", "chapters"),
-    PODCAST("Podcast", "Podcasts", "🎙️", "episodes"),
-    SEMINAR("Seminar", "Seminars", "🎤", "sessions"),
-    COURSE("Course", "Courses", "🎓", "modules"),
-    VIDEO("Video", "Videos", "🎬", "videos"),
-    ARTICLE("Article", "Articles", "📰", "parts"),
+enum class ItemType(
+    val emoji: String,
+    @StringRes val labelRes: Int,
+    @StringRes val pluralRes: Int,
+    @PluralsRes val countRes: Int,
+    @StringRes val unitRes: Int,
+) {
+    BOOK("📚", R.string.type_book, R.string.type_books, R.plurals.count_book, R.string.unit_pages),
+    AUDIOBOOK("🎧", R.string.type_audiobook, R.string.type_audiobooks, R.plurals.count_audiobook, R.string.unit_chapters),
+    PODCAST("🎙️", R.string.type_podcast, R.string.type_podcasts, R.plurals.count_podcast, R.string.unit_episodes),
+    SEMINAR("🎤", R.string.type_seminar, R.string.type_seminars, R.plurals.count_seminar, R.string.unit_sessions),
+    COURSE("🎓", R.string.type_course, R.string.type_courses, R.plurals.count_course, R.string.unit_modules),
+    VIDEO("🎬", R.string.type_video, R.string.type_videos, R.plurals.count_video, R.string.unit_videos),
+    ARTICLE("📰", R.string.type_article, R.string.type_articles, R.plurals.count_article, R.string.unit_parts),
     /** A user-defined category; see [LearningItem.categoryId] and [CustomCategory]. */
-    CUSTOM("Custom", "Custom", "📌", "parts"),
+    CUSTOM("📌", R.string.type_other, R.string.type_other, R.plurals.count_item, R.string.unit_parts),
 }
 
 /** A library category the learner defined themselves, e.g. "Workshop" or "Documentary". */
@@ -34,7 +43,7 @@ data class CustomCategory(
 )
 
 @Serializable
-enum class ItemStatus(val label: String) { WANT("Want to"), ACTIVE("In progress"), DONE("Finished") }
+enum class ItemStatus(@StringRes val labelRes: Int) { WANT(R.string.status_want), ACTIVE(R.string.status_active), DONE(R.string.status_done) }
 
 @Serializable
 enum class SessionSource { TIMER, MANUAL }
@@ -43,8 +52,8 @@ enum class SessionSource { TIMER, MANUAL }
 enum class GoalKind { TIME, ITEMS }
 
 @Serializable
-enum class GoalPeriod(val label: String) {
-    DAILY("Daily"), WEEKLY("Weekly"), MONTHLY("Monthly"), BY_DATE("By a date")
+enum class GoalPeriod(@StringRes val labelRes: Int) {
+    DAILY(R.string.period_daily), WEEKLY(R.string.period_weekly), MONTHLY(R.string.period_monthly), BY_DATE(R.string.period_by_date)
 }
 
 @Serializable

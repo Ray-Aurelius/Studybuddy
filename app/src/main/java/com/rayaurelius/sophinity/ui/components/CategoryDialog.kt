@@ -2,6 +2,9 @@
 
 package com.rayaurelius.sophinity.ui.components
 
+import com.rayaurelius.sophinity.R
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,13 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.rayaurelius.sophinity.data.db.CustomCategory
-import com.rayaurelius.sophinity.domain.Categories
 
 private val categoryEmojis = listOf(
     "📌", "🛠️", "🎭", "🎞️", "🧑‍🏫", "🗺️", "🔬", "🧩", "📝", "💬",
     "🏛️", "🌐", "🧪", "🎨", "🎹", "🏃", "🧘", "🍳", "🌿", "🐾",
 )
-private val unitSuggestions = listOf("sessions", "lessons", "chapters", "episodes", "hours", "parts")
+private val unitSuggestions = listOf(R.string.unit_sessions, R.string.unit_lessons, R.string.unit_chapters, R.string.unit_episodes, R.string.unit_hours, R.string.unit_parts)
 
 /** Create or edit a custom library category: a name, an emoji, and what progress is counted in. */
 @Composable
@@ -42,19 +44,19 @@ fun CategoryDialog(
     onDelete: ((CustomCategory) -> Unit)? = null,
     itemsUsing: Int = 0,
 ) {
-    var c by remember { mutableStateOf(initial) }
+    val defaultUnit = stringResource(R.string.unit_parts)
+    var c by remember { mutableStateOf(if (initial.id == 0L && initial.unitLabel == "parts") initial.copy(unitLabel = defaultUnit) else initial) }
     var confirmDelete by remember { mutableStateOf(false) }
     val isNew = initial.id == 0L
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(if (isNew) "New category" else "Edit category") },
+        title = { Text(stringResource(if (isNew) R.string.cat_new else R.string.cat_edit)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedTextField(
                     c.name, { c = c.copy(name = it.take(30)) },
-                    label = { Text("Name") }, placeholder = { Text("e.g. Workshop, Documentary") },
-                    supportingText = { if (c.name.isNotBlank()) Text("Shown as \"${Categories.pluralize(c.name)}\" in lists") },
+                    label = { Text(stringResource(R.string.cat_name)) }, placeholder = { Text(stringResource(R.string.cat_name_hint)) },
                     singleLine = true, modifier = Modifier.fillMaxWidth(),
                 )
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -67,20 +69,20 @@ fun CategoryDialog(
                         )
                     }
                 }
-                Text("Track progress in", style = MaterialTheme.typography.labelLarge)
+                Text(stringResource(R.string.cat_track_in), style = MaterialTheme.typography.labelLarge)
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    unitSuggestions.forEach { u -> FilterChip(c.unitLabel == u, { c = c.copy(unitLabel = u) }, { Text(u) }) }
+                    unitSuggestions.forEach { id -> val u = stringResource(id); FilterChip(c.unitLabel == u, { c = c.copy(unitLabel = u) }, { Text(u) }) }
                 }
             }
         },
         confirmButton = {
-            TextButton(enabled = c.name.isNotBlank(), onClick = { onSave(c.copy(name = c.name.trim())) }) { Text("Save") }
+            TextButton(enabled = c.name.isNotBlank(), onClick = { onSave(c.copy(name = c.name.trim())) }) { Text(stringResource(R.string.common_save)) }
         },
         dismissButton = {
             if (!isNew && onDelete != null) {
-                TextButton(onClick = { confirmDelete = true }) { Text("Delete", color = MaterialTheme.colorScheme.error) }
+                TextButton(onClick = { confirmDelete = true }) { Text(stringResource(R.string.common_delete), color = MaterialTheme.colorScheme.error) }
             } else {
-                TextButton(onClick = onDismiss) { Text("Cancel") }
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
             }
         },
     )
@@ -88,15 +90,15 @@ fun CategoryDialog(
     if (confirmDelete && onDelete != null) {
         AlertDialog(
             onDismissRequest = { confirmDelete = false },
-            title = { Text("Delete \"${initial.name}\"?") },
+            title = { Text(stringResource(R.string.cat_delete_title, initial.name)) },
             text = {
                 Text(
-                    if (itemsUsing == 0) "This category isn't used by anything in your library."
-                    else "$itemsUsing item${if (itemsUsing == 1) "" else "s"} will move to \"Other\". Nothing is lost."
+                    if (itemsUsing == 0) stringResource(R.string.cat_delete_unused)
+                    else pluralStringResource(R.plurals.cat_delete_used, itemsUsing, itemsUsing)
                 )
             },
-            confirmButton = { TextButton(onClick = { onDelete(initial) }) { Text("Delete") } },
-            dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text("Cancel") } },
+            confirmButton = { TextButton(onClick = { onDelete(initial) }) { Text(stringResource(R.string.common_delete)) } },
+            dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text(stringResource(R.string.common_cancel)) } },
         )
     }
 }

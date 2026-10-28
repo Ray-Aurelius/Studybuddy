@@ -36,9 +36,14 @@ data class BackupData(
 
         fun decode(text: String): BackupData {
             val data = json.decodeFromString(serializer(), text)
-            require(data.app in ACCEPTED_APP_IDS) { "This file isn't a Sophinity backup." }
-            require(data.version <= CURRENT_VERSION) { "This backup is from a newer version of Sophinity. Update the app first." }
+            if (data.app !in ACCEPTED_APP_IDS) throw BackupException(BackupException.Reason.NOT_A_BACKUP)
+            if (data.version > CURRENT_VERSION) throw BackupException(BackupException.Reason.TOO_NEW)
             return data
         }
     }
+}
+
+/** Why a backup can't be restored; the UI turns this into a translated message. */
+class BackupException(val reason: Reason) : Exception(reason.name) {
+    enum class Reason { NOT_A_BACKUP, TOO_NEW }
 }

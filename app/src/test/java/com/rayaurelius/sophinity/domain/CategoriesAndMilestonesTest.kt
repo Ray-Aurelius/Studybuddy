@@ -1,5 +1,6 @@
 package com.rayaurelius.sophinity.domain
 
+import com.rayaurelius.sophinity.R
 import com.rayaurelius.sophinity.data.db.CustomCategory
 import com.rayaurelius.sophinity.data.db.Goal
 import com.rayaurelius.sophinity.data.db.GoalKind
@@ -64,21 +65,14 @@ class CategoriesAndMilestonesTest {
         val byId = mapOf(workshop.id to workshop)
         val item = LearningItem(type = ItemType.CUSTOM, title = "Pottery", categoryId = 7)
         val info = Categories.of(item, byId)
-        assertEquals("Workshop", info.label)
-        assertEquals("sessions", info.unit)
-        assertEquals("3 workshops", info.count(3))
+        assertEquals(Txt.Raw("Workshop"), info.label)
+        assertEquals(Txt.Raw("sessions"), info.unit)
+        assertEquals(Txt.Res(R.string.count_custom, listOf(3, Txt.Raw("Workshop"))), info.count(3))
+        assertEquals(Txt.Plural(R.plurals.count_book, 3), Categories.builtIn(ItemType.BOOK).count(3))
         // Deleted category: item shows under "Other" instead of vanishing.
         assertEquals(Categories.OTHER, Categories.of(item.copy(categoryId = null), byId))
         assertEquals("AUDIOBOOK", Categories.all(listOf(workshop))[1].key)
         assertEquals("c7", Categories.all(listOf(workshop)).last().key)
-    }
-
-    @Test fun pluralize() {
-        assertEquals("Workshops", Categories.pluralize("Workshop"))
-        assertEquals("Classes", Categories.pluralize("Class"))
-        assertEquals("Documentaries", Categories.pluralize("Documentary"))
-        assertEquals("Essays", Categories.pluralize("Essay"))
-        assertEquals("Lectures", Categories.pluralize("Lectures"))
     }
 
     @Test fun customCategoryGoalCountsOnlyThatCategory() {
@@ -87,7 +81,7 @@ class CategoriesAndMilestonesTest {
         val items = done(ItemType.CUSTOM, 1, 7) + done(ItemType.CUSTOM, 3, 8) + done(ItemType.BOOK, 2)
         val p = GoalMath.progress(goal, emptyList(), items, today, DayOfWeek.MONDAY, zone)
         assertEquals(1, p.current)
-        assertEquals("2 workshops a month", GoalMath.describe(goal, Categories.custom(workshop)))
+        assertEquals(Txt.Res(R.string.goal_desc_monthly, listOf(Categories.custom(workshop).count(2))), GoalMath.describe(goal, Categories.custom(workshop)))
     }
 
     @Test fun levelsKeepGrowingTo5000Hours() {

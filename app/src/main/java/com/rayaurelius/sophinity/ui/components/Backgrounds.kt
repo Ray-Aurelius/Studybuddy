@@ -1,5 +1,6 @@
 package com.rayaurelius.sophinity.ui.components
 
+import com.rayaurelius.sophinity.ui.i18n.AppLocale
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -54,7 +55,7 @@ object Backgrounds {
         while (max(bounds.outWidth, bounds.outHeight) / sample > 2048) sample *= 2
         val bmp = resolver.openInputStream(uri)!!.use {
             BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inSampleSize = sample })
-        } ?: error("That file isn't an image we can read.")
+        } ?: error(AppLocale.localized(context).getString(com.rayaurelius.sophinity.R.string.err_image))
         val out = photoFile(context)
         out.parentFile?.mkdirs()
         out.outputStream().use { bmp.compress(Bitmap.CompressFormat.JPEG, 88, it) }

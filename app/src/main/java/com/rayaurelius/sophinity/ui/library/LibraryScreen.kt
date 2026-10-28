@@ -2,6 +2,9 @@
 
 package com.rayaurelius.sophinity.ui.library
 
+import com.rayaurelius.sophinity.domain.str
+import com.rayaurelius.sophinity.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -106,26 +109,26 @@ fun LibraryScreen(contentPadding: PaddingValues) {
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.fillMaxSize(),
         ) {
-            item { Text("Library", style = MaterialTheme.typography.headlineMedium) }
+            item { Text(stringResource(R.string.lib_title), style = MaterialTheme.typography.headlineMedium) }
             item { YearTally(snap) }
             item {
                 SecondaryTabRow(selectedTabIndex = ItemStatus.entries.indexOf(status)) {
                     ItemStatus.entries.forEach { st ->
                         val n = snap.items.count { it.status == st }
-                        Tab(status == st, { status = st }, text = { Text("${st.label} ($n)") })
+                        Tab(status == st, { status = st }, text = { Text(stringResource(R.string.lib_tab, stringResource(st.labelRes), n)) })
                     }
                 }
             }
             item {
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    item { FilterChip(filter == null, { filterKey = null }, { Text("All") }) }
+                    item { FilterChip(filter == null, { filterKey = null }, { Text(stringResource(R.string.lib_all)) }) }
                     // Only show categories that have something in them, plus the built-ins people use most.
                     val used = snap.items.map { snap.categoryOf(it).key }.toSet()
                     val shown = snap.categories.filter { it.key in used || it.type in pinned || it.key == filterKey }
                     items(shown, key = { it.key }) { c ->
-                        FilterChip(filter?.key == c.key, { filterKey = if (filterKey == c.key) null else c.key }, { Text("${c.emoji} ${c.plural}") })
+                        FilterChip(filter?.key == c.key, { filterKey = if (filterKey == c.key) null else c.key }, { Text("${c.emoji} ${c.plural.str()}") })
                     }
-                    item { AssistChip(onClick = { newCategory = true }, label = { Text("＋ New category") }) }
+                    item { AssistChip(onClick = { newCategory = true }, label = { Text(stringResource(R.string.lib_new_category)) }) }
                 }
             }
             if (list.isEmpty()) {
@@ -133,11 +136,11 @@ fun LibraryScreen(contentPadding: PaddingValues) {
                     EmptyState(
                         "📚",
                         when (status) {
-                            ItemStatus.ACTIVE -> "Nothing in progress"
-                            ItemStatus.WANT -> "Your want-to list is empty"
-                            ItemStatus.DONE -> "Nothing finished yet"
+                            ItemStatus.ACTIVE -> stringResource(R.string.lib_empty_active)
+                            ItemStatus.WANT -> stringResource(R.string.lib_empty_want)
+                            ItemStatus.DONE -> stringResource(R.string.lib_empty_done)
                         },
-                        "Add the books you're reading, podcasts you follow, and seminars you attend. Everything you learn from counts.",
+                        stringResource(R.string.lib_empty_body),
                     )
                 }
             } else {
@@ -147,7 +150,7 @@ fun LibraryScreen(contentPadding: PaddingValues) {
         ExtendedFloatingActionButton(
             onClick = { editing = LearningItem(type = filter?.type ?: ItemType.BOOK, categoryId = filter?.customId, title = "", status = status) },
             icon = { Icon(Icons.Default.Add, null) },
-            text = { Text("Add") },
+            text = { Text(stringResource(R.string.common_add)) },
             modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = contentPadding.calculateBottomPadding() + 16.dp),
         )
     }
@@ -180,11 +183,11 @@ private fun YearTally(snap: Snapshot) {
     val counts = done.groupingBy { snap.categoryOf(it) }.eachCount()
     ElevatedCard(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp)) {
-            Text("Finished in $year", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.lib_finished_in, year), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(6.dp))
             FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 counts.entries.sortedByDescending { it.value }.forEach { (cat, n) ->
-                    Text("${cat.emoji} ${cat.count(n)}", style = MaterialTheme.typography.titleMedium)
+                    Text("${cat.emoji} ${cat.count(n).str()}", style = MaterialTheme.typography.titleMedium)
                 }
             }
         }
@@ -213,11 +216,11 @@ private fun ItemCard(snap: Snapshot, item: LearningItem, onClick: () -> Unit) {
                     Spacer(Modifier.height(8.dp))
                     LinearMeter(item.progressUnits.toFloat() / total, Modifier.fillMaxWidth())
                     Spacer(Modifier.height(2.dp))
-                    Text("${item.progressUnits} of $total ${cat.unit} · ${item.progressUnits * 100 / total}%",
+                    Text(stringResource(R.string.lib_units_progress, item.progressUnits, total, cat.unit.str(), item.progressUnits * 100 / total),
                         style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 val logged = snap.secondsForItem(item.id)
-                if (logged > 0) Text("${StudyMath.formatDuration(logged)} logged", style = MaterialTheme.typography.labelSmall,
+                if (logged > 0) Text(stringResource(R.string.logged, StudyMath.formatDuration(logged)), style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary)
                 if (item.status == ItemStatus.DONE) {
                     Spacer(Modifier.height(4.dp))
@@ -248,37 +251,37 @@ private fun ItemEditorSheet(
             Modifier.padding(horizontal = 24.dp).padding(bottom = 24.dp).verticalScroll(rememberScrollState()).imePadding(),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            Text(if (isNew) "Add to library" else "Edit", style = MaterialTheme.typography.headlineSmall)
+            Text(stringResource(if (isNew) R.string.lib_add_title else R.string.lib_edit_title), style = MaterialTheme.typography.headlineSmall)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 snap.categories.forEach { c ->
-                    FilterChip(cat.key == c.key, { item = item.copy(type = c.type, categoryId = c.customId) }, { Text("${c.emoji} ${c.label}") })
+                    FilterChip(cat.key == c.key, { item = item.copy(type = c.type, categoryId = c.customId) }, { Text("${c.emoji} ${c.label.str()}") })
                 }
-                if (cat == com.rayaurelius.sophinity.domain.Categories.OTHER) FilterChip(true, {}, { Text("📌 Other") })
-                AssistChip(onClick = { newCategory = true }, label = { Text("＋ New category") })
+                if (cat == com.rayaurelius.sophinity.domain.Categories.OTHER) FilterChip(true, {}, { Text("📌 " + stringResource(R.string.type_other)) })
+                AssistChip(onClick = { newCategory = true }, label = { Text(stringResource(R.string.lib_new_category)) })
             }
-            OutlinedTextField(item.title, { item = item.copy(title = it) }, label = { Text("Title") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(item.title, { item = item.copy(title = it) }, label = { Text(stringResource(R.string.lib_field_title)) }, singleLine = true, modifier = Modifier.fillMaxWidth())
             OutlinedTextField(
                 item.creator, { item = item.copy(creator = it) },
-                label = { Text(when (item.type) { ItemType.BOOK, ItemType.ARTICLE -> "Author"; ItemType.AUDIOBOOK -> "Author / narrator"; ItemType.PODCAST -> "Host / show"; ItemType.SEMINAR -> "Speaker / organizer"; else -> "Creator" }) },
+                label = { Text(stringResource(when (item.type) { ItemType.BOOK, ItemType.ARTICLE -> R.string.lib_author; ItemType.AUDIOBOOK -> R.string.lib_author_narrator; ItemType.PODCAST -> R.string.lib_host; ItemType.SEMINAR -> R.string.lib_speaker; else -> R.string.lib_creator })) },
                 singleLine = true, modifier = Modifier.fillMaxWidth(),
             )
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                ItemStatus.entries.forEach { st -> FilterChip(item.status == st, { item = item.copy(status = st) }, { Text(st.label) }) }
+                ItemStatus.entries.forEach { st -> FilterChip(item.status == st, { item = item.copy(status = st) }, { Text(stringResource(st.labelRes)) }) }
             }
             SubjectPicker(snap.activeSubjects, item.subjectId, { item = item.copy(subjectId = it) })
             if (MediaTime.supportsRuntime(item.type)) {
-                Text("Run time", style = MaterialTheme.typography.titleSmall)
+                Text(stringResource(R.string.lib_runtime), style = MaterialTheme.typography.titleSmall)
                 Text(
-                    "Total length of the ${cat.label.lowercase()}. Time you log on it with the timer counts toward it.",
+                    stringResource(R.string.lib_runtime_hint),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                DurationFields("Total", item.runtimeMin?.times(60L), { sec -> item = item.copy(runtimeMin = sec?.let { (it / 60).toInt() }?.takeIf { it > 0 }) })
+                DurationFields(stringResource(R.string.field_total), item.runtimeMin?.times(60L), { sec -> item = item.copy(runtimeMin = sec?.let { (it / 60).toInt() }?.takeIf { it > 0 }) })
                 if (item.runtimeMin != null && item.status == ItemStatus.ACTIVE) {
-                    Text("Already completed before tracking", style = MaterialTheme.typography.labelLarge)
-                    DurationFields("Done", item.priorSec.takeIf { it > 0 }, { sec -> item = item.copy(priorSec = sec ?: 0) })
+                    Text(stringResource(R.string.lib_prior), style = MaterialTheme.typography.labelLarge)
+                    DurationFields(stringResource(R.string.field_done), item.priorSec.takeIf { it > 0 }, { sec -> item = item.copy(priorSec = sec ?: 0) })
                 }
                 if (item.runtimeMin != null && MediaTime.supportsSpeed(item.type)) {
-                    Text("Playback speed", style = MaterialTheme.typography.labelLarge)
+                    Text(stringResource(R.string.lib_speed), style = MaterialTheme.typography.labelLarge)
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         MediaTime.SPEEDS.forEach { sp ->
                             FilterChip(item.playbackSpeed == sp, { item = item.copy(playbackSpeed = sp) }, { Text(MediaTime.formatSpeed(sp)) })
@@ -289,28 +292,28 @@ private fun ItemEditorSheet(
             }
             if (item.status != ItemStatus.WANT) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    NumberField("Done", item.progressUnits, { item = item.copy(progressUnits = it ?: 0) }, Modifier.weight(1f))
-                    NumberField("Total ${cat.unit}", item.totalUnits, { item = item.copy(totalUnits = it) }, Modifier.weight(1f))
+                    NumberField(stringResource(R.string.field_done), item.progressUnits, { item = item.copy(progressUnits = it ?: 0) }, Modifier.weight(1f))
+                    NumberField(stringResource(R.string.lib_total_units, cat.unit.str()), item.totalUnits, { item = item.copy(totalUnits = it) }, Modifier.weight(1f))
                 }
             }
             if (item.status == ItemStatus.DONE) {
-                Text("Your rating", style = MaterialTheme.typography.titleSmall)
+                Text(stringResource(R.string.lib_rating), style = MaterialTheme.typography.titleSmall)
                 StarRating(item.rating, { item = item.copy(rating = it) })
                 OutlinedTextField(
                     item.takeaway, { item = item.copy(takeaway = it) },
-                    label = { Text("Biggest takeaway") },
-                    supportingText = { Text("Summarizing in one line is a powerful way to remember it.") },
+                    label = { Text(stringResource(R.string.lib_takeaway)) },
+                    supportingText = { Text(stringResource(R.string.lib_takeaway_hint)) },
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
-            OutlinedTextField(item.notes, { item = item.copy(notes = it) }, label = { Text("Notes") }, minLines = 2, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(item.notes, { item = item.copy(notes = it) }, label = { Text(stringResource(R.string.lib_notes)) }, minLines = 2, modifier = Modifier.fillMaxWidth())
             Row(verticalAlignment = Alignment.CenterVertically) {
-                if (!isNew) TextButton(onClick = { onDelete(initial) }) { Text("Delete", color = MaterialTheme.colorScheme.error) }
+                if (!isNew) TextButton(onClick = { onDelete(initial) }) { Text(stringResource(R.string.common_delete), color = MaterialTheme.colorScheme.error) }
                 Spacer(Modifier.weight(1f))
-                TextButton(onClick = onDismiss) { Text("Cancel") }
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
                 Spacer(Modifier.width(8.dp))
                 Button(enabled = item.title.isNotBlank(), onClick = { onSave(item.copy(title = item.title.trim(), creator = item.creator.trim())) }) {
-                    Text("Save")
+                    Text(stringResource(R.string.common_save))
                 }
             }
         }

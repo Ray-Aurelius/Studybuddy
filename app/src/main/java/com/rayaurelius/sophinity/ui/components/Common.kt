@@ -1,5 +1,7 @@
 package com.rayaurelius.sophinity.ui.components
 
+import com.rayaurelius.sophinity.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -133,7 +135,7 @@ fun SubjectPicker(
     selectedId: Long?,
     onSelect: (Long?) -> Unit,
     modifier: Modifier = Modifier,
-    noneLabel: String = "No subject",
+    noneLabel: String = stringResource(R.string.subject_none),
 ) {
     var open by remember { mutableStateOf(false) }
     val sel = subjects.firstOrNull { it.id == selectedId }
@@ -171,7 +173,7 @@ fun StarRating(rating: Int?, onChange: ((Int?) -> Unit)? = null, size: Int = 28)
             val tint = if (filled) Brand.Gold else MaterialTheme.colorScheme.outline
             if (onChange != null) {
                 IconButton(onClick = { onChange(if (rating == i) null else i) }, modifier = Modifier.size((size + 12).dp)) {
-                    Icon(icon, "$i stars", tint = tint, modifier = Modifier.size(size.dp))
+                    Icon(icon, stringResource(R.string.stars, i), tint = tint, modifier = Modifier.size(size.dp))
                 }
             } else {
                 Icon(icon, null, tint = tint, modifier = Modifier.size(size.dp))
@@ -183,7 +185,7 @@ fun StarRating(rating: Int?, onChange: ((Int?) -> Unit)? = null, size: Int = 28)
 /** 1–5 focus self-rating. Noticing focus quality is a core metacognitive skill. */
 @Composable
 fun FocusRating(value: Int?, onChange: (Int?) -> Unit) {
-    val faces = listOf("😵‍💫" to "Scattered", "😕" to "Distracted", "🙂" to "Okay", "😃" to "Focused", "🤩" to "Deep flow")
+    val faces = listOf("😵‍💫" to R.string.focus_1, "😕" to R.string.focus_2, "🙂" to R.string.focus_3, "😃" to R.string.focus_4, "🤩" to R.string.focus_5)
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         faces.forEachIndexed { i, (emoji, label) ->
             val n = i + 1
@@ -196,7 +198,7 @@ fun FocusRating(value: Int?, onChange: (Int?) -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(emoji, style = MaterialTheme.typography.headlineSmall)
-                Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(label), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.rayaurelius.sophinity.domain
 
+import com.rayaurelius.sophinity.R
 /**
  * Earned titles: a ladder from Neophyte to Philosopher. Each rung requires specific laurels
  * (milestones) and every rung below it, so a title reflects breadth — time, reading,
@@ -7,9 +8,12 @@ package com.rayaurelius.sophinity.domain
  */
 data class LearnerTitle(
     val rank: Int,
-    val name: String,
+    /** Stable id, e.g. "philosopher". */
+    val id: String,
+    val name: Txt,
+    /** The Greek word itself, shown as-is in every language. */
     val greek: String,
-    val meaning: String,
+    val meaning: Txt,
     /** Milestone keys that must all be unlocked. */
     val requires: List<String>,
 )
@@ -25,14 +29,14 @@ data class TitleStatus(
 
 object Titles {
     val all = listOf(
-        LearnerTitle(1, "Neophyte", "νεόφυτος", "newly planted", emptyList()),
-        LearnerTitle(2, "Seeker", "ζητητής", "one who seeks", listOf("first_session")),
-        LearnerTitle(3, "Pupil", "μαθητής", "learner", listOf("hours_10", "streak_7")),
-        LearnerTitle(4, "Scribe", "γραμματεύς", "keeper of words", listOf("book_1", "reflect_10")),
-        LearnerTitle(5, "Rhetor", "ῥήτωρ", "one who speaks with purpose", listOf("hours_50", "goal_10")),
-        LearnerTitle(6, "Scholar", "σχολαστικός", "devoted to learning", listOf("hours_100", "streak_30", "renaissance")),
-        LearnerTitle(7, "Sage", "σοφός", "wise one", listOf("hours_500", "book_50", "streak_100")),
-        LearnerTitle(8, "Philosopher", "φιλόσοφος", "lover of wisdom", listOf("hours_1000", "book_100", "streak_365", "reflect_50")),
+        LearnerTitle(1, "neophyte", Txt.Res(R.string.title_neophyte), "νεόφυτος", Txt.Res(R.string.title_neophyte_meaning), emptyList()),
+        LearnerTitle(2, "seeker", Txt.Res(R.string.title_seeker), "ζητητής", Txt.Res(R.string.title_seeker_meaning), listOf("first_session")),
+        LearnerTitle(3, "pupil", Txt.Res(R.string.title_pupil), "μαθητής", Txt.Res(R.string.title_pupil_meaning), listOf("hours_10", "streak_7")),
+        LearnerTitle(4, "scribe", Txt.Res(R.string.title_scribe), "γραμματεύς", Txt.Res(R.string.title_scribe_meaning), listOf("book_1", "reflect_10")),
+        LearnerTitle(5, "rhetor", Txt.Res(R.string.title_rhetor), "ῥήτωρ", Txt.Res(R.string.title_rhetor_meaning), listOf("hours_50", "goal_10")),
+        LearnerTitle(6, "scholar", Txt.Res(R.string.title_scholar), "σχολαστικός", Txt.Res(R.string.title_scholar_meaning), listOf("hours_100", "streak_30", "renaissance")),
+        LearnerTitle(7, "sage", Txt.Res(R.string.title_sage), "σοφός", Txt.Res(R.string.title_sage_meaning), listOf("hours_500", "book_50", "streak_100")),
+        LearnerTitle(8, "philosopher", Txt.Res(R.string.title_philosopher), "φιλόσοφος", Txt.Res(R.string.title_philosopher_meaning), listOf("hours_1000", "book_100", "streak_365", "reflect_50")),
     )
 
     val highest get() = all.last()

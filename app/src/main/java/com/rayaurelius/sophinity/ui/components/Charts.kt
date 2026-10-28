@@ -1,5 +1,7 @@
 package com.rayaurelius.sophinity.ui.components
 
+import com.rayaurelius.sophinity.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -69,7 +71,7 @@ fun StudyBarChart(
     Column(modifier) {
         val sel = bars.getOrNull(selected)
         Text(
-            if (sel != null) "${sel.detail} · ${StudyMath.formatDuration(sel.seconds)}" else "Tap a bar for details",
+            if (sel != null) "${sel.detail} · ${StudyMath.formatDuration(sel.seconds)}" else stringResource(R.string.chart_tap_hint),
             style = MaterialTheme.typography.labelLarge,
             color = if (sel != null) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -158,13 +160,13 @@ fun StudyHeatmap(
         }
         Spacer(Modifier.height(8.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Less", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.chart_less), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             listOf(0L, 600L, 1200L, 2400L, 4000L).forEach {
                 Spacer(Modifier.width(4.dp))
                 Box(Modifier.size(12.dp).clip(RoundedCornerShape(3.dp)).background(color(it)))
             }
             Spacer(Modifier.width(4.dp))
-            Text("More", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.chart_more), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

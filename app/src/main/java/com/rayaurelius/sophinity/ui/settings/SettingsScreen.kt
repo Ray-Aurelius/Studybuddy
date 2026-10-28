@@ -2,6 +2,16 @@
 
 package com.rayaurelius.sophinity.ui.settings
 
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.material.icons.outlined.Language
+import androidx.core.os.LocaleListCompat
+import com.rayaurelius.sophinity.domain.StudyMath
+import com.rayaurelius.sophinity.data.BackupException
+import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
+import com.rayaurelius.sophinity.ui.i18n.AppLocale
+import com.rayaurelius.sophinity.R
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -70,7 +80,6 @@ import com.rayaurelius.sophinity.data.ThemeMode
 import com.rayaurelius.sophinity.data.db.CustomCategory
 import com.rayaurelius.sophinity.data.db.ItemType
 import com.rayaurelius.sophinity.data.db.Subject
-import com.rayaurelius.sophinity.domain.Categories
 import com.rayaurelius.sophinity.ui.components.CategoryDialog
 import com.rayaurelius.sophinity.reminders.ReminderScheduler
 import com.rayaurelius.sophinity.timer.TimerAlarms
@@ -92,6 +101,7 @@ class SettingsViewModel(private val c: AppContainer) : ViewModel() {
     val categories = c.repo.categories.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     val items = c.repo.items.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     val messages = MutableSharedFlow<String>(extraBufferCapacity = 4)
+    private fun str(id: Int, vararg args: Any) = AppLocale.localized(c.appContext).getString(id, *args)
 
     fun update(t: (AppSettings) -> AppSettings) = viewModelScope.launch {
         c.settingsStore.update(t)
@@ -111,7 +121,7 @@ class SettingsViewModel(private val c: AppContainer) : ViewModel() {
             withContext(Dispatchers.IO) {
                 c.appContext.contentResolver.openOutputStream(uri, "wt")!!.use { it.write(text.toByteArray()) }
             }
-        }.onSuccess { messages.emit("Backup saved") }.onFailure { messages.emit("Couldn't save backup: ${it.message}") }
+        }.onSuccess { messages.emit(str(R.string.set_backup_saved)) }.onFailure { messages.emit(str(R.string.set_backup_save_failed, it.message ?: "")) }
     }
 
     fun import(uri: Uri) = viewModelScope.launch {
@@ -120,7 +130,14 @@ class SettingsViewModel(private val c: AppContainer) : ViewModel() {
                 c.appContext.contentResolver.openInputStream(uri)!!.use { it.readBytes().decodeToString() }
             }
             c.repo.importData(BackupData.decode(text))
-        }.onSuccess { messages.emit("Backup restored") }.onFailure { messages.emit("Couldn't restore: ${it.message}") }
+        }.onSuccess { messages.emit(str(R.string.set_backup_restored)) }.onFailure { e ->
+            val why = when ((e as? BackupException)?.reason) {
+                BackupException.Reason.NOT_A_BACKUP -> str(R.string.set_not_backup)
+                BackupException.Reason.TOO_NEW -> str(R.string.set_backup_too_new)
+                null -> e.message ?: ""
+            }
+            messages.emit(str(R.string.set_restore_failed, why))
+        }
     }
 }
 
@@ -137,6 +154,7 @@ fun SettingsScreen(
     val categories by vm.categories.collectAsStateWithLifecycle()
     val items by vm.items.collectAsStateWithLifecycle()
     var editCategory by remember { mutableStateOf<CustomCategory?>(null) }
+    var pickLanguage by remember { mutableStateOf(false) }
     val ctx = LocalContext.current
     val snackbar = remember { SnackbarHostState() }
     var editSubject by remember { mutableStateOf<Subject?>(null) }
@@ -154,46 +172,58 @@ fun SettingsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Settings") },
-                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back") } },
+                title = { Text(stringResource(R.string.set_title)) },
+                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.common_back)) } },
             )
         },
         snackbarHost = { SnackbarHost(snackbar) },
     ) { pad ->
         LazyColumn(contentPadding = pad, modifier = Modifier.fillMaxSize()) {
-            item { Header("Make it yours") }
+            item { Header(stringResource(R.string.set_make_yours)) }
             item {
                 ListItem(
-                    headlineContent = { Text("Appearance") },
-                    supportingContent = { Text("Color themes, light or dark, backgrounds") },
+                    headlineContent = { Text(stringResource(R.string.set_appearance)) },
+                    supportingContent = { Text(stringResource(R.string.set_appearance_sub)) },
                     leadingContent = { Icon(Icons.Outlined.Palette, null) },
                     modifier = Modifier.clickable(onClick = onOpenAppearance),
                 )
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Accessibility") },
-                    supportingContent = { Text("Text size, bold text, contrast, motion, readable font") },
+                    headlineContent = { Text(stringResource(R.string.set_accessibility)) },
+                    supportingContent = { Text(stringResource(R.string.set_accessibility_sub)) },
                     leadingContent = { Icon(Icons.Outlined.AccessibilityNew, null) },
                     modifier = Modifier.clickable(onClick = onOpenAccessibility),
                 )
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Toolbar") },
-                    supportingContent = { Text("Bottom, left or right; choose which tabs to show") },
+                    headlineContent = { Text(stringResource(R.string.set_toolbar)) },
+                    supportingContent = { Text(stringResource(R.string.set_toolbar_sub)) },
                     leadingContent = { Icon(Icons.Outlined.ViewSidebar, null) },
                     modifier = Modifier.clickable(onClick = onOpenToolbar),
                 )
             }
+            item {
+                val chosen = AppLocale.chosenTag()
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.set_language)) },
+                    supportingContent = {
+                        Text(chosen?.let { AppLocale.nativeName(it) }
+                            ?: stringResource(R.string.set_language_follow, AppLocale.nativeName(LocaleListCompat.getAdjustedDefault()[0]?.toLanguageTag() ?: "en")))
+                    },
+                    leadingContent = { Icon(Icons.Outlined.Language, null) },
+                    modifier = Modifier.clickable { pickLanguage = true },
+                )
+            }
             item { HorizontalDivider() }
 
-            item { Header("Subjects") }
+            item { Header(stringResource(R.string.set_subjects)) }
             subjects.forEach { sub ->
                 item(key = "s${sub.id}") {
                     ListItem(
                         headlineContent = { Text("${sub.emoji}  ${sub.name}") },
-                        supportingContent = if (sub.archived) ({ Text("Archived") }) else null,
+                        supportingContent = if (sub.archived) ({ Text(stringResource(R.string.set_archived)) }) else null,
                         leadingContent = { SubjectDot(sub.color, size = 14) },
                         modifier = Modifier.clickable { editSubject = sub },
                     )
@@ -201,17 +231,17 @@ fun SettingsScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Add subject") },
+                    headlineContent = { Text(stringResource(R.string.set_add_subject)) },
                     leadingContent = { Icon(Icons.Default.Add, null) },
                     modifier = Modifier.clickable { editSubject = Subject(name = "", color = Brand.subjectPalette[subjects.size % Brand.subjectPalette.size]) },
                 )
             }
             item { HorizontalDivider() }
 
-            item { Header("Library categories") }
+            item { Header(stringResource(R.string.set_categories)) }
             item {
                 Text(
-                    "Built in: " + ItemType.entries.filter { it != ItemType.CUSTOM }.joinToString { "${it.emoji} ${it.label}" },
+                    stringResource(R.string.set_built_in, ItemType.entries.filter { it != ItemType.CUSTOM }.map { "${it.emoji} ${stringResource(it.labelRes)}" }.joinToString()),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                 )
@@ -220,39 +250,40 @@ fun SettingsScreen(
                 item(key = "c${cat.id}") {
                     val n = items.count { it.type == ItemType.CUSTOM && it.categoryId == cat.id }
                     ListItem(
-                        headlineContent = { Text("${cat.emoji}  ${Categories.pluralize(cat.name)}") },
-                        supportingContent = { Text("$n item${if (n == 1) "" else "s"} · progress in ${cat.unitLabel}") },
+                        headlineContent = { Text("${cat.emoji}  ${cat.name}") },
+                        supportingContent = { Text(pluralStringResource(R.plurals.set_cat_items, n, n, cat.unitLabel)) },
                         modifier = Modifier.clickable { editCategory = cat },
                     )
                 }
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Add your own category") },
-                    supportingContent = { Text("e.g. Workshops, Documentaries, Lectures") },
+                    headlineContent = { Text(stringResource(R.string.set_add_category)) },
+                    supportingContent = { Text(stringResource(R.string.set_add_category_sub)) },
                     leadingContent = { Icon(Icons.Default.Add, null) },
                     modifier = Modifier.clickable { editCategory = CustomCategory(name = "") },
                 )
             }
             item { HorizontalDivider() }
 
-            item { Header("Streak") }
+            item { Header(stringResource(R.string.set_streak)) }
             item {
-                Stepper("Minimum per day", "${s.streakMinutes} min counts as a learning day", s.streakMinutes, 1, 120, step = 5) { v ->
+                Stepper(stringResource(R.string.set_min_day), stringResource(R.string.set_min_day_sub, StudyMath.formatDuration(s.streakMinutes * 60L)), s.streakMinutes, 1, 120, step = 5) { v ->
                     vm.update { it.copy(streakMinutes = v) }
                 }
             }
             item {
-                Stepper("Rest days per week", "Missing these won't break your streak", s.restDaysPerWeek, 0, 3) { v ->
+                Stepper(stringResource(R.string.set_rest_days), stringResource(R.string.set_rest_days_sub), s.restDaysPerWeek, 0, 3) { v ->
                     vm.update { it.copy(restDaysPerWeek = v) }
                 }
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Week starts on") },
+                    headlineContent = { Text(stringResource(R.string.set_week_starts)) },
                     trailingContent = {
                         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                            listOf(DayOfWeek.MONDAY to "Mon", DayOfWeek.SUNDAY to "Sun", DayOfWeek.SATURDAY to "Sat").forEach { (d, l) ->
+                            val loc = LocalConfiguration.current.locales[0]
+                            listOf(DayOfWeek.MONDAY, DayOfWeek.SUNDAY, DayOfWeek.SATURDAY).map { it to it.getDisplayName(java.time.format.TextStyle.SHORT, loc) }.forEach { (d, l) ->
                                 FilterChip(s.weekStart == d, { vm.update { it.copy(weekStart = d) } }, { Text(l) })
                             }
                         }
@@ -261,14 +292,14 @@ fun SettingsScreen(
             }
             item { HorizontalDivider() }
 
-            item { Header("Timer") }
-            item { Stepper("Focus block", "${s.focusMinutes} minutes", s.focusMinutes, 5, 120, step = 5) { v -> vm.update { it.copy(focusMinutes = v) } } }
-            item { Stepper("Break", "${s.breakMinutes} minutes", s.breakMinutes, 1, 30) { v -> vm.update { it.copy(breakMinutes = v) } } }
+            item { Header(stringResource(R.string.set_timer)) }
+            item { Stepper(stringResource(R.string.set_focus_block), StudyMath.formatDuration(s.focusMinutes * 60L), s.focusMinutes, 5, 120, step = 5) { v -> vm.update { it.copy(focusMinutes = v) } } }
+            item { Stepper(stringResource(R.string.set_break), StudyMath.formatDuration(s.breakMinutes * 60L), s.breakMinutes, 1, 30) { v -> vm.update { it.copy(breakMinutes = v) } } }
             if (!TimerAlarms.canBeExact(ctx) && Build.VERSION.SDK_INT >= 31) {
                 item {
                     ListItem(
-                        headlineContent = { Text("Precise timer alerts") },
-                        supportingContent = { Text("Allow \"Alarms & reminders\" so focus and break alerts ring right on time") },
+                        headlineContent = { Text(stringResource(R.string.set_precise)) },
+                        supportingContent = { Text(stringResource(R.string.set_precise_sub)) },
                         modifier = Modifier.clickable {
                             ctx.startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, Uri.parse("package:${ctx.packageName}")))
                         },
@@ -277,11 +308,11 @@ fun SettingsScreen(
             }
             item { HorizontalDivider() }
 
-            item { Header("Daily reminder") }
+            item { Header(stringResource(R.string.set_reminder)) }
             item {
                 ListItem(
-                    headlineContent = { Text("Daily learning reminder") },
-                    supportingContent = { Text("Skipped automatically on days you've already learned") },
+                    headlineContent = { Text(stringResource(R.string.set_reminder_toggle)) },
+                    supportingContent = { Text(stringResource(R.string.set_reminder_sub)) },
                     trailingContent = {
                         Switch(s.reminderEnabled, { on ->
                             if (on && Build.VERSION.SDK_INT >= 33) notifPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
@@ -293,8 +324,8 @@ fun SettingsScreen(
             if (s.reminderEnabled) {
                 item {
                     ListItem(
-                        headlineContent = { Text("When") },
-                        trailingContent = { Text("%d:%02d %s".format(((s.reminderHour + 11) % 12) + 1, s.reminderMinute, if (s.reminderHour < 12) "AM" else "PM")) },
+                        headlineContent = { Text(stringResource(R.string.set_when)) },
+                        trailingContent = { Text(java.time.LocalTime.of(s.reminderHour, s.reminderMinute).format(rememberDateFormat("jmm"))) },
                         modifier = Modifier.clickable { pickTime = true },
                     )
                 }
@@ -302,9 +333,9 @@ fun SettingsScreen(
                     var place by remember(s.reminderPlace) { mutableStateOf(s.reminderPlace) }
                     OutlinedTextField(
                         place, { place = it; vm.update { st -> st.copy(reminderPlace = it) } },
-                        label = { Text("Where (optional)") },
-                        placeholder = { Text("e.g. at the kitchen table") },
-                        supportingText = { Text("Planning when and where makes you far more likely to follow through.") },
+                        label = { Text(stringResource(R.string.set_where)) },
+                        placeholder = { Text(stringResource(R.string.set_where_hint)) },
+                        supportingText = { Text(stringResource(R.string.set_where_sub)) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                     )
@@ -312,32 +343,36 @@ fun SettingsScreen(
             }
             item { HorizontalDivider(Modifier.padding(top = 8.dp)) }
 
-            item { Header("Your data") }
+            item { Header(stringResource(R.string.set_data)) }
             item {
                 ListItem(
-                    headlineContent = { Text("Export backup") },
-                    supportingContent = { Text("Save everything as a JSON file you own") },
+                    headlineContent = { Text(stringResource(R.string.set_export)) },
+                    supportingContent = { Text(stringResource(R.string.set_export_sub)) },
                     modifier = Modifier.clickable { exportLauncher.launch("sophinity-${LocalDate.now()}.json") },
                 )
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Restore from backup") },
-                    supportingContent = { Text("Replaces what's on this device") },
+                    headlineContent = { Text(stringResource(R.string.set_restore)) },
+                    supportingContent = { Text(stringResource(R.string.set_restore_sub)) },
                     modifier = Modifier.clickable { importLauncher.launch(arrayOf("application/json", "*/*")) },
                 )
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Privacy") },
-                    supportingContent = { Text("Sophinity has no accounts, ads or trackers. Your data stays on this device and in your own Android backup.") },
+                    headlineContent = { Text(stringResource(R.string.set_privacy)) },
+                    supportingContent = { Text(stringResource(R.string.set_privacy_sub)) },
                 )
             }
             item {
-                ListItem(headlineContent = { Text("Version") }, trailingContent = { Text(BuildConfigInfo.versionName(ctx)) })
+                ListItem(headlineContent = { Text(stringResource(R.string.set_version)) }, trailingContent = { Text(BuildConfigInfo.versionName(ctx)) })
             }
             item { Spacer(Modifier.height(32.dp)) }
         }
+    }
+
+    if (pickLanguage) {
+        LanguageDialog(onDismiss = { pickLanguage = false }) { tag -> pickLanguage = false; AppLocale.set(tag) }
     }
 
     editCategory?.let { cat ->
@@ -357,9 +392,9 @@ fun SettingsScreen(
         AlertDialog(
             onDismissRequest = { pickTime = false },
             confirmButton = {
-                TextButton(onClick = { vm.update { it.copy(reminderHour = state.hour, reminderMinute = state.minute) }; pickTime = false }) { Text("OK") }
+                TextButton(onClick = { vm.update { it.copy(reminderHour = state.hour, reminderMinute = state.minute) }; pickTime = false }) { Text(stringResource(R.string.common_ok)) }
             },
-            dismissButton = { TextButton(onClick = { pickTime = false }) { Text("Cancel") } },
+            dismissButton = { TextButton(onClick = { pickTime = false }) { Text(stringResource(R.string.common_cancel)) } },
             text = { TimePicker(state) },
         )
     }
@@ -367,10 +402,10 @@ fun SettingsScreen(
     confirmImport?.let { uri ->
         AlertDialog(
             onDismissRequest = { confirmImport = null },
-            title = { Text("Restore this backup?") },
-            text = { Text("Everything currently in Sophinity on this device will be replaced by the backup.") },
-            confirmButton = { TextButton(onClick = { vm.import(uri); confirmImport = null }) { Text("Restore") } },
-            dismissButton = { TextButton(onClick = { confirmImport = null }) { Text("Cancel") } },
+            title = { Text(stringResource(R.string.set_restore_title)) },
+            text = { Text(stringResource(R.string.set_restore_body)) },
+            confirmButton = { TextButton(onClick = { vm.import(uri); confirmImport = null }) { Text(stringResource(R.string.set_restore_confirm)) } },
+            dismissButton = { TextButton(onClick = { confirmImport = null }) { Text(stringResource(R.string.common_cancel)) } },
         )
     }
 }
@@ -403,10 +438,10 @@ fun SubjectDialog(initial: Subject, onDismiss: () -> Unit, onSave: (Subject) -> 
     var s by remember { mutableStateOf(initial) }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(if (initial.id == 0L) "New subject" else "Edit subject") },
+        title = { Text(stringResource(if (initial.id == 0L) R.string.subject_new else R.string.subject_edit)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                OutlinedTextField(s.name, { s = s.copy(name = it) }, label = { Text("Name") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(s.name, { s = s.copy(name = it) }, label = { Text(stringResource(R.string.cat_name)) }, singleLine = true, modifier = Modifier.fillMaxWidth())
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     subjectEmojis.forEach { e ->
                         Text(
@@ -428,16 +463,60 @@ fun SubjectDialog(initial: Subject, onDismiss: () -> Unit, onSave: (Subject) -> 
                 }
                 if (initial.id != 0L) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("Archived", Modifier.weight(1f))
+                        Text(stringResource(R.string.set_archived), Modifier.weight(1f))
                         Switch(s.archived, { s = s.copy(archived = it) })
                     }
                 }
             }
         },
-        confirmButton = { TextButton(enabled = s.name.isNotBlank(), onClick = { onSave(s.copy(name = s.name.trim())) }) { Text("Save") } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
+        confirmButton = { TextButton(enabled = s.name.isNotBlank(), onClick = { onSave(s.copy(name = s.name.trim())) }) { Text(stringResource(R.string.common_save)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } },
     )
 }
 
 @Suppress("unused")
 private val spacer = Modifier.width(0.dp)
+
+@Composable
+private fun LanguageDialog(onDismiss: () -> Unit, onPick: (String?) -> Unit) {
+    val chosen = AppLocale.chosenTag()
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.set_language)) },
+        text = {
+            LazyColumn {
+                item {
+                    val phone = AppLocale.nativeName(LocaleListCompat.getAdjustedDefault()[0]?.toLanguageTag() ?: "en")
+                    LanguageRow(stringResource(R.string.set_language_follow, phone), null, chosen == null) { onPick(null) }
+                }
+                AppLocale.supported.forEach { tag ->
+                    item(key = tag) {
+                        val english = java.util.Locale.forLanguageTag(tag).getDisplayName(java.util.Locale.ENGLISH)
+                        LanguageRow(AppLocale.nativeName(tag), english, chosen == tag) { onPick(tag) }
+                    }
+                }
+                item {
+                    Text(stringResource(R.string.set_language_note), style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 12.dp))
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } },
+    )
+}
+
+@Composable
+private fun LanguageRow(name: String, english: String?, selected: Boolean, onClick: () -> Unit) {
+    Row(
+        Modifier.fillMaxWidth().clip(MaterialTheme.shapes.small)
+            .clickable(role = androidx.compose.ui.semantics.Role.RadioButton, onClick = onClick).padding(vertical = 10.dp, horizontal = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        androidx.compose.material3.RadioButton(selected, null)
+        Spacer(Modifier.width(10.dp))
+        Column {
+            Text(name, style = MaterialTheme.typography.bodyLarge)
+            if (english != null && english != name) Text(english, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}

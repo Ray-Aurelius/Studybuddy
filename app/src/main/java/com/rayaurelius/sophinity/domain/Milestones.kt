@@ -1,5 +1,7 @@
 package com.rayaurelius.sophinity.domain
 
+import androidx.annotation.StringRes
+import com.rayaurelius.sophinity.R
 import com.rayaurelius.sophinity.data.db.ItemStatus
 import com.rayaurelius.sophinity.data.db.ItemType
 import com.rayaurelius.sophinity.data.db.LearningItem
@@ -51,15 +53,15 @@ data class MilestoneContext(
     }
 }
 
-enum class MilestoneCategory(val label: String) {
-    TIME("Time invested"), STREAK("Consistency"), LIBRARY("Library"), CRAFT("The learner's craft"), GOALS("Goals")
+enum class MilestoneCategory(@StringRes val labelRes: Int) {
+    TIME(R.string.mscat_time), STREAK(R.string.mscat_streak), LIBRARY(R.string.mscat_library), CRAFT(R.string.mscat_craft), GOALS(R.string.mscat_goals)
 }
 
 data class Milestone(
     val key: String,
     val emoji: String,
-    val title: String,
-    val description: String,
+    val title: Txt,
+    val description: Txt,
     val category: MilestoneCategory,
     val target: Long,
     val measure: (MilestoneContext) -> Long,
@@ -69,90 +71,91 @@ data class Milestone(
 }
 
 object Milestones {
-    private fun hours(h: Int, emoji: String, title: String) = Milestone(
-        "hours_$h", emoji, title, "Learn for $h hour${if (h == 1) "" else "s"} in total",
+    private fun t(@StringRes id: Int) = Txt.Res(id)
+
+    private fun hours(h: Int, emoji: String, @StringRes title: Int) = Milestone(
+        "hours_$h", emoji, t(title), Txt.Plural(R.plurals.ms_desc_hours, h),
         MilestoneCategory.TIME, h.toLong(),
     ) { it.totalSeconds / 3600 }
 
-    private fun streak(d: Int, emoji: String, title: String) = Milestone(
-        "streak_$d", emoji, title, "Reach a $d-day streak", MilestoneCategory.STREAK, d.toLong(),
+    private fun streak(d: Int, emoji: String, @StringRes title: Int) = Milestone(
+        "streak_$d", emoji, t(title), Txt.Plural(R.plurals.ms_desc_streak, d), MilestoneCategory.STREAK, d.toLong(),
     ) { it.bestStreak.toLong() }
 
-    private fun done(type: ItemType, n: Int, emoji: String, title: String) = Milestone(
-        "${type.name.lowercase()}_$n", emoji, title,
-        "Finish $n ${if (n == 1) type.label.lowercase() else type.plural.lowercase()}",
+    private fun done(type: ItemType, n: Int, emoji: String, @StringRes title: Int) = Milestone(
+        "${type.name.lowercase()}_$n", emoji, t(title),
+        Txt.Res(R.string.ms_desc_finish, listOf(Txt.Plural(type.countRes, n))),
         MilestoneCategory.LIBRARY, n.toLong(),
     ) { (it.doneByType[type] ?: 0).toLong() }
 
     // Keys stay "book_N" so badges already unlocked keep their dates.
-    private fun books(n: Int, emoji: String, title: String) = Milestone(
-        "book_$n", emoji, title,
-        if (n == 1) "Finish your first book (print, e-book or audio)" else "Finish $n books (print, e-book or audio)",
+    private fun books(n: Int, emoji: String, @StringRes title: Int) = Milestone(
+        "book_$n", emoji, t(title), Txt.Plural(R.plurals.ms_desc_books, n),
         MilestoneCategory.LIBRARY, n.toLong(),
     ) { it.booksFinished.toLong() }
 
     val all: List<Milestone> = listOf(
-        Milestone("first_session", "🌱", "First Step", "Log your first learning session", MilestoneCategory.TIME, 1) { it.sessions.toLong() },
-        hours(1, "🔥", "Spark Kindled"),
-        hours(10, "🏺", "Agora Regular"),
-        hours(25, "🪜", "Steady Ascent"),
-        hours(50, "🧠", "Half-Century"),
-        hours(100, "🛡️", "Hundred-Hour Hero"),
-        hours(250, "🏔️", "Olympian Climb"),
-        hours(500, "💪", "Herculean"),
-        hours(1000, "⛵", "Odyssey"),
-        hours(5000, "🌌", "Elysian"),
+        Milestone("first_session", "🌱", t(R.string.ms_first_session), t(R.string.ms_desc_first_session), MilestoneCategory.TIME, 1) { it.sessions.toLong() },
+        hours(1, "🔥", R.string.ms_hours_1),
+        hours(10, "🏺", R.string.ms_hours_10),
+        hours(25, "🪜", R.string.ms_hours_25),
+        hours(50, "🧠", R.string.ms_hours_50),
+        hours(100, "🛡️", R.string.ms_hours_100),
+        hours(250, "🏔️", R.string.ms_hours_250),
+        hours(500, "💪", R.string.ms_hours_500),
+        hours(1000, "⛵", R.string.ms_hours_1000),
+        hours(5000, "🌌", R.string.ms_hours_5000),
 
-        streak(3, "🕯️", "First Flame"),
-        streak(7, "📜", "Seven Sages"),
-        streak(14, "⚡", "Fortnight Focus"),
-        streak(30, "🌙", "Full Moon"),
-        streak(60, "🌟", "Ethos Formed"),
-        streak(100, "🏃", "Marathon"),
-        streak(365, "☀️", "Circuit of Helios"),
+        streak(3, "🕯️", R.string.ms_streak_3),
+        streak(7, "📜", R.string.ms_streak_7),
+        streak(14, "⚡", R.string.ms_streak_14),
+        streak(30, "🌙", R.string.ms_streak_30),
+        streak(60, "🌟", R.string.ms_streak_60),
+        streak(100, "🏃", R.string.ms_streak_100),
+        streak(365, "☀️", R.string.ms_streak_365),
 
-        books(1, "📖", "First Scroll"),
-        books(5, "📚", "Bookworm"),
-        books(12, "🗓️", "A Book a Month"),
-        books(25, "🗃️", "Personal Library"),
-        books(50, "🗝️", "Bibliophile"),
-        books(100, "🏰", "Century of Stories"),
-        books(250, "🌳", "Tree of Knowledge"),
-        books(500, "🔭", "Lifelong Reader"),
-        books(1000, "🏛️", "Library of Alexandria"),
-        done(ItemType.AUDIOBOOK, 1, "🎧", "Homeric Listener"),
-        done(ItemType.AUDIOBOOK, 10, "🚗", "Commute Scholar"),
-        done(ItemType.AUDIOBOOK, 50, "🎼", "Rhapsode"),
-        done(ItemType.PODCAST, 1, "📡", "Tuned In"),
-        done(ItemType.PODCAST, 10, "🚶", "Peripatetic Listener"),
-        done(ItemType.PODCAST, 50, "📻", "Audio Scholar"),
-        done(ItemType.SEMINAR, 1, "🍇", "Symposium Guest"),
-        done(ItemType.SEMINAR, 5, "🤝", "Academy Regular"),
-        done(ItemType.SEMINAR, 20, "🏛️", "Lyceum Fixture"),
-        done(ItemType.COURSE, 1, "🎓", "Course Complete"),
-        done(ItemType.COURSE, 5, "📜", "Paideia"),
-        Milestone("custom_1", "🧭", "Your Own Path", "Finish something in a category you created", MilestoneCategory.LIBRARY, 1) {
+        books(1, "📖", R.string.ms_book_1),
+        books(5, "📚", R.string.ms_book_5),
+        books(12, "🗓️", R.string.ms_book_12),
+        books(25, "🗃️", R.string.ms_book_25),
+        books(50, "🗝️", R.string.ms_book_50),
+        books(100, "🏰", R.string.ms_book_100),
+        books(250, "🌳", R.string.ms_book_250),
+        books(500, "🔭", R.string.ms_book_500),
+        books(1000, "🏛️", R.string.ms_book_1000),
+        done(ItemType.AUDIOBOOK, 1, "🎧", R.string.ms_audiobook_1),
+        done(ItemType.AUDIOBOOK, 10, "🚗", R.string.ms_audiobook_10),
+        done(ItemType.AUDIOBOOK, 50, "🎼", R.string.ms_audiobook_50),
+        done(ItemType.PODCAST, 1, "📡", R.string.ms_podcast_1),
+        done(ItemType.PODCAST, 10, "🚶", R.string.ms_podcast_10),
+        done(ItemType.PODCAST, 50, "📻", R.string.ms_podcast_50),
+        done(ItemType.SEMINAR, 1, "🍇", R.string.ms_seminar_1),
+        done(ItemType.SEMINAR, 5, "🤝", R.string.ms_seminar_5),
+        done(ItemType.SEMINAR, 20, "🏛️", R.string.ms_seminar_20),
+        done(ItemType.COURSE, 1, "🎓", R.string.ms_course_1),
+        done(ItemType.COURSE, 5, "📜", R.string.ms_course_5),
+        Milestone("custom_1", "🧭", t(R.string.ms_custom_1), t(R.string.ms_desc_custom_1), MilestoneCategory.LIBRARY, 1) {
             it.doneCustom.toLong()
         },
-        Milestone("renaissance", "🎨", "Polymath", "Finish a book, a podcast, a seminar and a course",
+        Milestone("renaissance", "🎨", t(R.string.ms_renaissance), t(R.string.ms_desc_renaissance),
             MilestoneCategory.LIBRARY, 4) { ctx ->
             (listOf(ItemType.PODCAST, ItemType.SEMINAR, ItemType.COURSE).count { (ctx.doneByType[it] ?: 0) > 0 } +
                 if (ctx.booksFinished > 0) 1 else 0).toLong()
         },
 
-        Milestone("deep_60", "🌊", "Deep Work", "Complete a single 60-minute session", MilestoneCategory.CRAFT, 60) { it.longestSessionSec / 60 },
-        Milestone("deep_120", "🤿", "Contemplation", "Complete a single 2-hour session", MilestoneCategory.CRAFT, 120) { it.longestSessionSec / 60 },
-        Milestone("reflect_10", "✍️", "Know Thyself", "Write 10 session reflections", MilestoneCategory.CRAFT, 10) { it.reflections.toLong() },
-        Milestone("reflect_50", "🪞", "Socratic Mind", "Write 50 session reflections", MilestoneCategory.CRAFT, 50) { it.reflections.toLong() },
-        Milestone("variety_3", "🧩", "Cross-Trainer", "Learn across 3 different subjects", MilestoneCategory.CRAFT, 3) { it.subjectsStudied.toLong() },
-        Milestone("variety_6", "🌈", "Many-Sided Mind", "Learn across 6 different subjects", MilestoneCategory.CRAFT, 6) { it.subjectsStudied.toLong() },
-        Milestone("sessions_100", "🧱", "Stone by Stone", "Log 100 sessions", MilestoneCategory.CRAFT, 100) { it.sessions.toLong() },
-        Milestone("early_bird", "🌅", "Rosy-Fingered Dawn", "Start a session between 4 and 7 am", MilestoneCategory.CRAFT, 1) { if (it.earlyBird) 1 else 0 },
-        Milestone("night_owl", "🦉", "Owl of Athena", "Start a session after 10 pm", MilestoneCategory.CRAFT, 1) { if (it.nightOwl) 1 else 0 },
+        Milestone("deep_60", "🌊", t(R.string.ms_deep_60), Txt.Plural(R.plurals.ms_desc_session_minutes, 60), MilestoneCategory.CRAFT, 60) { it.longestSessionSec / 60 },
+        Milestone("deep_120", "🤿", t(R.string.ms_deep_120), Txt.Plural(R.plurals.ms_desc_session_minutes, 120), MilestoneCategory.CRAFT, 120) { it.longestSessionSec / 60 },
+        Milestone("reflect_10", "✍️", t(R.string.ms_reflect_10), Txt.Plural(R.plurals.ms_desc_reflections, 10), MilestoneCategory.CRAFT, 10) { it.reflections.toLong() },
+        Milestone("reflect_50", "🪞", t(R.string.ms_reflect_50), Txt.Plural(R.plurals.ms_desc_reflections, 50), MilestoneCategory.CRAFT, 50) { it.reflections.toLong() },
+        Milestone("variety_3", "🧩", t(R.string.ms_variety_3), Txt.Plural(R.plurals.ms_desc_subjects, 3), MilestoneCategory.CRAFT, 3) { it.subjectsStudied.toLong() },
+        Milestone("variety_6", "🌈", t(R.string.ms_variety_6), Txt.Plural(R.plurals.ms_desc_subjects, 6), MilestoneCategory.CRAFT, 6) { it.subjectsStudied.toLong() },
+        Milestone("sessions_100", "🧱", t(R.string.ms_sessions_100), Txt.Plural(R.plurals.ms_desc_sessions, 100), MilestoneCategory.CRAFT, 100) { it.sessions.toLong() },
+        Milestone("early_bird", "🌅", t(R.string.ms_early_bird), t(R.string.ms_desc_early_bird), MilestoneCategory.CRAFT, 1) { if (it.earlyBird) 1 else 0 },
+        Milestone("night_owl", "🦉", t(R.string.ms_night_owl), t(R.string.ms_desc_night_owl), MilestoneCategory.CRAFT, 1) { if (it.nightOwl) 1 else 0 },
 
-        Milestone("goal_1", "🎯", "On Target", "Hit a goal for the first time", MilestoneCategory.GOALS, 1) { it.goalWins.toLong() },
-        Milestone("goal_10", "🏹", "Artemis' Aim", "Hit your goals 10 times", MilestoneCategory.GOALS, 10) { it.goalWins.toLong() },
-        Milestone("goal_50", "🏅", "Arete", "Hit your goals 50 times", MilestoneCategory.GOALS, 50) { it.goalWins.toLong() },
+        Milestone("goal_1", "🎯", t(R.string.ms_goal_1), t(R.string.ms_desc_goal_1), MilestoneCategory.GOALS, 1) { it.goalWins.toLong() },
+        Milestone("goal_10", "🏹", t(R.string.ms_goal_10), Txt.Plural(R.plurals.ms_desc_goal_wins, 10), MilestoneCategory.GOALS, 10) { it.goalWins.toLong() },
+        Milestone("goal_50", "🏅", t(R.string.ms_goal_50), Txt.Plural(R.plurals.ms_desc_goal_wins, 50), MilestoneCategory.GOALS, 50) { it.goalWins.toLong() },
     )
 
     val byKey = all.associateBy { it.key }

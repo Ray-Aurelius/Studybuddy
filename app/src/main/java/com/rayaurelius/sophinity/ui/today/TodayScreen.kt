@@ -2,6 +2,12 @@
 
 package com.rayaurelius.sophinity.ui.today
 
+import com.rayaurelius.sophinity.ui.i18n.goalTitle
+import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
+import com.rayaurelius.sophinity.domain.str
+import com.rayaurelius.sophinity.R
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -124,14 +130,14 @@ fun TodayScreen(
         item { Header(snap, onOpenSettings, onOpenBadges) }
         item { TimerCard(snap, timer, vm) }
         item { QuickStats(snap) }
-        item { GoalsGlance(snap.goalProgress, onOpenGoals) }
+        item { GoalsGlance(snap, snap.goalProgress, onOpenGoals) }
         if (snap.activeItems.isNotEmpty()) item { ContinueLearning(snap, timer, vm) }
         item { TipCard(snap) }
         item {
             TextButton(onClick = { showManual = true }, modifier = Modifier.fillMaxWidth()) {
                 Icon(Icons.Outlined.EditCalendar, null)
                 Spacer(Modifier.width(8.dp))
-                Text("Log a session I forgot to time")
+                Text(stringResource(R.string.today_log_forgotten))
             }
         }
     }
@@ -150,19 +156,19 @@ fun TodayScreen(
 @Composable
 private fun Header(snap: Snapshot, onOpenSettings: () -> Unit, onOpenBadges: () -> Unit) {
     val hour = LocalTime.now().hour
-    val greeting = when (hour) { in 4..11 -> "Good morning"; in 12..16 -> "Good afternoon"; else -> "Good evening" }
+    val greeting = stringResource(when (hour) { in 4..11 -> R.string.greet_morning; in 12..16 -> R.string.greet_afternoon; else -> R.string.greet_evening })
     // Stacked so it never truncates: narrow screens, side toolbar, large text, long translations.
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(snap.today.format(DateTimeFormatter.ofPattern("EEEE, MMMM d")), style = MaterialTheme.typography.labelLarge,
+            Text(snap.today.format(rememberDateFormat("EEEEMMMMd")), style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f))
-            IconButton(onClick = onOpenSettings) { Icon(Icons.Outlined.Settings, "Settings") }
+            IconButton(onClick = onOpenSettings) { Icon(Icons.Outlined.Settings, stringResource(R.string.common_settings)) }
         }
         Text(greeting, style = MaterialTheme.typography.headlineMedium)
         Spacer(Modifier.height(8.dp))
         Surface(onClick = onOpenBadges, shape = MaterialTheme.shapes.small, color = MaterialTheme.colorScheme.primaryContainer) {
             Text(
-                "🏛️ ${snap.title.current.name} · Lv ${snap.level.level}",
+                stringResource(R.string.today_title_chip, snap.title.current.name.str(), snap.level.level),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
@@ -194,10 +200,10 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                 TimerStatus.IDLE -> {
                     SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
                         SegmentedButton(mode == TimerMode.STOPWATCH, { mode = TimerMode.STOPWATCH }, SegmentedButtonDefaults.itemShape(0, 2)) {
-                            Text("Open session")
+                            Text(stringResource(R.string.timer_open))
                         }
                         SegmentedButton(mode == TimerMode.FOCUS, { mode = TimerMode.FOCUS }, SegmentedButtonDefaults.itemShape(1, 2)) {
-                            Text("Focus ${snap.settings.focusMinutes}m")
+                            Text(stringResource(R.string.timer_focus, StudyMath.formatDuration(snap.settings.focusMinutes * 60L, true)))
                         }
                     }
                     Spacer(Modifier.height(20.dp))
@@ -208,7 +214,7 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                                 style = TimerDigits,
                             )
                             Text(
-                                if (mode == TimerMode.FOCUS) "then a ${snap.settings.breakMinutes}-min break" else "count up, stop anytime",
+                                if (mode == TimerMode.FOCUS) stringResource(R.string.timer_then_break, StudyMath.formatDuration(snap.settings.breakMinutes * 60L, true)) else stringResource(R.string.timer_count_up),
                                 style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
@@ -225,7 +231,7 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                     Button(onClick = { vm.start(mode, subjectId, itemId) }, modifier = Modifier.fillMaxWidth().height(56.dp)) {
                         Icon(Icons.Default.PlayArrow, null)
                         Spacer(Modifier.width(8.dp))
-                        Text("Start learning", style = MaterialTheme.typography.titleMedium)
+                        Text(stringResource(R.string.timer_start), style = MaterialTheme.typography.titleMedium)
                     }
                 }
 
@@ -244,7 +250,7 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                     }
                     Text(
                         listOfNotNull(subject?.let { "${it.emoji} ${it.name}" }, timer.itemId?.let { snap.itemsById[it]?.title })
-                            .joinToString(" · ").ifEmpty { "Learning" },
+                            .joinToString(" · ").ifEmpty { stringResource(R.string.common_learning) },
                         style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
                     )
                     Spacer(Modifier.height(16.dp))
@@ -253,20 +259,20 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                             if (showMediaInRing) {
                                 Text(StudyMath.formatClock(media!!.completedSec * 1000), style = MediaDigits)
                                 Text(
-                                    "of ${StudyMath.formatClock(media.totalSec * 1000)} · ${media.percent}%",
+                                    stringResource(R.string.timer_media_of, StudyMath.formatClock(media.totalSec * 1000), media.percent),
                                     style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                                 Text(
-                                    if (timer.status == TimerStatus.PAUSED) "Paused" else "completed",
+                                    if (timer.status == TimerStatus.PAUSED) stringResource(R.string.common_paused) else stringResource(R.string.timer_completed),
                                     style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             } else {
                                 Text(StudyMath.formatClock(if (focus) timer.remainingMs(now) else elapsed), style = TimerDigits)
                                 Text(
                                     when {
-                                        timer.status == TimerStatus.PAUSED -> "Paused"
-                                        focus -> "focus · ${StudyMath.formatDuration(elapsed / 1000)} done"
-                                        else -> "in the zone"
+                                        timer.status == TimerStatus.PAUSED -> stringResource(R.string.common_paused)
+                                        focus -> stringResource(R.string.timer_focus_done, StudyMath.formatDuration(elapsed / 1000))
+                                        else -> stringResource(R.string.timer_in_zone)
                                     },
                                     style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
@@ -277,9 +283,11 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                         Spacer(Modifier.height(12.dp))
                         if (showMediaInRing) {
                             Text(
-                                "This session ${StudyMath.formatClock(elapsed)}" +
-                                    (if (media.speed != 1f) " at ${MediaTime.formatSpeed(media.speed)}" else "") +
-                                    if (!media.isComplete) " · ${StudyMath.formatDuration(media.remainingAtSpeedSec, true)} to go" else " · finished! 🎉",
+                                (if (media.speed != 1f) stringResource(R.string.timer_session_speed, StudyMath.formatClock(elapsed), MediaTime.formatSpeed(media.speed))
+                                else stringResource(R.string.timer_session, StudyMath.formatClock(elapsed))).let { session ->
+                                    if (!media.isComplete) stringResource(R.string.timer_to_go, session, StudyMath.formatDuration(media.remainingAtSpeedSec, true))
+                                    else stringResource(R.string.timer_finished, session)
+                                },
                                 style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         } else {
@@ -287,8 +295,8 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                                 LinearMeter(media.fraction, Modifier.fillMaxWidth(), color = if (media.isComplete) Brand.Laurel else MaterialTheme.colorScheme.primary)
                                 Spacer(Modifier.height(4.dp))
                                 Text(
-                                    "${StudyMath.formatClock(media.completedSec * 1000)} of ${StudyMath.formatClock(media.totalSec * 1000)} · ${media.percent}%" +
-                                        if (media.speed != 1f) " · ${MediaTime.formatSpeed(media.speed)}" else "",
+                                    if (media.speed != 1f) stringResource(R.string.timer_media_line_speed, StudyMath.formatClock(media.completedSec * 1000), StudyMath.formatClock(media.totalSec * 1000), media.percent, MediaTime.formatSpeed(media.speed))
+                                    else stringResource(R.string.timer_media_line, StudyMath.formatClock(media.completedSec * 1000), StudyMath.formatClock(media.totalSec * 1000), media.percent),
                                     style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
@@ -296,24 +304,24 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                     }
                     Spacer(Modifier.height(20.dp))
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                        FilledTonalIconButton(onClick = { vm.discard() }, modifier = Modifier.size(52.dp)) { Icon(Icons.Default.Close, "Discard session") }
+                        FilledTonalIconButton(onClick = { vm.discard() }, modifier = Modifier.size(52.dp)) { Icon(Icons.Default.Close, stringResource(R.string.timer_discard)) }
                         if (timer.status == TimerStatus.RUNNING) {
                             FilledTonalButton(onClick = { vm.pause() }, modifier = Modifier.height(52.dp)) {
-                                Icon(Icons.Default.Pause, null); Spacer(Modifier.width(6.dp)); Text("Pause")
+                                Icon(Icons.Default.Pause, null); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.common_pause))
                             }
                         } else {
                             FilledTonalButton(onClick = { vm.resume() }, modifier = Modifier.height(52.dp)) {
-                                Icon(Icons.Default.PlayArrow, null); Spacer(Modifier.width(6.dp)); Text("Resume")
+                                Icon(Icons.Default.PlayArrow, null); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.common_resume))
                             }
                         }
                         Button(onClick = { vm.finish() }, modifier = Modifier.height(52.dp)) {
-                            Icon(Icons.Default.Stop, null); Spacer(Modifier.width(6.dp)); Text("Finish")
+                            Icon(Icons.Default.Stop, null); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.common_finish))
                         }
                     }
                 }
 
                 TimerStatus.BREAK -> {
-                    Text("Break time ☕", style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.break_title), style = MaterialTheme.typography.titleMedium)
                     Spacer(Modifier.height(16.dp))
                     val total = snap.settings.breakMinutes * 60_000f
                     val left = (timer.breakEndsAt - now).coerceAtLeast(0)
@@ -321,10 +329,10 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                         Text(StudyMath.formatClock(left), style = TimerDigits)
                     }
                     Spacer(Modifier.height(12.dp))
-                    Text("Stand up, stretch, look at something far away.", style = MaterialTheme.typography.bodyMedium,
+                    Text(stringResource(R.string.break_text), style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
                     Spacer(Modifier.height(12.dp))
-                    FilledTonalButton(onClick = { vm.skipBreak() }) { Text("Skip break") }
+                    FilledTonalButton(onClick = { vm.skipBreak() }) { Text(stringResource(R.string.break_skip)) }
                 }
             }
         }
@@ -339,11 +347,11 @@ private fun ItemPicker(items: List<LearningItem>, selectedId: Long?, emojiOf: (L
     Box {
         AssistChip(
             onClick = { open = true },
-            label = { Text(sel?.let { "${emojiOf(it)} ${it.title}" } ?: "＋ What are you learning?", maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            label = { Text(sel?.let { "${emojiOf(it)} ${it.title}" } ?: stringResource(R.string.item_pick), maxLines = 1, overflow = TextOverflow.Ellipsis) },
             modifier = Modifier.width(170.dp),
         )
         DropdownMenu(open, { open = false }) {
-            DropdownMenuItem(text = { Text("Nothing specific") }, onClick = { onSelect(null); open = false })
+            DropdownMenuItem(text = { Text(stringResource(R.string.item_nothing)) }, onClick = { onSelect(null); open = false })
             items.forEach { item ->
                 DropdownMenuItem(text = { Text("${emojiOf(item)}  ${item.title}", maxLines = 1) }, onClick = { onSelect(item.id); open = false })
             }
@@ -355,32 +363,32 @@ private fun ItemPicker(items: List<LearningItem>, selectedId: Long?, emojiOf: (L
 private fun QuickStats(snap: Snapshot) {
     val streak = snap.streak
     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        StatTile("⏱️", StudyMath.formatDuration(snap.todaySeconds, true), "today", Modifier.weight(1f))
+        StatTile("⏱️", StudyMath.formatDuration(snap.todaySeconds, true), stringResource(R.string.tile_today), Modifier.weight(1f))
         StatTile(
-            "🔥", "${streak.current} day${if (streak.current == 1) "" else "s"}",
-            if (!streak.studiedToday && streak.current > 0) "learn to extend" else "streak",
+            "🔥", pluralStringResource(R.plurals.tile_days, streak.current, streak.current),
+            if (!streak.studiedToday && streak.current > 0) stringResource(R.string.tile_extend) else stringResource(R.string.tile_streak),
             Modifier.weight(1f),
             container = com.rayaurelius.sophinity.ui.theme.LocalGold.current.container,
         )
-        StatTile("📅", StudyMath.formatDuration(snap.weekSeconds, true), "this week", Modifier.weight(1f))
+        StatTile("📅", StudyMath.formatDuration(snap.weekSeconds, true), stringResource(R.string.tile_week), Modifier.weight(1f))
     }
 }
 
 @Composable
-private fun GoalsGlance(progress: List<GoalProgress>, onOpenGoals: () -> Unit) {
-    SectionCard(title = "Goals", action = { TextButton(onClick = onOpenGoals) { Text(if (progress.isEmpty()) "Set one" else "All goals") } }) {
+private fun GoalsGlance(snap: Snapshot, progress: List<GoalProgress>, onOpenGoals: () -> Unit) {
+    SectionCard(title = stringResource(R.string.goals_title), action = { TextButton(onClick = onOpenGoals) { Text(stringResource(if (progress.isEmpty()) R.string.goals_set_one else R.string.goals_all)) } }) {
         if (progress.isEmpty()) {
             Text(
-                "People who set a specific, challenging goal reliably outperform those told to \"do their best.\" Try 3 hours a week to start.",
+                stringResource(R.string.goals_empty_hint),
                 style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         } else {
             progress.take(3).forEachIndexed { i, p ->
                 if (i > 0) Spacer(Modifier.height(14.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(p.goal.title, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(goalTitle(snap, p.goal), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Text(
-                        if (p.met) "Done ✓" else goalAmount(p),
+                        if (p.met) stringResource(R.string.goal_done) else goalAmount(p),
                         style = MaterialTheme.typography.labelLarge,
                         color = if (p.met) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -392,16 +400,17 @@ private fun GoalsGlance(progress: List<GoalProgress>, onOpenGoals: () -> Unit) {
     }
 }
 
+@Composable
 fun goalAmount(p: GoalProgress): String = when (p.goal.kind) {
     com.rayaurelius.sophinity.data.db.GoalKind.TIME ->
-        "${StudyMath.formatDuration(p.current * 60L, true)} / ${StudyMath.formatDuration(p.target * 60L, true)}"
-    com.rayaurelius.sophinity.data.db.GoalKind.ITEMS -> "${p.current} / ${p.target}"
+        stringResource(R.string.amount_of, StudyMath.formatDuration(p.current * 60L, true), StudyMath.formatDuration(p.target * 60L, true))
+    com.rayaurelius.sophinity.data.db.GoalKind.ITEMS -> stringResource(R.string.amount_of, p.current.toString(), p.target.toString())
 }
 
 @Composable
 private fun ContinueLearning(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
     Column {
-        Text("Continue learning", style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.continue_title), style = MaterialTheme.typography.titleMedium)
         Spacer(Modifier.height(10.dp))
         LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             items(snap.activeItems, key = { it.id }) { item ->
@@ -419,17 +428,17 @@ private fun ContinueLearning(snap: Snapshot, timer: TimerState, vm: TodayViewMod
                         } else if (total != null && total > 0) {
                             Spacer(Modifier.height(6.dp))
                             LinearMeter(item.progressUnits.toFloat() / total, Modifier.fillMaxWidth())
-                            Text("${item.progressUnits}/$total ${snap.categoryOf(item).unit}", style = MaterialTheme.typography.labelSmall,
+                            Text(stringResource(R.string.units_of, item.progressUnits, total, snap.categoryOf(item).unit.str()), style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant)
                         } else {
-                            Text(StudyMath.formatDuration(snap.secondsForItem(item.id)) + " logged", style = MaterialTheme.typography.labelSmall,
+                            Text(stringResource(R.string.logged, StudyMath.formatDuration(snap.secondsForItem(item.id))), style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                         Spacer(Modifier.height(8.dp))
                         FilledTonalButton(
                             onClick = { if (timer.isActive) vm.setSubject(item.subjectId, item.id) else vm.start(TimerMode.STOPWATCH, item.subjectId, item.id) },
                             modifier = Modifier.fillMaxWidth(),
-                        ) { Text(if (timer.isActive) "Switch to this" else "Learn this") }
+                        ) { Text(stringResource(if (timer.isActive) R.string.switch_to_this else R.string.learn_this)) }
                     }
                 }
             }
@@ -445,16 +454,16 @@ private fun TipCard(snap: Snapshot) {
         Column {
             GreekKeyBand(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f))
             Column(Modifier.padding(horizontal = 18.dp, vertical = 16.dp)) {
-                Text("Today's wisdom", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                Text(stringResource(R.string.wisdom_title), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                 Spacer(Modifier.height(6.dp))
                 Text(
-                    "“${wisdom.text}”",
+                    stringResource(R.string.wisdom_quote, stringResource(wisdom.text)),
                     style = MaterialTheme.typography.titleLarge.copy(fontFamily = LocalHeadingFont.current, fontWeight = FontWeight.Normal),
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
                 Spacer(Modifier.height(6.dp))
                 Text(
-                    "— ${wisdom.who}, ${wisdom.source}",
+                    stringResource(R.string.wisdom_by, stringResource(wisdom.who), stringResource(wisdom.source)),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f),
                 )
                 Spacer(Modifier.height(14.dp))
@@ -462,8 +471,8 @@ private fun TipCard(snap: Snapshot) {
                     Text(tip.emoji, style = MaterialTheme.typography.titleLarge)
                     Spacer(Modifier.width(10.dp))
                     Column {
-                        Text("Try this · ${tip.title}", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                        Text(tip.body, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Text(stringResource(R.string.tip_try, stringResource(tip.title)), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Text(stringResource(tip.body), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
                     }
                 }
             }
@@ -479,21 +488,22 @@ private fun ReflectionSheet(session: StudySession, snap: Snapshot, timer: TimerS
     val subject = session.subjectId?.let { snap.subjectsById[it] }
     ModalBottomSheet(onDismissRequest = { vm.saveReflection(session, note, focus) }, sheetState = sheet) {
         Column(Modifier.padding(horizontal = 24.dp).padding(bottom = 24.dp)) {
-            Text("Nice work! 🎉", style = MaterialTheme.typography.headlineSmall)
+            Text(stringResource(R.string.reflect_nice), style = MaterialTheme.typography.headlineSmall)
             Text(
-                "${StudyMath.formatDuration(session.durationSec)}${subject?.let { " of ${it.name}" } ?: ""} saved.",
+                subject?.let { stringResource(R.string.reflect_saved_subject, StudyMath.formatDuration(session.durationSec), it.name) }
+                    ?: stringResource(R.string.reflect_saved, StudyMath.formatDuration(session.durationSec)),
                 style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Spacer(Modifier.height(20.dp))
-            Text("How focused were you?", style = MaterialTheme.typography.titleSmall)
+            Text(stringResource(R.string.reflect_focus_q), style = MaterialTheme.typography.titleSmall)
             Spacer(Modifier.height(8.dp))
             FocusRating(focus) { focus = it }
             Spacer(Modifier.height(20.dp))
-            Text("One thing you learned", style = MaterialTheme.typography.titleSmall)
-            Text("Recalling it now, without looking, helps it stick.", style = MaterialTheme.typography.bodySmall,
+            Text(stringResource(R.string.reflect_learned), style = MaterialTheme.typography.titleSmall)
+            Text(stringResource(R.string.reflect_learned_hint), style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(8.dp))
-            OutlinedTextField(note, { note = it }, Modifier.fillMaxWidth(), placeholder = { Text("e.g. Spaced repetition beats cramming") }, minLines = 2)
+            OutlinedTextField(note, { note = it }, Modifier.fillMaxWidth(), placeholder = { Text(stringResource(R.string.reflect_placeholder)) }, minLines = 2)
             val item = session.itemId?.let { snap.itemsById[it] }
             val media = item?.let { snap.mediaProgress(it) }
             if (item != null && media != null && item.status != ItemStatus.DONE) {
@@ -506,7 +516,7 @@ private fun ReflectionSheet(session: StudySession, snap: Snapshot, timer: TimerS
                         if (media.isComplete) {
                             Spacer(Modifier.height(8.dp))
                             FilledTonalButton(onClick = { vm.markFinished(item) }, modifier = Modifier.fillMaxWidth()) {
-                                Text("You've reached the end — mark as finished 🎉")
+                                Text(stringResource(R.string.reflect_mark_finished))
                             }
                         }
                     }
@@ -516,10 +526,10 @@ private fun ReflectionSheet(session: StudySession, snap: Snapshot, timer: TimerS
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 if (timer.status == TimerStatus.IDLE && session.durationSec >= (snap.settings.focusMinutes * 60L) - 5) {
                     FilledTonalButton(onClick = { vm.saveReflection(session, note, focus); vm.startBreak() }, Modifier.weight(1f)) {
-                        Text("Save + break")
+                        Text(stringResource(R.string.reflect_save_break))
                     }
                 }
-                Button(onClick = { vm.saveReflection(session, note, focus) }, Modifier.weight(1f)) { Text("Save") }
+                Button(onClick = { vm.saveReflection(session, note, focus) }, Modifier.weight(1f)) { Text(stringResource(R.string.common_save)) }
             }
         }
     }
@@ -542,12 +552,12 @@ fun ManualSessionDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Log a past session") },
+        title = { Text(stringResource(R.string.manual_title)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 val date = Instant.ofEpochMilli(dateMillis).atZone(ZoneOffset.UTC).toLocalDate()
                 OutlinedCard(onClick = { pickDate = true }, modifier = Modifier.fillMaxWidth()) {
-                    Text("📅  ${date.format(DateTimeFormatter.ofPattern("EEE, MMM d, yyyy"))}", Modifier.padding(14.dp))
+                    Text("📅  ${date.format(rememberDateFormat("EEEMMMdyyyy"))}", Modifier.padding(14.dp))
                 }
                 SubjectPicker(snap.activeSubjects, subjectId, { subjectId = it })
                 ItemPicker(snap.activeItems, itemId, { snap.categoryOf(it).emoji }) { id ->
@@ -555,10 +565,10 @@ fun ManualSessionDialog(
                     snap.itemsById[id]?.subjectId?.let { subjectId = it }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    NumberField("Hours", hours, { hours = it?.coerceAtMost(16) }, Modifier.weight(1f))
-                    NumberField("Minutes", minutes, { minutes = it?.coerceAtMost(59) }, Modifier.weight(1f))
+                    NumberField(stringResource(R.string.field_hours), hours, { hours = it?.coerceAtMost(16) }, Modifier.weight(1f))
+                    NumberField(stringResource(R.string.field_minutes), minutes, { minutes = it?.coerceAtMost(59) }, Modifier.weight(1f))
                 }
-                OutlinedTextField(note, { note = it }, label = { Text("What did you learn? (optional)") }, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(note, { note = it }, label = { Text(stringResource(R.string.manual_note)) }, modifier = Modifier.fillMaxWidth())
             }
         },
         confirmButton = {
@@ -566,9 +576,9 @@ fun ManualSessionDialog(
                 val date = Instant.ofEpochMilli(dateMillis).atZone(ZoneOffset.UTC).toLocalDate()
                 val noon = date.atTime(12, 0).atZone(snap.zone).toInstant().toEpochMilli()
                 onSave(subjectId, itemId, noon, total, note)
-            }) { Text("Save") }
+            }) { Text(stringResource(R.string.common_save)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } },
     )
 
     if (pickDate) {
@@ -581,8 +591,8 @@ fun ManualSessionDialog(
         )
         DatePickerDialog(
             onDismissRequest = { pickDate = false },
-            confirmButton = { TextButton(onClick = { state.selectedDateMillis?.let { dateMillis = it }; pickDate = false }) { Text("OK") } },
-            dismissButton = { TextButton(onClick = { pickDate = false }) { Text("Cancel") } },
+            confirmButton = { TextButton(onClick = { state.selectedDateMillis?.let { dateMillis = it }; pickDate = false }) { Text(stringResource(R.string.common_ok)) } },
+            dismissButton = { TextButton(onClick = { pickDate = false }) { Text(stringResource(R.string.common_cancel)) } },
         ) { DatePicker(state) }
     }
 }
@@ -595,19 +605,19 @@ private fun MilestoneCelebration(snap: Snapshot, onSeen: (List<String>) -> Unit)
         AlertDialog(
             onDismissRequest = { onSeen(fresh.map { it.key }) },
             icon = { Text(fresh.first().emoji, style = MaterialTheme.typography.displayMedium) },
-            title = { Text(if (fresh.size == 1) "Laurel earned!" else "${fresh.size} laurels earned!", textAlign = TextAlign.Center) },
+            title = { Text(pluralStringResource(R.plurals.laurels_earned, fresh.size, fresh.size), textAlign = TextAlign.Center) },
             text = {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
                     fresh.take(5).forEach { m ->
-                        Text("${m.emoji}  ${m.title}", style = MaterialTheme.typography.titleMedium)
-                        Text(m.description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        Text("${m.emoji}  ${m.title.str()}", style = MaterialTheme.typography.titleMedium)
+                        Text(m.description.str(), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center)
                         Spacer(Modifier.height(10.dp))
                     }
-                    if (fresh.size > 5) Text("…and ${fresh.size - 5} more on the Laurels tab")
+                    if (fresh.size > 5) Text(stringResource(R.string.laurels_more, fresh.size - 5))
                 }
             },
-            confirmButton = { Button(onClick = { onSeen(fresh.map { it.key }) }) { Text("Keep going") } },
+            confirmButton = { Button(onClick = { onSeen(fresh.map { it.key }) }) { Text(stringResource(R.string.laurels_keep_going)) } },
         )
         Confetti()
     }
@@ -621,25 +631,25 @@ private fun TitleCelebration(title: com.rayaurelius.sophinity.domain.LearnerTitl
             icon = { Text("🏛️", style = MaterialTheme.typography.displayMedium) },
             title = {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-                    Text("A new title", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
-                    Text(title.name, style = MaterialTheme.typography.displaySmall, textAlign = TextAlign.Center)
+                    Text(stringResource(R.string.title_new), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                    Text(title.name.str(), style = MaterialTheme.typography.displaySmall, textAlign = TextAlign.Center)
                 }
             },
             text = {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-                    Text("${title.greek} · “${title.meaning}”", style = MaterialTheme.typography.titleMedium.copy(fontFamily = LocalHeadingFont.current),
+                    Text(stringResource(R.string.title_greek_meaning, title.greek, title.meaning.str()), style = MaterialTheme.typography.titleMedium.copy(fontFamily = LocalHeadingFont.current),
                         textAlign = TextAlign.Center)
                     Spacer(Modifier.height(8.dp))
                     Text(
                         if (title.rank == com.rayaurelius.sophinity.domain.Titles.highest.rank)
-                            "The highest title of all. A true lover of wisdom — and the journey still never ends."
-                        else "Earned through your laurels. Keep going — Philosopher awaits.",
+                            stringResource(R.string.title_highest)
+                        else stringResource(R.string.title_keep_going),
                         style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             },
-            confirmButton = { Button(onClick = onSeen) { Text("Onward") } },
+            confirmButton = { Button(onClick = onSeen) { Text(stringResource(R.string.title_onward)) } },
         )
         Confetti()
     }

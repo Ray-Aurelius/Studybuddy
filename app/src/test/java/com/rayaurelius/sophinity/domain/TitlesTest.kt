@@ -10,13 +10,13 @@ class TitlesTest {
 
     @Test fun everyoneStartsAsNeophyte() {
         val s = Titles.status(emptyMap())
-        assertEquals("Neophyte", s.current.name)
-        assertEquals("Seeker", s.next?.name)
+        assertEquals("neophyte", s.current.id)
+        assertEquals("seeker", s.next?.id)
         assertNull(s.earnedAt)
     }
 
     @Test fun philosopherIsTheHighestTitle() {
-        assertEquals("Philosopher", Titles.highest.name)
+        assertEquals("philosopher", Titles.highest.id)
         assertEquals(Titles.all.size, Titles.highest.rank)
         assertEquals((1..Titles.all.size).toList(), Titles.all.map { it.rank })
     }
@@ -27,21 +27,21 @@ class TitlesTest {
 
     @Test fun titlesAreEarnedInOrder() {
         // Has Pupil's gates but not Seeker's (impossible in practice, but the ladder must not skip rungs).
-        assertEquals("Neophyte", Titles.status(unlocked("hours_10", "streak_7")).current.name)
-        assertEquals("Pupil", Titles.status(unlocked("first_session", "hours_10", "streak_7")).current.name)
+        assertEquals("neophyte", Titles.status(unlocked("hours_10", "streak_7")).current.id)
+        assertEquals("pupil", Titles.status(unlocked("first_session", "hours_10", "streak_7")).current.id)
     }
 
     @Test fun nextChecklistShowsWhatIsMissing() {
         val s = Titles.status(unlocked("first_session", "hours_10"))
-        assertEquals("Seeker", s.current.name)
-        assertEquals("Pupil", s.next?.name)
+        assertEquals("seeker", s.current.id)
+        assertEquals("pupil", s.next?.id)
         assertEquals(listOf(true, false), s.nextChecklist.map { it.second })
     }
 
     @Test fun reachingPhilosopher() {
         val all = Titles.all.flatMap { it.requires }.toTypedArray()
         val s = Titles.status(unlocked(*all))
-        assertEquals("Philosopher", s.current.name)
+        assertEquals("philosopher", s.current.id)
         assertNull(s.next)
         assertEquals(1000L + all.size - 1, s.earnedAt)
     }
