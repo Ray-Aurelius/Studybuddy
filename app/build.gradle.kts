@@ -21,8 +21,8 @@ android {
         applicationId = "com.rayaurelius.studybuddy"
         minSdk = 26
         targetSdk = 37
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.1.0"
     }
 
     signingConfigs {
@@ -78,6 +78,10 @@ ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
 
+// Exported Room schemas are debug-only assets so MigrationTestHelper can rebuild old database
+// versions in unit tests. They are not packaged into release builds.
+android.sourceSets.getByName("debug").assets.directories.add("$projectDir/schemas")
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
@@ -107,6 +111,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.room.testing)
     testImplementation(libs.roborazzi)
     testImplementation(libs.roborazzi.compose)
     testImplementation(libs.androidx.test.junit)

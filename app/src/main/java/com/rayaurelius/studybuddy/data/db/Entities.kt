@@ -9,12 +9,28 @@ import kotlinx.serialization.Serializable
 @Serializable
 enum class ItemType(val label: String, val plural: String, val emoji: String, val unitLabel: String) {
     BOOK("Book", "Books", "📚", "pages"),
-    PODCAST("Podcast", "Podcasts", "🎧", "episodes"),
+    AUDIOBOOK("Audiobook", "Audiobooks", "🎧", "chapters"),
+    PODCAST("Podcast", "Podcasts", "🎙️", "episodes"),
     SEMINAR("Seminar", "Seminars", "🎤", "sessions"),
     COURSE("Course", "Courses", "🎓", "modules"),
     VIDEO("Video", "Videos", "🎬", "videos"),
     ARTICLE("Article", "Articles", "📰", "parts"),
+    /** A user-defined category; see [LearningItem.categoryId] and [CustomCategory]. */
+    CUSTOM("Custom", "Custom", "📌", "parts"),
 }
+
+/** A library category the learner defined themselves, e.g. "Workshop" or "Documentary". */
+@Serializable
+@Entity(tableName = "categories")
+data class CustomCategory(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    /** Singular name, e.g. "Workshop". */
+    val name: String,
+    val emoji: String = "📌",
+    /** What progress is counted in, e.g. "sessions" or "lessons". */
+    val unitLabel: String = "parts",
+    val createdAt: Long = System.currentTimeMillis(),
+)
 
 @Serializable
 enum class ItemStatus(val label: String) { WANT("Want to"), ACTIVE("In progress"), DONE("Finished") }
@@ -66,6 +82,8 @@ data class LearningItem(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val type: ItemType,
     val title: String,
+    /** Set when [type] is CUSTOM. */
+    val categoryId: Long? = null,
     val creator: String = "",
     val status: ItemStatus = ItemStatus.ACTIVE,
     val subjectId: Long? = null,
@@ -89,6 +107,8 @@ data class Goal(
     /** Minutes for TIME goals, item count for ITEMS goals. */
     val target: Int,
     val itemType: ItemType? = null,
+    /** Set when [itemType] is CUSTOM. */
+    val categoryId: Long? = null,
     val subjectId: Long? = null,
     /** Epoch day (LocalDate.toEpochDay) the goal is due, for BY_DATE goals. */
     val deadlineEpochDay: Long? = null,

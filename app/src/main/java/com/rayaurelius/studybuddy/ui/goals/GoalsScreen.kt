@@ -77,7 +77,7 @@ import java.time.format.DateTimeFormatter
 
 class GoalsViewModel(private val c: AppContainer) : ViewModel() {
     val snapshot = c.repo.snapshot.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
-    fun save(g: Goal) = viewModelScope.launch { c.repo.saveGoal(g.copy(title = g.title.ifBlank { GoalMath.describe(g).replaceFirstChar { it.uppercase() } })) }
+    fun save(g: Goal, fallbackTitle: String) = viewModelScope.launch { c.repo.saveGoal(g.copy(title = g.title.ifBlank { fallbackTitle })) }
     fun delete(g: Goal) = viewModelScope.launch { c.repo.deleteGoal(g) }
 }
 
@@ -87,6 +87,7 @@ private fun presets(today: LocalDate) = listOf(
     Preset("30 min a day") { Goal(title = "", kind = GoalKind.TIME, period = GoalPeriod.DAILY, target = 30) },
     Preset("5 hours a week") { Goal(title = "", kind = GoalKind.TIME, period = GoalPeriod.WEEKLY, target = 300) },
     Preset("2 books a month") { Goal(title = "", kind = GoalKind.ITEMS, period = GoalPeriod.MONTHLY, target = 2, itemType = ItemType.BOOK) },
+    Preset("2 audiobooks a month") { Goal(title = "", kind = GoalKind.ITEMS, period = GoalPeriod.MONTHLY, target = 2, itemType = ItemType.AUDIOBOOK) },
     Preset("4 podcasts a month") { Goal(title = "", kind = GoalKind.ITEMS, period = GoalPeriod.MONTHLY, target = 4, itemType = ItemType.PODCAST) },
     Preset("1 seminar a month") { Goal(title = "", kind = GoalKind.ITEMS, period = GoalPeriod.MONTHLY, target = 1, itemType = ItemType.SEMINAR) },
     Preset("12 books this year") {
@@ -134,7 +135,7 @@ fun GoalsScreen(contentPadding: PaddingValues) {
     }
 
     editing?.let { g ->
-        GoalEditor(snap, g, onDismiss = { editing = null }, onSave = { vm.save(it); editing = null }, onDelete = { vm.delete(it); editing = null })
+        GoalEditor(snap, g, onDismiss = { editing = null }, onSave = { g -> vm.save(g, GoalMath.describe(g, snap.categoryOf(g)).replaceFirstChar { it.uppercase() }); editing = null }, onDelete = { vm.delete(it); editing = null })
     }
 }
 
@@ -208,8 +209,10 @@ private fun GoalEditor(snap: Snapshot, initial: Goal, onDismiss: () -> Unit, onS
             } else {
                 NumberField("How many", g.target, { g = g.copy(target = it ?: 0) }, Modifier.fillMaxWidth())
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(g.itemType == null, { g = g.copy(itemType = null) }, { Text("Anything") })
-                    ItemType.entries.forEach { t -> FilterChip(g.itemType == t, { g = g.copy(itemType = t) }, { Text("${t.emoji} ${t.plural}") }) }
+                    FilterChip(g.itemType == null, { g = g.copy(itemType = null, categoryId = null) }, { Text("Anything") })
+                    snap.categories.forEach { c ->
+                        FilterChip(c.matchesGoal(g), { g = g.copy(itemType = c.type, categoryId = c.customId) }, { Text("${c.emoji} ${c.plural}") })
+                    }
                 }
             }
             if (g.period == GoalPeriod.BY_DATE) {
@@ -220,7 +223,7 @@ private fun GoalEditor(snap: Snapshot, initial: Goal, onDismiss: () -> Unit, onS
             }
             OutlinedTextField(
                 g.title, { g = g.copy(title = it) }, label = { Text("Name (optional)") },
-                placeholder = { Text(GoalMath.describe(g).replaceFirstChar { it.uppercase() }) },
+                placeholder = { Text(GoalMath.describe(g, snap.categoryOf(g)).replaceFirstChar { it.uppercase() }) },
                 singleLine = true, modifier = Modifier.fillMaxWidth(),
             )
             Row(verticalAlignment = Alignment.CenterVertically) {

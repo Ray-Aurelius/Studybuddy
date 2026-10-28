@@ -14,12 +14,17 @@ data class MilestoneContext(
     val longestSessionSec: Long,
     val bestStreak: Int,
     val doneByType: Map<ItemType, Int>,
+    /** Finished custom-category items. */
+    val doneCustom: Int,
     val reflections: Int,
     val subjectsStudied: Int,
     val earlyBird: Boolean,
     val nightOwl: Boolean,
     val goalWins: Int,
 ) {
+    /** Books in any format: print, e-book and audiobook all count as reading a book. */
+    val booksFinished: Int get() = (doneByType[ItemType.BOOK] ?: 0) + (doneByType[ItemType.AUDIOBOOK] ?: 0)
+
     companion object {
         fun from(
             sessions: List<StudySession>,
@@ -35,6 +40,7 @@ data class MilestoneContext(
                 longestSessionSec = sessions.maxOfOrNull { it.durationSec } ?: 0,
                 bestStreak = bestStreak,
                 doneByType = items.filter { it.status == ItemStatus.DONE }.groupingBy { it.type }.eachCount(),
+                doneCustom = items.count { it.status == ItemStatus.DONE && it.type == ItemType.CUSTOM },
                 reflections = sessions.count { it.note.isNotBlank() },
                 subjectsStudied = sessions.mapNotNull { it.subjectId }.distinct().size,
                 earlyBird = hours.any { it in 4..6 },
@@ -78,6 +84,13 @@ object Milestones {
         MilestoneCategory.LIBRARY, n.toLong(),
     ) { (it.doneByType[type] ?: 0).toLong() }
 
+    // Keys stay "book_N" so badges already unlocked keep their dates.
+    private fun books(n: Int, emoji: String, title: String) = Milestone(
+        "book_$n", emoji, title,
+        if (n == 1) "Finish your first book (print, e-book or audio)" else "Finish $n books (print, e-book or audio)",
+        MilestoneCategory.LIBRARY, n.toLong(),
+    ) { it.booksFinished.toLong() }
+
     val all: List<Milestone> = listOf(
         Milestone("first_session", "🌱", "First Step", "Log your first study session", MilestoneCategory.TIME, 1) { it.sessions.toLong() },
         hours(1, "⏱️", "Warming Up"),
@@ -88,6 +101,7 @@ object Milestones {
         hours(250, "🏔️", "Summit Seeker"),
         hours(500, "🌋", "Unstoppable"),
         hours(1000, "👑", "Thousand-Hour Mind"),
+        hours(5000, "🌌", "Master's Path"),
 
         streak(3, "🔥", "Spark"),
         streak(7, "📅", "One Full Week"),
@@ -97,12 +111,19 @@ object Milestones {
         streak(100, "🏆", "Hundred Days"),
         streak(365, "🌍", "Year-Round Learner"),
 
-        done(ItemType.BOOK, 1, "📖", "First Chapter Closed"),
-        done(ItemType.BOOK, 5, "📚", "Bookworm"),
-        done(ItemType.BOOK, 12, "🗓️", "A Book a Month"),
-        done(ItemType.BOOK, 25, "🏛️", "Personal Library"),
-        done(ItemType.BOOK, 50, "🗝️", "Bibliophile"),
-        done(ItemType.PODCAST, 1, "🎧", "Tuned In"),
+        books(1, "📖", "First Chapter Closed"),
+        books(5, "📚", "Bookworm"),
+        books(12, "🗓️", "A Book a Month"),
+        books(25, "🏛️", "Personal Library"),
+        books(50, "🗝️", "Bibliophile"),
+        books(100, "🏰", "Century of Stories"),
+        books(250, "🌳", "Tree of Knowledge"),
+        books(500, "🔭", "Lifelong Reader"),
+        books(1000, "🌠", "Thousand-Book Legend"),
+        done(ItemType.AUDIOBOOK, 1, "🎧", "Story in Your Ears"),
+        done(ItemType.AUDIOBOOK, 10, "🚗", "Commute Scholar"),
+        done(ItemType.AUDIOBOOK, 50, "🎼", "Narrated Mind"),
+        done(ItemType.PODCAST, 1, "📡", "Tuned In"),
         done(ItemType.PODCAST, 10, "🎙️", "Ear Learner"),
         done(ItemType.PODCAST, 50, "📻", "Audio Scholar"),
         done(ItemType.SEMINAR, 1, "🎤", "In the Room"),
@@ -110,9 +131,13 @@ object Milestones {
         done(ItemType.SEMINAR, 20, "🎟️", "Front Row Regular"),
         done(ItemType.COURSE, 1, "🎓", "Course Complete"),
         done(ItemType.COURSE, 5, "📜", "Self-Made Curriculum"),
+        Milestone("custom_1", "🧭", "Your Own Path", "Finish something in a category you created", MilestoneCategory.LIBRARY, 1) {
+            it.doneCustom.toLong()
+        },
         Milestone("renaissance", "🎨", "Renaissance Learner", "Finish a book, a podcast, a seminar and a course",
             MilestoneCategory.LIBRARY, 4) { ctx ->
-            listOf(ItemType.BOOK, ItemType.PODCAST, ItemType.SEMINAR, ItemType.COURSE).count { (ctx.doneByType[it] ?: 0) > 0 }.toLong()
+            (listOf(ItemType.PODCAST, ItemType.SEMINAR, ItemType.COURSE).count { (ctx.doneByType[it] ?: 0) > 0 } +
+                if (ctx.booksFinished > 0) 1 else 0).toLong()
         },
 
         Milestone("deep_60", "🌊", "Deep Work", "Complete a single 60-minute session", MilestoneCategory.CRAFT, 60) { it.longestSessionSec / 60 },

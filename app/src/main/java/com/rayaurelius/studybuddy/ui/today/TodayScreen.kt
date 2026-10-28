@@ -203,7 +203,7 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                     Spacer(Modifier.height(20.dp))
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                         SubjectPicker(snap.activeSubjects, subjectId, { subjectId = it; itemId = null })
-                        ItemPicker(snap.activeItems, itemId) { id ->
+                        ItemPicker(snap.activeItems, itemId, { snap.categoryOf(it).emoji }) { id ->
                             itemId = id
                             snap.itemsById[id]?.subjectId?.let { subjectId = it }
                         }
@@ -278,20 +278,20 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
 }
 
 @Composable
-private fun ItemPicker(items: List<LearningItem>, selectedId: Long?, onSelect: (Long?) -> Unit) {
+private fun ItemPicker(items: List<LearningItem>, selectedId: Long?, emojiOf: (LearningItem) -> String, onSelect: (Long?) -> Unit) {
     if (items.isEmpty()) return
     var open by remember { mutableStateOf(false) }
     val sel = items.firstOrNull { it.id == selectedId }
     Box {
         AssistChip(
             onClick = { open = true },
-            label = { Text(sel?.let { "${it.type.emoji} ${it.title}" } ?: "＋ What are you learning?", maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            label = { Text(sel?.let { "${emojiOf(it)} ${it.title}" } ?: "＋ What are you learning?", maxLines = 1, overflow = TextOverflow.Ellipsis) },
             modifier = Modifier.width(170.dp),
         )
         DropdownMenu(open, { open = false }) {
             DropdownMenuItem(text = { Text("Nothing specific") }, onClick = { onSelect(null); open = false })
             items.forEach { item ->
-                DropdownMenuItem(text = { Text("${item.type.emoji}  ${item.title}", maxLines = 1) }, onClick = { onSelect(item.id); open = false })
+                DropdownMenuItem(text = { Text("${emojiOf(item)}  ${item.title}", maxLines = 1) }, onClick = { onSelect(item.id); open = false })
             }
         }
     }
@@ -353,7 +353,7 @@ private fun ContinueLearning(snap: Snapshot, timer: TimerState, vm: TodayViewMod
             items(snap.activeItems, key = { it.id }) { item ->
                 OutlinedCard(Modifier.width(200.dp)) {
                     Column(Modifier.padding(14.dp)) {
-                        Text(item.type.emoji, style = MaterialTheme.typography.headlineSmall)
+                        Text(snap.categoryOf(item).emoji, style = MaterialTheme.typography.headlineSmall)
                         Spacer(Modifier.height(4.dp))
                         Text(item.title, style = MaterialTheme.typography.titleSmall, maxLines = 2, overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.height(40.dp))
@@ -361,7 +361,7 @@ private fun ContinueLearning(snap: Snapshot, timer: TimerState, vm: TodayViewMod
                         if (total != null && total > 0) {
                             Spacer(Modifier.height(6.dp))
                             LinearMeter(item.progressUnits.toFloat() / total, Modifier.fillMaxWidth())
-                            Text("${item.progressUnits}/$total ${item.type.unitLabel}", style = MaterialTheme.typography.labelSmall,
+                            Text("${item.progressUnits}/$total ${snap.categoryOf(item).unit}", style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant)
                         } else {
                             Text(StudyMath.formatDuration(snap.secondsForItem(item.id)) + " logged", style = MaterialTheme.typography.labelSmall,

@@ -1,5 +1,6 @@
 package com.rayaurelius.studybuddy.data
 
+import com.rayaurelius.studybuddy.data.db.CustomCategory
 import com.rayaurelius.studybuddy.data.db.Goal
 import com.rayaurelius.studybuddy.data.db.LearningItem
 import com.rayaurelius.studybuddy.data.db.StudySession
@@ -15,6 +16,8 @@ data class BackupData(
     val version: Int,
     val exportedAt: Long,
     val subjects: List<Subject>,
+    /** Added in backup version 2. */
+    val categories: List<CustomCategory> = emptyList(),
     val sessions: List<StudySession>,
     val items: List<LearningItem>,
     val goals: List<Goal>,
@@ -23,7 +26,7 @@ data class BackupData(
     val restDaysPerWeek: Int = 1,
 ) {
     companion object {
-        const val CURRENT_VERSION = 1
+        const val CURRENT_VERSION = 2
         val json = Json { prettyPrint = true; ignoreUnknownKeys = true; encodeDefaults = true }
 
         fun encode(data: BackupData): String = json.encodeToString(serializer(), data)

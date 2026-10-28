@@ -64,7 +64,11 @@ import com.rayaurelius.studybuddy.BuildConfigInfo
 import com.rayaurelius.studybuddy.data.AppSettings
 import com.rayaurelius.studybuddy.data.BackupData
 import com.rayaurelius.studybuddy.data.ThemeMode
+import com.rayaurelius.studybuddy.data.db.CustomCategory
+import com.rayaurelius.studybuddy.data.db.ItemType
 import com.rayaurelius.studybuddy.data.db.Subject
+import com.rayaurelius.studybuddy.domain.Categories
+import com.rayaurelius.studybuddy.ui.components.CategoryDialog
 import com.rayaurelius.studybuddy.reminders.ReminderScheduler
 import com.rayaurelius.studybuddy.timer.TimerAlarms
 import com.rayaurelius.studybuddy.ui.components.SubjectDot
@@ -82,6 +86,8 @@ import java.time.LocalDate
 class SettingsViewModel(private val c: AppContainer) : ViewModel() {
     val settings = c.settingsStore.settings.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
     val subjects = c.repo.subjects.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val categories = c.repo.categories.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val items = c.repo.items.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     val messages = MutableSharedFlow<String>(extraBufferCapacity = 4)
 
     fun update(t: (AppSettings) -> AppSettings) = viewModelScope.launch {
@@ -92,6 +98,9 @@ class SettingsViewModel(private val c: AppContainer) : ViewModel() {
     fun saveSubject(s: Subject) = viewModelScope.launch {
         if (s.id == 0L) c.repo.addSubject(s) else c.repo.updateSubject(s)
     }
+
+    fun saveCategory(cat: CustomCategory) = viewModelScope.launch { c.repo.saveCategory(cat) }
+    fun deleteCategory(cat: CustomCategory) = viewModelScope.launch { c.repo.deleteCategory(cat) }
 
     fun export(uri: Uri) = viewModelScope.launch {
         runCatching {
@@ -117,6 +126,9 @@ fun SettingsScreen(onBack: () -> Unit) {
     val vm = appViewModel { SettingsViewModel(it) }
     val s = vm.settings.collectAsStateWithLifecycle().value ?: return
     val subjects by vm.subjects.collectAsStateWithLifecycle()
+    val categories by vm.categories.collectAsStateWithLifecycle()
+    val items by vm.items.collectAsStateWithLifecycle()
+    var editCategory by remember { mutableStateOf<CustomCategory?>(null) }
     val ctx = LocalContext.current
     val snackbar = remember { SnackbarHostState() }
     var editSubject by remember { mutableStateOf<Subject?>(null) }
@@ -157,6 +169,34 @@ fun SettingsScreen(onBack: () -> Unit) {
                     headlineContent = { Text("Add subject") },
                     leadingContent = { Icon(Icons.Default.Add, null) },
                     modifier = Modifier.clickable { editSubject = Subject(name = "", color = Brand.subjectPalette[subjects.size % Brand.subjectPalette.size]) },
+                )
+            }
+            item { HorizontalDivider() }
+
+            item { Header("Library categories") }
+            item {
+                Text(
+                    "Built in: " + ItemType.entries.filter { it != ItemType.CUSTOM }.joinToString { "${it.emoji} ${it.label}" },
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                )
+            }
+            categories.forEach { cat ->
+                item(key = "c${cat.id}") {
+                    val n = items.count { it.type == ItemType.CUSTOM && it.categoryId == cat.id }
+                    ListItem(
+                        headlineContent = { Text("${cat.emoji}  ${Categories.pluralize(cat.name)}") },
+                        supportingContent = { Text("$n item${if (n == 1) "" else "s"} · progress in ${cat.unitLabel}") },
+                        modifier = Modifier.clickable { editCategory = cat },
+                    )
+                }
+            }
+            item {
+                ListItem(
+                    headlineContent = { Text("Add your own category") },
+                    supportingContent = { Text("e.g. Workshops, Documentaries, Lectures") },
+                    leadingContent = { Icon(Icons.Default.Add, null) },
+                    modifier = Modifier.clickable { editCategory = CustomCategory(name = "") },
                 )
             }
             item { HorizontalDivider() }
@@ -287,6 +327,16 @@ fun SettingsScreen(onBack: () -> Unit) {
             }
             item { Spacer(Modifier.height(32.dp)) }
         }
+    }
+
+    editCategory?.let { cat ->
+        CategoryDialog(
+            cat,
+            onDismiss = { editCategory = null },
+            onSave = { vm.saveCategory(it); editCategory = null },
+            onDelete = { vm.deleteCategory(it); editCategory = null },
+            itemsUsing = items.count { it.type == ItemType.CUSTOM && it.categoryId == cat.id },
+        )
     }
 
     editSubject?.let { sub -> SubjectDialog(sub, onDismiss = { editSubject = null }) { vm.saveSubject(it); editSubject = null } }

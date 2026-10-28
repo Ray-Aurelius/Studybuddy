@@ -56,7 +56,8 @@ object GoalMath {
             .sumOf { it.durationSec } / 60).toInt()
         GoalKind.ITEMS -> items.count {
             it.status == ItemStatus.DONE && it.completedAt != null &&
-                (goal.itemType == null || it.type == goal.itemType) &&
+                (goal.itemType == null || (it.type == goal.itemType &&
+                    (goal.itemType != com.rayaurelius.studybuddy.data.db.ItemType.CUSTOM || it.categoryId == goal.categoryId))) &&
                 StudyMath.dayOf(it.completedAt, zone) in range
         }
     }
@@ -111,13 +112,10 @@ object GoalMath {
         }
     }
 
-    fun describe(goal: Goal): String {
+    fun describe(goal: Goal, category: CategoryInfo? = goal.itemType?.let { Categories.builtIn(it) }): String {
         val what = when (goal.kind) {
             GoalKind.TIME -> StudyMath.formatDuration(goal.target * 60L, short = true)
-            GoalKind.ITEMS -> "${goal.target} ${
-                (goal.itemType?.let { if (goal.target == 1) it.label.lowercase() else it.plural.lowercase() }
-                    ?: if (goal.target == 1) "item" else "items")
-            }"
+            GoalKind.ITEMS -> category?.count(goal.target) ?: "${goal.target} ${if (goal.target == 1) "item" else "items"}"
         }
         return when (goal.period) {
             GoalPeriod.DAILY -> "$what a day"

@@ -23,6 +23,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -52,10 +53,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.rayaurelius.studybuddy.AppContainer
 import com.rayaurelius.studybuddy.data.Snapshot
+import com.rayaurelius.studybuddy.data.db.CustomCategory
 import com.rayaurelius.studybuddy.data.db.ItemStatus
 import com.rayaurelius.studybuddy.data.db.ItemType
 import com.rayaurelius.studybuddy.data.db.LearningItem
 import com.rayaurelius.studybuddy.domain.StudyMath
+import com.rayaurelius.studybuddy.domain.CategoryInfo
+import com.rayaurelius.studybuddy.ui.components.CategoryDialog
 import com.rayaurelius.studybuddy.ui.components.EmptyState
 import com.rayaurelius.studybuddy.ui.components.LinearMeter
 import com.rayaurelius.studybuddy.ui.components.NumberField
@@ -78,6 +82,7 @@ class LibraryViewModel(private val c: AppContainer) : ViewModel() {
         c.repo.saveItem(fixed)
     }
     fun delete(item: LearningItem) = viewModelScope.launch { c.repo.deleteItem(item) }
+    fun saveCategory(cat: CustomCategory, onSaved: (Long) -> Unit = {}) = viewModelScope.launch { onSaved(c.repo.saveCategory(cat)) }
 }
 
 @Composable
@@ -85,10 +90,12 @@ fun LibraryScreen(contentPadding: PaddingValues) {
     val vm = appViewModel { LibraryViewModel(it) }
     val snap = vm.snapshot.collectAsStateWithLifecycle().value ?: return
     var status by rememberSaveable { mutableStateOf(ItemStatus.ACTIVE) }
-    var type by rememberSaveable { mutableStateOf<ItemType?>(null) }
+    var filterKey by rememberSaveable { mutableStateOf<String?>(null) }
     var editing by remember { mutableStateOf<LearningItem?>(null) }
+    var newCategory by remember { mutableStateOf(false) }
+    val filter = snap.categories.firstOrNull { it.key == filterKey }
 
-    val list = snap.items.filter { it.status == status && (type == null || it.type == type) }
+    val list = snap.items.filter { it.status == status && (filter == null || filter.matches(it)) }
 
     Box(Modifier.fillMaxSize()) {
         LazyColumn(
@@ -108,8 +115,14 @@ fun LibraryScreen(contentPadding: PaddingValues) {
             }
             item {
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    item { FilterChip(type == null, { type = null }, { Text("All") }) }
-                    items(ItemType.entries) { t -> FilterChip(type == t, { type = if (type == t) null else t }, { Text("${t.emoji} ${t.plural}") }) }
+                    item { FilterChip(filter == null, { filterKey = null }, { Text("All") }) }
+                    // Only show categories that have something in them, plus the built-ins people use most.
+                    val used = snap.items.map { snap.categoryOf(it).key }.toSet()
+                    val shown = snap.categories.filter { it.key in used || it.type in pinned || it.key == filterKey }
+                    items(shown, key = { it.key }) { c ->
+                        FilterChip(filter?.key == c.key, { filterKey = if (filterKey == c.key) null else c.key }, { Text("${c.emoji} ${c.plural}") })
+                    }
+                    item { AssistChip(onClick = { newCategory = true }, label = { Text("＋ New category") }) }
                 }
             }
             if (list.isEmpty()) {
@@ -129,7 +142,7 @@ fun LibraryScreen(contentPadding: PaddingValues) {
             }
         }
         ExtendedFloatingActionButton(
-            onClick = { editing = LearningItem(type = type ?: ItemType.BOOK, title = "", status = status) },
+            onClick = { editing = LearningItem(type = filter?.type ?: ItemType.BOOK, categoryId = filter?.customId, title = "", status = status) },
             icon = { Icon(Icons.Default.Add, null) },
             text = { Text("Add") },
             modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = contentPadding.calculateBottomPadding() + 16.dp),
@@ -142,23 +155,33 @@ fun LibraryScreen(contentPadding: PaddingValues) {
             onDismiss = { editing = null },
             onSave = { vm.save(it); editing = null },
             onDelete = { vm.delete(it); editing = null },
+            onCreateCategory = { cat, picked -> vm.saveCategory(cat, picked) },
+        )
+    }
+    if (newCategory) {
+        CategoryDialog(
+            CustomCategory(name = ""),
+            onDismiss = { newCategory = false },
+            onSave = { cat -> vm.saveCategory(cat) { id -> filterKey = "c$id" }; newCategory = false },
         )
     }
 }
+
+private val pinned = setOf(ItemType.BOOK, ItemType.AUDIOBOOK, ItemType.PODCAST, ItemType.SEMINAR, ItemType.COURSE)
 
 @Composable
 private fun YearTally(snap: Snapshot) {
     val year = snap.today.year
     val done = snap.items.filter { it.status == ItemStatus.DONE && it.completedAt != null && StudyMath.dayOf(it.completedAt, snap.zone).year == year }
     if (done.isEmpty()) return
-    val counts = done.groupingBy { it.type }.eachCount()
+    val counts = done.groupingBy { snap.categoryOf(it) }.eachCount()
     ElevatedCard(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp)) {
             Text("Finished in $year", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(6.dp))
             FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                ItemType.entries.filter { (counts[it] ?: 0) > 0 }.forEach { t ->
-                    Text("${t.emoji} ${counts[t]} ${if (counts[t] == 1) t.label.lowercase() else t.plural.lowercase()}", style = MaterialTheme.typography.titleMedium)
+                counts.entries.sortedByDescending { it.value }.forEach { (cat, n) ->
+                    Text("${cat.emoji} ${cat.count(n)}", style = MaterialTheme.typography.titleMedium)
                 }
             }
         }
@@ -168,9 +191,10 @@ private fun YearTally(snap: Snapshot) {
 @Composable
 private fun ItemCard(snap: Snapshot, item: LearningItem, onClick: () -> Unit) {
     val subject = item.subjectId?.let { snap.subjectsById[it] }
+    val cat = snap.categoryOf(item)
     ElevatedCard(onClick = onClick, modifier = Modifier.fillMaxWidth()) {
         Row(Modifier.padding(16.dp)) {
-            Text(item.type.emoji, style = MaterialTheme.typography.headlineMedium)
+            Text(cat.emoji, style = MaterialTheme.typography.headlineMedium)
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
                 Text(item.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -182,7 +206,7 @@ private fun ItemCard(snap: Snapshot, item: LearningItem, onClick: () -> Unit) {
                     Spacer(Modifier.height(8.dp))
                     LinearMeter(item.progressUnits.toFloat() / total, Modifier.fillMaxWidth())
                     Spacer(Modifier.height(2.dp))
-                    Text("${item.progressUnits} of $total ${item.type.unitLabel} · ${item.progressUnits * 100 / total}%",
+                    Text("${item.progressUnits} of $total ${cat.unit} · ${item.progressUnits * 100 / total}%",
                         style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 val logged = snap.secondsForItem(item.id)
@@ -206,9 +230,12 @@ private fun ItemEditorSheet(
     onDismiss: () -> Unit,
     onSave: (LearningItem) -> Unit,
     onDelete: (LearningItem) -> Unit,
+    onCreateCategory: (CustomCategory, (Long) -> Unit) -> Unit,
 ) {
     var item by remember { mutableStateOf(initial) }
+    var newCategory by remember { mutableStateOf(false) }
     val isNew = initial.id == 0L
+    val cat = snap.categoryOf(item)
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
         Column(
             Modifier.padding(horizontal = 24.dp).padding(bottom = 24.dp).verticalScroll(rememberScrollState()).imePadding(),
@@ -216,12 +243,16 @@ private fun ItemEditorSheet(
         ) {
             Text(if (isNew) "Add to library" else "Edit", style = MaterialTheme.typography.headlineSmall)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                ItemType.entries.forEach { t -> FilterChip(item.type == t, { item = item.copy(type = t) }, { Text("${t.emoji} ${t.label}") }) }
+                snap.categories.forEach { c ->
+                    FilterChip(cat.key == c.key, { item = item.copy(type = c.type, categoryId = c.customId) }, { Text("${c.emoji} ${c.label}") })
+                }
+                if (cat == com.rayaurelius.studybuddy.domain.Categories.OTHER) FilterChip(true, {}, { Text("📌 Other") })
+                AssistChip(onClick = { newCategory = true }, label = { Text("＋ New category") })
             }
             OutlinedTextField(item.title, { item = item.copy(title = it) }, label = { Text("Title") }, singleLine = true, modifier = Modifier.fillMaxWidth())
             OutlinedTextField(
                 item.creator, { item = item.copy(creator = it) },
-                label = { Text(when (item.type) { ItemType.BOOK, ItemType.ARTICLE -> "Author"; ItemType.PODCAST -> "Host / show"; ItemType.SEMINAR -> "Speaker / organizer"; else -> "Creator" }) },
+                label = { Text(when (item.type) { ItemType.BOOK, ItemType.ARTICLE -> "Author"; ItemType.AUDIOBOOK -> "Author / narrator"; ItemType.PODCAST -> "Host / show"; ItemType.SEMINAR -> "Speaker / organizer"; else -> "Creator" }) },
                 singleLine = true, modifier = Modifier.fillMaxWidth(),
             )
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -231,7 +262,7 @@ private fun ItemEditorSheet(
             if (item.status != ItemStatus.WANT) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     NumberField("Done", item.progressUnits, { item = item.copy(progressUnits = it ?: 0) }, Modifier.weight(1f))
-                    NumberField("Total ${item.type.unitLabel}", item.totalUnits, { item = item.copy(totalUnits = it) }, Modifier.weight(1f))
+                    NumberField("Total ${cat.unit}", item.totalUnits, { item = item.copy(totalUnits = it) }, Modifier.weight(1f))
                 }
             }
             if (item.status == ItemStatus.DONE) {
@@ -255,5 +286,16 @@ private fun ItemEditorSheet(
                 }
             }
         }
+    }
+
+    if (newCategory) {
+        CategoryDialog(
+            CustomCategory(name = ""),
+            onDismiss = { newCategory = false },
+            onSave = { c ->
+                onCreateCategory(c) { id -> item = item.copy(type = ItemType.CUSTOM, categoryId = id) }
+                newCategory = false
+            },
+        )
     }
 }

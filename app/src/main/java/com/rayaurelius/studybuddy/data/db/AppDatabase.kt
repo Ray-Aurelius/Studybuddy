@@ -1,6 +1,7 @@
 package com.rayaurelius.studybuddy.data.db
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Delete
@@ -46,6 +47,25 @@ interface SessionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE) suspend fun insertAll(list: List<StudySession>)
     @Query("DELETE FROM sessions") suspend fun clear()
     @Query("UPDATE sessions SET itemId = NULL WHERE itemId = :itemId") suspend fun detachItem(itemId: Long)
+}
+
+@Dao
+interface CategoryDao {
+    @Query("SELECT * FROM categories ORDER BY name COLLATE NOCASE")
+    fun observeAll(): Flow<List<CustomCategory>>
+
+    @Query("SELECT * FROM categories")
+    suspend fun getAll(): List<CustomCategory>
+
+    @Insert suspend fun insert(c: CustomCategory): Long
+    @Update suspend fun update(c: CustomCategory)
+    @Delete suspend fun delete(c: CustomCategory)
+    @Insert(onConflict = OnConflictStrategy.REPLACE) suspend fun insertAll(list: List<CustomCategory>)
+    @Query("DELETE FROM categories") suspend fun clear()
+
+    // When a category is deleted its items and goals fall back to the generic "Other" bucket.
+    @Query("UPDATE items SET categoryId = NULL WHERE categoryId = :id") suspend fun detachItems(id: Long)
+    @Query("UPDATE goals SET categoryId = NULL WHERE categoryId = :id") suspend fun detachGoals(id: Long)
 }
 
 @Dao
@@ -100,12 +120,18 @@ interface MilestoneDao {
 }
 
 @Database(
-    entities = [Subject::class, StudySession::class, LearningItem::class, Goal::class, UnlockedMilestone::class],
-    version = 1,
+    entities = [
+        Subject::class, StudySession::class, LearningItem::class, Goal::class, UnlockedMilestone::class,
+        CustomCategory::class,
+    ],
+    version = 2,
     exportSchema = true,
+    // v2: custom library categories (new table + categoryId on items and goals).
+    autoMigrations = [AutoMigration(from = 1, to = 2)],
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun subjects(): SubjectDao
+    abstract fun categories(): CategoryDao
     abstract fun sessions(): SessionDao
     abstract fun items(): ItemDao
     abstract fun goals(): GoalDao

@@ -24,7 +24,7 @@ object Levels {
     private val titles = listOf(
         1 to "Curious Mind", 3 to "Explorer", 5 to "Apprentice", 7 to "Seeker",
         10 to "Scholar", 13 to "Deep Diver", 16 to "Lorekeeper", 19 to "Polymath",
-        22 to "Sage", 26 to "Luminary",
+        22 to "Sage", 26 to "Luminary", 35 to "Visionary", 45 to "Grandmaster", 53 to "Legend",
     )
 
     private fun threshold(i: Int): Double =

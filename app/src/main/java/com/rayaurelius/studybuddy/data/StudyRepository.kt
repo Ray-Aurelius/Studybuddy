@@ -2,12 +2,15 @@ package com.rayaurelius.studybuddy.data
 
 import androidx.room.withTransaction
 import com.rayaurelius.studybuddy.data.db.AppDatabase
+import com.rayaurelius.studybuddy.data.db.CustomCategory
 import com.rayaurelius.studybuddy.data.db.Goal
 import com.rayaurelius.studybuddy.data.db.ItemStatus
 import com.rayaurelius.studybuddy.data.db.LearningItem
 import com.rayaurelius.studybuddy.data.db.StudySession
 import com.rayaurelius.studybuddy.data.db.Subject
 import com.rayaurelius.studybuddy.data.db.UnlockedMilestone
+import com.rayaurelius.studybuddy.domain.CategoryInfo
+import com.rayaurelius.studybuddy.domain.Categories
 import com.rayaurelius.studybuddy.domain.GoalMath
 import com.rayaurelius.studybuddy.domain.GoalProgress
 import com.rayaurelius.studybuddy.domain.LevelInfo
@@ -27,6 +30,7 @@ data class Snapshot(
     val zone: ZoneId,
     val settings: AppSettings,
     val subjects: List<Subject>,
+    val customCategories: List<CustomCategory>,
     val sessions: List<StudySession>,
     val items: List<LearningItem>,
     val goals: List<Goal>,
@@ -39,6 +43,11 @@ data class Snapshot(
 ) {
     val subjectsById: Map<Long, Subject> = subjects.associateBy { it.id }
     val itemsById: Map<Long, LearningItem> = items.associateBy { it.id }
+    val customById: Map<Long, CustomCategory> = customCategories.associateBy { it.id }
+    /** Built-in library categories followed by the learner's own. */
+    val categories: List<CategoryInfo> = Categories.all(customCategories)
+    fun categoryOf(item: LearningItem): CategoryInfo = Categories.of(item, customById)
+    fun categoryOf(goal: Goal): CategoryInfo? = Categories.forGoal(goal, customById)
     val todaySeconds: Long get() = daily[today] ?: 0L
     val weekSeconds: Long get() = StudyMath.secondsIn(StudyMath.weekRange(today, settings.weekStart), daily)
     val totalSeconds: Long get() = milestoneContext.totalSeconds
@@ -54,6 +63,7 @@ class StudyRepository(private val db: AppDatabase, val settingsStore: SettingsSt
     fun refreshDate() { clock.value = LocalDate.now() }
 
     val subjects = db.subjects().observeAll()
+    val categories = db.categories().observeAll()
     val sessions = db.sessions().observeAll()
     val items = db.items().observeAll()
     val goals = db.goals().observeActive()
@@ -73,9 +83,10 @@ class StudyRepository(private val db: AppDatabase, val settingsStore: SettingsSt
         milestones,
         settings,
         clock,
-    ) { raw, unlocked, s, today -> compute(raw, unlocked, s, today) }
+        categories,
+    ) { raw, unlocked, s, today, cats -> compute(raw, unlocked, s, today, cats) }
 
-    private fun compute(raw: Raw, unlocked: List<UnlockedMilestone>, s: AppSettings, today: LocalDate): Snapshot {
+    private fun compute(raw: Raw, unlocked: List<UnlockedMilestone>, s: AppSettings, today: LocalDate, cats: List<CustomCategory>): Snapshot {
         val zone = ZoneId.systemDefault()
         val daily = StudyMath.dailySeconds(raw.sessions, zone)
         val streak = StudyMath.streak(daily, today, s.streakMinutes * 60L, s.restDaysPerWeek, s.weekStart)
@@ -84,7 +95,7 @@ class StudyRepository(private val db: AppDatabase, val settingsStore: SettingsSt
         val ctx = MilestoneContext.from(raw.sessions, raw.items, streak.best, wins, zone)
         return Snapshot(
             today = today, zone = zone, settings = s,
-            subjects = raw.subjects, sessions = raw.sessions, items = raw.items, goals = raw.goals,
+            subjects = raw.subjects, customCategories = cats, sessions = raw.sessions, items = raw.items, goals = raw.goals,
             unlocked = unlocked, daily = daily, streak = streak,
             level = Levels.forSeconds(ctx.totalSeconds), goalProgress = progress, milestoneContext = ctx,
         )
@@ -104,6 +115,16 @@ class StudyRepository(private val db: AppDatabase, val settingsStore: SettingsSt
     // --- Subjects
     suspend fun addSubject(s: Subject): Long = db.subjects().insert(s)
     suspend fun updateSubject(s: Subject) = db.subjects().update(s)
+
+    // --- Custom categories
+    suspend fun saveCategory(c: CustomCategory): Long =
+        if (c.id == 0L) db.categories().insert(c) else { db.categories().update(c); c.id }
+
+    suspend fun deleteCategory(c: CustomCategory) = db.withTransaction {
+        db.categories().detachItems(c.id)
+        db.categories().detachGoals(c.id)
+        db.categories().delete(c)
+    }
 
     // --- Library
     suspend fun saveItem(item: LearningItem): Long =
@@ -134,6 +155,7 @@ class StudyRepository(private val db: AppDatabase, val settingsStore: SettingsSt
             version = BackupData.CURRENT_VERSION,
             exportedAt = System.currentTimeMillis(),
             subjects = db.subjects().getAll(),
+            categories = db.categories().getAll(),
             sessions = db.sessions().getAll(),
             items = db.items().getAll(),
             goals = db.goals().getAll(),
@@ -146,8 +168,9 @@ class StudyRepository(private val db: AppDatabase, val settingsStore: SettingsSt
     suspend fun importData(data: BackupData) {
         db.withTransaction {
             db.sessions().clear(); db.items().clear(); db.goals().clear()
-            db.subjects().clear(); db.milestones().clear()
+            db.subjects().clear(); db.milestones().clear(); db.categories().clear()
             db.subjects().insertAll(data.subjects)
+            db.categories().insertAll(data.categories)
             db.items().insertAll(data.items)
             db.sessions().insertAll(data.sessions)
             db.goals().insertAll(data.goals)

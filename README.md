@@ -15,11 +15,11 @@ A study and learning tracker for everything you learn **outside formal schooling
 - **Stats** — day / week / month / year views, tap-to-inspect bar charts, subject breakdown, 18-week consistency heatmap, session history.
 - **Streaks with rest days** — configurable minimum minutes per day and rest days per week.
 - **Goals** — study-time goals (daily / weekly / monthly) and "finish things" goals (e.g. 2 books a month, 12 books by Dec 31), with a hit-rate history.
-- **Library** — books, podcasts, seminars, courses, videos, articles; progress in pages / episodes / modules; ratings and takeaways.
-- **Levels & 42 milestones** — time invested, consistency, library, learning craft, goals. Celebrations with confetti.
+- **Library** — books, audiobooks, podcasts, seminars, courses, videos, articles, plus **your own categories** (name, emoji, and progress unit — e.g. "Workshop" tracked in sessions). Ratings and takeaways.
+- **Levels & 51 milestones** — time invested (up to 5,000 hours), books (up to 1,000, audiobooks included), consistency, library, learning craft, goals. Celebrations with confetti.
 - **Home-screen widget** — today's time, streak, weekly goal, live ticking timer, one-tap start/pause.
 - **Daily reminder** — set *when and where* you'll study; skipped automatically on days you already studied.
-- **Private by design** — no accounts, ads, or trackers. Data stays on device, in Android Backup, and in JSON export/import.
+- **Private by design** — no accounts, ads, or trackers. Data stays on device, in Android Backup, and in JSON export/import. Database upgrades are covered by a migration test so existing data always carries over.
 
 ## The learning science behind it
 
