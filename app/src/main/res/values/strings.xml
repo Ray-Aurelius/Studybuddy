@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Studybuddy</string>
-    <string name="widget_name">Study tracker</string>
-    <string name="widget_description">Today\'s study time, your streak, and a one-tap timer</string>
+    <string name="app_name">Sophinity</string>
+    <string name="widget_name">Learning tracker</string>
+    <string name="widget_description">Today\'s learning time, your streak, and a one-tap timer</string>
 </resources>

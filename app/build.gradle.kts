@@ -14,15 +14,15 @@ val keystoreProps = Properties().apply {
 }
 
 android {
-    namespace = "com.rayaurelius.studybuddy"
+    namespace = "com.rayaurelius.sophinity"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.rayaurelius.studybuddy"
+        applicationId = "com.rayaurelius.sophinity"
         minSdk = 26
         targetSdk = 37
-        versionCode = 3
-        versionName = "1.2.0"
+        versionCode = 4
+        versionName = "1.3.0"
     }
 
     signingConfigs {
