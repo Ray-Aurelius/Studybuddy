@@ -10,6 +10,7 @@ import com.rayaurelius.sophinity.data.BackupException
 import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
 import com.rayaurelius.sophinity.ui.i18n.AppLocale
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.data.AutoBackup
 import androidx.compose.ui.graphics.Color
 import com.rayaurelius.sophinity.ui.glyphs.GlyphPicker
 import com.rayaurelius.sophinity.ui.glyphs.Glyphs
@@ -128,6 +129,24 @@ class SettingsViewModel(private val c: AppContainer) : ViewModel() {
         }.onSuccess { messages.emit(str(R.string.set_backup_saved)) }.onFailure { messages.emit(str(R.string.set_backup_save_failed, it.message ?: "")) }
     }
 
+    /** A folder was picked for automatic backups: keep access to it, turn backups on, and make the first one now. */
+    fun chooseBackupFolder(tree: Uri) = viewModelScope.launch {
+        AutoBackup.takePermission(c.appContext, tree)
+        c.settingsStore.update { it.copy(backupFolder = tree.toString(), autoBackup = true, lastBackupFailed = false) }
+        AutoBackup.schedule(c.appContext, c.settingsStore.current())
+        backupNow()
+    }
+
+    fun setAutoBackup(on: Boolean) = viewModelScope.launch {
+        c.settingsStore.update { it.copy(autoBackup = on) }
+        AutoBackup.schedule(c.appContext, c.settingsStore.current())
+    }
+
+    fun backupNow() = viewModelScope.launch {
+        val ok = AutoBackup.runNow(c.appContext)
+        messages.emit(str(if (ok) R.string.set_backup_saved else R.string.set_backup_failed))
+    }
+
     fun import(uri: Uri) = viewModelScope.launch {
         runCatching {
             val text = withContext(Dispatchers.IO) {
@@ -171,6 +190,7 @@ fun SettingsScreen(
         uri?.let(vm::export)
     }
     val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> confirmImport = uri }
+    val folderLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri -> uri?.let(vm::chooseBackupFolder) }
     val notifPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
 
     Scaffold(
@@ -348,7 +368,45 @@ fun SettingsScreen(
             }
             item { HorizontalDivider(Modifier.padding(top = 8.dp)) }
 
-            item { Header(stringResource(R.string.set_data)) }
+            item { Header(stringResource(R.string.set_backups)) }
+            item {
+                val folder = remember(s.backupFolder) { AutoBackup.folderName(ctx, s.backupFolder) }
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.set_auto_backup)) },
+                    supportingContent = {
+                        Text(
+                            if (s.backupFolder == null) stringResource(R.string.set_auto_backup_sub_none)
+                            else stringResource(R.string.set_auto_backup_sub, folder ?: stringResource(R.string.set_unknown_folder), AutoBackup.KEEP)
+                        )
+                    },
+                    leadingContent = { Glyph("amphora", size = 24.dp, tint = MaterialTheme.colorScheme.primary) },
+                    trailingContent = {
+                        Switch(s.autoBackup && s.backupFolder != null, { on ->
+                            if (on && s.backupFolder == null) folderLauncher.launch(null) else vm.setAutoBackup(on)
+                        })
+                    },
+                )
+            }
+            if (s.backupFolder != null) {
+                item {
+                    val status = when {
+                        s.lastBackupFailed -> stringResource(R.string.set_backup_failed)
+                        s.lastBackupAt != null -> stringResource(
+                            R.string.set_last_backup,
+                            java.time.Instant.ofEpochMilli(s.lastBackupAt).atZone(java.time.ZoneId.systemDefault()).format(rememberDateFormat("yMMMdjmm")),
+                        )
+                        else -> stringResource(R.string.set_no_backup_yet)
+                    }
+                    ListItem(
+                        headlineContent = { Text(stringResource(R.string.set_backup_folder)) },
+                        supportingContent = {
+                            Text(status, color = if (s.lastBackupFailed) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant)
+                        },
+                        trailingContent = { TextButton(onClick = { vm.backupNow() }) { Text(stringResource(R.string.set_backup_now)) } },
+                        modifier = Modifier.clickable { folderLauncher.launch(null) },
+                    )
+                }
+            }
             item {
                 ListItem(
                     headlineContent = { Text(stringResource(R.string.set_export)) },
@@ -363,6 +421,14 @@ fun SettingsScreen(
                     modifier = Modifier.clickable { importLauncher.launch(arrayOf("application/json", "*/*")) },
                 )
             }
+            item {
+                Text(
+                    stringResource(R.string.set_backup_cloud_note), style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                )
+            }
+            item { HorizontalDivider(Modifier.padding(top = 8.dp)) }
+            item { Header(stringResource(R.string.set_data)) }
             item {
                 ListItem(
                     headlineContent = { Text(stringResource(R.string.set_privacy)) },

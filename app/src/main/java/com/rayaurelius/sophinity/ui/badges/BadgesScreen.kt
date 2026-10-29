@@ -3,6 +3,7 @@ package com.rayaurelius.sophinity.ui.badges
 import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
 import com.rayaurelius.sophinity.domain.str
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.ui.components.PageHeader
 import com.rayaurelius.sophinity.ui.glyphs.Glyph
 import com.rayaurelius.sophinity.ui.glyphs.GlyphTile
 import com.rayaurelius.sophinity.ui.glyphs.LaurelMedal
@@ -69,7 +70,7 @@ fun BadgesScreen(contentPadding: PaddingValues) {
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier.fillMaxSize(),
     ) {
-        item(span = { GridItemSpan(maxLineSpan) }) { Text(stringResource(R.string.laurels_title), style = MaterialTheme.typography.headlineMedium) }
+        item(span = { GridItemSpan(maxLineSpan) }) { PageHeader(stringResource(R.string.laurels_title)) }
         item(span = { GridItemSpan(maxLineSpan) }) { TitleCard(snap) }
         item(span = { GridItemSpan(maxLineSpan) }) { TitleLadder(snap) }
         item(span = { GridItemSpan(maxLineSpan) }) {

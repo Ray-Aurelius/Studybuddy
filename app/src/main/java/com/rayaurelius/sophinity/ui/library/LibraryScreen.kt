@@ -4,6 +4,7 @@ package com.rayaurelius.sophinity.ui.library
 
 import com.rayaurelius.sophinity.domain.str
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.ui.components.PageHeader
 import com.rayaurelius.sophinity.ui.glyphs.Glyph
 import com.rayaurelius.sophinity.ui.glyphs.GlyphTile
 import com.rayaurelius.sophinity.ui.glyphs.Glyphs
@@ -112,7 +113,7 @@ fun LibraryScreen(contentPadding: PaddingValues) {
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.fillMaxSize(),
         ) {
-            item { Text(stringResource(R.string.lib_title), style = MaterialTheme.typography.headlineMedium) }
+            item { PageHeader(stringResource(R.string.lib_title)) }
             item { YearTally(snap) }
             item {
                 SecondaryTabRow(selectedTabIndex = ItemStatus.entries.indexOf(status)) {

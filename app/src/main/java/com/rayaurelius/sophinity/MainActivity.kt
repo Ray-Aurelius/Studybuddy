@@ -1,5 +1,26 @@
 package com.rayaurelius.sophinity
 
+import androidx.compose.ui.unit.dp
+import com.rayaurelius.sophinity.ui.components.LocalOpenSettings
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.Alignment
+import androidx.compose.material3.Surface
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
 import androidx.compose.ui.unit.sp
 import com.rayaurelius.sophinity.ui.glyphs.Glyph
 import com.rayaurelius.sophinity.ui.sessions.SessionsScreen
@@ -179,20 +200,12 @@ private fun AppShell(settings: AppSettings) {
                             contentWindowInsets = if (showRail) ScaffoldDefaults.contentWindowInsets.only(WindowInsetsSides.Vertical)
                                 else ScaffoldDefaults.contentWindowInsets,
                             bottomBar = {
-                                if (onTab && settings.navPosition == NavPosition.BOTTOM) NavigationBar {
-                                    visibleTabs.forEach { t ->
-                                        val selected = dest?.hasRoute(t.cls) == true
-                                        NavigationBarItem(
-                                            selected = selected,
-                                            onClick = { go(t.route) },
-                                            icon = { Glyph(t.glyph, contentDescription = if (settings.navLabels) null else stringResource(t.label)) },
-                                            label = if (settings.navLabels) ({ NavLabel(stringResource(t.label)) }) else null,
-                                            alwaysShowLabel = settings.navLabels,
-                                        )
-                                    }
+                                if (onTab && settings.navPosition == NavPosition.BOTTOM) {
+                                    BottomBar(visibleTabs, isSelected = { t -> dest?.hasRoute(t.cls) == true }, showLabels = settings.navLabels, onClick = { go(it.route) })
                                 }
                             },
                         ) { pad ->
+                            CompositionLocalProvider(LocalOpenSettings provides { nav.navigate(SettingsRoute) { launchSingleTop = true } }) {
                             NavHost(nav, startDestination = TodayRoute) {
                                 composable<TodayRoute> {
                                     TodayScreen(pad, onOpenSettings = { nav.navigate(SettingsRoute) }, onOpenGoals = { go(GoalsRoute) }, onOpenBadges = { go(BadgesRoute) })
@@ -213,6 +226,7 @@ private fun AppShell(settings: AppSettings) {
                                 composable<AppearanceRoute> { AppearanceScreen(onBack = { nav.popBackStack() }) }
                                 composable<AccessibilityRoute> { AccessibilityScreen(onBack = { nav.popBackStack() }) }
                                 composable<ToolbarRoute> { ToolbarScreen(onBack = { nav.popBackStack() }) }
+                            }
                             }
                         }
                     }
@@ -239,4 +253,47 @@ private fun NavLabel(text: String) {
         text, maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis,
         autoSize = androidx.compose.foundation.text.TextAutoSize.StepBased(minFontSize = 9.sp, maxFontSize = max),
     )
+}
+
+/**
+ * Bottom toolbar. Material's NavigationBar draws a fixed 64dp highlight per item, which spills
+ * past the screen edge when six tabs share a narrow phone. Here the highlight is sized to the
+ * tab's own width, so it always stays on screen.
+ */
+@Composable
+private fun BottomBar(tabs: List<Tab>, isSelected: (Tab) -> Boolean, showLabels: Boolean, onClick: (Tab) -> Unit) {
+    val scheme = MaterialTheme.colorScheme
+    Surface(color = scheme.surfaceContainer, tonalElevation = 3.dp) {
+        Row(
+            Modifier.fillMaxWidth().windowInsetsPadding(WindowInsets.navigationBars)
+                .height(if (showLabels) 76.dp else 64.dp).padding(horizontal = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            tabs.forEach { t ->
+                val selected = isSelected(t)
+                val label = stringResource(t.label)
+                Column(
+                    Modifier.weight(1f).fillMaxHeight()
+                        .selectable(selected = selected, role = Role.Tab, onClick = { onClick(t) })
+                        .semantics { if (!showLabels) contentDescription = label },
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Box(
+                        Modifier.fillMaxWidth(0.86f).widthIn(max = 64.dp).height(32.dp).clip(CircleShape)
+                            .background(if (selected) scheme.secondaryContainer else Color.Transparent),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Glyph(t.glyph, size = 24.dp, tint = if (selected) scheme.onSecondaryContainer else scheme.onSurfaceVariant)
+                    }
+                    if (showLabels) {
+                        Spacer(Modifier.height(4.dp))
+                        CompositionLocalProvider(LocalContentColor provides if (selected) scheme.onSurface else scheme.onSurfaceVariant) {
+                            Box(Modifier.padding(horizontal = 2.dp)) { NavLabel(label) }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

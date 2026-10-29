@@ -6,6 +6,7 @@ import com.rayaurelius.sophinity.ui.i18n.goalTitle
 import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
 import com.rayaurelius.sophinity.domain.str
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.ui.components.PageHeader
 import com.rayaurelius.sophinity.ui.glyphs.Glyph
 import com.rayaurelius.sophinity.ui.glyphs.Glyphs
 import androidx.compose.ui.res.pluralStringResource
@@ -118,7 +119,7 @@ fun GoalsScreen(contentPadding: PaddingValues) {
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.fillMaxSize(),
         ) {
-            item { Text(stringResource(R.string.goals_title), style = MaterialTheme.typography.headlineMedium) }
+            item { PageHeader(stringResource(R.string.goals_title)) }
             item {
                 Column {
                     Text(stringResource(R.string.goals_quick_add), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)

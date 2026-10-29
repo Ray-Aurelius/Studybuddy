@@ -1,5 +1,8 @@
 package com.rayaurelius.sophinity.ui.components
 
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.heading
 import com.rayaurelius.sophinity.R
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.Canvas
@@ -297,5 +300,25 @@ fun GreekKeyBand(modifier: Modifier = Modifier, color: Color = MaterialTheme.col
         }
         drawPath(path, color, style = androidx.compose.ui.graphics.drawscope.Stroke(stroke))
         drawLine(color, Offset(0f, 6f * u), Offset(size.width, 6f * u), strokeWidth = stroke)
+    }
+}
+
+/** Opens Settings from any page; provided by the app shell. Null in previews and tests of single screens. */
+val LocalOpenSettings = androidx.compose.runtime.staticCompositionLocalOf<(() -> Unit)?> { null }
+
+/** A page's title with the Settings button in the top-right corner, the same on every tab. */
+@Composable
+fun PageHeader(title: String, modifier: Modifier = Modifier) {
+    Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Text(title, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.weight(1f).semantics { heading() })
+        SettingsButton()
+    }
+}
+
+@Composable
+fun SettingsButton() {
+    val open = LocalOpenSettings.current ?: return
+    androidx.compose.material3.IconButton(onClick = open) {
+        Icon(androidx.compose.material.icons.Icons.Outlined.Settings, stringResource(R.string.common_settings))
     }
 }

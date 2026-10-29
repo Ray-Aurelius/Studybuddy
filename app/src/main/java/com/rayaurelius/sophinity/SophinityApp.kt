@@ -69,6 +69,7 @@ class SophinityApp : Application() {
 
         c.appScope.launch {
             ReminderScheduler.apply(this@SophinityApp, c.settingsStore.current())
+            com.rayaurelius.sophinity.data.AutoBackup.schedule(this@SophinityApp, c.settingsStore.current())
             c.timer.restore()
         }
     }

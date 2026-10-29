@@ -65,6 +65,13 @@ data class AppSettings(
     val lastSubjectId: Long? = null,
     /** Highest title rank already celebrated, so each new title is celebrated once. */
     val seenTitleRank: Int = 1,
+    // --- Automatic backups
+    val autoBackup: Boolean = false,
+    /** Storage Access Framework tree URI of the folder the user picked for automatic backups. */
+    val backupFolder: String? = null,
+    val lastBackupAt: Long? = null,
+    /** True when the most recent automatic backup could not be written (e.g. the folder was removed). */
+    val lastBackupFailed: Boolean = false,
 )
 
 private val Context.settingsDataStore by preferencesDataStore(name = "settings")
@@ -98,6 +105,10 @@ class SettingsStore(private val context: Context) {
         val navLabels = booleanPreferencesKey("nav_labels")
         val lastSubject = longPreferencesKey("last_subject")
         val seenTitle = intPreferencesKey("seen_title_rank")
+        val autoBackup = booleanPreferencesKey("auto_backup")
+        val backupFolder = stringPreferencesKey("backup_folder")
+        val lastBackup = longPreferencesKey("last_backup_at")
+        val backupFailed = booleanPreferencesKey("last_backup_failed")
     }
 
     val settings: Flow<AppSettings> = context.settingsDataStore.data.map { it.toSettings() }
@@ -134,6 +145,10 @@ class SettingsStore(private val context: Context) {
             prefs[K.navLabels] = s.navLabels
             prefs[K.seenTitle] = s.seenTitleRank
             if (s.lastSubjectId != null) prefs[K.lastSubject] = s.lastSubjectId else prefs.remove(K.lastSubject)
+            prefs[K.autoBackup] = s.autoBackup
+            if (s.backupFolder != null) prefs[K.backupFolder] = s.backupFolder else prefs.remove(K.backupFolder)
+            if (s.lastBackupAt != null) prefs[K.lastBackup] = s.lastBackupAt else prefs.remove(K.lastBackup)
+            prefs[K.backupFailed] = s.lastBackupFailed
         }
     }
 
@@ -166,6 +181,10 @@ class SettingsStore(private val context: Context) {
             navLabels = this[K.navLabels] ?: d.navLabels,
             lastSubjectId = this[K.lastSubject],
             seenTitleRank = this[K.seenTitle] ?: d.seenTitleRank,
+            autoBackup = this[K.autoBackup] ?: d.autoBackup,
+            backupFolder = this[K.backupFolder],
+            lastBackupAt = this[K.lastBackup],
+            lastBackupFailed = this[K.backupFailed] ?: d.lastBackupFailed,
         )
     }
 }

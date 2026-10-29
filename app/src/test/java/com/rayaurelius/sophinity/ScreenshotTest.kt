@@ -4,6 +4,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollAction
@@ -105,6 +106,19 @@ class ScreenshotTest {
         compose.waitForIdle()
         compose.onAllNodes(hasScrollAction()).let { it[it.fetchSemanticsNodes().size - 1] }.performScrollToNode(hasText("Total chapters"))
         shot("13_audiobook_editor")
+    }
+
+    @Config(qualifiers = "w360dp-h780dp-night-xxhdpi")
+    @Test fun narrowPhoneToolbar() {
+        tab("Sessions")
+        shot("14_narrow_toolbar")
+    }
+
+    @Test fun settingsFromAnyPageAndBackups() {
+        tab("Goals")
+        compose.onNode(hasContentDescription("Settings")).performClick()
+        compose.onNode(hasScrollAction()).performScrollToNode(hasText("Automatic daily backups"))
+        shot("15_backups")
     }
 
     @Test fun laurelMedallions() {

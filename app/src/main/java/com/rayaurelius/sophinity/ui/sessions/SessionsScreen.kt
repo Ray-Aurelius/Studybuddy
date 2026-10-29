@@ -17,6 +17,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import com.rayaurelius.sophinity.data.db.ItemStatus
 import com.rayaurelius.sophinity.ui.components.FocusRating
 import com.rayaurelius.sophinity.ui.components.SubjectPicker
+import com.rayaurelius.sophinity.ui.components.LibraryItemPicker
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -65,6 +66,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.rayaurelius.sophinity.AppContainer
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.ui.components.PageHeader
 import com.rayaurelius.sophinity.data.Snapshot
 import com.rayaurelius.sophinity.data.db.SessionSource
 import com.rayaurelius.sophinity.data.db.StudySession
@@ -133,7 +135,7 @@ fun SessionsScreen(contentPadding: PaddingValues) {
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxSize(),
         ) {
-            item { Text(stringResource(R.string.sessions_title), style = MaterialTheme.typography.headlineMedium) }
+            item { PageHeader(stringResource(R.string.sessions_title)) }
             item {
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(Span.entries) { s -> FilterChip(span == s, { span = s }, { Text(stringResource(s.label)) }) }
@@ -328,42 +330,6 @@ private fun SessionEditor(snap: Snapshot, initial: StudySession, onDismiss: () -
                 Spacer(Modifier.weight(1f))
                 TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
                 Button(onClick = { onSave(s.copy(note = s.note.trim())) }) { Text(stringResource(R.string.common_save)) }
-            }
-        }
-    }
-}
-
-/** Every library item (in progress first, then want-to, then finished), or none. */
-@Composable
-private fun LibraryItemPicker(snap: Snapshot, selectedId: Long?, onSelect: (Long?) -> Unit) {
-    var open by remember { mutableStateOf(false) }
-    val order = listOf(ItemStatus.ACTIVE, ItemStatus.WANT, ItemStatus.DONE)
-    val items = snap.items.sortedWith(compareBy({ order.indexOf(it.status) }, { it.title.lowercase() }))
-    val sel = selectedId?.let { snap.itemsById[it] }
-    Box {
-        OutlinedCard(onClick = { open = true }, modifier = Modifier.fillMaxWidth()) {
-            Row(Modifier.padding(horizontal = 14.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-                Glyph(sel?.let { snap.categoryOf(it).glyph } ?: "scroll", size = 22.dp, fallback = Glyphs.CATEGORY_DEFAULT,
-                    tint = if (sel != null) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
-                Spacer(Modifier.width(12.dp))
-                Text(sel?.title ?: stringResource(R.string.sessions_not_linked), Modifier.weight(1f), maxLines = 2, overflow = TextOverflow.Ellipsis,
-                    color = if (sel != null) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant)
-                Icon(Icons.Default.ArrowDropDown, null)
-            }
-        }
-        DropdownMenu(open, { open = false }, Modifier.heightIn(max = 360.dp)) {
-            DropdownMenuItem(text = { Text(stringResource(R.string.sessions_not_linked)) }, onClick = { onSelect(null); open = false })
-            items.forEach { item ->
-                DropdownMenuItem(
-                    text = {
-                        Column {
-                            Text(item.title, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                            Text(stringResource(item.status.labelRes), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                    },
-                    leadingIcon = { Glyph(snap.categoryOf(item).glyph, size = 20.dp, fallback = Glyphs.CATEGORY_DEFAULT) },
-                    onClick = { onSelect(item.id); open = false },
-                )
             }
         }
     }

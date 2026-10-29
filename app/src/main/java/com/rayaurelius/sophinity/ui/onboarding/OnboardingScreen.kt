@@ -86,6 +86,24 @@ class OnboardingViewModel(private val c: AppContainer) : ViewModel() {
             ReminderScheduler.apply(c.appContext, c.settingsStore.current())
             done()
         }
+
+    /** Restoring marks onboarding done, so the app opens straight onto the restored history. */
+    fun restore(uri: android.net.Uri, onError: (String) -> Unit) = viewModelScope.launch {
+        runCatching {
+            val text = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                c.appContext.contentResolver.openInputStream(uri)!!.use { it.readBytes().decodeToString() }
+            }
+            c.repo.importData(com.rayaurelius.sophinity.data.BackupData.decode(text))
+        }.onFailure { e ->
+            val ctx = com.rayaurelius.sophinity.ui.i18n.AppLocale.localized(c.appContext)
+            val why = when ((e as? com.rayaurelius.sophinity.data.BackupException)?.reason) {
+                com.rayaurelius.sophinity.data.BackupException.Reason.NOT_A_BACKUP -> ctx.getString(R.string.set_not_backup)
+                com.rayaurelius.sophinity.data.BackupException.Reason.TOO_NEW -> ctx.getString(R.string.set_backup_too_new)
+                null -> e.message ?: ""
+            }
+            onError(ctx.getString(R.string.set_restore_failed, why))
+        }
+    }
 }
 
 @Composable
@@ -99,6 +117,10 @@ fun OnboardingScreen(onDone: () -> Unit) {
     var place by remember { mutableStateOf("") }
     val time = rememberTimePickerState(19, 0)
     val notif = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        uri?.let { vm.restore(it) { msg -> android.widget.Toast.makeText(ctx, msg, android.widget.Toast.LENGTH_LONG).show() } }
+    }
 
     Column(Modifier.fillMaxSize().safeDrawingPadding().imePadding().padding(24.dp)) {
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -178,6 +200,7 @@ fun OnboardingScreen(onDone: () -> Unit) {
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             if (step > 0) TextButton(onClick = { step-- }) { Text(stringResource(R.string.common_back)) }
+            else TextButton(onClick = { restoreLauncher.launch(arrayOf("application/json", "*/*")) }) { Text(stringResource(R.string.onb_restore)) }
             Spacer(Modifier.weight(1f))
             Button(
                 onClick = {

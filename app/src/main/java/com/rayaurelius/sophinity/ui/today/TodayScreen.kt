@@ -7,6 +7,7 @@ import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
 import com.rayaurelius.sophinity.domain.str
 import androidx.compose.ui.unit.sp
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.ui.components.LibraryItemPicker
 import com.rayaurelius.sophinity.ui.glyphs.Glyph
 import com.rayaurelius.sophinity.ui.glyphs.GlyphTile
 import com.rayaurelius.sophinity.ui.glyphs.Glyphs
@@ -230,7 +231,7 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                     Spacer(Modifier.height(20.dp))
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                         SubjectPicker(snap.activeSubjects, subjectId, { subjectId = it; itemId = null })
-                        ItemPicker(snap.activeItems, itemId, { snap.categoryOf(it).glyph }) { id ->
+                        ItemPicker(snap.items.filter { it.status != ItemStatus.DONE }.sortedBy { it.status != ItemStatus.ACTIVE }, itemId, { snap.categoryOf(it).glyph }) { id ->
                             itemId = id
                             snap.itemsById[id]?.subjectId?.let { subjectId = it }
                         }
@@ -589,11 +590,12 @@ fun ManualSessionDialog(
                         Text(date.format(rememberDateFormat("EEEMMMdyyyy")))
                     }
                 }
-                SubjectPicker(snap.activeSubjects, subjectId, { subjectId = it })
-                ItemPicker(snap.activeItems, itemId, { snap.categoryOf(it).glyph }) { id ->
+                Text(stringResource(R.string.sessions_link_item), style = MaterialTheme.typography.labelLarge)
+                LibraryItemPicker(snap, itemId) { id ->
                     itemId = id
-                    snap.itemsById[id]?.subjectId?.let { subjectId = it }
+                    id?.let { snap.itemsById[it]?.subjectId }?.let { subjectId = it }
                 }
+                SubjectPicker(snap.activeSubjects, subjectId, { subjectId = it })
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     NumberField(stringResource(R.string.field_hours), hours, { hours = it?.coerceAtMost(16) }, Modifier.weight(1f))
                     NumberField(stringResource(R.string.field_minutes), minutes, { minutes = it?.coerceAtMost(59) }, Modifier.weight(1f))

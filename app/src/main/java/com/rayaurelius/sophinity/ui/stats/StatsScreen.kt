@@ -2,6 +2,7 @@ package com.rayaurelius.sophinity.ui.stats
 
 import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.ui.components.PageHeader
 import com.rayaurelius.sophinity.ui.glyphs.Glyph
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -119,7 +120,7 @@ fun StatsScreen(contentPadding: PaddingValues, onOpenSessions: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxSize(),
     ) {
-        item { Text(stringResource(R.string.stats_title), style = MaterialTheme.typography.headlineMedium) }
+        item { PageHeader(stringResource(R.string.stats_title)) }
         item {
             SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
                 Period.entries.forEachIndexed { i, p ->
