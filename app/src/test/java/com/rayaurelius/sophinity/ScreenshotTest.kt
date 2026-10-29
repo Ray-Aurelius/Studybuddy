@@ -4,6 +4,9 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasScrollAction
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
@@ -64,6 +67,23 @@ class ScreenshotTest {
         tab("Library"); shot("3_library")
         tab("Goals"); shot("4_goals")
         tab("Laurels"); shot("5_laurels")
+        tab("Sessions"); shot("8_sessions")
+    }
+
+    @Test fun deleteAsksFirst() {
+        tab("Sessions")
+        compose.onAllNodes(hasContentDescription("Delete session"))[0].performClick()
+        shot("9_sessions_delete_confirm")
+        // Cancelling keeps the session; the dialog's wording names the session being deleted.
+        compose.onNode(hasText("Cancel")).performClick()
+        compose.waitForIdle()
+        compose.onAllNodes(hasContentDescription("Delete session"))[0].assertExists()
+    }
+
+    @Test fun laurelMedallions() {
+        tab("Laurels")
+        compose.onNode(hasScrollAction()).performScrollToNode(hasText("Consistency"))
+        shot("10_laurel_medallions")
     }
 
     @Test fun timerOnAudiobook() {

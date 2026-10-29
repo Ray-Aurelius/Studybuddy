@@ -42,6 +42,19 @@ Gold is reserved for achievement so it keeps its meaning.
 
 A gold laurel wreath around an open book, with a spark of insight, on an Aegean-to-sea gradient. Generated from `tools/make_icon.py` (Android vector + `icon.svg`), so app icon and store icon always match. Includes a monochrome layer for Android themed icons.
 
+## Glyphs (the app's icon set)
+
+No emoji anywhere: every icon is Sophinity's own Greek line art. 62 glyphs on a 24-unit grid with one stroke weight (1.7) and round caps, so they read as one family, like line work on painted pottery. They are tinted like any icon (primary, the subject's color, or gold for achievement).
+
+- Library types: scroll (book), lyre (audiobook), theatre masks (podcast), stoa (seminar), wax tablet (course), theatre (video), papyrus (article), meander (other)
+- Toolbar: sundial (Today), columns (Stats), hourglass (Sessions), scroll stack (Library), target (Goals), laurel wreath (Laurels)
+- Laurels: a gold disc inside a laurel wreath when earned; a quiet grey outline while still ahead
+- Title emblems: sprout, oil lamp, wax tablet, quill, herald's staff, scrolls, herm, owl of Athena
+
+Source: `tools/make_glyphs.py` (edit there, then run it). Contact sheet: `docs/brand/glyphs.svg`.
+
+![Glyph sheet](glyphs.svg)
+
 ## Titles (earned through laurels)
 
 | # | Title | Greek | Meaning | Requires |

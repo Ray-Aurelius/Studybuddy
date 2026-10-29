@@ -16,7 +16,19 @@ data class LearnerTitle(
     val meaning: Txt,
     /** Milestone keys that must all be unlocked. */
     val requires: List<String>,
-)
+) {
+    /** Emblem glyph: the learner's tools as they grow, from seedling to the owl of Athena. */
+    val glyph: String get() = when (id) {
+        "neophyte" -> "sprout"
+        "seeker" -> "lamp"
+        "pupil" -> "tablet"
+        "scribe" -> "quill"
+        "rhetor" -> "kerykeion"
+        "scholar" -> "scroll_stack"
+        "sage" -> "herm"
+        else -> "owl"
+    }
+}
 
 data class TitleStatus(
     val current: LearnerTitle,

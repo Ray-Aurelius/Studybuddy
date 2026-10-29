@@ -21,7 +21,7 @@ class CategoriesAndMilestonesTest {
     private val zone = ZoneId.of("America/Denver")
     private val today = LocalDate.of(2026, 10, 28)
     private val now = today.atTime(12, 0).atZone(zone).toInstant().toEpochMilli()
-    private val workshop = CustomCategory(id = 7, name = "Workshop", emoji = "🛠️", unitLabel = "sessions")
+    private val workshop = CustomCategory(id = 7, name = "Workshop", icon = "anvil", unitLabel = "sessions")
 
     private fun done(type: ItemType, n: Int, categoryId: Long? = null) =
         List(n) { LearningItem(type = type, title = "x$it", status = ItemStatus.DONE, completedAt = now, categoryId = categoryId) }

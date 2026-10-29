@@ -235,10 +235,10 @@
     <string name="notif_every_minute">Elke minuut telt</string>
     <string name="notif_paused_title">Gepauzeerd · %1$s</string>
     <string name="notif_tap_resume">Tik op Hervatten als je klaar bent</string>
-    <string name="notif_break_title">Pauzetijd ☕</string>
+    <string name="notif_break_title">Pauzetijd</string>
     <string name="notif_break_text">Strek je uit, drink wat, kijk in de verte</string>
     <string name="notif_skip_break">Pauze overslaan</string>
-    <string name="notif_focus_done_title">Focusblok voltooid 🎉</string>
+    <string name="notif_focus_done_title">Focusblok voltooid</string>
     <string name="notif_focus_done_text">%1$s vastgelegd. Tik om één ding te noteren dat je hebt geleerd.</string>
     <string name="notif_start_break">Pauze starten</string>
     <string name="notif_break_over">De pauze is voorbij</string>
@@ -246,7 +246,7 @@
     <string name="notif_saved_title">%1$s opgeslagen</string>
     <string name="notif_saved_text">Tik voor een korte reflectie</string>
     <string name="notif_media_line">%1$s · vanaf %2$d%% van %3$s</string>
-    <string name="reminder_title">Tijd om iets te leren ✨</string>
+    <string name="reminder_title">Tijd om iets te leren</string>
     <string name="reminder_body">Je had gepland om nu te leren. Zelfs %1$s telt.</string>
     <string name="reminder_body_place">Je had gepland om nu te leren, %1$s. Zelfs %2$s telt.</string>
     <string name="widget_this_week">%1$s deze week</string>
@@ -256,6 +256,15 @@
     <string name="nav_library">Bibliotheek</string>
     <string name="nav_goals">Doelen</string>
     <string name="nav_laurels">Lauweren</string>
+    <string name="nav_sessions">Sessies</string>
+    <string name="sessions_title">Sessies</string>
+    <string name="sessions_this_month">Deze maand</string>
+    <string name="sessions_manual">Handmatig ingevoerd</string>
+    <string name="sessions_delete_warning">Ze wordt verwijderd uit je statistieken, reeks en doelen. Dit kan niet ongedaan worden gemaakt.</string>
+    <string name="sessions_focus">Focus %1$d van 5</string>
+    <string name="stats_all_sessions">Alle sessies bekijken</string>
+    <string name="tb_sessions_hidden_sub">Ook verborgen bereikbaar via Statistieken</string>
+    <string name="icon_n">Pictogram %1$d</string>
     <string name="cat_new">Nieuwe categorie</string>
     <string name="cat_edit">Categorie bewerken</string>
     <string name="cat_name">Naam</string>
@@ -285,7 +294,7 @@
     <string name="greet_morning">Goedemorgen</string>
     <string name="greet_afternoon">Goedemiddag</string>
     <string name="greet_evening">Goedenavond</string>
-    <string name="today_title_chip">🏛️ %1$s · Niv. %2$d</string>
+    <string name="today_title_chip">%1$s · Niv. %2$d</string>
     <string name="timer_open">Open sessie</string>
     <string name="timer_focus">Focus %1$s</string>
     <string name="timer_then_break">dan %1$s pauze</string>
@@ -298,11 +307,11 @@
     <string name="timer_session">Deze sessie %1$s</string>
     <string name="timer_session_speed">Deze sessie %1$s op %2$s</string>
     <string name="timer_to_go">%1$s · nog %2$s</string>
-    <string name="timer_finished">%1$s · klaar! 🎉</string>
+    <string name="timer_finished">%1$s · klaar!</string>
     <string name="timer_media_line">%1$s van %2$s · %3$d%%</string>
     <string name="timer_media_line_speed">%1$s van %2$s · %3$d%% · %4$s</string>
     <string name="timer_discard">Sessie weggooien</string>
-    <string name="break_title">Pauzetijd ☕</string>
+    <string name="break_title">Pauzetijd</string>
     <string name="break_text">Sta op, strek je uit en kijk naar iets in de verte.</string>
     <string name="break_skip">Pauze overslaan</string>
     <string name="item_pick">＋ Wat leer je?</string>
@@ -315,7 +324,7 @@
     <string name="goals_set_one">Stel er een in</string>
     <string name="goals_all">Alle doelen</string>
     <string name="goals_empty_hint">Wie een concreet, uitdagend doel stelt, presteert beter dan wie \'zijn best doet\'. Probeer 3 uur per week.</string>
-    <string name="goal_done">Klaar ✓</string>
+    <string name="goal_done">Klaar</string>
     <string name="amount_of">%1$s / %2$s</string>
     <string name="continue_title">Verder waar je was</string>
     <string name="units_of">%1$d/%2$d %3$s</string>
@@ -326,14 +335,14 @@
     <string name="wisdom_quote">\'%1$s\'</string>
     <string name="wisdom_by">— %1$s, %2$s</string>
     <string name="tip_try">Probeer dit · %1$s</string>
-    <string name="reflect_nice">Goed gedaan! 🎉</string>
+    <string name="reflect_nice">Goed gedaan!</string>
     <string name="reflect_saved">%1$s opgeslagen.</string>
     <string name="reflect_saved_subject">%1$s %2$s opgeslagen.</string>
     <string name="reflect_focus_q">Hoe gefocust was je?</string>
     <string name="reflect_learned">Eén ding dat je hebt geleerd</string>
     <string name="reflect_learned_hint">Het nu zonder te kijken ophalen helpt je het te onthouden.</string>
     <string name="reflect_placeholder">bijv. Gespreid herhalen verslaat blokken</string>
-    <string name="reflect_mark_finished">Je bent bij het einde: markeer als afgerond 🎉</string>
+    <string name="reflect_mark_finished">Je bent bij het einde: markeer als afgerond</string>
     <string name="reflect_save_break">Opslaan + pauze</string>
     <string name="manual_title">Eerdere sessie vastleggen</string>
     <string name="manual_note">Wat heb je geleerd? (optioneel)</string>
@@ -355,11 +364,9 @@
     <string name="stats_current_streak">huidige reeks</string>
     <string name="stats_best_streak">beste reeks</string>
     <string name="stats_all_time">in totaal</string>
-    <string name="stats_sessions">Sessies</string>
     <string name="stats_empty_title">Hier nog geen sessies</string>
     <string name="stats_empty_body">Start de timer bij Vandaag, of voeg een sessie toe die je niet hebt getimed.</string>
     <string name="stats_delete_title">Deze sessie verwijderen?</string>
-    <string name="stats_delete_body">%1$s wordt uit je statistieken verwijderd.</string>
     <string name="stats_today">Vandaag</string>
     <string name="stats_yesterday">Gisteren</string>
     <string name="stats_this_week">Deze week</string>
@@ -381,7 +388,6 @@
     <string name="stats_general">Algemeen</string>
     <string name="stats_share">%1$s · %2$d%%</string>
     <string name="stats_learning_session">Leersessie</string>
-    <string name="stats_focus">Focus %1$d/5</string>
     <string name="stats_delete_session">Sessie verwijderen</string>
     <string name="laurels_title">Lauweren</string>
     <string name="laurels_count">%1$d van %2$d lauweren verdiend</string>
@@ -391,7 +397,7 @@
     <string name="level_n">Niveau %1$d</string>
     <string name="level_progress">%1$s tot niveau %2$d · %3$s in jezelf geïnvesteerd</string>
     <string name="path_title">Het pad naar Filosoof</string>
-    <string name="you_are_here">%1$s  · je bent hier</string>
+    <string name="you_are_here">%1$s · je bent hier</string>
     <string name="greek_dot_meaning">%1$s · %2$s</string>
     <string name="lib_title">Bibliotheek</string>
     <string name="lib_tab">%1$s (%2$d)</string>
@@ -425,19 +431,19 @@
     <string name="goals_empty_body">Kies iets concreets en een beetje ambitieus. Wekelijkse tijddoelen zijn een goed begin: ze passen zich aan drukke dagen aan.</string>
     <string name="goals_new">Nieuw doel</string>
     <string name="goals_edit">Doel bewerken</string>
-    <string name="goal_achieved">Gehaald! 🎉</string>
-    <string name="goal_done_today">Klaar voor vandaag 🎉</string>
-    <string name="goal_done_week">Klaar voor deze week 🎉</string>
-    <string name="goal_done_month">Klaar voor deze maand 🎉</string>
+    <string name="goal_achieved">Gehaald!</string>
+    <string name="goal_done_today">Klaar voor vandaag</string>
+    <string name="goal_done_week">Klaar voor deze week</string>
+    <string name="goal_done_month">Klaar voor deze maand</string>
     <string name="goal_last_day">Laatste dag</string>
     <string name="goal_resets">Wordt vannacht gereset</string>
     <string name="goal_hit_recent">%1$d van de laatste %2$d gehaald</string>
-    <string name="goal_kind_time">⏱️ Leertijd</string>
-    <string name="goal_kind_items">✅ Dingen afronden</string>
+    <string name="goal_kind_time">Leertijd</string>
+    <string name="goal_kind_items">Dingen afronden</string>
     <string name="goal_any_subject">Elk onderwerp</string>
     <string name="goal_how_many">Hoeveel</string>
     <string name="goal_anything">Alles</string>
-    <string name="goal_due">📅  Vóór %1$s</string>
+    <string name="goal_due">Vóór %1$s</string>
     <string name="goal_name">Naam (optioneel)</string>
     <string name="subj_languages">Talen</string>
     <string name="subj_programming">Programmeren</string>
@@ -639,8 +645,8 @@
         <item quantity="other">Haal je doelen %d keer</item>
     </plurals>
     <plurals name="reminder_title_streak">
-        <item quantity="one">Houd je reeks van %d dag in leven 🔥</item>
-        <item quantity="other">Houd je reeks van %d dagen in leven 🔥</item>
+        <item quantity="one">Houd je reeks van %d dag in leven</item>
+        <item quantity="other">Houd je reeks van %d dagen in leven</item>
     </plurals>
     <plurals name="cat_delete_used">
         <item quantity="one">%d item gaat naar \'Overig\'. Er gaat niets verloren.</item>
@@ -653,6 +659,10 @@
     <plurals name="laurels_earned">
         <item quantity="one">Lauwerkrans verdiend!</item>
         <item quantity="other">%d lauweren verdiend!</item>
+    </plurals>
+    <plurals name="sessions_summary">
+        <item quantity="one">%1$d sessie · %2$s</item>
+        <item quantity="other">%1$d sessies · %2$s</item>
     </plurals>
     <plurals name="stats_sessions_count" tools:ignore="ImpliedQuantity">
         <item quantity="one">sessie</item>

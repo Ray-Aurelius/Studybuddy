@@ -412,8 +412,8 @@ fun ToolbarScreen(onBack: () -> Unit) {
         }
         TabId.entries.forEach { t ->
             item(key = t.name) {
-                val label = stringResource(when (t) { TabId.STATS -> R.string.nav_stats; TabId.LIBRARY -> R.string.nav_library; TabId.GOALS -> R.string.nav_goals; TabId.LAURELS -> R.string.nav_laurels })
-                ToggleRow(label, stringResource(R.string.tb_hidden_sub), t !in s.hiddenTabs) { on ->
+                val label = stringResource(when (t) { TabId.STATS -> R.string.nav_stats; TabId.SESSIONS -> R.string.nav_sessions; TabId.LIBRARY -> R.string.nav_library; TabId.GOALS -> R.string.nav_goals; TabId.LAURELS -> R.string.nav_laurels })
+                ToggleRow(label, stringResource(if (t == TabId.SESSIONS) R.string.tb_sessions_hidden_sub else R.string.tb_hidden_sub), t !in s.hiddenTabs) { on ->
                     vm.update { it.copy(hiddenTabs = if (on) it.hiddenTabs - t else it.hiddenTabs + t) }
                 }
             }

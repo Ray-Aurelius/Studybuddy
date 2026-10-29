@@ -235,10 +235,10 @@
     <string name="notif_every_minute">ทุกนาทีมีค่า</string>
     <string name="notif_paused_title">หยุดชั่วคราว · %1$s</string>
     <string name="notif_tap_resume">แตะทำต่อเมื่อพร้อม</string>
-    <string name="notif_break_title">ได้เวลาพัก ☕</string>
+    <string name="notif_break_title">ได้เวลาพัก</string>
     <string name="notif_break_text">ยืดเส้น ดื่มน้ำ มองไปไกลๆ</string>
     <string name="notif_skip_break">ข้ามการพัก</string>
-    <string name="notif_focus_done_title">จบช่วงโฟกัสแล้ว 🎉</string>
+    <string name="notif_focus_done_title">จบช่วงโฟกัสแล้ว</string>
     <string name="notif_focus_done_text">บันทึก %1$s แล้ว แตะเพื่อจดสิ่งหนึ่งที่ได้เรียนรู้</string>
     <string name="notif_start_break">เริ่มพัก</string>
     <string name="notif_break_over">หมดเวลาพัก</string>
@@ -246,7 +246,7 @@
     <string name="notif_saved_title">บันทึก %1$s แล้ว</string>
     <string name="notif_saved_text">แตะเพื่อทบทวนสั้นๆ</string>
     <string name="notif_media_line">%1$s · จาก %2$d%% ของ %3$s</string>
-    <string name="reminder_title">ได้เวลาเรียนรู้อะไรสักอย่าง ✨</string>
+    <string name="reminder_title">ได้เวลาเรียนรู้อะไรสักอย่าง</string>
     <string name="reminder_body">คุณตั้งใจจะเรียนตอนนี้ แค่ %1$s ก็นับ</string>
     <string name="reminder_body_place">คุณตั้งใจจะเรียนตอนนี้ %1$s แค่ %2$s ก็นับ</string>
     <string name="widget_this_week">%1$s สัปดาห์นี้</string>
@@ -256,6 +256,15 @@
     <string name="nav_library">ห้องสมุด</string>
     <string name="nav_goals">เป้าหมาย</string>
     <string name="nav_laurels">ช่อมะกอก</string>
+    <string name="nav_sessions">การเรียน</string>
+    <string name="sessions_title">การเรียน</string>
+    <string name="sessions_this_month">เดือนนี้</string>
+    <string name="sessions_manual">บันทึกเอง</string>
+    <string name="sessions_delete_warning">จะถูกลบออกจากสถิติ สถิติต่อเนื่อง และเป้าหมายของคุณ และย้อนกลับไม่ได้</string>
+    <string name="sessions_focus">สมาธิ %1$d จาก 5</string>
+    <string name="stats_all_sessions">ดูการเรียนทั้งหมด</string>
+    <string name="tb_sessions_hidden_sub">ยังเปิดได้จากหน้าสถิติแม้จะซ่อนไว้</string>
+    <string name="icon_n">ไอคอน %1$d</string>
     <string name="cat_new">หมวดใหม่</string>
     <string name="cat_edit">แก้ไขหมวด</string>
     <string name="cat_name">ชื่อ</string>
@@ -285,7 +294,7 @@
     <string name="greet_morning">อรุณสวัสดิ์</string>
     <string name="greet_afternoon">สวัสดีตอนบ่าย</string>
     <string name="greet_evening">สวัสดีตอนเย็น</string>
-    <string name="today_title_chip">🏛️ %1$s · Lv %2$d</string>
+    <string name="today_title_chip">%1$s · Lv %2$d</string>
     <string name="timer_open">เรียนแบบอิสระ</string>
     <string name="timer_focus">โฟกัส %1$s</string>
     <string name="timer_then_break">แล้วพัก %1$s</string>
@@ -298,11 +307,11 @@
     <string name="timer_session">ครั้งนี้ %1$s</string>
     <string name="timer_session_speed">ครั้งนี้ %1$s ที่ %2$s</string>
     <string name="timer_to_go">%1$s · เหลือ %2$s</string>
-    <string name="timer_finished">%1$s · เสร็จแล้ว! 🎉</string>
+    <string name="timer_finished">%1$s · เสร็จแล้ว!</string>
     <string name="timer_media_line">%1$s จาก %2$s · %3$d%%</string>
     <string name="timer_media_line_speed">%1$s จาก %2$s · %3$d%% · %4$s</string>
     <string name="timer_discard">ทิ้งการเรียนครั้งนี้</string>
-    <string name="break_title">ได้เวลาพัก ☕</string>
+    <string name="break_title">ได้เวลาพัก</string>
     <string name="break_text">ลุกขึ้น ยืดเส้น และมองอะไรที่อยู่ไกลๆ</string>
     <string name="break_skip">ข้ามการพัก</string>
     <string name="item_pick">＋ คุณกำลังเรียนอะไร</string>
@@ -315,7 +324,7 @@
     <string name="goals_set_one">ตั้งเป้าหมาย</string>
     <string name="goals_all">เป้าหมายทั้งหมด</string>
     <string name="goals_empty_hint">คนที่ตั้งเป้าหมายชัดเจนและท้าทายทำได้ดีกว่าคนที่แค่ \"ทำให้ดีที่สุด\" ลองสัปดาห์ละ 3 ชั่วโมง</string>
-    <string name="goal_done">เสร็จ ✓</string>
+    <string name="goal_done">เสร็จ</string>
     <string name="amount_of">%1$s / %2$s</string>
     <string name="continue_title">ทำต่อจากที่ค้างไว้</string>
     <string name="units_of">%1$d/%2$d %3$s</string>
@@ -326,14 +335,14 @@
     <string name="wisdom_quote">\"%1$s\"</string>
     <string name="wisdom_by">— %1$s, %2$s</string>
     <string name="tip_try">ลองดู · %1$s</string>
-    <string name="reflect_nice">เยี่ยมมาก! 🎉</string>
+    <string name="reflect_nice">เยี่ยมมาก!</string>
     <string name="reflect_saved">บันทึก %1$s แล้ว</string>
     <string name="reflect_saved_subject">บันทึก %1$s ของ %2$s แล้ว</string>
     <string name="reflect_focus_q">คุณมีสมาธิแค่ไหน</string>
     <string name="reflect_learned">สิ่งหนึ่งที่คุณได้เรียนรู้</string>
     <string name="reflect_learned_hint">การนึกออกตอนนี้โดยไม่ดูช่วยให้จำได้</string>
     <string name="reflect_placeholder">เช่น การทบทวนแบบเว้นระยะดีกว่าการอัดก่อนสอบ</string>
-    <string name="reflect_mark_finished">คุณมาถึงตอนจบแล้ว — ทำเครื่องหมายว่าเสร็จ 🎉</string>
+    <string name="reflect_mark_finished">คุณมาถึงตอนจบแล้ว — ทำเครื่องหมายว่าเสร็จ</string>
     <string name="reflect_save_break">บันทึก + พัก</string>
     <string name="manual_title">บันทึกการเรียนย้อนหลัง</string>
     <string name="manual_note">คุณได้เรียนรู้อะไร (ไม่บังคับ)</string>
@@ -355,11 +364,9 @@
     <string name="stats_current_streak">ต่อเนื่องปัจจุบัน</string>
     <string name="stats_best_streak">ต่อเนื่องสูงสุด</string>
     <string name="stats_all_time">ตลอดกาล</string>
-    <string name="stats_sessions">การเรียน</string>
     <string name="stats_empty_title">ยังไม่มีการเรียนที่นี่</string>
     <string name="stats_empty_body">เริ่มจับเวลาจากหน้าวันนี้ หรือบันทึกการเรียนที่ไม่ได้จับเวลา</string>
     <string name="stats_delete_title">ลบการเรียนครั้งนี้ไหม</string>
-    <string name="stats_delete_body">%1$s จะถูกลบออกจากสถิติของคุณ</string>
     <string name="stats_today">วันนี้</string>
     <string name="stats_yesterday">เมื่อวาน</string>
     <string name="stats_this_week">สัปดาห์นี้</string>
@@ -381,7 +388,6 @@
     <string name="stats_general">ทั่วไป</string>
     <string name="stats_share">%1$s · %2$d%%</string>
     <string name="stats_learning_session">การเรียน</string>
-    <string name="stats_focus">สมาธิ %1$d/5</string>
     <string name="stats_delete_session">ลบการเรียน</string>
     <string name="laurels_title">ช่อมะกอก</string>
     <string name="laurels_count">ได้รับ %1$d จาก %2$d ช่อมะกอก</string>
@@ -391,7 +397,7 @@
     <string name="level_n">เลเวล %1$d</string>
     <string name="level_progress">อีก %1$s ถึงเลเวล %2$d · ลงทุนให้ตัวเองแล้ว %3$s</string>
     <string name="path_title">เส้นทางสู่นักปรัชญา</string>
-    <string name="you_are_here">%1$s  · คุณอยู่ที่นี่</string>
+    <string name="you_are_here">%1$s · คุณอยู่ที่นี่</string>
     <string name="greek_dot_meaning">%1$s · %2$s</string>
     <string name="lib_title">ห้องสมุด</string>
     <string name="lib_tab">%1$s (%2$d)</string>
@@ -425,19 +431,19 @@
     <string name="goals_empty_body">เลือกสิ่งที่ชัดเจนและท้าทายนิดหน่อย เป้าหมายเวลารายสัปดาห์เป็นจุดเริ่มต้นที่ดี เพราะยืดหยุ่นตามวันที่ยุ่ง</string>
     <string name="goals_new">เป้าหมายใหม่</string>
     <string name="goals_edit">แก้ไขเป้าหมาย</string>
-    <string name="goal_achieved">สำเร็จ! 🎉</string>
-    <string name="goal_done_today">เสร็จสำหรับวันนี้ 🎉</string>
-    <string name="goal_done_week">เสร็จสำหรับสัปดาห์นี้ 🎉</string>
-    <string name="goal_done_month">เสร็จสำหรับเดือนนี้ 🎉</string>
+    <string name="goal_achieved">สำเร็จ!</string>
+    <string name="goal_done_today">เสร็จสำหรับวันนี้</string>
+    <string name="goal_done_week">เสร็จสำหรับสัปดาห์นี้</string>
+    <string name="goal_done_month">เสร็จสำหรับเดือนนี้</string>
     <string name="goal_last_day">วันสุดท้าย</string>
     <string name="goal_resets">รีเซ็ตคืนนี้</string>
     <string name="goal_hit_recent">สำเร็จ %1$d จาก %2$d ครั้งล่าสุด</string>
-    <string name="goal_kind_time">⏱️ เวลาเรียน</string>
-    <string name="goal_kind_items">✅ ทำให้เสร็จ</string>
+    <string name="goal_kind_time">เวลาเรียน</string>
+    <string name="goal_kind_items">ทำให้เสร็จ</string>
     <string name="goal_any_subject">หัวข้อใดก็ได้</string>
     <string name="goal_how_many">กี่รายการ</string>
     <string name="goal_anything">อะไรก็ได้</string>
-    <string name="goal_due">📅  กำหนด %1$s</string>
+    <string name="goal_due">กำหนด %1$s</string>
     <string name="goal_name">ชื่อ (ไม่บังคับ)</string>
     <string name="subj_languages">ภาษา</string>
     <string name="subj_programming">การเขียนโปรแกรม</string>
@@ -623,7 +629,7 @@
         <item quantity="other">ทำเป้าหมายสำเร็จ %d ครั้ง</item>
     </plurals>
     <plurals name="reminder_title_streak">
-        <item quantity="other">รักษาสถิติต่อเนื่อง %d วันของคุณไว้ 🔥</item>
+        <item quantity="other">รักษาสถิติต่อเนื่อง %d วันของคุณไว้</item>
     </plurals>
     <plurals name="cat_delete_used">
         <item quantity="other">%d รายการจะย้ายไปที่ \"อื่นๆ\" ไม่มีอะไรหาย</item>
@@ -633,6 +639,9 @@
     </plurals>
     <plurals name="laurels_earned">
         <item quantity="other">ได้รับ %d ช่อมะกอก!</item>
+    </plurals>
+    <plurals name="sessions_summary">
+        <item quantity="other">%1$d ครั้ง · %2$s</item>
     </plurals>
     <plurals name="stats_sessions_count" tools:ignore="ImpliedQuantity">
         <item quantity="other">ครั้ง</item>

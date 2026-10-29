@@ -6,6 +6,10 @@ import com.rayaurelius.sophinity.ui.i18n.goalTitle
 import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
 import com.rayaurelius.sophinity.domain.str
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.ui.glyphs.Glyph
+import com.rayaurelius.sophinity.ui.glyphs.GlyphTile
+import com.rayaurelius.sophinity.ui.glyphs.Glyphs
+import com.rayaurelius.sophinity.ui.glyphs.LaurelMedal
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
@@ -167,12 +171,15 @@ private fun Header(snap: Snapshot, onOpenSettings: () -> Unit, onOpenBadges: () 
         Text(greeting, style = MaterialTheme.typography.headlineMedium)
         Spacer(Modifier.height(8.dp))
         Surface(onClick = onOpenBadges, shape = MaterialTheme.shapes.small, color = MaterialTheme.colorScheme.primaryContainer) {
-            Text(
-                stringResource(R.string.today_title_chip, snap.title.current.name.str(), snap.level.level),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
-            )
+            Row(Modifier.padding(start = 8.dp, end = 10.dp, top = 5.dp, bottom = 5.dp), verticalAlignment = Alignment.CenterVertically) {
+                Glyph(snap.title.current.glyph, size = 18.dp, tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                Spacer(Modifier.width(6.dp))
+                Text(
+                    stringResource(R.string.today_title_chip, snap.title.current.name.str(), snap.level.level),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+            }
         }
     }
 }
@@ -222,7 +229,7 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                     Spacer(Modifier.height(20.dp))
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                         SubjectPicker(snap.activeSubjects, subjectId, { subjectId = it; itemId = null })
-                        ItemPicker(snap.activeItems, itemId, { snap.categoryOf(it).emoji }) { id ->
+                        ItemPicker(snap.activeItems, itemId, { snap.categoryOf(it).glyph }) { id ->
                             itemId = id
                             snap.itemsById[id]?.subjectId?.let { subjectId = it }
                         }
@@ -249,7 +256,7 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                         else -> (elapsed % 3_600_000L) / 3_600_000f
                     }
                     Text(
-                        listOfNotNull(subject?.let { "${it.emoji} ${it.name}" }, timer.itemId?.let { snap.itemsById[it]?.title })
+                        listOfNotNull(subject?.name, timer.itemId?.let { snap.itemsById[it]?.title })
                             .joinToString(" · ").ifEmpty { stringResource(R.string.common_learning) },
                         style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
                     )
@@ -340,20 +347,25 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
 }
 
 @Composable
-private fun ItemPicker(items: List<LearningItem>, selectedId: Long?, emojiOf: (LearningItem) -> String, onSelect: (Long?) -> Unit) {
+private fun ItemPicker(items: List<LearningItem>, selectedId: Long?, glyphOf: (LearningItem) -> String, onSelect: (Long?) -> Unit) {
     if (items.isEmpty()) return
     var open by remember { mutableStateOf(false) }
     val sel = items.firstOrNull { it.id == selectedId }
     Box {
         AssistChip(
             onClick = { open = true },
-            label = { Text(sel?.let { "${emojiOf(it)} ${it.title}" } ?: stringResource(R.string.item_pick), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            label = { Text(sel?.title ?: stringResource(R.string.item_pick), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            leadingIcon = { Glyph(sel?.let(glyphOf) ?: "scroll", size = 18.dp, fallback = Glyphs.CATEGORY_DEFAULT) },
             modifier = Modifier.width(170.dp),
         )
         DropdownMenu(open, { open = false }) {
             DropdownMenuItem(text = { Text(stringResource(R.string.item_nothing)) }, onClick = { onSelect(null); open = false })
             items.forEach { item ->
-                DropdownMenuItem(text = { Text("${emojiOf(item)}  ${item.title}", maxLines = 1) }, onClick = { onSelect(item.id); open = false })
+                DropdownMenuItem(
+                    text = { Text(item.title, maxLines = 1) },
+                    leadingIcon = { Glyph(glyphOf(item), size = 20.dp, fallback = Glyphs.CATEGORY_DEFAULT) },
+                    onClick = { onSelect(item.id); open = false },
+                )
             }
         }
     }
@@ -363,14 +375,14 @@ private fun ItemPicker(items: List<LearningItem>, selectedId: Long?, emojiOf: (L
 private fun QuickStats(snap: Snapshot) {
     val streak = snap.streak
     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        StatTile("⏱️", StudyMath.formatDuration(snap.todaySeconds, true), stringResource(R.string.tile_today), Modifier.weight(1f))
+        StatTile("sundial", StudyMath.formatDuration(snap.todaySeconds, true), stringResource(R.string.tile_today), Modifier.weight(1f))
         StatTile(
-            "🔥", pluralStringResource(R.plurals.tile_days, streak.current, streak.current),
+            "flame", pluralStringResource(R.plurals.tile_days, streak.current, streak.current),
             if (!streak.studiedToday && streak.current > 0) stringResource(R.string.tile_extend) else stringResource(R.string.tile_streak),
             Modifier.weight(1f),
             container = com.rayaurelius.sophinity.ui.theme.LocalGold.current.container,
         )
-        StatTile("📅", StudyMath.formatDuration(snap.weekSeconds, true), stringResource(R.string.tile_week), Modifier.weight(1f))
+        StatTile("hourglass", StudyMath.formatDuration(snap.weekSeconds, true), stringResource(R.string.tile_week), Modifier.weight(1f))
     }
 }
 
@@ -416,7 +428,7 @@ private fun ContinueLearning(snap: Snapshot, timer: TimerState, vm: TodayViewMod
             items(snap.activeItems, key = { it.id }) { item ->
                 OutlinedCard(Modifier.width(200.dp)) {
                     Column(Modifier.padding(14.dp)) {
-                        Text(snap.categoryOf(item).emoji, style = MaterialTheme.typography.headlineSmall)
+                        GlyphTile(snap.categoryOf(item).glyph, size = 36.dp, fallback = Glyphs.CATEGORY_DEFAULT)
                         Spacer(Modifier.height(4.dp))
                         Text(item.title, style = MaterialTheme.typography.titleSmall, maxLines = 2, overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.height(40.dp))
@@ -468,7 +480,7 @@ private fun TipCard(snap: Snapshot) {
                 )
                 Spacer(Modifier.height(14.dp))
                 Row {
-                    Text(tip.emoji, style = MaterialTheme.typography.titleLarge)
+                    Glyph(tip.glyph, size = 28.dp, tint = MaterialTheme.colorScheme.onPrimaryContainer)
                     Spacer(Modifier.width(10.dp))
                     Column {
                         Text(stringResource(R.string.tip_try, stringResource(tip.title)), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
@@ -510,7 +522,11 @@ private fun ReflectionSheet(session: StudySession, snap: Snapshot, timer: TimerS
                 Spacer(Modifier.height(20.dp))
                 Surface(shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.surfaceContainerHigh, modifier = Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(14.dp)) {
-                        Text("${snap.categoryOf(item).emoji} ${item.title}", style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Glyph(snap.categoryOf(item).glyph, size = 18.dp, fallback = Glyphs.CATEGORY_DEFAULT)
+                            Spacer(Modifier.width(6.dp))
+                            Text(item.title, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        }
                         Spacer(Modifier.height(6.dp))
                         MediaMeter(media)
                         if (media.isComplete) {
@@ -557,10 +573,14 @@ fun ManualSessionDialog(
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 val date = Instant.ofEpochMilli(dateMillis).atZone(ZoneOffset.UTC).toLocalDate()
                 OutlinedCard(onClick = { pickDate = true }, modifier = Modifier.fillMaxWidth()) {
-                    Text("📅  ${date.format(rememberDateFormat("EEEMMMdyyyy"))}", Modifier.padding(14.dp))
+                    Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Glyph("sundial", size = 20.dp, tint = MaterialTheme.colorScheme.primary)
+                        Spacer(Modifier.width(10.dp))
+                        Text(date.format(rememberDateFormat("EEEMMMdyyyy")))
+                    }
                 }
                 SubjectPicker(snap.activeSubjects, subjectId, { subjectId = it })
-                ItemPicker(snap.activeItems, itemId, { snap.categoryOf(it).emoji }) { id ->
+                ItemPicker(snap.activeItems, itemId, { snap.categoryOf(it).glyph }) { id ->
                     itemId = id
                     snap.itemsById[id]?.subjectId?.let { subjectId = it }
                 }
@@ -604,12 +624,16 @@ private fun MilestoneCelebration(snap: Snapshot, onSeen: (List<String>) -> Unit)
     Box(Modifier.fillMaxSize()) {
         AlertDialog(
             onDismissRequest = { onSeen(fresh.map { it.key }) },
-            icon = { Text(fresh.first().emoji, style = MaterialTheme.typography.displayMedium) },
+            icon = { LaurelMedal(fresh.first().glyph, earned = true, size = 88.dp) },
             title = { Text(pluralStringResource(R.plurals.laurels_earned, fresh.size, fresh.size), textAlign = TextAlign.Center) },
             text = {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
                     fresh.take(5).forEach { m ->
-                        Text("${m.emoji}  ${m.title.str()}", style = MaterialTheme.typography.titleMedium)
+                        if (fresh.size > 1) Row(verticalAlignment = Alignment.CenterVertically) {
+                            Glyph(m.glyph, size = 20.dp, tint = MaterialTheme.colorScheme.primary)
+                            Spacer(Modifier.width(8.dp))
+                            Text(m.title.str(), style = MaterialTheme.typography.titleMedium)
+                        } else Text(m.title.str(), style = MaterialTheme.typography.titleMedium)
                         Text(m.description.str(), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center)
                         Spacer(Modifier.height(10.dp))
@@ -628,7 +652,7 @@ private fun TitleCelebration(title: com.rayaurelius.sophinity.domain.LearnerTitl
     Box(Modifier.fillMaxSize()) {
         AlertDialog(
             onDismissRequest = onSeen,
-            icon = { Text("🏛️", style = MaterialTheme.typography.displayMedium) },
+            icon = { LaurelMedal(title.glyph, earned = true, size = 96.dp) },
             title = {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
                     Text(stringResource(R.string.title_new), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)

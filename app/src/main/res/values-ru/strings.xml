@@ -235,10 +235,10 @@
     <string name="notif_every_minute">Каждая минута на счету</string>
     <string name="notif_paused_title">На паузе · %1$s</string>
     <string name="notif_tap_resume">Нажми «Продолжить», когда будешь готов</string>
-    <string name="notif_break_title">Время перерыва ☕</string>
+    <string name="notif_break_title">Время перерыва</string>
     <string name="notif_break_text">Потянись, попей воды, посмотри вдаль</string>
     <string name="notif_skip_break">Пропустить перерыв</string>
-    <string name="notif_focus_done_title">Блок фокуса завершён 🎉</string>
+    <string name="notif_focus_done_title">Блок фокуса завершён</string>
     <string name="notif_focus_done_text">Записано: %1$s. Нажми, чтобы записать одну вещь, которую ты узнал.</string>
     <string name="notif_start_break">Начать перерыв</string>
     <string name="notif_break_over">Перерыв окончен</string>
@@ -246,7 +246,7 @@
     <string name="notif_saved_title">Сохранено: %1$s</string>
     <string name="notif_saved_text">Нажми для короткой рефлексии</string>
     <string name="notif_media_line">%1$s · с %2$d%% из %3$s</string>
-    <string name="reminder_title">Время узнать что-то новое ✨</string>
+    <string name="reminder_title">Время узнать что-то новое</string>
     <string name="reminder_body">Ты планировал учиться в это время. Даже %1$s засчитывается.</string>
     <string name="reminder_body_place">Ты планировал учиться в это время, %1$s. Даже %2$s засчитывается.</string>
     <string name="widget_this_week">%1$s на этой неделе</string>
@@ -256,6 +256,15 @@
     <string name="nav_library">Библиотека</string>
     <string name="nav_goals">Цели</string>
     <string name="nav_laurels">Лавры</string>
+    <string name="nav_sessions">Занятия</string>
+    <string name="sessions_title">Занятия</string>
+    <string name="sessions_this_month">Этот месяц</string>
+    <string name="sessions_manual">Добавлено вручную</string>
+    <string name="sessions_delete_warning">Оно будет удалено из статистики, серии и целей. Это нельзя отменить.</string>
+    <string name="sessions_focus">Фокус %1$d из 5</string>
+    <string name="stats_all_sessions">Все занятия</string>
+    <string name="tb_sessions_hidden_sub">Доступна из «Статистики», даже если скрыта</string>
+    <string name="icon_n">Значок %1$d</string>
     <string name="cat_new">Новая категория</string>
     <string name="cat_edit">Изменить категорию</string>
     <string name="cat_name">Название</string>
@@ -285,7 +294,7 @@
     <string name="greet_morning">Доброе утро</string>
     <string name="greet_afternoon">Добрый день</string>
     <string name="greet_evening">Добрый вечер</string>
-    <string name="today_title_chip">🏛️ %1$s · Ур. %2$d</string>
+    <string name="today_title_chip">%1$s · Ур. %2$d</string>
     <string name="timer_open">Свободное занятие</string>
     <string name="timer_focus">Фокус %1$s</string>
     <string name="timer_then_break">затем перерыв %1$s</string>
@@ -298,11 +307,11 @@
     <string name="timer_session">Это занятие %1$s</string>
     <string name="timer_session_speed">Это занятие %1$s на %2$s</string>
     <string name="timer_to_go">%1$s · осталось %2$s</string>
-    <string name="timer_finished">%1$s · готово! 🎉</string>
+    <string name="timer_finished">%1$s · готово!</string>
     <string name="timer_media_line">%1$s из %2$s · %3$d%%</string>
     <string name="timer_media_line_speed">%1$s из %2$s · %3$d%% · %4$s</string>
     <string name="timer_discard">Отменить занятие</string>
-    <string name="break_title">Время перерыва ☕</string>
+    <string name="break_title">Время перерыва</string>
     <string name="break_text">Встань, потянись и посмотри на что-нибудь вдалеке.</string>
     <string name="break_skip">Пропустить перерыв</string>
     <string name="item_pick">＋ Что ты изучаешь?</string>
@@ -315,7 +324,7 @@
     <string name="goals_set_one">Поставить</string>
     <string name="goals_all">Все цели</string>
     <string name="goals_empty_hint">Конкретная и сложная цель даёт лучший результат, чем «постараюсь». Попробуй 3 часа в неделю.</string>
-    <string name="goal_done">Готово ✓</string>
+    <string name="goal_done">Готово</string>
     <string name="amount_of">%1$s / %2$s</string>
     <string name="continue_title">Продолжить</string>
     <string name="units_of">%1$d/%2$d %3$s</string>
@@ -326,14 +335,14 @@
     <string name="wisdom_quote">«%1$s»</string>
     <string name="wisdom_by">— %1$s, %2$s</string>
     <string name="tip_try">Попробуй · %1$s</string>
-    <string name="reflect_nice">Отличная работа! 🎉</string>
+    <string name="reflect_nice">Отличная работа!</string>
     <string name="reflect_saved">Сохранено: %1$s.</string>
     <string name="reflect_saved_subject">Сохранено: %1$s, %2$s.</string>
     <string name="reflect_focus_q">Насколько ты был сосредоточен?</string>
     <string name="reflect_learned">Одна вещь, которую ты узнал</string>
     <string name="reflect_learned_hint">Если вспомнить её сейчас, не подглядывая, она лучше запомнится.</string>
     <string name="reflect_placeholder">напр. Интервальные повторения лучше зубрёжки</string>
-    <string name="reflect_mark_finished">Ты дошёл до конца — отметить как завершённое 🎉</string>
+    <string name="reflect_mark_finished">Ты дошёл до конца — отметить как завершённое</string>
     <string name="reflect_save_break">Сохранить + перерыв</string>
     <string name="manual_title">Добавить прошлое занятие</string>
     <string name="manual_note">Что ты узнал? (необязательно)</string>
@@ -355,11 +364,9 @@
     <string name="stats_current_streak">текущая серия</string>
     <string name="stats_best_streak">лучшая серия</string>
     <string name="stats_all_time">за всё время</string>
-    <string name="stats_sessions">Занятия</string>
     <string name="stats_empty_title">Здесь пока нет занятий</string>
     <string name="stats_empty_body">Запусти таймер на вкладке «Сегодня» или добавь занятие без таймера.</string>
     <string name="stats_delete_title">Удалить это занятие?</string>
-    <string name="stats_delete_body">%1$s будет удалено из статистики.</string>
     <string name="stats_today">Сегодня</string>
     <string name="stats_yesterday">Вчера</string>
     <string name="stats_this_week">Эта неделя</string>
@@ -381,7 +388,6 @@
     <string name="stats_general">Общее</string>
     <string name="stats_share">%1$s · %2$d%%</string>
     <string name="stats_learning_session">Учебное занятие</string>
-    <string name="stats_focus">Фокус %1$d/5</string>
     <string name="stats_delete_session">Удалить занятие</string>
     <string name="laurels_title">Лавры</string>
     <string name="laurels_count">Получено лавров: %1$d из %2$d</string>
@@ -391,7 +397,7 @@
     <string name="level_n">Уровень %1$d</string>
     <string name="level_progress">%1$s до уровня %2$d · %3$s вложено в себя</string>
     <string name="path_title">Путь к Философу</string>
-    <string name="you_are_here">%1$s  · ты здесь</string>
+    <string name="you_are_here">%1$s · ты здесь</string>
     <string name="greek_dot_meaning">%1$s · %2$s</string>
     <string name="lib_title">Библиотека</string>
     <string name="lib_tab">%1$s (%2$d)</string>
@@ -425,19 +431,19 @@
     <string name="goals_empty_body">Выбери что-то конкретное и немного амбициозное. Еженедельные цели по времени — хорошее начало: они подстраиваются под загруженные дни.</string>
     <string name="goals_new">Новая цель</string>
     <string name="goals_edit">Изменить цель</string>
-    <string name="goal_achieved">Достигнуто! 🎉</string>
-    <string name="goal_done_today">На сегодня всё 🎉</string>
-    <string name="goal_done_week">На эту неделю всё 🎉</string>
-    <string name="goal_done_month">На этот месяц всё 🎉</string>
+    <string name="goal_achieved">Достигнуто!</string>
+    <string name="goal_done_today">На сегодня всё</string>
+    <string name="goal_done_week">На эту неделю всё</string>
+    <string name="goal_done_month">На этот месяц всё</string>
     <string name="goal_last_day">Последний день</string>
     <string name="goal_resets">Сбросится сегодня ночью</string>
     <string name="goal_hit_recent">Выполнено %1$d из последних %2$d</string>
-    <string name="goal_kind_time">⏱️ Время учёбы</string>
-    <string name="goal_kind_items">✅ Завершение</string>
+    <string name="goal_kind_time">Время учёбы</string>
+    <string name="goal_kind_items">Завершение</string>
     <string name="goal_any_subject">Любая тема</string>
     <string name="goal_how_many">Сколько</string>
     <string name="goal_anything">Что угодно</string>
-    <string name="goal_due">📅  Срок: %1$s</string>
+    <string name="goal_due">Срок: %1$s</string>
     <string name="goal_name">Название (необязательно)</string>
     <string name="subj_languages">Языки</string>
     <string name="subj_programming">Программирование</string>
@@ -671,10 +677,10 @@
         <item quantity="other">Достигни своих целей %d раза</item>
     </plurals>
     <plurals name="reminder_title_streak">
-        <item quantity="one">Не прерывай серию в %d день 🔥</item>
-        <item quantity="few">Не прерывай серию в %d дня 🔥</item>
-        <item quantity="many">Не прерывай серию в %d дней 🔥</item>
-        <item quantity="other">Не прерывай серию в %d дня 🔥</item>
+        <item quantity="one">Не прерывай серию в %d день</item>
+        <item quantity="few">Не прерывай серию в %d дня</item>
+        <item quantity="many">Не прерывай серию в %d дней</item>
+        <item quantity="other">Не прерывай серию в %d дня</item>
     </plurals>
     <plurals name="cat_delete_used">
         <item quantity="one">%d элемент перейдёт в «Другое». Ничего не потеряется.</item>
@@ -693,6 +699,12 @@
         <item quantity="few">Получено %d лавра!</item>
         <item quantity="many">Получено %d лавров!</item>
         <item quantity="other">Получено %d лавра!</item>
+    </plurals>
+    <plurals name="sessions_summary">
+        <item quantity="one">%1$d занятие · %2$s</item>
+        <item quantity="few">%1$d занятия · %2$s</item>
+        <item quantity="many">%1$d занятий · %2$s</item>
+        <item quantity="other">%1$d занятия · %2$s</item>
     </plurals>
     <plurals name="stats_sessions_count" tools:ignore="ImpliedQuantity">
         <item quantity="one">занятие</item>

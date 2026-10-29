@@ -2,6 +2,7 @@ package com.rayaurelius.sophinity.ui.stats
 
 import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.ui.glyphs.Glyph
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +26,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -78,12 +80,11 @@ enum class Period(@androidx.annotation.StringRes val label: Int) { DAY(R.string.
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StatsScreen(contentPadding: PaddingValues) {
+fun StatsScreen(contentPadding: PaddingValues, onOpenSessions: () -> Unit) {
     val vm = appViewModel { StatsViewModel(it) }
     val snap = vm.snapshot.collectAsStateWithLifecycle().value ?: return
     var period by rememberSaveable { mutableStateOf(Period.WEEK) }
     var offset by rememberSaveable(period) { mutableIntStateOf(0) }
-    var confirmDelete by remember { mutableStateOf<StudySession?>(null) }
 
     val anchor = when (period) {
         Period.DAY -> snap.today.plusDays(offset.toLong())
@@ -142,31 +143,24 @@ fun StatsScreen(contentPadding: PaddingValues) {
                 StudyHeatmap(snap.daily, snap.today, snap.settings.weekStart)
                 Spacer(Modifier.height(12.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    StatTile("🔥", "${snap.streak.current}", stringResource(R.string.stats_current_streak), Modifier.weight(1f))
-                    StatTile("🏆", "${snap.streak.best}", stringResource(R.string.stats_best_streak), Modifier.weight(1f))
-                    StatTile("📚", StudyMath.formatDuration(snap.totalSeconds, true), stringResource(R.string.stats_all_time), Modifier.weight(1f))
+                    StatTile("flame", "${snap.streak.current}", stringResource(R.string.stats_current_streak), Modifier.weight(1f))
+                    StatTile("torch", "${snap.streak.best}", stringResource(R.string.stats_best_streak), Modifier.weight(1f))
+                    StatTile("sundial", StudyMath.formatDuration(snap.totalSeconds, true), stringResource(R.string.stats_all_time), Modifier.weight(1f))
                 }
             }
         }
-        item { Text(stringResource(R.string.stats_sessions), style = MaterialTheme.typography.titleMedium) }
         if (sessions.isEmpty()) {
-            item { EmptyState("🌱", stringResource(R.string.stats_empty_title), stringResource(R.string.stats_empty_body)) }
-        } else {
-            items(sessions.take(100), key = { it.id }) { s -> SessionRow(snap, s, onDelete = { confirmDelete = s }) }
+            item { EmptyState("sprout", stringResource(R.string.stats_empty_title), stringResource(R.string.stats_empty_body)) }
+        }
+        item {
+            OutlinedButton(onClick = onOpenSessions, modifier = Modifier.fillMaxWidth()) {
+                Glyph("hourglass", size = 18.dp)
+                Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.stats_all_sessions))
+            }
         }
     }
-
-    confirmDelete?.let { s ->
-        AlertDialog(
-            onDismissRequest = { confirmDelete = null },
-            title = { Text(stringResource(R.string.stats_delete_title)) },
-            text = { Text(stringResource(R.string.stats_delete_body, StudyMath.formatDuration(s.durationSec))) },
-            confirmButton = { TextButton(onClick = { vm.delete(s); confirmDelete = null }) { Text(stringResource(R.string.common_delete)) } },
-            dismissButton = { TextButton(onClick = { confirmDelete = null }) { Text(stringResource(R.string.common_cancel)) } },
-        )
-    }
 }
-
 @Composable
 private fun rangeLabel(p: Period, r: DateRange, offset: Int): String = when (p) {
     Period.DAY -> if (offset == 0) stringResource(R.string.stats_today) else if (offset == -1) stringResource(R.string.stats_yesterday) else r.start.format(rememberDateFormat("EEEMMMd"))
@@ -182,15 +176,15 @@ private fun Summary(snap: Snapshot, period: Period, range: DateRange, total: Lon
     val studiedDays = range.days.count { (snap.daily[it] ?: 0) > 0 }
     val delta = if (prevTotal > 0) ((total - prevTotal) * 100 / prevTotal).toInt() else null
     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        StatTile("⏱️", StudyMath.formatDuration(total, true), stringResource(R.string.stats_total), Modifier.weight(1f))
+        StatTile("hourglass", StudyMath.formatDuration(total, true), stringResource(R.string.stats_total), Modifier.weight(1f))
         if (period == Period.DAY) {
-            StatTile("🧩", "$count", pluralStringResource(R.plurals.stats_sessions_count, count), Modifier.weight(1f))
+            StatTile("tablet", "$count", pluralStringResource(R.plurals.stats_sessions_count, count), Modifier.weight(1f))
             val focusAvg = snap.sessions.filter { StudyMath.dayOf(it.startedAt, snap.zone) in range }.mapNotNull { it.focus }.average()
-            StatTile("🎯", if (focusAvg.isNaN()) "–" else "%.1f/5".format(focusAvg), stringResource(R.string.stats_avg_focus), Modifier.weight(1f))
+            StatTile("eye", if (focusAvg.isNaN()) "–" else "%.1f/5".format(focusAvg), stringResource(R.string.stats_avg_focus), Modifier.weight(1f))
         } else {
-            StatTile("📊", StudyMath.formatDuration(total / elapsedDays, true), stringResource(R.string.stats_daily_avg), Modifier.weight(1f))
+            StatTile("columns", StudyMath.formatDuration(total / elapsedDays, true), stringResource(R.string.stats_daily_avg), Modifier.weight(1f))
             StatTile(
-                if (delta == null) "✨" else if (delta >= 0) "📈" else "📉",
+                if (delta == null) "sun" else "steps",
                 when { delta == null -> stringResource(R.string.stats_days_short, studiedDays); delta >= 0 -> "+$delta%"; else -> "$delta%" },
                 stringResource(when { delta == null -> R.string.stats_days_learning; period == Period.YEAR -> R.string.stats_vs_last_year; period == Period.MONTH -> R.string.stats_vs_same_month; period == Period.DAY -> R.string.stats_vs_yesterday; else -> R.string.stats_vs_same_week }),
                 Modifier.weight(1f),
@@ -251,9 +245,9 @@ private fun SubjectBreakdown(snap: Snapshot, sessions: List<StudySession>, total
             val subject = sid?.let { snap.subjectsById[it] }
             if (i > 0) Spacer(Modifier.height(12.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                SubjectDot(subject?.color ?: 0xFF9AA0A6.toInt())
+                Glyph(subject?.icon ?: "meander", size = 20.dp, tint = subject?.let { Color(it.color) } ?: MaterialTheme.colorScheme.outline)
                 Spacer(Modifier.width(8.dp))
-                Text(subject?.let { "${it.emoji} ${it.name}" } ?: stringResource(R.string.stats_general), Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(subject?.name ?: stringResource(R.string.stats_general), Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(stringResource(R.string.stats_share, StudyMath.formatDuration(sec, true), (sec * 100 / total).toInt()), style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
@@ -263,32 +257,4 @@ private fun SubjectBreakdown(snap: Snapshot, sessions: List<StudySession>, total
     }
 }
 
-@Composable
-private fun SessionRow(snap: Snapshot, s: StudySession, onDelete: () -> Unit) {
-    val subject = s.subjectId?.let { snap.subjectsById[it] }
-    val item = s.itemId?.let { snap.itemsById[it] }
-    val time = Instant.ofEpochMilli(s.startedAt).atZone(snap.zone)
-    Row(verticalAlignment = Alignment.Top, modifier = Modifier.fillMaxWidth()) {
-        Text(subject?.emoji ?: "📘", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(top = 2.dp))
-        Spacer(Modifier.width(12.dp))
-        Column(Modifier.weight(1f)) {
-            Text(
-                listOfNotNull(subject?.name, item?.title).joinToString(" · ").ifEmpty { stringResource(R.string.stats_learning_session) },
-                style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis,
-            )
-            Text(
-                listOfNotNull(
-                    time.format(rememberDateFormat("EEEMMMd")), time.format(rememberDateFormat("jmm")), StudyMath.formatDuration(s.durationSec),
-                    s.focus?.let { stringResource(R.string.stats_focus, it) },
-                ).joinToString(" · "),
-                style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            if (s.note.isNotBlank()) {
-                Spacer(Modifier.height(2.dp))
-                Text("“${s.note}”", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
-            }
-        }
-        IconButton(onClick = onDelete) { Icon(Icons.Outlined.Delete, stringResource(R.string.stats_delete_session), tint = MaterialTheme.colorScheme.outline) }
-    }
-}
 

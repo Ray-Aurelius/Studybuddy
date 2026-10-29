@@ -235,10 +235,10 @@
     <string name="notif_every_minute">हर मिनट मायने रखता है</string>
     <string name="notif_paused_title">रुका हुआ · %1$s</string>
     <string name="notif_tap_resume">तैयार हों तो जारी रखें पर टैप करें</string>
-    <string name="notif_break_title">ब्रेक का समय ☕</string>
+    <string name="notif_break_title">ब्रेक का समय</string>
     <string name="notif_break_text">अंगड़ाई लें, पानी पिएँ, दूर देखें</string>
     <string name="notif_skip_break">ब्रेक छोड़ें</string>
-    <string name="notif_focus_done_title">फ़ोकस ब्लॉक पूरा 🎉</string>
+    <string name="notif_focus_done_title">फ़ोकस ब्लॉक पूरा</string>
     <string name="notif_focus_done_text">%1$s दर्ज। सीखी एक बात लिखने के लिए टैप करें।</string>
     <string name="notif_start_break">ब्रेक शुरू करें</string>
     <string name="notif_break_over">ब्रेक खत्म</string>
@@ -246,7 +246,7 @@
     <string name="notif_saved_title">%1$s सहेजा गया</string>
     <string name="notif_saved_text">झटपट चिंतन के लिए टैप करें</string>
     <string name="notif_media_line">%1$s · %3$s के %2$d%% से</string>
-    <string name="reminder_title">कुछ सीखने का समय ✨</string>
+    <string name="reminder_title">कुछ सीखने का समय</string>
     <string name="reminder_body">आपने इस समय सीखने की योजना बनाई थी। %1$s भी गिना जाता है।</string>
     <string name="reminder_body_place">आपने इस समय सीखने की योजना बनाई थी, %1$s। %2$s भी गिना जाता है।</string>
     <string name="widget_this_week">इस हफ़्ते %1$s</string>
@@ -256,6 +256,15 @@
     <string name="nav_library">लाइब्रेरी</string>
     <string name="nav_goals">लक्ष्य</string>
     <string name="nav_laurels">लॉरेल</string>
+    <string name="nav_sessions">सत्र</string>
+    <string name="sessions_title">सत्र</string>
+    <string name="sessions_this_month">इस महीने</string>
+    <string name="sessions_manual">हाथ से दर्ज</string>
+    <string name="sessions_delete_warning">इसे आपके आँकड़ों, सीरीज़ और लक्ष्यों से हटा दिया जाएगा। इसे पहले जैसा नहीं किया जा सकता।</string>
+    <string name="sessions_focus">फ़ोकस 5 में से %1$d</string>
+    <string name="stats_all_sessions">सभी सत्र देखें</string>
+    <string name="tb_sessions_hidden_sub">छिपा होने पर भी आँकड़े से खुल जाता है</string>
+    <string name="icon_n">आइकन %1$d</string>
     <string name="cat_new">नई श्रेणी</string>
     <string name="cat_edit">श्रेणी संपादित करें</string>
     <string name="cat_name">नाम</string>
@@ -285,7 +294,7 @@
     <string name="greet_morning">सुप्रभात</string>
     <string name="greet_afternoon">नमस्ते</string>
     <string name="greet_evening">शुभ संध्या</string>
-    <string name="today_title_chip">🏛️ %1$s · स्तर %2$d</string>
+    <string name="today_title_chip">%1$s · स्तर %2$d</string>
     <string name="timer_open">खुला सत्र</string>
     <string name="timer_focus">फ़ोकस %1$s</string>
     <string name="timer_then_break">फिर %1$s ब्रेक</string>
@@ -298,11 +307,11 @@
     <string name="timer_session">यह सत्र %1$s</string>
     <string name="timer_session_speed">यह सत्र %2$s पर %1$s</string>
     <string name="timer_to_go">%1$s · %2$s बाकी</string>
-    <string name="timer_finished">%1$s · पूरा! 🎉</string>
+    <string name="timer_finished">%1$s · पूरा!</string>
     <string name="timer_media_line">%2$s में से %1$s · %3$d%%</string>
     <string name="timer_media_line_speed">%2$s में से %1$s · %3$d%% · %4$s</string>
     <string name="timer_discard">सत्र हटाएँ</string>
-    <string name="break_title">ब्रेक का समय ☕</string>
+    <string name="break_title">ब्रेक का समय</string>
     <string name="break_text">उठें, अंगड़ाई लें और किसी दूर की चीज़ को देखें।</string>
     <string name="break_skip">ब्रेक छोड़ें</string>
     <string name="item_pick">＋ आप क्या सीख रहे हैं?</string>
@@ -315,7 +324,7 @@
     <string name="goals_set_one">एक तय करें</string>
     <string name="goals_all">सभी लक्ष्य</string>
     <string name="goals_empty_hint">जो लोग विशिष्ट, चुनौतीपूर्ण लक्ष्य तय करते हैं, वे \"अपना बेहतर करने\" वालों से आगे रहते हैं। हफ़्ते में 3 घंटे आज़माएँ।</string>
-    <string name="goal_done">हो गया ✓</string>
+    <string name="goal_done">हो गया</string>
     <string name="amount_of">%1$s / %2$s</string>
     <string name="continue_title">जहाँ छोड़ा वहीं से</string>
     <string name="units_of">%1$d/%2$d %3$s</string>
@@ -326,14 +335,14 @@
     <string name="wisdom_quote">\"%1$s\"</string>
     <string name="wisdom_by">— %1$s, %2$s</string>
     <string name="tip_try">इसे आज़माएँ · %1$s</string>
-    <string name="reflect_nice">बहुत बढ़िया! 🎉</string>
+    <string name="reflect_nice">बहुत बढ़िया!</string>
     <string name="reflect_saved">%1$s सहेजा गया।</string>
     <string name="reflect_saved_subject">%2$s के %1$s सहेजे गए।</string>
     <string name="reflect_focus_q">आप कितने केंद्रित थे?</string>
     <string name="reflect_learned">सीखी एक बात</string>
     <string name="reflect_learned_hint">बिना देखे अभी याद करना इसे याद रखने में मदद करता है।</string>
     <string name="reflect_placeholder">जैसे अंतराल पर दोहराना रटने से बेहतर है</string>
-    <string name="reflect_mark_finished">आप अंत तक पहुँच गए — पूरा चिह्नित करें 🎉</string>
+    <string name="reflect_mark_finished">आप अंत तक पहुँच गए — पूरा चिह्नित करें</string>
     <string name="reflect_save_break">सहेजें + ब्रेक</string>
     <string name="manual_title">पिछला सत्र दर्ज करें</string>
     <string name="manual_note">आपने क्या सीखा? (वैकल्पिक)</string>
@@ -355,11 +364,9 @@
     <string name="stats_current_streak">मौजूदा सीरीज़</string>
     <string name="stats_best_streak">सबसे अच्छी सीरीज़</string>
     <string name="stats_all_time">अब तक कुल</string>
-    <string name="stats_sessions">सत्र</string>
     <string name="stats_empty_title">यहाँ अभी कोई सत्र नहीं</string>
     <string name="stats_empty_body">आज टैब से टाइमर शुरू करें, या बिना टाइमर वाला सत्र जोड़ें।</string>
     <string name="stats_delete_title">यह सत्र हटाएँ?</string>
-    <string name="stats_delete_body">आपके आँकड़ों से %1$s हटा दिए जाएँगे।</string>
     <string name="stats_today">आज</string>
     <string name="stats_yesterday">कल</string>
     <string name="stats_this_week">इस हफ़्ते</string>
@@ -381,7 +388,6 @@
     <string name="stats_general">सामान्य</string>
     <string name="stats_share">%1$s · %2$d%%</string>
     <string name="stats_learning_session">सीखने का सत्र</string>
-    <string name="stats_focus">फ़ोकस %1$d/5</string>
     <string name="stats_delete_session">सत्र हटाएँ</string>
     <string name="laurels_title">लॉरेल</string>
     <string name="laurels_count">%2$d में से %1$d लॉरेल अर्जित</string>
@@ -391,7 +397,7 @@
     <string name="level_n">स्तर %1$d</string>
     <string name="level_progress">स्तर %2$d तक %1$s · खुद में %3$s निवेश</string>
     <string name="path_title">दार्शनिक बनने की राह</string>
-    <string name="you_are_here">%1$s  · आप यहाँ हैं</string>
+    <string name="you_are_here">%1$s · आप यहाँ हैं</string>
     <string name="greek_dot_meaning">%1$s · %2$s</string>
     <string name="lib_title">लाइब्रेरी</string>
     <string name="lib_tab">%1$s (%2$d)</string>
@@ -425,19 +431,19 @@
     <string name="goals_empty_body">कुछ विशिष्ट और थोड़ा महत्वाकांक्षी चुनें। साप्ताहिक समय लक्ष्य अच्छी शुरुआत हैं: ये व्यस्त दिनों के अनुसार ढल जाते हैं।</string>
     <string name="goals_new">नया लक्ष्य</string>
     <string name="goals_edit">लक्ष्य संपादित करें</string>
-    <string name="goal_achieved">हासिल! 🎉</string>
-    <string name="goal_done_today">आज के लिए पूरा 🎉</string>
-    <string name="goal_done_week">इस हफ़्ते के लिए पूरा 🎉</string>
-    <string name="goal_done_month">इस महीने के लिए पूरा 🎉</string>
+    <string name="goal_achieved">हासिल!</string>
+    <string name="goal_done_today">आज के लिए पूरा</string>
+    <string name="goal_done_week">इस हफ़्ते के लिए पूरा</string>
+    <string name="goal_done_month">इस महीने के लिए पूरा</string>
     <string name="goal_last_day">आखिरी दिन</string>
     <string name="goal_resets">आज रात रीसेट होगा</string>
     <string name="goal_hit_recent">पिछले %2$d में से %1$d बार पूरा</string>
-    <string name="goal_kind_time">⏱️ सीखने का समय</string>
-    <string name="goal_kind_items">✅ चीज़ें पूरी करना</string>
+    <string name="goal_kind_time">सीखने का समय</string>
+    <string name="goal_kind_items">चीज़ें पूरी करना</string>
     <string name="goal_any_subject">कोई भी विषय</string>
     <string name="goal_how_many">कितने</string>
     <string name="goal_anything">कुछ भी</string>
-    <string name="goal_due">📅  अंतिम तिथि %1$s</string>
+    <string name="goal_due">अंतिम तिथि %1$s</string>
     <string name="goal_name">नाम (वैकल्पिक)</string>
     <string name="subj_languages">भाषाएँ</string>
     <string name="subj_programming">प्रोग्रामिंग</string>
@@ -639,8 +645,8 @@
         <item quantity="other">अपने लक्ष्य %d बार पूरे करें</item>
     </plurals>
     <plurals name="reminder_title_streak">
-        <item quantity="one">अपनी %d दिन की सीरीज़ जारी रखें 🔥</item>
-        <item quantity="other">अपनी %d दिन की सीरीज़ जारी रखें 🔥</item>
+        <item quantity="one">अपनी %d दिन की सीरीज़ जारी रखें</item>
+        <item quantity="other">अपनी %d दिन की सीरीज़ जारी रखें</item>
     </plurals>
     <plurals name="cat_delete_used">
         <item quantity="one">%d आइटम \"अन्य\" में चला जाएगा। कुछ नहीं खोएगा।</item>
@@ -653,6 +659,10 @@
     <plurals name="laurels_earned">
         <item quantity="one">%d लॉरेल अर्जित!</item>
         <item quantity="other">%d लॉरेल अर्जित!</item>
+    </plurals>
+    <plurals name="sessions_summary">
+        <item quantity="one">%1$d सत्र · %2$s</item>
+        <item quantity="other">%1$d सत्र · %2$s</item>
     </plurals>
     <plurals name="stats_sessions_count" tools:ignore="ImpliedQuantity">
         <item quantity="one">सत्र</item>

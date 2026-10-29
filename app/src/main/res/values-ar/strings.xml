@@ -235,10 +235,10 @@
     <string name="notif_every_minute">كل دقيقة تُحسب</string>
     <string name="notif_paused_title">متوقّف مؤقتًا · %1$s</string>
     <string name="notif_tap_resume">انقر استئناف عندما تكون جاهزًا</string>
-    <string name="notif_break_title">وقت الاستراحة ☕</string>
+    <string name="notif_break_title">وقت الاستراحة</string>
     <string name="notif_break_text">تمدّد، اشرب الماء، انظر إلى البعيد</string>
     <string name="notif_skip_break">تخطّي الاستراحة</string>
-    <string name="notif_focus_done_title">اكتملت فترة التركيز 🎉</string>
+    <string name="notif_focus_done_title">اكتملت فترة التركيز</string>
     <string name="notif_focus_done_text">سُجّل %1$s. انقر لتدوين شيء واحد تعلّمته.</string>
     <string name="notif_start_break">بدء الاستراحة</string>
     <string name="notif_break_over">انتهت الاستراحة</string>
@@ -246,7 +246,7 @@
     <string name="notif_saved_title">حُفظ %1$s</string>
     <string name="notif_saved_text">انقر لتأمّل سريع</string>
     <string name="notif_media_line">%1$s · من %2$d%% من %3$s</string>
-    <string name="reminder_title">حان وقت تعلّم شيء ما ✨</string>
+    <string name="reminder_title">حان وقت تعلّم شيء ما</string>
     <string name="reminder_body">خطّطت للتعلّم في هذا الوقت. حتى %1$s تُحسب.</string>
     <string name="reminder_body_place">خطّطت للتعلّم في هذا الوقت، %1$s. حتى %2$s تُحسب.</string>
     <string name="widget_this_week">%1$s هذا الأسبوع</string>
@@ -256,6 +256,15 @@
     <string name="nav_library">المكتبة</string>
     <string name="nav_goals">الأهداف</string>
     <string name="nav_laurels">الأكاليل</string>
+    <string name="nav_sessions">الجلسات</string>
+    <string name="sessions_title">الجلسات</string>
+    <string name="sessions_this_month">هذا الشهر</string>
+    <string name="sessions_manual">أُضيفت يدويًا</string>
+    <string name="sessions_delete_warning">ستُزال من إحصاءاتك وسلسلتك وأهدافك. لا يمكن التراجع عن ذلك.</string>
+    <string name="sessions_focus">التركيز %1$d من 5</string>
+    <string name="stats_all_sessions">عرض كل الجلسات</string>
+    <string name="tb_sessions_hidden_sub">يمكن الوصول إليه من الإحصاءات حتى لو كان مخفيًا</string>
+    <string name="icon_n">الرمز %1$d</string>
     <string name="cat_new">فئة جديدة</string>
     <string name="cat_edit">تعديل الفئة</string>
     <string name="cat_name">الاسم</string>
@@ -285,7 +294,7 @@
     <string name="greet_morning">صباح الخير</string>
     <string name="greet_afternoon">طاب يومك</string>
     <string name="greet_evening">مساء الخير</string>
-    <string name="today_title_chip">🏛️ %1$s · م%2$d</string>
+    <string name="today_title_chip">%1$s · م%2$d</string>
     <string name="timer_open">جلسة مفتوحة</string>
     <string name="timer_focus">تركيز %1$s</string>
     <string name="timer_then_break">ثم استراحة %1$s</string>
@@ -298,11 +307,11 @@
     <string name="timer_session">هذه الجلسة %1$s</string>
     <string name="timer_session_speed">هذه الجلسة %1$s بسرعة %2$s</string>
     <string name="timer_to_go">%1$s · يتبقّى %2$s</string>
-    <string name="timer_finished">%1$s · انتهى! 🎉</string>
+    <string name="timer_finished">%1$s · انتهى!</string>
     <string name="timer_media_line">%1$s من %2$s · %3$d%%</string>
     <string name="timer_media_line_speed">%1$s من %2$s · %3$d%% · %4$s</string>
     <string name="timer_discard">تجاهل الجلسة</string>
-    <string name="break_title">وقت الاستراحة ☕</string>
+    <string name="break_title">وقت الاستراحة</string>
     <string name="break_text">قم وتمدّد وانظر إلى شيء بعيد.</string>
     <string name="break_skip">تخطّي الاستراحة</string>
     <string name="item_pick">＋ ماذا تتعلّم؟</string>
@@ -315,7 +324,7 @@
     <string name="goals_set_one">حدّد هدفًا</string>
     <string name="goals_all">كل الأهداف</string>
     <string name="goals_empty_hint">من يضع هدفًا محدّدًا وصعبًا يحقّق أكثر ممّن «يبذل قصارى جهده». جرّب 3 ساعات أسبوعيًا.</string>
-    <string name="goal_done">تمّ ✓</string>
+    <string name="goal_done">تمّ</string>
     <string name="amount_of">%1$s / %2$s</string>
     <string name="continue_title">تابع من حيث توقّفت</string>
     <string name="units_of">%1$d/%2$d %3$s</string>
@@ -326,14 +335,14 @@
     <string name="wisdom_quote">«%1$s»</string>
     <string name="wisdom_by">— %1$s، %2$s</string>
     <string name="tip_try">جرّب هذا · %1$s</string>
-    <string name="reflect_nice">أحسنت! 🎉</string>
+    <string name="reflect_nice">أحسنت!</string>
     <string name="reflect_saved">حُفظ %1$s.</string>
     <string name="reflect_saved_subject">حُفظ %1$s من %2$s.</string>
     <string name="reflect_focus_q">ما مدى تركيزك؟</string>
     <string name="reflect_learned">شيء واحد تعلّمته</string>
     <string name="reflect_learned_hint">استرجاعه الآن دون النظر يساعدك على تذكّره.</string>
     <string name="reflect_placeholder">مثل: التكرار المتباعد يتفوّق على الحشو</string>
-    <string name="reflect_mark_finished">وصلت إلى النهاية — ضع علامة مكتمل 🎉</string>
+    <string name="reflect_mark_finished">وصلت إلى النهاية — ضع علامة مكتمل</string>
     <string name="reflect_save_break">حفظ + استراحة</string>
     <string name="manual_title">تسجيل جلسة سابقة</string>
     <string name="manual_note">ماذا تعلّمت؟ (اختياري)</string>
@@ -355,11 +364,9 @@
     <string name="stats_current_streak">السلسلة الحالية</string>
     <string name="stats_best_streak">أفضل سلسلة</string>
     <string name="stats_all_time">منذ البداية</string>
-    <string name="stats_sessions">الجلسات</string>
     <string name="stats_empty_title">لا توجد جلسات هنا بعد</string>
     <string name="stats_empty_body">شغّل المؤقّت من تبويب اليوم، أو سجّل جلسة لم توقّتها.</string>
     <string name="stats_delete_title">حذف هذه الجلسة؟</string>
-    <string name="stats_delete_body">ستُزال %1$s من إحصاءاتك.</string>
     <string name="stats_today">اليوم</string>
     <string name="stats_yesterday">أمس</string>
     <string name="stats_this_week">هذا الأسبوع</string>
@@ -381,7 +388,6 @@
     <string name="stats_general">عام</string>
     <string name="stats_share">%1$s · %2$d%%</string>
     <string name="stats_learning_session">جلسة تعلّم</string>
-    <string name="stats_focus">التركيز %1$d/5</string>
     <string name="stats_delete_session">حذف الجلسة</string>
     <string name="laurels_title">الأكاليل</string>
     <string name="laurels_count">نلت %1$d من %2$d إكليلًا</string>
@@ -391,7 +397,7 @@
     <string name="level_n">المستوى %1$d</string>
     <string name="level_progress">%1$s حتى المستوى %2$d · %3$s استثمرتها في نفسك</string>
     <string name="path_title">الطريق إلى الفيلسوف</string>
-    <string name="you_are_here">%1$s  · أنت هنا</string>
+    <string name="you_are_here">%1$s · أنت هنا</string>
     <string name="greek_dot_meaning">%1$s · %2$s</string>
     <string name="lib_title">المكتبة</string>
     <string name="lib_tab">%1$s (%2$d)</string>
@@ -425,19 +431,19 @@
     <string name="goals_empty_body">اختر شيئًا محدّدًا وطموحًا قليلًا. أهداف الوقت الأسبوعية بداية جيدة: تتكيّف مع الأيام المزدحمة.</string>
     <string name="goals_new">هدف جديد</string>
     <string name="goals_edit">تعديل الهدف</string>
-    <string name="goal_achieved">تحقّق! 🎉</string>
-    <string name="goal_done_today">تمّ لهذا اليوم 🎉</string>
-    <string name="goal_done_week">تمّ لهذا الأسبوع 🎉</string>
-    <string name="goal_done_month">تمّ لهذا الشهر 🎉</string>
+    <string name="goal_achieved">تحقّق!</string>
+    <string name="goal_done_today">تمّ لهذا اليوم</string>
+    <string name="goal_done_week">تمّ لهذا الأسبوع</string>
+    <string name="goal_done_month">تمّ لهذا الشهر</string>
     <string name="goal_last_day">اليوم الأخير</string>
     <string name="goal_resets">يُعاد ضبطه الليلة</string>
     <string name="goal_hit_recent">تحقّق %1$d من آخر %2$d</string>
-    <string name="goal_kind_time">⏱️ وقت التعلّم</string>
-    <string name="goal_kind_items">✅ إنهاء أشياء</string>
+    <string name="goal_kind_time">وقت التعلّم</string>
+    <string name="goal_kind_items">إنهاء أشياء</string>
     <string name="goal_any_subject">أي موضوع</string>
     <string name="goal_how_many">كم</string>
     <string name="goal_anything">أي شيء</string>
-    <string name="goal_due">📅  الموعد %1$s</string>
+    <string name="goal_due">الموعد %1$s</string>
     <string name="goal_name">الاسم (اختياري)</string>
     <string name="subj_languages">اللغات</string>
     <string name="subj_programming">البرمجة</string>
@@ -703,12 +709,12 @@
         <item quantity="other">حقّق أهدافك %d مرة</item>
     </plurals>
     <plurals name="reminder_title_streak">
-        <item quantity="zero">حافظ على سلسلتك 🔥</item>
-        <item quantity="one">حافظ على سلسلتك ذات اليوم الواحد 🔥</item>
-        <item quantity="two">حافظ على سلسلتك ذات اليومين 🔥</item>
-        <item quantity="few">حافظ على سلسلتك ذات %d أيام 🔥</item>
-        <item quantity="many">حافظ على سلسلتك ذات %d يومًا 🔥</item>
-        <item quantity="other">حافظ على سلسلتك ذات %d يوم 🔥</item>
+        <item quantity="zero">حافظ على سلسلتك</item>
+        <item quantity="one">حافظ على سلسلتك ذات اليوم الواحد</item>
+        <item quantity="two">حافظ على سلسلتك ذات اليومين</item>
+        <item quantity="few">حافظ على سلسلتك ذات %d أيام</item>
+        <item quantity="many">حافظ على سلسلتك ذات %d يومًا</item>
+        <item quantity="other">حافظ على سلسلتك ذات %d يوم</item>
     </plurals>
     <plurals name="cat_delete_used">
         <item quantity="zero">لا عناصر ستُنقل إلى «أخرى». لن يضيع شيء.</item>
@@ -733,6 +739,14 @@
         <item quantity="few">نلت %d أكاليل!</item>
         <item quantity="many">نلت %d إكليلًا!</item>
         <item quantity="other">نلت %d إكليل!</item>
+    </plurals>
+    <plurals name="sessions_summary">
+        <item quantity="zero">لا جلسات · %2$s</item>
+        <item quantity="one">جلسة واحدة · %2$s</item>
+        <item quantity="two">جلستان · %2$s</item>
+        <item quantity="few">%1$d جلسات · %2$s</item>
+        <item quantity="many">%1$d جلسة · %2$s</item>
+        <item quantity="other">%1$d جلسة · %2$s</item>
     </plurals>
     <plurals name="stats_sessions_count" tools:ignore="ImpliedQuantity">
         <item quantity="zero">جلسة</item>

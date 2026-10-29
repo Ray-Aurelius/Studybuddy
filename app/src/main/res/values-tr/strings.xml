@@ -235,10 +235,10 @@
     <string name="notif_every_minute">Her dakika önemli</string>
     <string name="notif_paused_title">Duraklatıldı · %1$s</string>
     <string name="notif_tap_resume">Hazır olduğunda Devam et\'e dokun</string>
-    <string name="notif_break_title">Mola zamanı ☕</string>
+    <string name="notif_break_title">Mola zamanı</string>
     <string name="notif_break_text">Esne, su iç, uzaklara bak</string>
     <string name="notif_skip_break">Molayı atla</string>
-    <string name="notif_focus_done_title">Odak bloğu tamamlandı 🎉</string>
+    <string name="notif_focus_done_title">Odak bloğu tamamlandı</string>
     <string name="notif_focus_done_text">%1$s kaydedildi. Öğrendiğin bir şeyi not etmek için dokun.</string>
     <string name="notif_start_break">Molayı başlat</string>
     <string name="notif_break_over">Mola bitti</string>
@@ -246,7 +246,7 @@
     <string name="notif_saved_title">%1$s kaydedildi</string>
     <string name="notif_saved_text">Kısa bir değerlendirme için dokun</string>
     <string name="notif_media_line">%1$s · %3$s içinde %%%2$d itibarıyla</string>
-    <string name="reminder_title">Bir şey öğrenme zamanı ✨</string>
+    <string name="reminder_title">Bir şey öğrenme zamanı</string>
     <string name="reminder_body">Bu saatte çalışmayı planlamıştın. %1$s bile sayılır.</string>
     <string name="reminder_body_place">Bu saatte çalışmayı planlamıştın, %1$s. %2$s bile sayılır.</string>
     <string name="widget_this_week">Bu hafta %1$s</string>
@@ -256,6 +256,15 @@
     <string name="nav_library">Kütüphane</string>
     <string name="nav_goals">Hedefler</string>
     <string name="nav_laurels">Defneler</string>
+    <string name="nav_sessions">Oturumlar</string>
+    <string name="sessions_title">Oturumlar</string>
+    <string name="sessions_this_month">Bu ay</string>
+    <string name="sessions_manual">Elle eklendi</string>
+    <string name="sessions_delete_warning">İstatistiklerinden, serinden ve hedeflerinden kaldırılacak. Bu işlem geri alınamaz.</string>
+    <string name="sessions_focus">Odak 5 üzerinden %1$d</string>
+    <string name="stats_all_sessions">Tüm oturumları gör</string>
+    <string name="tb_sessions_hidden_sub">Gizli olsa da İstatistik\'ten ulaşılabilir</string>
+    <string name="icon_n">Simge %1$d</string>
     <string name="cat_new">Yeni kategori</string>
     <string name="cat_edit">Kategoriyi düzenle</string>
     <string name="cat_name">Ad</string>
@@ -285,7 +294,7 @@
     <string name="greet_morning">Günaydın</string>
     <string name="greet_afternoon">Tünaydın</string>
     <string name="greet_evening">İyi akşamlar</string>
-    <string name="today_title_chip">🏛️ %1$s · Sv. %2$d</string>
+    <string name="today_title_chip">%1$s · Sv. %2$d</string>
     <string name="timer_open">Serbest oturum</string>
     <string name="timer_focus">Odak %1$s</string>
     <string name="timer_then_break">ardından %1$s mola</string>
@@ -298,11 +307,11 @@
     <string name="timer_session">Bu oturum %1$s</string>
     <string name="timer_session_speed">Bu oturum %2$s hızda %1$s</string>
     <string name="timer_to_go">%1$s · %2$s kaldı</string>
-    <string name="timer_finished">%1$s · bitti! 🎉</string>
+    <string name="timer_finished">%1$s · bitti!</string>
     <string name="timer_media_line">%1$s / %2$s · %%%3$d</string>
     <string name="timer_media_line_speed">%1$s / %2$s · %%%3$d · %4$s</string>
     <string name="timer_discard">Oturumu sil</string>
-    <string name="break_title">Mola zamanı ☕</string>
+    <string name="break_title">Mola zamanı</string>
     <string name="break_text">Kalk, esne ve uzaktaki bir şeye bak.</string>
     <string name="break_skip">Molayı atla</string>
     <string name="item_pick">＋ Ne öğreniyorsun?</string>
@@ -315,7 +324,7 @@
     <string name="goals_set_one">Bir tane belirle</string>
     <string name="goals_all">Tüm hedefler</string>
     <string name="goals_empty_hint">Belirli ve zorlayıcı bir hedef koyanlar, \"elinden geleni yapanlardan\" daha iyi sonuç alır. Haftada 3 saati dene.</string>
-    <string name="goal_done">Tamam ✓</string>
+    <string name="goal_done">Tamam</string>
     <string name="amount_of">%1$s / %2$s</string>
     <string name="continue_title">Kaldığın yerden devam et</string>
     <string name="units_of">%1$d/%2$d %3$s</string>
@@ -326,14 +335,14 @@
     <string name="wisdom_quote">\"%1$s\"</string>
     <string name="wisdom_by">— %1$s, %2$s</string>
     <string name="tip_try">Bunu dene · %1$s</string>
-    <string name="reflect_nice">Harika iş! 🎉</string>
+    <string name="reflect_nice">Harika iş!</string>
     <string name="reflect_saved">%1$s kaydedildi.</string>
     <string name="reflect_saved_subject">%1$s %2$s kaydedildi.</string>
     <string name="reflect_focus_q">Ne kadar odaklıydın?</string>
     <string name="reflect_learned">Öğrendiğin bir şey</string>
     <string name="reflect_learned_hint">Bakmadan şimdi hatırlamak, aklında tutmana yardım eder.</string>
     <string name="reflect_placeholder">örn. Aralıklı tekrar son dakika çalışmasını yener</string>
-    <string name="reflect_mark_finished">Sona geldin — bitti olarak işaretle 🎉</string>
+    <string name="reflect_mark_finished">Sona geldin — bitti olarak işaretle</string>
     <string name="reflect_save_break">Kaydet + mola</string>
     <string name="manual_title">Geçmiş bir oturumu kaydet</string>
     <string name="manual_note">Ne öğrendin? (isteğe bağlı)</string>
@@ -355,11 +364,9 @@
     <string name="stats_current_streak">mevcut seri</string>
     <string name="stats_best_streak">en iyi seri</string>
     <string name="stats_all_time">tüm zamanlar</string>
-    <string name="stats_sessions">Oturumlar</string>
     <string name="stats_empty_title">Burada henüz oturum yok</string>
     <string name="stats_empty_body">Bugün sekmesinden zamanlayıcıyı başlat ya da zamanlamadığın bir oturumu ekle.</string>
     <string name="stats_delete_title">Bu oturum silinsin mi?</string>
-    <string name="stats_delete_body">%1$s istatistiklerinden kaldırılacak.</string>
     <string name="stats_today">Bugün</string>
     <string name="stats_yesterday">Dün</string>
     <string name="stats_this_week">Bu hafta</string>
@@ -381,7 +388,6 @@
     <string name="stats_general">Genel</string>
     <string name="stats_share">%1$s · %%%2$d</string>
     <string name="stats_learning_session">Öğrenme oturumu</string>
-    <string name="stats_focus">Odak %1$d/5</string>
     <string name="stats_delete_session">Oturumu sil</string>
     <string name="laurels_title">Defneler</string>
     <string name="laurels_count">%2$d defnenin %1$d tanesi kazanıldı</string>
@@ -391,7 +397,7 @@
     <string name="level_n">Seviye %1$d</string>
     <string name="level_progress">Seviye %2$d için %1$s · kendine %3$s yatırım</string>
     <string name="path_title">Filozofluğa giden yol</string>
-    <string name="you_are_here">%1$s  · buradasın</string>
+    <string name="you_are_here">%1$s · buradasın</string>
     <string name="greek_dot_meaning">%1$s · %2$s</string>
     <string name="lib_title">Kütüphane</string>
     <string name="lib_tab">%1$s (%2$d)</string>
@@ -425,19 +431,19 @@
     <string name="goals_empty_body">Belirli ve biraz iddialı bir şey seç. Haftalık süre hedefleri iyi bir başlangıçtır: yoğun günlere uyum sağlar.</string>
     <string name="goals_new">Yeni hedef</string>
     <string name="goals_edit">Hedefi düzenle</string>
-    <string name="goal_achieved">Ulaşıldı! 🎉</string>
-    <string name="goal_done_today">Bugünlük tamam 🎉</string>
-    <string name="goal_done_week">Bu haftalık tamam 🎉</string>
-    <string name="goal_done_month">Bu aylık tamam 🎉</string>
+    <string name="goal_achieved">Ulaşıldı!</string>
+    <string name="goal_done_today">Bugünlük tamam</string>
+    <string name="goal_done_week">Bu haftalık tamam</string>
+    <string name="goal_done_month">Bu aylık tamam</string>
     <string name="goal_last_day">Son gün</string>
     <string name="goal_resets">Bu gece sıfırlanır</string>
     <string name="goal_hit_recent">Son %2$d dönemin %1$d tanesinde ulaşıldı</string>
-    <string name="goal_kind_time">⏱️ Öğrenme süresi</string>
-    <string name="goal_kind_items">✅ Bitirilenler</string>
+    <string name="goal_kind_time">Öğrenme süresi</string>
+    <string name="goal_kind_items">Bitirilenler</string>
     <string name="goal_any_subject">Herhangi bir konu</string>
     <string name="goal_how_many">Kaç tane</string>
     <string name="goal_anything">Herhangi bir şey</string>
-    <string name="goal_due">📅  Son tarih %1$s</string>
+    <string name="goal_due">Son tarih %1$s</string>
     <string name="goal_name">Ad (isteğe bağlı)</string>
     <string name="subj_languages">Diller</string>
     <string name="subj_programming">Programlama</string>
@@ -639,8 +645,8 @@
         <item quantity="other">Hedeflerine %d kez ulaş</item>
     </plurals>
     <plurals name="reminder_title_streak">
-        <item quantity="one">%d günlük serini sürdür 🔥</item>
-        <item quantity="other">%d günlük serini sürdür 🔥</item>
+        <item quantity="one">%d günlük serini sürdür</item>
+        <item quantity="other">%d günlük serini sürdür</item>
     </plurals>
     <plurals name="cat_delete_used">
         <item quantity="one">%d öğe \"Diğer\"e taşınacak. Hiçbir şey kaybolmaz.</item>
@@ -653,6 +659,10 @@
     <plurals name="laurels_earned">
         <item quantity="one">Defne kazandın!</item>
         <item quantity="other">%d defne kazandın!</item>
+    </plurals>
+    <plurals name="sessions_summary">
+        <item quantity="one">%1$d oturum · %2$s</item>
+        <item quantity="other">%1$d oturum · %2$s</item>
     </plurals>
     <plurals name="stats_sessions_count" tools:ignore="ImpliedQuantity">
         <item quantity="one">oturum</item>

@@ -6,6 +6,8 @@ import com.rayaurelius.sophinity.ui.i18n.goalTitle
 import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
 import com.rayaurelius.sophinity.domain.str
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.ui.glyphs.Glyph
+import com.rayaurelius.sophinity.ui.glyphs.Glyphs
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
@@ -53,6 +55,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -127,7 +130,7 @@ fun GoalsScreen(contentPadding: PaddingValues) {
             }
             if (snap.goalProgress.isEmpty()) {
                 item {
-                    EmptyState("🎯", stringResource(R.string.goals_empty_title), stringResource(R.string.goals_empty_body))
+                    EmptyState("target", stringResource(R.string.goals_empty_title), stringResource(R.string.goals_empty_body))
                 }
             } else {
                 items(snap.goalProgress, key = { it.goal.id }) { p -> GoalCard(snap, p) { editing = p.goal } }
@@ -151,16 +154,22 @@ private fun GoalCard(snap: Snapshot, p: GoalProgress, onClick: () -> Unit) {
     ElevatedCard(onClick = onClick, modifier = Modifier.fillMaxWidth()) {
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             ProgressRing(p.fraction, Modifier.size(64.dp), stroke = 8.dp, color = if (p.met) Brand.Laurel else MaterialTheme.colorScheme.primary) {
-                Text(if (p.met) "✓" else "${(p.fraction * 100).toInt()}%", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                if (p.met) Glyph("check", size = 26.dp, tint = Brand.Laurel)
+                else Text("${(p.fraction * 100).toInt()}%", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
             }
             Spacer(Modifier.width(16.dp))
             Column(Modifier.weight(1f)) {
                 Text(goalTitle(snap, g), style = MaterialTheme.typography.titleMedium)
                 val subject = g.subjectId?.let { snap.subjectsById[it] }
-                Text(
-                    listOfNotNull(goalAmount(p), subject?.let { "${it.emoji} ${it.name}" }).joinToString(" · "),
-                    style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(goalAmount(p), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    if (subject != null) {
+                        Text("  ·  ", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Glyph(subject.icon, size = 16.dp, tint = Color(subject.color))
+                        Spacer(Modifier.width(4.dp))
+                        Text(subject.name, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+                    }
+                }
                 Spacer(Modifier.height(4.dp))
                 val footer = when {
                     p.met && g.period == GoalPeriod.BY_DATE -> stringResource(R.string.goal_achieved)
@@ -217,7 +226,7 @@ private fun GoalEditor(snap: Snapshot, initial: Goal, onDismiss: () -> Unit, onS
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     FilterChip(g.itemType == null, { g = g.copy(itemType = null, categoryId = null) }, { Text(stringResource(R.string.goal_anything)) })
                     snap.categories.forEach { c ->
-                        FilterChip(c.matchesGoal(g), { g = g.copy(itemType = c.type, categoryId = c.customId) }, { Text("${c.emoji} ${c.plural.str()}") })
+                        FilterChip(c.matchesGoal(g), { g = g.copy(itemType = c.type, categoryId = c.customId) }, { Text(c.plural.str()) }, leadingIcon = { Glyph(c.glyph, size = 18.dp, fallback = Glyphs.CATEGORY_DEFAULT) })
                     }
                 }
             }

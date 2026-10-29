@@ -7,26 +7,28 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /** Kinds of learning material a person can log outside formal schooling. */
 @Serializable
 enum class ItemType(
-    val emoji: String,
+    /** Glyph name (see ui/glyphs). */
+    val glyph: String,
     @StringRes val labelRes: Int,
     @StringRes val pluralRes: Int,
     @PluralsRes val countRes: Int,
     @StringRes val unitRes: Int,
 ) {
-    BOOK("📚", R.string.type_book, R.string.type_books, R.plurals.count_book, R.string.unit_pages),
-    AUDIOBOOK("🎧", R.string.type_audiobook, R.string.type_audiobooks, R.plurals.count_audiobook, R.string.unit_chapters),
-    PODCAST("🎙️", R.string.type_podcast, R.string.type_podcasts, R.plurals.count_podcast, R.string.unit_episodes),
-    SEMINAR("🎤", R.string.type_seminar, R.string.type_seminars, R.plurals.count_seminar, R.string.unit_sessions),
-    COURSE("🎓", R.string.type_course, R.string.type_courses, R.plurals.count_course, R.string.unit_modules),
-    VIDEO("🎬", R.string.type_video, R.string.type_videos, R.plurals.count_video, R.string.unit_videos),
-    ARTICLE("📰", R.string.type_article, R.string.type_articles, R.plurals.count_article, R.string.unit_parts),
+    BOOK("scroll", R.string.type_book, R.string.type_books, R.plurals.count_book, R.string.unit_pages),
+    AUDIOBOOK("lyre", R.string.type_audiobook, R.string.type_audiobooks, R.plurals.count_audiobook, R.string.unit_chapters),
+    PODCAST("masks", R.string.type_podcast, R.string.type_podcasts, R.plurals.count_podcast, R.string.unit_episodes),
+    SEMINAR("stoa", R.string.type_seminar, R.string.type_seminars, R.plurals.count_seminar, R.string.unit_sessions),
+    COURSE("tablet", R.string.type_course, R.string.type_courses, R.plurals.count_course, R.string.unit_modules),
+    VIDEO("theatre", R.string.type_video, R.string.type_videos, R.plurals.count_video, R.string.unit_videos),
+    ARTICLE("papyrus", R.string.type_article, R.string.type_articles, R.plurals.count_article, R.string.unit_parts),
     /** A user-defined category; see [LearningItem.categoryId] and [CustomCategory]. */
-    CUSTOM("📌", R.string.type_other, R.string.type_other, R.plurals.count_item, R.string.unit_parts),
+    CUSTOM("meander", R.string.type_other, R.string.type_other, R.plurals.count_item, R.string.unit_parts),
 }
 
 /** A library category the learner defined themselves, e.g. "Workshop" or "Documentary". */
@@ -36,7 +38,8 @@ data class CustomCategory(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     /** Singular name, e.g. "Workshop". */
     val name: String,
-    val emoji: String = "📌",
+    /** Glyph name; stored in the old "emoji" column so existing databases and backups keep working. */
+    @ColumnInfo(name = "emoji") @SerialName("emoji") val icon: String = "meander",
     /** What progress is counted in, e.g. "sessions" or "lessons". */
     val unitLabel: String = "parts",
     val createdAt: Long = System.currentTimeMillis(),
@@ -62,7 +65,8 @@ data class Subject(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
     val color: Int,
-    val emoji: String = "📘",
+    /** Glyph name; stored in the old "emoji" column so existing databases and backups keep working. */
+    @ColumnInfo(name = "emoji") @SerialName("emoji") val icon: String = "scroll",
     val archived: Boolean = false,
     val createdAt: Long = System.currentTimeMillis(),
 )

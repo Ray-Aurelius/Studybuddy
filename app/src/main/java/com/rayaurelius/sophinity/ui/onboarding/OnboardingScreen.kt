@@ -4,6 +4,9 @@ package com.rayaurelius.sophinity.ui.onboarding
 
 import com.rayaurelius.sophinity.domain.StudyMath
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.ui.glyphs.Glyph
+import com.rayaurelius.sophinity.ui.glyphs.Glyphs
+import com.rayaurelius.sophinity.ui.glyphs.LaurelMedal
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import android.Manifest
@@ -63,16 +66,16 @@ import com.rayaurelius.sophinity.ui.theme.Brand
 import kotlinx.coroutines.launch
 
 private val presetSubjects = listOf(
-    "🗣️" to R.string.subj_languages, "💻" to R.string.subj_programming, "💼" to R.string.subj_business, "💰" to R.string.subj_finance,
-    "🧪" to R.string.subj_science, "📜" to R.string.subj_history, "🧠" to R.string.subj_psychology, "🎨" to R.string.subj_art,
-    "🎵" to R.string.subj_music, "⚕️" to R.string.subj_health, "✍️" to R.string.subj_writing, "🌍" to R.string.subj_philosophy,
+    "alpha_omega" to R.string.subj_languages, "gear" to R.string.subj_programming, "coin" to R.string.subj_business, "scales" to R.string.subj_finance,
+    "armillary" to R.string.subj_science, "broken_column" to R.string.subj_history, "butterfly" to R.string.subj_psychology, "amphora" to R.string.subj_art,
+    "lyre" to R.string.subj_music, "asclepius" to R.string.subj_health, "quill" to R.string.subj_writing, "owl" to R.string.subj_philosophy,
 )
 
 class OnboardingViewModel(private val c: AppContainer) : ViewModel() {
     fun finish(subjects: List<Pair<String, String>>, weeklyHours: Int, reminder: Boolean, hour: Int, minute: Int, place: String, done: () -> Unit) =
         viewModelScope.launch {
-            subjects.forEachIndexed { i, (emoji, name) ->
-                c.repo.addSubject(Subject(name = name, emoji = emoji, color = Brand.subjectPalette[i % Brand.subjectPalette.size]))
+            subjects.forEachIndexed { i, (glyph, name) ->
+                c.repo.addSubject(Subject(name = name, icon = glyph, color = Brand.subjectPalette[i % Brand.subjectPalette.size]))
             }
             if (weeklyHours > 0) {
                 c.repo.saveGoal(Goal(title = "", kind = GoalKind.TIME, period = GoalPeriod.WEEKLY, target = weeklyHours * 60))
@@ -109,7 +112,7 @@ fun OnboardingScreen(onDone: () -> Unit) {
                 when (s) {
                     0 -> {
                         Spacer(Modifier.height(40.dp))
-                        Text("🏛️", style = MaterialTheme.typography.displayLarge, modifier = Modifier.align(Alignment.CenterHorizontally))
+                        LaurelMedal("owl", earned = true, size = 128.dp, modifier = Modifier.align(Alignment.CenterHorizontally))
                         Spacer(Modifier.height(24.dp))
                         Text(stringResource(R.string.onb_welcome), style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth())
@@ -128,13 +131,13 @@ fun OnboardingScreen(onDone: () -> Unit) {
                         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             val presets = presetSubjects.map { it.first to stringResource(it.second) }
                             (presets + chosen.filter { it !in presets }).forEach { p ->
-                                FilterChip(p in chosen, { if (p in chosen) chosen.remove(p) else chosen.add(p) }, { Text("${p.first} ${p.second}") })
+                                FilterChip(p in chosen, { if (p in chosen) chosen.remove(p) else chosen.add(p) }, { Text(p.second) }, leadingIcon = { Glyph(p.first, size = 18.dp) })
                             }
                         }
                         Spacer(Modifier.height(16.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             OutlinedTextField(custom, { custom = it }, label = { Text(stringResource(R.string.onb_something_else)) }, singleLine = true, modifier = Modifier.weight(1f))
-                            TextButton(enabled = custom.isNotBlank(), onClick = { chosen.add("📘" to custom.trim()); custom = "" }) { Text(stringResource(R.string.common_add)) }
+                            TextButton(enabled = custom.isNotBlank(), onClick = { chosen.add(Glyphs.SUBJECT_DEFAULT to custom.trim()); custom = "" }) { Text(stringResource(R.string.common_add)) }
                         }
                     }
                     2 -> {

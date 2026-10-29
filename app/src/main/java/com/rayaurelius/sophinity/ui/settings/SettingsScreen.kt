@@ -10,6 +10,10 @@ import com.rayaurelius.sophinity.data.BackupException
 import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
 import com.rayaurelius.sophinity.ui.i18n.AppLocale
 import com.rayaurelius.sophinity.R
+import androidx.compose.ui.graphics.Color
+import com.rayaurelius.sophinity.ui.glyphs.GlyphPicker
+import com.rayaurelius.sophinity.ui.glyphs.Glyphs
+import com.rayaurelius.sophinity.ui.glyphs.Glyph
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import android.content.Intent
@@ -222,9 +226,9 @@ fun SettingsScreen(
             subjects.forEach { sub ->
                 item(key = "s${sub.id}") {
                     ListItem(
-                        headlineContent = { Text("${sub.emoji}  ${sub.name}") },
+                        headlineContent = { Text(sub.name) },
                         supportingContent = if (sub.archived) ({ Text(stringResource(R.string.set_archived)) }) else null,
-                        leadingContent = { SubjectDot(sub.color, size = 14) },
+                        leadingContent = { Glyph(sub.icon, size = 24.dp, tint = Color(sub.color)) },
                         modifier = Modifier.clickable { editSubject = sub },
                     )
                 }
@@ -241,7 +245,7 @@ fun SettingsScreen(
             item { Header(stringResource(R.string.set_categories)) }
             item {
                 Text(
-                    stringResource(R.string.set_built_in, ItemType.entries.filter { it != ItemType.CUSTOM }.map { "${it.emoji} ${stringResource(it.labelRes)}" }.joinToString()),
+                    stringResource(R.string.set_built_in, ItemType.entries.filter { it != ItemType.CUSTOM }.map { stringResource(it.labelRes) }.joinToString()),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                 )
@@ -250,7 +254,8 @@ fun SettingsScreen(
                 item(key = "c${cat.id}") {
                     val n = items.count { it.type == ItemType.CUSTOM && it.categoryId == cat.id }
                     ListItem(
-                        headlineContent = { Text("${cat.emoji}  ${cat.name}") },
+                        headlineContent = { Text(cat.name) },
+                        leadingContent = { Glyph(cat.icon, size = 24.dp, tint = MaterialTheme.colorScheme.primary, fallback = Glyphs.CATEGORY_DEFAULT) },
                         supportingContent = { Text(pluralStringResource(R.plurals.set_cat_items, n, n, cat.unitLabel)) },
                         modifier = Modifier.clickable { editCategory = cat },
                     )
@@ -431,8 +436,6 @@ internal fun Stepper(title: String, subtitle: String, value: Int, min: Int, max:
     )
 }
 
-private val subjectEmojis = listOf("📘", "🧪", "🧮", "💻", "🌍", "🎨", "🎵", "🗣️", "💼", "🧠", "📜", "⚕️", "🏋️", "🍳", "📷", "✍️", "🔧", "💰", "🌱", "🧘")
-
 @Composable
 fun SubjectDialog(initial: Subject, onDismiss: () -> Unit, onSave: (Subject) -> Unit) {
     var s by remember { mutableStateOf(initial) }
@@ -442,16 +445,7 @@ fun SubjectDialog(initial: Subject, onDismiss: () -> Unit, onSave: (Subject) -> 
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedTextField(s.name, { s = s.copy(name = it) }, label = { Text(stringResource(R.string.cat_name)) }, singleLine = true, modifier = Modifier.fillMaxWidth())
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    subjectEmojis.forEach { e ->
-                        Text(
-                            e, style = MaterialTheme.typography.titleLarge,
-                            modifier = Modifier.clip(MaterialTheme.shapes.small)
-                                .then(if (s.emoji == e) Modifier.border(2.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small) else Modifier)
-                                .clickable { s = s.copy(emoji = e) }.padding(6.dp),
-                        )
-                    }
-                }
+                GlyphPicker(Glyphs.subjectChoices, s.icon, { s = s.copy(icon = it) }, tint = Color(s.color))
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Brand.subjectPalette.forEach { c ->
                         SubjectDot(

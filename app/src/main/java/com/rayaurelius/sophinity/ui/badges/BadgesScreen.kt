@@ -3,6 +3,9 @@ package com.rayaurelius.sophinity.ui.badges
 import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
 import com.rayaurelius.sophinity.domain.str
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.ui.glyphs.Glyph
+import com.rayaurelius.sophinity.ui.glyphs.GlyphTile
+import com.rayaurelius.sophinity.ui.glyphs.LaurelMedal
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -92,13 +95,18 @@ private fun TitleCard(snap: Snapshot) {
         Column {
             GreekKeyBand(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f))
             Column(Modifier.padding(20.dp)) {
-                Text(stringResource(R.string.your_title), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
-                Text(t.current.name.str(), style = MaterialTheme.typography.displaySmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                Text(
-                    stringResource(R.string.title_greek_meaning, t.current.greek, t.current.meaning.str()),
-                    style = MaterialTheme.typography.titleMedium.copy(fontFamily = LocalHeadingFont.current),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Column(Modifier.weight(1f)) {
+                        Text(stringResource(R.string.your_title), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                        Text(t.current.name.str(), style = MaterialTheme.typography.displaySmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Text(
+                            stringResource(R.string.title_greek_meaning, t.current.greek, t.current.meaning.str()),
+                            style = MaterialTheme.typography.titleMedium.copy(fontFamily = LocalHeadingFont.current),
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        )
+                    }
+                    LaurelMedal(t.current.glyph, earned = true, size = 84.dp)
+                }
                 val next = t.next
                 if (next != null) {
                     Spacer(Modifier.height(16.dp))
@@ -107,7 +115,9 @@ private fun TitleCard(snap: Snapshot) {
                     t.nextChecklist.forEach { (m, done) ->
                         val p = m.progress(snap.milestoneContext)
                         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(vertical = 3.dp)) {
-                            Text(if (done) "✅" else m.emoji, modifier = Modifier.width(30.dp))
+                            Box(Modifier.width(32.dp)) {
+                                Glyph(if (done) "check" else m.glyph, size = 22.dp, tint = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = if (done) 1f else 0.8f))
+                            }
                             Column(Modifier.weight(1f)) {
                                 Text(m.title.str(), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
                                 Text(m.description.str(), style = MaterialTheme.typography.labelSmall,
@@ -150,16 +160,11 @@ private fun TitleLadder(snap: Snapshot) {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp).alpha(if (earned) 1f else 0.5f),
             ) {
-                Surface(
-                    shape = androidx.compose.foundation.shape.CircleShape,
-                    color = if (earned) LocalGold.current.container else MaterialTheme.colorScheme.surfaceContainerHigh,
-                    modifier = Modifier.size(32.dp),
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Text(if (earned) "✓" else "${t.rank}", style = MaterialTheme.typography.labelLarge,
-                            color = LocalGold.current.onContainer)
-                    }
-                }
+                GlyphTile(
+                    t.glyph, size = 40.dp,
+                    container = if (earned) LocalGold.current.container else MaterialTheme.colorScheme.surfaceContainerHigh,
+                    tint = if (earned) LocalGold.current.onContainer else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier.weight(1f)) {
                     Text(
@@ -179,11 +184,11 @@ private fun BadgeTile(snap: Snapshot, m: Milestone, unlockedAt: Long?) {
     val done = unlockedAt != null
     Surface(
         shape = MaterialTheme.shapes.medium,
-        color = if (done) LocalGold.current.container else MaterialTheme.colorScheme.surfaceContainerLow,
-        modifier = Modifier.fillMaxWidth().height(168.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        modifier = Modifier.fillMaxWidth().height(196.dp),
     ) {
         Column(Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-            Text(m.emoji, style = MaterialTheme.typography.displaySmall, modifier = Modifier.alpha(if (done) 1f else 0.35f))
+            LaurelMedal(m.glyph, earned = done, size = 68.dp)
             Spacer(Modifier.height(6.dp))
             Text(m.title.str(), style = MaterialTheme.typography.titleSmall, textAlign = TextAlign.Center, maxLines = 2)
             Text(m.description.str(), style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Center,

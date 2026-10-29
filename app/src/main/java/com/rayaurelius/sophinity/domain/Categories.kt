@@ -13,7 +13,8 @@ import com.rayaurelius.sophinity.data.db.LearningItem
 data class CategoryInfo(
     val type: ItemType,
     val customId: Long?,
-    val emoji: String,
+    /** Glyph name (a legacy emoji for categories made before 1.5; the UI maps those). */
+    val glyph: String,
     val label: Txt,
     val plural: Txt,
     val unit: Txt,
@@ -35,11 +36,11 @@ data class CategoryInfo(
 
 object Categories {
     /** Shown for items whose custom category was deleted. */
-    val OTHER = CategoryInfo(ItemType.CUSTOM, null, "📌", Txt.Res(R.string.type_other), Txt.Res(R.string.type_other), Txt.Res(R.string.unit_parts))
+    val OTHER = CategoryInfo(ItemType.CUSTOM, null, "meander", Txt.Res(R.string.type_other), Txt.Res(R.string.type_other), Txt.Res(R.string.unit_parts))
 
-    fun builtIn(t: ItemType) = CategoryInfo(t, null, t.emoji, Txt.Res(t.labelRes), Txt.Res(t.pluralRes), Txt.Res(t.unitRes))
+    fun builtIn(t: ItemType) = CategoryInfo(t, null, t.glyph, Txt.Res(t.labelRes), Txt.Res(t.pluralRes), Txt.Res(t.unitRes))
 
-    fun custom(c: CustomCategory) = CategoryInfo(ItemType.CUSTOM, c.id, c.emoji, Txt.Raw(c.name), Txt.Raw(c.name), Txt.Raw(c.unitLabel))
+    fun custom(c: CustomCategory) = CategoryInfo(ItemType.CUSTOM, c.id, c.icon, Txt.Raw(c.name), Txt.Raw(c.name), Txt.Raw(c.unitLabel))
 
     fun all(custom: List<CustomCategory>): List<CategoryInfo> =
         ItemType.entries.filter { it != ItemType.CUSTOM }.map(::builtIn) + custom.map(::custom)

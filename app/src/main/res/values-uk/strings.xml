@@ -235,10 +235,10 @@
     <string name="notif_every_minute">Кожна хвилина важлива</string>
     <string name="notif_paused_title">На паузі · %1$s</string>
     <string name="notif_tap_resume">Торкнися «Продовжити», коли будеш готовий</string>
-    <string name="notif_break_title">Час перерви ☕</string>
+    <string name="notif_break_title">Час перерви</string>
     <string name="notif_break_text">Потягнися, попий води, подивися вдалину</string>
     <string name="notif_skip_break">Пропустити перерву</string>
-    <string name="notif_focus_done_title">Блок фокусу завершено 🎉</string>
+    <string name="notif_focus_done_title">Блок фокусу завершено</string>
     <string name="notif_focus_done_text">Записано: %1$s. Торкнися, щоб записати одну річ, яку ти дізнався.</string>
     <string name="notif_start_break">Почати перерву</string>
     <string name="notif_break_over">Перерва скінчилася</string>
@@ -246,7 +246,7 @@
     <string name="notif_saved_title">Збережено: %1$s</string>
     <string name="notif_saved_text">Торкнися для короткої рефлексії</string>
     <string name="notif_media_line">%1$s · з %2$d%% із %3$s</string>
-    <string name="reminder_title">Час дізнатися щось нове ✨</string>
+    <string name="reminder_title">Час дізнатися щось нове</string>
     <string name="reminder_body">Ти планував учитися в цей час. Навіть %1$s зараховується.</string>
     <string name="reminder_body_place">Ти планував учитися в цей час, %1$s. Навіть %2$s зараховується.</string>
     <string name="widget_this_week">%1$s цього тижня</string>
@@ -256,6 +256,15 @@
     <string name="nav_library">Бібліотека</string>
     <string name="nav_goals">Цілі</string>
     <string name="nav_laurels">Лаври</string>
+    <string name="nav_sessions">Заняття</string>
+    <string name="sessions_title">Заняття</string>
+    <string name="sessions_this_month">Цей місяць</string>
+    <string name="sessions_manual">Додано вручну</string>
+    <string name="sessions_delete_warning">Його буде видалено зі статистики, серії та цілей. Це не можна скасувати.</string>
+    <string name="sessions_focus">Фокус %1$d з 5</string>
+    <string name="stats_all_sessions">Усі заняття</string>
+    <string name="tb_sessions_hidden_sub">Доступна зі «Статистики», навіть якщо прихована</string>
+    <string name="icon_n">Значок %1$d</string>
     <string name="cat_new">Нова категорія</string>
     <string name="cat_edit">Змінити категорію</string>
     <string name="cat_name">Назва</string>
@@ -285,7 +294,7 @@
     <string name="greet_morning">Доброго ранку</string>
     <string name="greet_afternoon">Доброго дня</string>
     <string name="greet_evening">Добрий вечір</string>
-    <string name="today_title_chip">🏛️ %1$s · Рів. %2$d</string>
+    <string name="today_title_chip">%1$s · Рів. %2$d</string>
     <string name="timer_open">Вільне заняття</string>
     <string name="timer_focus">Фокус %1$s</string>
     <string name="timer_then_break">потім перерва %1$s</string>
@@ -298,11 +307,11 @@
     <string name="timer_session">Це заняття %1$s</string>
     <string name="timer_session_speed">Це заняття %1$s на %2$s</string>
     <string name="timer_to_go">%1$s · залишилося %2$s</string>
-    <string name="timer_finished">%1$s · готово! 🎉</string>
+    <string name="timer_finished">%1$s · готово!</string>
     <string name="timer_media_line">%1$s із %2$s · %3$d%%</string>
     <string name="timer_media_line_speed">%1$s із %2$s · %3$d%% · %4$s</string>
     <string name="timer_discard">Скасувати заняття</string>
-    <string name="break_title">Час перерви ☕</string>
+    <string name="break_title">Час перерви</string>
     <string name="break_text">Встань, потягнися й подивися на щось удалині.</string>
     <string name="break_skip">Пропустити перерву</string>
     <string name="item_pick">＋ Що ти вивчаєш?</string>
@@ -315,7 +324,7 @@
     <string name="goals_set_one">Поставити</string>
     <string name="goals_all">Усі цілі</string>
     <string name="goals_empty_hint">Конкретна й складна мета дає кращий результат, ніж «постараюся». Спробуй 3 години на тиждень.</string>
-    <string name="goal_done">Готово ✓</string>
+    <string name="goal_done">Готово</string>
     <string name="amount_of">%1$s / %2$s</string>
     <string name="continue_title">Продовжити</string>
     <string name="units_of">%1$d/%2$d %3$s</string>
@@ -326,14 +335,14 @@
     <string name="wisdom_quote">«%1$s»</string>
     <string name="wisdom_by">— %1$s, %2$s</string>
     <string name="tip_try">Спробуй · %1$s</string>
-    <string name="reflect_nice">Чудова робота! 🎉</string>
+    <string name="reflect_nice">Чудова робота!</string>
     <string name="reflect_saved">Збережено: %1$s.</string>
     <string name="reflect_saved_subject">Збережено: %1$s, %2$s.</string>
     <string name="reflect_focus_q">Наскільки ти був зосереджений?</string>
     <string name="reflect_learned">Одна річ, яку ти дізнався</string>
     <string name="reflect_learned_hint">Якщо пригадати її зараз, не підглядаючи, вона краще запам\'ятається.</string>
     <string name="reflect_placeholder">напр. Інтервальні повторення кращі за зубрійку</string>
-    <string name="reflect_mark_finished">Ти дійшов до кінця — позначити як завершене 🎉</string>
+    <string name="reflect_mark_finished">Ти дійшов до кінця — позначити як завершене</string>
     <string name="reflect_save_break">Зберегти + перерва</string>
     <string name="manual_title">Додати минуле заняття</string>
     <string name="manual_note">Що ти дізнався? (необов\'язково)</string>
@@ -355,11 +364,9 @@
     <string name="stats_current_streak">поточна серія</string>
     <string name="stats_best_streak">найкраща серія</string>
     <string name="stats_all_time">за весь час</string>
-    <string name="stats_sessions">Заняття</string>
     <string name="stats_empty_title">Тут ще немає занять</string>
     <string name="stats_empty_body">Запусти таймер на вкладці «Сьогодні» або додай заняття без таймера.</string>
     <string name="stats_delete_title">Видалити це заняття?</string>
-    <string name="stats_delete_body">%1$s буде видалено зі статистики.</string>
     <string name="stats_today">Сьогодні</string>
     <string name="stats_yesterday">Учора</string>
     <string name="stats_this_week">Цей тиждень</string>
@@ -381,7 +388,6 @@
     <string name="stats_general">Загальне</string>
     <string name="stats_share">%1$s · %2$d%%</string>
     <string name="stats_learning_session">Навчальне заняття</string>
-    <string name="stats_focus">Фокус %1$d/5</string>
     <string name="stats_delete_session">Видалити заняття</string>
     <string name="laurels_title">Лаври</string>
     <string name="laurels_count">Здобуто лаврів: %1$d із %2$d</string>
@@ -391,7 +397,7 @@
     <string name="level_n">Рівень %1$d</string>
     <string name="level_progress">%1$s до рівня %2$d · %3$s вкладено в себе</string>
     <string name="path_title">Шлях до Філософа</string>
-    <string name="you_are_here">%1$s  · ти тут</string>
+    <string name="you_are_here">%1$s · ти тут</string>
     <string name="greek_dot_meaning">%1$s · %2$s</string>
     <string name="lib_title">Бібліотека</string>
     <string name="lib_tab">%1$s (%2$d)</string>
@@ -425,19 +431,19 @@
     <string name="goals_empty_body">Обери щось конкретне й трохи амбітне. Щотижневі цілі за часом — добрий початок: вони підлаштовуються під завантажені дні.</string>
     <string name="goals_new">Нова мета</string>
     <string name="goals_edit">Змінити мету</string>
-    <string name="goal_achieved">Досягнуто! 🎉</string>
-    <string name="goal_done_today">На сьогодні все 🎉</string>
-    <string name="goal_done_week">На цей тиждень все 🎉</string>
-    <string name="goal_done_month">На цей місяць все 🎉</string>
+    <string name="goal_achieved">Досягнуто!</string>
+    <string name="goal_done_today">На сьогодні все</string>
+    <string name="goal_done_week">На цей тиждень все</string>
+    <string name="goal_done_month">На цей місяць все</string>
     <string name="goal_last_day">Останній день</string>
     <string name="goal_resets">Скинеться сьогодні вночі</string>
     <string name="goal_hit_recent">Виконано %1$d з останніх %2$d</string>
-    <string name="goal_kind_time">⏱️ Час навчання</string>
-    <string name="goal_kind_items">✅ Завершення</string>
+    <string name="goal_kind_time">Час навчання</string>
+    <string name="goal_kind_items">Завершення</string>
     <string name="goal_any_subject">Будь-яка тема</string>
     <string name="goal_how_many">Скільки</string>
     <string name="goal_anything">Будь-що</string>
-    <string name="goal_due">📅  Термін: %1$s</string>
+    <string name="goal_due">Термін: %1$s</string>
     <string name="goal_name">Назва (необов\'язково)</string>
     <string name="subj_languages">Мови</string>
     <string name="subj_programming">Програмування</string>
@@ -671,10 +677,10 @@
         <item quantity="other">Досягни своїх цілей %d рази</item>
     </plurals>
     <plurals name="reminder_title_streak">
-        <item quantity="one">Не переривай серію в %d день 🔥</item>
-        <item quantity="few">Не переривай серію в %d дні 🔥</item>
-        <item quantity="many">Не переривай серію в %d днів 🔥</item>
-        <item quantity="other">Не переривай серію в %d дня 🔥</item>
+        <item quantity="one">Не переривай серію в %d день</item>
+        <item quantity="few">Не переривай серію в %d дні</item>
+        <item quantity="many">Не переривай серію в %d днів</item>
+        <item quantity="other">Не переривай серію в %d дня</item>
     </plurals>
     <plurals name="cat_delete_used">
         <item quantity="one">%d елемент перейде до «Інше». Нічого не загубиться.</item>
@@ -693,6 +699,12 @@
         <item quantity="few">Здобуто %d лаври!</item>
         <item quantity="many">Здобуто %d лаврів!</item>
         <item quantity="other">Здобуто %d лавра!</item>
+    </plurals>
+    <plurals name="sessions_summary">
+        <item quantity="one">%1$d заняття · %2$s</item>
+        <item quantity="few">%1$d заняття · %2$s</item>
+        <item quantity="many">%1$d занять · %2$s</item>
+        <item quantity="other">%1$d заняття · %2$s</item>
     </plurals>
     <plurals name="stats_sessions_count" tools:ignore="ImpliedQuantity">
         <item quantity="one">заняття</item>

@@ -1,5 +1,7 @@
 package com.rayaurelius.sophinity
 
+import com.rayaurelius.sophinity.ui.glyphs.Glyph
+import com.rayaurelius.sophinity.ui.sessions.SessionsScreen
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.res.stringResource
 import android.content.Intent
@@ -72,6 +74,7 @@ import kotlin.reflect.KClass
 
 @Serializable object TodayRoute
 @Serializable object StatsRoute
+@Serializable object SessionsRoute
 @Serializable object LibraryRoute
 @Serializable object GoalsRoute
 @Serializable object BadgesRoute
@@ -80,14 +83,15 @@ import kotlin.reflect.KClass
 @Serializable object AccessibilityRoute
 @Serializable object ToolbarRoute
 
-private data class Tab(val route: Any, val cls: KClass<*>, @androidx.annotation.StringRes val label: Int, val on: ImageVector, val off: ImageVector, val id: TabId?)
+private data class Tab(val route: Any, val cls: KClass<*>, @androidx.annotation.StringRes val label: Int, val glyph: String, val id: TabId?)
 
 private val tabs = listOf(
-    Tab(TodayRoute, TodayRoute::class, R.string.nav_today, Icons.Filled.Timer, Icons.Outlined.Timer, null),
-    Tab(StatsRoute, StatsRoute::class, R.string.nav_stats, Icons.Filled.BarChart, Icons.Outlined.BarChart, TabId.STATS),
-    Tab(LibraryRoute, LibraryRoute::class, R.string.nav_library, Icons.Filled.AutoStories, Icons.Outlined.AutoStories, TabId.LIBRARY),
-    Tab(GoalsRoute, GoalsRoute::class, R.string.nav_goals, Icons.Filled.Flag, Icons.Outlined.Flag, TabId.GOALS),
-    Tab(BadgesRoute, BadgesRoute::class, R.string.nav_laurels, Icons.Filled.EmojiEvents, Icons.Outlined.EmojiEvents, TabId.LAURELS),
+    Tab(TodayRoute, TodayRoute::class, R.string.nav_today, "sundial", null),
+    Tab(StatsRoute, StatsRoute::class, R.string.nav_stats, "columns", TabId.STATS),
+    Tab(SessionsRoute, SessionsRoute::class, R.string.nav_sessions, "hourglass", TabId.SESSIONS),
+    Tab(LibraryRoute, LibraryRoute::class, R.string.nav_library, "scroll_stack", TabId.LIBRARY),
+    Tab(GoalsRoute, GoalsRoute::class, R.string.nav_goals, "target", TabId.GOALS),
+    Tab(BadgesRoute, BadgesRoute::class, R.string.nav_laurels, "wreath", TabId.LAURELS),
 )
 
 class MainActivity : AppCompatActivity() {
@@ -150,7 +154,7 @@ private fun AppShell(settings: AppSettings) {
                 NavigationRailItem(
                     selected = selected,
                     onClick = { go(t.route) },
-                    icon = { Icon(if (selected) t.on else t.off, contentDescription = if (settings.navLabels) null else stringResource(t.label)) },
+                    icon = { Glyph(t.glyph, contentDescription = if (settings.navLabels) null else stringResource(t.label)) },
                     label = if (settings.navLabels) ({ Text(stringResource(t.label), maxLines = 1, overflow = TextOverflow.Ellipsis) }) else null,
                     alwaysShowLabel = settings.navLabels,
                 )
@@ -180,7 +184,7 @@ private fun AppShell(settings: AppSettings) {
                                         NavigationBarItem(
                                             selected = selected,
                                             onClick = { go(t.route) },
-                                            icon = { Icon(if (selected) t.on else t.off, contentDescription = if (settings.navLabels) null else stringResource(t.label)) },
+                                            icon = { Glyph(t.glyph, contentDescription = if (settings.navLabels) null else stringResource(t.label)) },
                                             label = if (settings.navLabels) ({ Text(stringResource(t.label), maxLines = 1, overflow = TextOverflow.Ellipsis) }) else null,
                                             alwaysShowLabel = settings.navLabels,
                                         )
@@ -192,7 +196,8 @@ private fun AppShell(settings: AppSettings) {
                                 composable<TodayRoute> {
                                     TodayScreen(pad, onOpenSettings = { nav.navigate(SettingsRoute) }, onOpenGoals = { go(GoalsRoute) }, onOpenBadges = { go(BadgesRoute) })
                                 }
-                                composable<StatsRoute> { StatsScreen(pad) }
+                                composable<StatsRoute> { StatsScreen(pad, onOpenSessions = { go(SessionsRoute) }) }
+                                composable<SessionsRoute> { SessionsScreen(pad) }
                                 composable<LibraryRoute> { LibraryScreen(pad) }
                                 composable<GoalsRoute> { GoalsScreen(pad) }
                                 composable<BadgesRoute> { BadgesScreen(pad) }

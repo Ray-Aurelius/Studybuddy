@@ -28,14 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.rayaurelius.sophinity.data.db.CustomCategory
+import com.rayaurelius.sophinity.ui.glyphs.GlyphPicker
+import com.rayaurelius.sophinity.ui.glyphs.Glyphs
 
-private val categoryEmojis = listOf(
-    "📌", "🛠️", "🎭", "🎞️", "🧑‍🏫", "🗺️", "🔬", "🧩", "📝", "💬",
-    "🏛️", "🌐", "🧪", "🎨", "🎹", "🏃", "🧘", "🍳", "🌿", "🐾",
-)
 private val unitSuggestions = listOf(R.string.unit_sessions, R.string.unit_lessons, R.string.unit_chapters, R.string.unit_episodes, R.string.unit_hours, R.string.unit_parts)
 
-/** Create or edit a custom library category: a name, an emoji, and what progress is counted in. */
+/** Create or edit a custom library category: a name, an icon, and what progress is counted in. */
 @Composable
 fun CategoryDialog(
     initial: CustomCategory,
@@ -59,16 +57,7 @@ fun CategoryDialog(
                     label = { Text(stringResource(R.string.cat_name)) }, placeholder = { Text(stringResource(R.string.cat_name_hint)) },
                     singleLine = true, modifier = Modifier.fillMaxWidth(),
                 )
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    categoryEmojis.forEach { e ->
-                        Text(
-                            e, style = MaterialTheme.typography.titleLarge,
-                            modifier = Modifier.clip(MaterialTheme.shapes.small)
-                                .then(if (c.emoji == e) Modifier.border(2.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small) else Modifier)
-                                .clickable { c = c.copy(emoji = e) }.padding(6.dp),
-                        )
-                    }
-                }
+                GlyphPicker(Glyphs.categoryChoices, c.icon, { c = c.copy(icon = it) }, fallback = Glyphs.CATEGORY_DEFAULT)
                 Text(stringResource(R.string.cat_track_in), style = MaterialTheme.typography.labelLarge)
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     unitSuggestions.forEach { id -> val u = stringResource(id); FilterChip(c.unitLabel == u, { c = c.copy(unitLabel = u) }, { Text(u) }) }

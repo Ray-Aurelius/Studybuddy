@@ -235,10 +235,10 @@
     <string name="notif_every_minute">Setiap menit berarti</string>
     <string name="notif_paused_title">Dijeda · %1$s</string>
     <string name="notif_tap_resume">Ketuk Lanjutkan saat kamu siap</string>
-    <string name="notif_break_title">Waktunya istirahat ☕</string>
+    <string name="notif_break_title">Waktunya istirahat</string>
     <string name="notif_break_text">Regangkan badan, minum air, lihat ke kejauhan</string>
     <string name="notif_skip_break">Lewati istirahat</string>
-    <string name="notif_focus_done_title">Blok fokus selesai 🎉</string>
+    <string name="notif_focus_done_title">Blok fokus selesai</string>
     <string name="notif_focus_done_text">%1$s tercatat. Ketuk untuk mencatat satu hal yang kamu pelajari.</string>
     <string name="notif_start_break">Mulai istirahat</string>
     <string name="notif_break_over">Istirahat selesai</string>
@@ -246,7 +246,7 @@
     <string name="notif_saved_title">%1$s tersimpan</string>
     <string name="notif_saved_text">Ketuk untuk refleksi singkat</string>
     <string name="notif_media_line">%1$s · dari %2$d%% dari %3$s</string>
-    <string name="reminder_title">Saatnya mempelajari sesuatu ✨</string>
+    <string name="reminder_title">Saatnya mempelajari sesuatu</string>
     <string name="reminder_body">Kamu berencana belajar sekarang. Bahkan %1$s pun berarti.</string>
     <string name="reminder_body_place">Kamu berencana belajar sekarang, %1$s. Bahkan %2$s pun berarti.</string>
     <string name="widget_this_week">%1$s minggu ini</string>
@@ -256,6 +256,15 @@
     <string name="nav_library">Perpustakaan</string>
     <string name="nav_goals">Target</string>
     <string name="nav_laurels">Laurel</string>
+    <string name="nav_sessions">Sesi</string>
+    <string name="sessions_title">Sesi</string>
+    <string name="sessions_this_month">Bulan ini</string>
+    <string name="sessions_manual">Dicatat manual</string>
+    <string name="sessions_delete_warning">Sesi ini akan dihapus dari statistik, rentetan, dan targetmu. Tindakan ini tidak bisa dibatalkan.</string>
+    <string name="sessions_focus">Fokus %1$d dari 5</string>
+    <string name="stats_all_sessions">Lihat semua sesi</string>
+    <string name="tb_sessions_hidden_sub">Tetap bisa dibuka dari Statistik meski disembunyikan</string>
+    <string name="icon_n">Ikon %1$d</string>
     <string name="cat_new">Kategori baru</string>
     <string name="cat_edit">Edit kategori</string>
     <string name="cat_name">Nama</string>
@@ -285,7 +294,7 @@
     <string name="greet_morning">Selamat pagi</string>
     <string name="greet_afternoon">Selamat siang</string>
     <string name="greet_evening">Selamat malam</string>
-    <string name="today_title_chip">🏛️ %1$s · Lv %2$d</string>
+    <string name="today_title_chip">%1$s · Lv %2$d</string>
     <string name="timer_open">Sesi bebas</string>
     <string name="timer_focus">Fokus %1$s</string>
     <string name="timer_then_break">lalu istirahat %1$s</string>
@@ -298,11 +307,11 @@
     <string name="timer_session">Sesi ini %1$s</string>
     <string name="timer_session_speed">Sesi ini %1$s pada %2$s</string>
     <string name="timer_to_go">%1$s · tersisa %2$s</string>
-    <string name="timer_finished">%1$s · selesai! 🎉</string>
+    <string name="timer_finished">%1$s · selesai!</string>
     <string name="timer_media_line">%1$s dari %2$s · %3$d%%</string>
     <string name="timer_media_line_speed">%1$s dari %2$s · %3$d%% · %4$s</string>
     <string name="timer_discard">Buang sesi</string>
-    <string name="break_title">Waktunya istirahat ☕</string>
+    <string name="break_title">Waktunya istirahat</string>
     <string name="break_text">Berdiri, regangkan badan, dan lihat sesuatu yang jauh.</string>
     <string name="break_skip">Lewati istirahat</string>
     <string name="item_pick">＋ Apa yang kamu pelajari?</string>
@@ -315,7 +324,7 @@
     <string name="goals_set_one">Buat satu</string>
     <string name="goals_all">Semua target</string>
     <string name="goals_empty_hint">Orang yang menetapkan target spesifik dan menantang berhasil lebih baik daripada yang sekadar \"berusaha sebaik mungkin\". Coba 3 jam per minggu.</string>
-    <string name="goal_done">Selesai ✓</string>
+    <string name="goal_done">Selesai</string>
     <string name="amount_of">%1$s / %2$s</string>
     <string name="continue_title">Lanjutkan</string>
     <string name="units_of">%1$d/%2$d %3$s</string>
@@ -326,14 +335,14 @@
     <string name="wisdom_quote">\"%1$s\"</string>
     <string name="wisdom_by">— %1$s, %2$s</string>
     <string name="tip_try">Coba ini · %1$s</string>
-    <string name="reflect_nice">Kerja bagus! 🎉</string>
+    <string name="reflect_nice">Kerja bagus!</string>
     <string name="reflect_saved">%1$s tersimpan.</string>
     <string name="reflect_saved_subject">%1$s %2$s tersimpan.</string>
     <string name="reflect_focus_q">Seberapa fokus kamu?</string>
     <string name="reflect_learned">Satu hal yang kamu pelajari</string>
     <string name="reflect_learned_hint">Mengingatnya sekarang tanpa melihat membantumu mengingatnya.</string>
     <string name="reflect_placeholder">misalnya Pengulangan berjarak mengalahkan kebut semalam</string>
-    <string name="reflect_mark_finished">Kamu sampai di akhir — tandai selesai 🎉</string>
+    <string name="reflect_mark_finished">Kamu sampai di akhir — tandai selesai</string>
     <string name="reflect_save_break">Simpan + istirahat</string>
     <string name="manual_title">Catat sesi sebelumnya</string>
     <string name="manual_note">Apa yang kamu pelajari? (opsional)</string>
@@ -355,11 +364,9 @@
     <string name="stats_current_streak">rentetan saat ini</string>
     <string name="stats_best_streak">rentetan terbaik</string>
     <string name="stats_all_time">sepanjang waktu</string>
-    <string name="stats_sessions">Sesi</string>
     <string name="stats_empty_title">Belum ada sesi di sini</string>
     <string name="stats_empty_body">Mulai timer dari Hari ini, atau catat sesi yang tidak kamu hitung waktunya.</string>
     <string name="stats_delete_title">Hapus sesi ini?</string>
-    <string name="stats_delete_body">%1$s akan dihapus dari statistikmu.</string>
     <string name="stats_today">Hari ini</string>
     <string name="stats_yesterday">Kemarin</string>
     <string name="stats_this_week">Minggu ini</string>
@@ -381,7 +388,6 @@
     <string name="stats_general">Umum</string>
     <string name="stats_share">%1$s · %2$d%%</string>
     <string name="stats_learning_session">Sesi belajar</string>
-    <string name="stats_focus">Fokus %1$d/5</string>
     <string name="stats_delete_session">Hapus sesi</string>
     <string name="laurels_title">Laurel</string>
     <string name="laurels_count">%1$d dari %2$d laurel diraih</string>
@@ -391,7 +397,7 @@
     <string name="level_n">Level %1$d</string>
     <string name="level_progress">%1$s menuju Level %2$d · %3$s diinvestasikan untuk dirimu</string>
     <string name="path_title">Jalan menuju Filsuf</string>
-    <string name="you_are_here">%1$s  · kamu di sini</string>
+    <string name="you_are_here">%1$s · kamu di sini</string>
     <string name="greek_dot_meaning">%1$s · %2$s</string>
     <string name="lib_title">Perpustakaan</string>
     <string name="lib_tab">%1$s (%2$d)</string>
@@ -425,19 +431,19 @@
     <string name="goals_empty_body">Pilih sesuatu yang spesifik dan sedikit ambisius. Target waktu mingguan adalah awal yang baik: menyesuaikan diri dengan hari-hari sibuk.</string>
     <string name="goals_new">Target baru</string>
     <string name="goals_edit">Edit target</string>
-    <string name="goal_achieved">Tercapai! 🎉</string>
-    <string name="goal_done_today">Selesai untuk hari ini 🎉</string>
-    <string name="goal_done_week">Selesai untuk minggu ini 🎉</string>
-    <string name="goal_done_month">Selesai untuk bulan ini 🎉</string>
+    <string name="goal_achieved">Tercapai!</string>
+    <string name="goal_done_today">Selesai untuk hari ini</string>
+    <string name="goal_done_week">Selesai untuk minggu ini</string>
+    <string name="goal_done_month">Selesai untuk bulan ini</string>
     <string name="goal_last_day">Hari terakhir</string>
     <string name="goal_resets">Direset malam ini</string>
     <string name="goal_hit_recent">Tercapai %1$d dari %2$d terakhir</string>
-    <string name="goal_kind_time">⏱️ Waktu belajar</string>
-    <string name="goal_kind_items">✅ Menyelesaikan sesuatu</string>
+    <string name="goal_kind_time">Waktu belajar</string>
+    <string name="goal_kind_items">Menyelesaikan sesuatu</string>
     <string name="goal_any_subject">Topik apa saja</string>
     <string name="goal_how_many">Berapa banyak</string>
     <string name="goal_anything">Apa saja</string>
-    <string name="goal_due">📅  Tenggat %1$s</string>
+    <string name="goal_due">Tenggat %1$s</string>
     <string name="goal_name">Nama (opsional)</string>
     <string name="subj_languages">Bahasa</string>
     <string name="subj_programming">Pemrograman</string>
@@ -623,7 +629,7 @@
         <item quantity="other">Capai targetmu %d kali</item>
     </plurals>
     <plurals name="reminder_title_streak">
-        <item quantity="other">Jaga rentetan %d harimu 🔥</item>
+        <item quantity="other">Jaga rentetan %d harimu</item>
     </plurals>
     <plurals name="cat_delete_used">
         <item quantity="other">%d item akan dipindah ke \"Lainnya\". Tidak ada yang hilang.</item>
@@ -633,6 +639,9 @@
     </plurals>
     <plurals name="laurels_earned">
         <item quantity="other">%d laurel diraih!</item>
+    </plurals>
+    <plurals name="sessions_summary">
+        <item quantity="other">%1$d sesi · %2$s</item>
     </plurals>
     <plurals name="stats_sessions_count" tools:ignore="ImpliedQuantity">
         <item quantity="other">sesi</item>

@@ -21,7 +21,7 @@ enum class ThemeMode { SYSTEM, LIGHT, DARK }
 enum class NavPosition { BOTTOM, LEFT, RIGHT }
 
 /** Tabs that can be hidden from the toolbar. Today is always shown. */
-enum class TabId { STATS, LIBRARY, GOALS, LAURELS }
+enum class TabId { STATS, SESSIONS, LIBRARY, GOALS, LAURELS }
 
 data class AppSettings(
     val onboarded: Boolean = false,

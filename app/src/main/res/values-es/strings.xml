@@ -235,10 +235,10 @@
     <string name="notif_every_minute">Cada minuto cuenta</string>
     <string name="notif_paused_title">En pausa · %1$s</string>
     <string name="notif_tap_resume">Toca reanudar cuando estés listo</string>
-    <string name="notif_break_title">Hora de descansar ☕</string>
+    <string name="notif_break_title">Hora de descansar</string>
     <string name="notif_break_text">Estírate, hidrátate, mira a lo lejos</string>
     <string name="notif_skip_break">Saltar pausa</string>
-    <string name="notif_focus_done_title">Bloque de enfoque completado 🎉</string>
+    <string name="notif_focus_done_title">Bloque de enfoque completado</string>
     <string name="notif_focus_done_text">%1$s registrados. Toca para anotar algo que aprendiste.</string>
     <string name="notif_start_break">Empezar pausa</string>
     <string name="notif_break_over">Se acabó la pausa</string>
@@ -246,7 +246,7 @@
     <string name="notif_saved_title">%1$s guardados</string>
     <string name="notif_saved_text">Toca para añadir una reflexión rápida</string>
     <string name="notif_media_line">%1$s · desde el %2$d%% de %3$s</string>
-    <string name="reminder_title">Hora de aprender algo ✨</string>
+    <string name="reminder_title">Hora de aprender algo</string>
     <string name="reminder_body">Planeaste aprender ahora. Incluso %1$s cuenta.</string>
     <string name="reminder_body_place">Planeaste aprender ahora, %1$s. Incluso %2$s cuenta.</string>
     <string name="widget_this_week">%1$s esta semana</string>
@@ -256,6 +256,15 @@
     <string name="nav_library">Biblioteca</string>
     <string name="nav_goals">Metas</string>
     <string name="nav_laurels">Laureles</string>
+    <string name="nav_sessions">Sesiones</string>
+    <string name="sessions_title">Sesiones</string>
+    <string name="sessions_this_month">Este mes</string>
+    <string name="sessions_manual">Registrada a mano</string>
+    <string name="sessions_delete_warning">Se quitará de tus estadísticas, tu racha y tus metas. No se puede deshacer.</string>
+    <string name="sessions_focus">Concentración %1$d de 5</string>
+    <string name="stats_all_sessions">Ver todas las sesiones</string>
+    <string name="tb_sessions_hidden_sub">Sigue disponible desde Estadísticas aunque la ocultes</string>
+    <string name="icon_n">Icono %1$d</string>
     <string name="cat_new">Nueva categoría</string>
     <string name="cat_edit">Editar categoría</string>
     <string name="cat_name">Nombre</string>
@@ -285,7 +294,7 @@
     <string name="greet_morning">Buenos días</string>
     <string name="greet_afternoon">Buenas tardes</string>
     <string name="greet_evening">Buenas noches</string>
-    <string name="today_title_chip">🏛️ %1$s · Nv %2$d</string>
+    <string name="today_title_chip">%1$s · Nv %2$d</string>
     <string name="timer_open">Sesión libre</string>
     <string name="timer_focus">Enfoque %1$s</string>
     <string name="timer_then_break">y luego una pausa de %1$s</string>
@@ -298,11 +307,11 @@
     <string name="timer_session">Esta sesión %1$s</string>
     <string name="timer_session_speed">Esta sesión %1$s a %2$s</string>
     <string name="timer_to_go">%1$s · faltan %2$s</string>
-    <string name="timer_finished">%1$s · ¡terminado! 🎉</string>
+    <string name="timer_finished">%1$s · ¡terminado!</string>
     <string name="timer_media_line">%1$s de %2$s · %3$d%%</string>
     <string name="timer_media_line_speed">%1$s de %2$s · %3$d%% · %4$s</string>
     <string name="timer_discard">Descartar sesión</string>
-    <string name="break_title">Hora de descansar ☕</string>
+    <string name="break_title">Hora de descansar</string>
     <string name="break_text">Levántate, estírate y mira algo lejano.</string>
     <string name="break_skip">Saltar pausa</string>
     <string name="item_pick">＋ ¿Qué estás aprendiendo?</string>
@@ -315,7 +324,7 @@
     <string name="goals_set_one">Crear una</string>
     <string name="goals_all">Todas las metas</string>
     <string name="goals_empty_hint">Quienes se fijan una meta concreta y exigente rinden mejor que quienes solo intentan «hacerlo lo mejor posible». Empieza con 3 horas a la semana.</string>
-    <string name="goal_done">Hecho ✓</string>
+    <string name="goal_done">Hecho</string>
     <string name="amount_of">%1$s / %2$s</string>
     <string name="continue_title">Continuar aprendiendo</string>
     <string name="units_of">%1$d/%2$d %3$s</string>
@@ -326,14 +335,14 @@
     <string name="wisdom_quote">«%1$s»</string>
     <string name="wisdom_by">— %1$s, %2$s</string>
     <string name="tip_try">Prueba esto · %1$s</string>
-    <string name="reflect_nice">¡Buen trabajo! 🎉</string>
+    <string name="reflect_nice">¡Buen trabajo!</string>
     <string name="reflect_saved">%1$s guardados.</string>
     <string name="reflect_saved_subject">%1$s de %2$s guardados.</string>
     <string name="reflect_focus_q">¿Qué tan concentrado estuviste?</string>
     <string name="reflect_learned">Una cosa que aprendiste</string>
     <string name="reflect_learned_hint">Recordarlo ahora, sin mirar, ayuda a fijarlo.</string>
     <string name="reflect_placeholder">p. ej. La repetición espaciada le gana al atracón</string>
-    <string name="reflect_mark_finished">Llegaste al final: márcalo como terminado 🎉</string>
+    <string name="reflect_mark_finished">Llegaste al final: márcalo como terminado</string>
     <string name="reflect_save_break">Guardar + pausa</string>
     <string name="manual_title">Registrar una sesión pasada</string>
     <string name="manual_note">¿Qué aprendiste? (opcional)</string>
@@ -355,11 +364,9 @@
     <string name="stats_current_streak">racha actual</string>
     <string name="stats_best_streak">mejor racha</string>
     <string name="stats_all_time">en total</string>
-    <string name="stats_sessions">Sesiones</string>
     <string name="stats_empty_title">Todavía no hay sesiones aquí</string>
     <string name="stats_empty_body">Inicia el temporizador en Hoy o registra una sesión que olvidaste cronometrar.</string>
     <string name="stats_delete_title">¿Eliminar esta sesión?</string>
-    <string name="stats_delete_body">Se quitarán %1$s de tus estadísticas.</string>
     <string name="stats_today">Hoy</string>
     <string name="stats_yesterday">Ayer</string>
     <string name="stats_this_week">Esta semana</string>
@@ -381,7 +388,6 @@
     <string name="stats_general">General</string>
     <string name="stats_share">%1$s · %2$d%%</string>
     <string name="stats_learning_session">Sesión de aprendizaje</string>
-    <string name="stats_focus">enfoque %1$d/5</string>
     <string name="stats_delete_session">Eliminar sesión</string>
     <string name="laurels_title">Laureles</string>
     <string name="laurels_count">%1$d de %2$d laureles ganados</string>
@@ -391,7 +397,7 @@
     <string name="level_n">Nivel %1$d</string>
     <string name="level_progress">%1$s para el nivel %2$d · %3$s invertidos en ti</string>
     <string name="path_title">El camino al Filósofo</string>
-    <string name="you_are_here">%1$s  · estás aquí</string>
+    <string name="you_are_here">%1$s · estás aquí</string>
     <string name="greek_dot_meaning">%1$s · %2$s</string>
     <string name="lib_title">Biblioteca</string>
     <string name="lib_tab">%1$s (%2$d)</string>
@@ -425,19 +431,19 @@
     <string name="goals_empty_body">Elige algo concreto y un poco ambicioso. Las metas de tiempo semanales son un gran comienzo: se adaptan a los días ocupados.</string>
     <string name="goals_new">Nueva meta</string>
     <string name="goals_edit">Editar meta</string>
-    <string name="goal_achieved">¡Lograda! 🎉</string>
-    <string name="goal_done_today">Hecho por hoy 🎉</string>
-    <string name="goal_done_week">Hecho esta semana 🎉</string>
-    <string name="goal_done_month">Hecho este mes 🎉</string>
+    <string name="goal_achieved">¡Lograda!</string>
+    <string name="goal_done_today">Hecho por hoy</string>
+    <string name="goal_done_week">Hecho esta semana</string>
+    <string name="goal_done_month">Hecho este mes</string>
     <string name="goal_last_day">Último día</string>
     <string name="goal_resets">Se reinicia esta noche</string>
     <string name="goal_hit_recent">Cumplida %1$d de las últimas %2$d</string>
-    <string name="goal_kind_time">⏱️ Tiempo de aprendizaje</string>
-    <string name="goal_kind_items">✅ Terminar cosas</string>
+    <string name="goal_kind_time">Tiempo de aprendizaje</string>
+    <string name="goal_kind_items">Terminar cosas</string>
     <string name="goal_any_subject">Cualquier materia</string>
     <string name="goal_how_many">Cuántos</string>
     <string name="goal_anything">Cualquier cosa</string>
-    <string name="goal_due">📅  Para el %1$s</string>
+    <string name="goal_due">Para el %1$s</string>
     <string name="goal_name">Nombre (opcional)</string>
     <string name="subj_languages">Idiomas</string>
     <string name="subj_programming">Programación</string>
@@ -655,9 +661,9 @@
         <item quantity="other">Cumple tus metas %d veces</item>
     </plurals>
     <plurals name="reminder_title_streak">
-        <item quantity="one">Mantén viva tu racha de %d día 🔥</item>
-        <item quantity="many">Mantén viva tu racha de %d de días 🔥</item>
-        <item quantity="other">Mantén viva tu racha de %d días 🔥</item>
+        <item quantity="one">Mantén viva tu racha de %d día</item>
+        <item quantity="many">Mantén viva tu racha de %d de días</item>
+        <item quantity="other">Mantén viva tu racha de %d días</item>
     </plurals>
     <plurals name="cat_delete_used">
         <item quantity="one">%d elemento pasará a «Otro». No se pierde nada.</item>
@@ -673,6 +679,11 @@
         <item quantity="one">¡Laurel ganado!</item>
         <item quantity="many">¡%d de laureles ganados!</item>
         <item quantity="other">¡%d laureles ganados!</item>
+    </plurals>
+    <plurals name="sessions_summary">
+        <item quantity="one">%1$d sesión · %2$s</item>
+        <item quantity="many">%1$d de sesiones · %2$s</item>
+        <item quantity="other">%1$d sesiones · %2$s</item>
     </plurals>
     <plurals name="stats_sessions_count" tools:ignore="ImpliedQuantity">
         <item quantity="one">sesión</item>

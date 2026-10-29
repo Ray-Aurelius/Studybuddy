@@ -68,11 +68,12 @@ private fun ColorEngine.Roles.toScheme(dark: Boolean): ColorScheme {
 }
 
 /** Laurel gold, reserved for achievement: earned laurels, titles and the streak. */
-data class GoldColors(val container: Color, val onContainer: Color)
-private val LightGold = GoldColors(Color(0xFFFFF0B8), Color(0xFF3A2C00))
-private val DarkGold = GoldColors(Color(0xFF4A3B00), Color(0xFFFFE9A8))
-private val LightGoldHc = GoldColors(Color(0xFFFFF4C9), Color(0xFF1F1700))
-private val DarkGoldHc = GoldColors(Color(0xFF2E2400), Color(0xFFFFF4C9))
+/** [ink] is gold line art (laurel wreaths) drawn on the page; it keeps at least 3:1 contrast against the background. */
+data class GoldColors(val container: Color, val onContainer: Color, val ink: Color)
+private val LightGold = GoldColors(Color(0xFFFFF0B8), Color(0xFF3A2C00), Color(0xFF946E00))
+private val DarkGold = GoldColors(Color(0xFF4A3B00), Color(0xFFFFE9A8), Color(0xFFE2B93B))
+private val LightGoldHc = GoldColors(Color(0xFFFFF4C9), Color(0xFF1F1700), Color(0xFF654B00))
+private val DarkGoldHc = GoldColors(Color(0xFF2E2400), Color(0xFFFFF4C9), Color(0xFFF5D36A))
 val LocalGold = staticCompositionLocalOf { LightGold }
 
 /** True when animations should be skipped (setting, or the system "remove animations" option). */

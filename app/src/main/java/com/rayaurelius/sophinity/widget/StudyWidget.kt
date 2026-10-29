@@ -11,6 +11,10 @@ import androidx.glance.Button
 import androidx.glance.ButtonDefaults
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
+import androidx.glance.layout.size
+import androidx.glance.ColorFilter
+import androidx.glance.ImageProvider
+import androidx.glance.Image
 import androidx.glance.GlanceTheme
 import androidx.glance.action.ActionParameters
 import androidx.glance.action.actionStartActivity
@@ -89,7 +93,9 @@ class StudyWidget : GlanceAppWidget() {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = GlanceModifier.fillMaxWidth()) {
                 Text("Sophinity", style = TextStyle(color = colors.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold))
                 Spacer(GlanceModifier.defaultWeight())
-                Text("🔥 ${d.streak}", style = TextStyle(color = colors.onSurface, fontSize = 13.sp, fontWeight = FontWeight.Medium))
+                Image(ImageProvider(R.drawable.gl_flame), null, GlanceModifier.size(14.dp), colorFilter = ColorFilter.tint(colors.primary))
+                Spacer(GlanceModifier.width(3.dp))
+                Text("${d.streak}", style = TextStyle(color = colors.onSurface, fontSize = 13.sp, fontWeight = FontWeight.Medium))
             }
             Spacer(GlanceModifier.height(6.dp))
             if (d.timer.isActive) {

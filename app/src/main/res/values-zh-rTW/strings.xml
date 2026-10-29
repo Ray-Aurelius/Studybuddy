@@ -235,10 +235,10 @@
     <string name="notif_every_minute">每一分鐘都算數</string>
     <string name="notif_paused_title">已暫停 · %1$s</string>
     <string name="notif_tap_resume">準備好後點按「繼續」</string>
-    <string name="notif_break_title">休息時間 ☕</string>
+    <string name="notif_break_title">休息時間</string>
     <string name="notif_break_text">伸展一下，喝點水，看看遠處</string>
     <string name="notif_skip_break">跳過休息</string>
-    <string name="notif_focus_done_title">專注時段完成 🎉</string>
+    <string name="notif_focus_done_title">專注時段完成</string>
     <string name="notif_focus_done_text">已記錄 %1$s。點按記下你學到的一件事。</string>
     <string name="notif_start_break">開始休息</string>
     <string name="notif_break_over">休息結束</string>
@@ -246,7 +246,7 @@
     <string name="notif_saved_title">已儲存 %1$s</string>
     <string name="notif_saved_text">點按快速反思</string>
     <string name="notif_media_line">%1$s · 從 %3$s 的 %2$d%% 開始</string>
-    <string name="reminder_title">該學點東西了 ✨</string>
+    <string name="reminder_title">該學點東西了</string>
     <string name="reminder_body">你計劃在這個時間學習。哪怕 %1$s 也算數。</string>
     <string name="reminder_body_place">你計劃在這個時間%1$s學習。哪怕 %2$s 也算數。</string>
     <string name="widget_this_week">本週 %1$s</string>
@@ -256,6 +256,15 @@
     <string name="nav_library">書庫</string>
     <string name="nav_goals">目標</string>
     <string name="nav_laurels">桂冠</string>
+    <string name="nav_sessions">學習紀錄</string>
+    <string name="sessions_title">學習紀錄</string>
+    <string name="sessions_this_month">本月</string>
+    <string name="sessions_manual">手動記錄</string>
+    <string name="sessions_delete_warning">它將從你的統計、連續紀錄和目標中移除，且無法復原。</string>
+    <string name="sessions_focus">專注度 %1$d/5</string>
+    <string name="stats_all_sessions">查看全部紀錄</string>
+    <string name="tb_sessions_hidden_sub">隱藏後仍可從「統計」進入</string>
+    <string name="icon_n">圖示 %1$d</string>
     <string name="cat_new">新分類</string>
     <string name="cat_edit">編輯分類</string>
     <string name="cat_name">名稱</string>
@@ -285,7 +294,7 @@
     <string name="greet_morning">早上好</string>
     <string name="greet_afternoon">下午好</string>
     <string name="greet_evening">晚上好</string>
-    <string name="today_title_chip">🏛️ %1$s · Lv %2$d</string>
+    <string name="today_title_chip">%1$s · Lv %2$d</string>
     <string name="timer_open">自由學習</string>
     <string name="timer_focus">專注 %1$s</string>
     <string name="timer_then_break">然後休息 %1$s</string>
@@ -298,11 +307,11 @@
     <string name="timer_session">本次 %1$s</string>
     <string name="timer_session_speed">本次 %1$s（%2$s）</string>
     <string name="timer_to_go">%1$s · 剩餘 %2$s</string>
-    <string name="timer_finished">%1$s · 完成！🎉</string>
+    <string name="timer_finished">%1$s · 完成！</string>
     <string name="timer_media_line">%1$s / %2$s · %3$d%%</string>
     <string name="timer_media_line_speed">%1$s / %2$s · %3$d%% · %4$s</string>
     <string name="timer_discard">放棄本次學習</string>
-    <string name="break_title">休息時間 ☕</string>
+    <string name="break_title">休息時間</string>
     <string name="break_text">站起來伸展一下，看看遠處的東西。</string>
     <string name="break_skip">跳過休息</string>
     <string name="item_pick">＋ 你在學什麼？</string>
@@ -315,7 +324,7 @@
     <string name="goals_set_one">設定一個</string>
     <string name="goals_all">全部目標</string>
     <string name="goals_empty_hint">設定具體且有挑戰的目標，比只是「盡力而為」效果更好。試試每週 3 小時。</string>
-    <string name="goal_done">完成 ✓</string>
+    <string name="goal_done">完成</string>
     <string name="amount_of">%1$s / %2$s</string>
     <string name="continue_title">繼續學習</string>
     <string name="units_of">%1$d/%2$d %3$s</string>
@@ -326,14 +335,14 @@
     <string name="wisdom_quote">「%1$s」</string>
     <string name="wisdom_by">—— %1$s，%2$s</string>
     <string name="tip_try">試試這個 · %1$s</string>
-    <string name="reflect_nice">幹得好！🎉</string>
+    <string name="reflect_nice">幹得好！</string>
     <string name="reflect_saved">已儲存 %1$s。</string>
     <string name="reflect_saved_subject">已儲存 %2$s %1$s。</string>
     <string name="reflect_focus_q">你有多專注？</string>
     <string name="reflect_learned">你學到的一件事</string>
     <string name="reflect_learned_hint">現在不看資料回想一下，有助於記住它。</string>
     <string name="reflect_placeholder">例如：間隔複習勝過臨時抱佛腳</string>
-    <string name="reflect_mark_finished">你已經到達結尾——標記為已完成 🎉</string>
+    <string name="reflect_mark_finished">你已經到達結尾——標記為已完成</string>
     <string name="reflect_save_break">儲存並休息</string>
     <string name="manual_title">補記過去的學習</string>
     <string name="manual_note">你學到了什麼？（可選）</string>
@@ -355,11 +364,9 @@
     <string name="stats_current_streak">當前連續</string>
     <string name="stats_best_streak">最長連續</string>
     <string name="stats_all_time">累計</string>
-    <string name="stats_sessions">學習記錄</string>
     <string name="stats_empty_title">這裡還沒有學習記錄</string>
     <string name="stats_empty_body">從「今天」開始計時，或補記一次未計時的學習。</string>
     <string name="stats_delete_title">刪除這次學習？</string>
-    <string name="stats_delete_body">將從統計中移除 %1$s。</string>
     <string name="stats_today">今天</string>
     <string name="stats_yesterday">昨天</string>
     <string name="stats_this_week">本週</string>
@@ -381,7 +388,6 @@
     <string name="stats_general">綜合</string>
     <string name="stats_share">%1$s · %2$d%%</string>
     <string name="stats_learning_session">學習</string>
-    <string name="stats_focus">專注度 %1$d/5</string>
     <string name="stats_delete_session">刪除記錄</string>
     <string name="laurels_title">桂冠</string>
     <string name="laurels_count">已獲得 %1$d / %2$d 頂桂冠</string>
@@ -391,7 +397,7 @@
     <string name="level_n">等級 %1$d</string>
     <string name="level_progress">距等級 %2$d 還需 %1$s · 已投入自己 %3$s</string>
     <string name="path_title">通往哲學家之路</string>
-    <string name="you_are_here">%1$s  · 你在這裡</string>
+    <string name="you_are_here">%1$s · 你在這裡</string>
     <string name="greek_dot_meaning">%1$s · %2$s</string>
     <string name="lib_title">書庫</string>
     <string name="lib_tab">%1$s（%2$d）</string>
@@ -425,19 +431,19 @@
     <string name="goals_empty_body">選一個具體而略有挑戰的目標。每週時長目標是很好的開始：能適應忙碌的日子。</string>
     <string name="goals_new">新目標</string>
     <string name="goals_edit">編輯目標</string>
-    <string name="goal_achieved">已達成！🎉</string>
-    <string name="goal_done_today">今日已完成 🎉</string>
-    <string name="goal_done_week">本週已完成 🎉</string>
-    <string name="goal_done_month">本月已完成 🎉</string>
+    <string name="goal_achieved">已達成！</string>
+    <string name="goal_done_today">今日已完成</string>
+    <string name="goal_done_week">本週已完成</string>
+    <string name="goal_done_month">本月已完成</string>
     <string name="goal_last_day">最後一天</string>
     <string name="goal_resets">今晚重置</string>
     <string name="goal_hit_recent">最近 %2$d 次中達成 %1$d 次</string>
-    <string name="goal_kind_time">⏱️ 學習時長</string>
-    <string name="goal_kind_items">✅ 完成數量</string>
+    <string name="goal_kind_time">學習時長</string>
+    <string name="goal_kind_items">完成數量</string>
     <string name="goal_any_subject">任意科目</string>
     <string name="goal_how_many">數量</string>
     <string name="goal_anything">任意</string>
-    <string name="goal_due">📅  截止 %1$s</string>
+    <string name="goal_due">截止 %1$s</string>
     <string name="goal_name">名稱（可選）</string>
     <string name="subj_languages">語言</string>
     <string name="subj_programming">程式設計</string>
@@ -623,7 +629,7 @@
         <item quantity="other">達成目標 %d 次</item>
     </plurals>
     <plurals name="reminder_title_streak">
-        <item quantity="other">保持你的 %d 天連續記錄 🔥</item>
+        <item quantity="other">保持你的 %d 天連續記錄</item>
     </plurals>
     <plurals name="cat_delete_used">
         <item quantity="other">%d 項將移至「其他」。不會丟失任何內容。</item>
@@ -633,6 +639,9 @@
     </plurals>
     <plurals name="laurels_earned">
         <item quantity="other">獲得 %d 頂桂冠！</item>
+    </plurals>
+    <plurals name="sessions_summary">
+        <item quantity="other">%1$d 次學習 · %2$s</item>
     </plurals>
     <plurals name="stats_sessions_count" tools:ignore="ImpliedQuantity">
         <item quantity="other">次學習</item>

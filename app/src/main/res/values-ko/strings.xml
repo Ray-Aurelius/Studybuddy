@@ -235,10 +235,10 @@
     <string name="notif_every_minute">1분 1분이 쌓여요</string>
     <string name="notif_paused_title">일시정지됨 · %1$s</string>
     <string name="notif_tap_resume">준비되면 계속을 탭하세요</string>
-    <string name="notif_break_title">휴식 시간 ☕</string>
+    <string name="notif_break_title">휴식 시간</string>
     <string name="notif_break_text">스트레칭하고, 물 마시고, 먼 곳을 바라보세요</string>
     <string name="notif_skip_break">휴식 건너뛰기</string>
-    <string name="notif_focus_done_title">집중 블록 완료 🎉</string>
+    <string name="notif_focus_done_title">집중 블록 완료</string>
     <string name="notif_focus_done_text">%1$s 기록했어요. 탭해서 배운 것 한 가지를 적어 보세요.</string>
     <string name="notif_start_break">휴식 시작</string>
     <string name="notif_break_over">휴식이 끝났어요</string>
@@ -246,7 +246,7 @@
     <string name="notif_saved_title">%1$s 저장됨</string>
     <string name="notif_saved_text">탭해서 짧게 돌아보기</string>
     <string name="notif_media_line">%1$s · %3$s의 %2$d%%부터</string>
-    <string name="reminder_title">무언가 배울 시간이에요 ✨</string>
+    <string name="reminder_title">무언가 배울 시간이에요</string>
     <string name="reminder_body">지금 공부하기로 계획했어요. %1$s만 해도 의미 있어요.</string>
     <string name="reminder_body_place">지금 %1$s 공부하기로 계획했어요. %2$s만 해도 의미 있어요.</string>
     <string name="widget_this_week">이번 주 %1$s</string>
@@ -256,6 +256,15 @@
     <string name="nav_library">라이브러리</string>
     <string name="nav_goals">목표</string>
     <string name="nav_laurels">월계관</string>
+    <string name="nav_sessions">세션</string>
+    <string name="sessions_title">세션</string>
+    <string name="sessions_this_month">이번 달</string>
+    <string name="sessions_manual">직접 기록</string>
+    <string name="sessions_delete_warning">통계, 연속 기록, 목표에서 삭제돼요. 되돌릴 수 없어요.</string>
+    <string name="sessions_focus">집중도 5점 중 %1$d점</string>
+    <string name="stats_all_sessions">모든 세션 보기</string>
+    <string name="tb_sessions_hidden_sub">숨겨도 통계 탭에서 열 수 있어요</string>
+    <string name="icon_n">아이콘 %1$d</string>
     <string name="cat_new">새 카테고리</string>
     <string name="cat_edit">카테고리 수정</string>
     <string name="cat_name">이름</string>
@@ -285,7 +294,7 @@
     <string name="greet_morning">좋은 아침이에요</string>
     <string name="greet_afternoon">좋은 오후예요</string>
     <string name="greet_evening">좋은 저녁이에요</string>
-    <string name="today_title_chip">🏛️ %1$s · Lv %2$d</string>
+    <string name="today_title_chip">%1$s · Lv %2$d</string>
     <string name="timer_open">자유 세션</string>
     <string name="timer_focus">집중 %1$s</string>
     <string name="timer_then_break">이후 %1$s 휴식</string>
@@ -298,11 +307,11 @@
     <string name="timer_session">이번 세션 %1$s</string>
     <string name="timer_session_speed">이번 세션 %1$s (%2$s)</string>
     <string name="timer_to_go">%1$s · %2$s 남음</string>
-    <string name="timer_finished">%1$s · 완료! 🎉</string>
+    <string name="timer_finished">%1$s · 완료!</string>
     <string name="timer_media_line">%1$s / %2$s · %3$d%%</string>
     <string name="timer_media_line_speed">%1$s / %2$s · %3$d%% · %4$s</string>
     <string name="timer_discard">세션 삭제</string>
-    <string name="break_title">휴식 시간 ☕</string>
+    <string name="break_title">휴식 시간</string>
     <string name="break_text">일어나서 스트레칭하고 먼 곳을 바라보세요.</string>
     <string name="break_skip">휴식 건너뛰기</string>
     <string name="item_pick">＋ 무엇을 배우고 있나요?</string>
@@ -315,7 +324,7 @@
     <string name="goals_set_one">목표 세우기</string>
     <string name="goals_all">모든 목표</string>
     <string name="goals_empty_hint">구체적이고 도전적인 목표를 세운 사람이 \"최선을 다하는\" 사람보다 더 좋은 성과를 내요. 주 3시간부터 시작해 보세요.</string>
-    <string name="goal_done">달성 ✓</string>
+    <string name="goal_done">달성</string>
     <string name="amount_of">%1$s / %2$s</string>
     <string name="continue_title">이어서 하기</string>
     <string name="units_of">%1$d/%2$d %3$s</string>
@@ -326,14 +335,14 @@
     <string name="wisdom_quote">\"%1$s\"</string>
     <string name="wisdom_by">— %1$s, %2$s</string>
     <string name="tip_try">이렇게 해 보세요 · %1$s</string>
-    <string name="reflect_nice">잘했어요! 🎉</string>
+    <string name="reflect_nice">잘했어요!</string>
     <string name="reflect_saved">%1$s 저장했어요.</string>
     <string name="reflect_saved_subject">%2$s %1$s 저장했어요.</string>
     <string name="reflect_focus_q">얼마나 집중했나요?</string>
     <string name="reflect_learned">배운 것 한 가지</string>
     <string name="reflect_learned_hint">보지 않고 지금 떠올리면 더 오래 기억할 수 있어요.</string>
     <string name="reflect_placeholder">예: 간격 반복이 벼락치기보다 낫다</string>
-    <string name="reflect_mark_finished">끝까지 왔어요 — 완료로 표시하기 🎉</string>
+    <string name="reflect_mark_finished">끝까지 왔어요 — 완료로 표시하기</string>
     <string name="reflect_save_break">저장 + 휴식</string>
     <string name="manual_title">지난 세션 기록하기</string>
     <string name="manual_note">무엇을 배웠나요? (선택)</string>
@@ -355,11 +364,9 @@
     <string name="stats_current_streak">현재 연속 기록</string>
     <string name="stats_best_streak">최고 연속 기록</string>
     <string name="stats_all_time">누적</string>
-    <string name="stats_sessions">세션</string>
     <string name="stats_empty_title">아직 세션이 없어요</string>
     <string name="stats_empty_body">오늘 탭에서 타이머를 시작하거나 타이머 없이 한 세션을 기록하세요.</string>
     <string name="stats_delete_title">이 세션을 삭제할까요?</string>
-    <string name="stats_delete_body">통계에서 %1$s이(가) 삭제돼요.</string>
     <string name="stats_today">오늘</string>
     <string name="stats_yesterday">어제</string>
     <string name="stats_this_week">이번 주</string>
@@ -381,7 +388,6 @@
     <string name="stats_general">일반</string>
     <string name="stats_share">%1$s · %2$d%%</string>
     <string name="stats_learning_session">학습 세션</string>
-    <string name="stats_focus">집중도 %1$d/5</string>
     <string name="stats_delete_session">세션 삭제</string>
     <string name="laurels_title">월계관</string>
     <string name="laurels_count">월계관 %2$d개 중 %1$d개 획득</string>
@@ -391,7 +397,7 @@
     <string name="level_n">레벨 %1$d</string>
     <string name="level_progress">레벨 %2$d까지 %1$s · 나에게 투자한 시간 %3$s</string>
     <string name="path_title">철학자로 가는 길</string>
-    <string name="you_are_here">%1$s  · 현재 위치</string>
+    <string name="you_are_here">%1$s · 현재 위치</string>
     <string name="greek_dot_meaning">%1$s · %2$s</string>
     <string name="lib_title">라이브러리</string>
     <string name="lib_tab">%1$s (%2$d)</string>
@@ -425,19 +431,19 @@
     <string name="goals_empty_body">구체적이고 조금 도전적인 것을 고르세요. 주간 시간 목표로 시작하기 좋아요. 바쁜 날에도 유연하게 맞출 수 있어요.</string>
     <string name="goals_new">새 목표</string>
     <string name="goals_edit">목표 수정</string>
-    <string name="goal_achieved">달성! 🎉</string>
-    <string name="goal_done_today">오늘 목표 달성 🎉</string>
-    <string name="goal_done_week">이번 주 목표 달성 🎉</string>
-    <string name="goal_done_month">이번 달 목표 달성 🎉</string>
+    <string name="goal_achieved">달성!</string>
+    <string name="goal_done_today">오늘 목표 달성</string>
+    <string name="goal_done_week">이번 주 목표 달성</string>
+    <string name="goal_done_month">이번 달 목표 달성</string>
     <string name="goal_last_day">마지막 날</string>
     <string name="goal_resets">오늘 밤 초기화돼요</string>
     <string name="goal_hit_recent">최근 %2$d회 중 %1$d회 달성</string>
-    <string name="goal_kind_time">⏱️ 학습 시간</string>
-    <string name="goal_kind_items">✅ 완료 개수</string>
+    <string name="goal_kind_time">학습 시간</string>
+    <string name="goal_kind_items">완료 개수</string>
     <string name="goal_any_subject">모든 분야</string>
     <string name="goal_how_many">개수</string>
     <string name="goal_anything">무엇이든</string>
-    <string name="goal_due">📅  기한 %1$s</string>
+    <string name="goal_due">기한 %1$s</string>
     <string name="goal_name">이름 (선택)</string>
     <string name="subj_languages">언어</string>
     <string name="subj_programming">프로그래밍</string>
@@ -623,7 +629,7 @@
         <item quantity="other">목표 %d번 달성하기</item>
     </plurals>
     <plurals name="reminder_title_streak">
-        <item quantity="other">%d일 연속 기록을 이어 가세요 🔥</item>
+        <item quantity="other">%d일 연속 기록을 이어 가세요</item>
     </plurals>
     <plurals name="cat_delete_used">
         <item quantity="other">%d개 항목이 \'기타\'로 이동해요. 사라지는 건 없어요.</item>
@@ -633,6 +639,9 @@
     </plurals>
     <plurals name="laurels_earned">
         <item quantity="other">월계관 %d개 획득!</item>
+    </plurals>
+    <plurals name="sessions_summary">
+        <item quantity="other">세션 %1$d회 · %2$s</item>
     </plurals>
     <plurals name="stats_sessions_count" tools:ignore="ImpliedQuantity">
         <item quantity="other">세션</item>

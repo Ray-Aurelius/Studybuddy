@@ -4,6 +4,9 @@ package com.rayaurelius.sophinity.ui.library
 
 import com.rayaurelius.sophinity.domain.str
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.ui.glyphs.Glyph
+import com.rayaurelius.sophinity.ui.glyphs.GlyphTile
+import com.rayaurelius.sophinity.ui.glyphs.Glyphs
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -126,7 +129,7 @@ fun LibraryScreen(contentPadding: PaddingValues) {
                     val used = snap.items.map { snap.categoryOf(it).key }.toSet()
                     val shown = snap.categories.filter { it.key in used || it.type in pinned || it.key == filterKey }
                     items(shown, key = { it.key }) { c ->
-                        FilterChip(filter?.key == c.key, { filterKey = if (filterKey == c.key) null else c.key }, { Text("${c.emoji} ${c.plural.str()}") })
+                        FilterChip(filter?.key == c.key, { filterKey = if (filterKey == c.key) null else c.key }, { Text(c.plural.str()) }, leadingIcon = { Glyph(c.glyph, size = 18.dp, fallback = Glyphs.CATEGORY_DEFAULT) })
                     }
                     item { AssistChip(onClick = { newCategory = true }, label = { Text(stringResource(R.string.lib_new_category)) }) }
                 }
@@ -134,7 +137,7 @@ fun LibraryScreen(contentPadding: PaddingValues) {
             if (list.isEmpty()) {
                 item {
                     EmptyState(
-                        "📚",
+                        "scroll_stack",
                         when (status) {
                             ItemStatus.ACTIVE -> stringResource(R.string.lib_empty_active)
                             ItemStatus.WANT -> stringResource(R.string.lib_empty_want)
@@ -187,7 +190,11 @@ private fun YearTally(snap: Snapshot) {
             Spacer(Modifier.height(6.dp))
             FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 counts.entries.sortedByDescending { it.value }.forEach { (cat, n) ->
-                    Text("${cat.emoji} ${cat.count(n).str()}", style = MaterialTheme.typography.titleMedium)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Glyph(cat.glyph, size = 22.dp, tint = MaterialTheme.colorScheme.primary, fallback = Glyphs.CATEGORY_DEFAULT)
+                        Spacer(Modifier.width(6.dp))
+                        Text(cat.count(n).str(), style = MaterialTheme.typography.titleMedium)
+                    }
                 }
             }
         }
@@ -200,11 +207,11 @@ private fun ItemCard(snap: Snapshot, item: LearningItem, onClick: () -> Unit) {
     val cat = snap.categoryOf(item)
     ElevatedCard(onClick = onClick, modifier = Modifier.fillMaxWidth()) {
         Row(Modifier.padding(16.dp)) {
-            Text(cat.emoji, style = MaterialTheme.typography.headlineMedium)
+            GlyphTile(cat.glyph, size = 44.dp, fallback = Glyphs.CATEGORY_DEFAULT)
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
                 Text(item.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                val meta = listOfNotNull(item.creator.takeIf { it.isNotBlank() }, subject?.let { "${it.emoji} ${it.name}" })
+                val meta = listOfNotNull(item.creator.takeIf { it.isNotBlank() }, subject?.name)
                 if (meta.isNotEmpty()) Text(meta.joinToString(" · "), style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 val total = item.totalUnits
@@ -225,7 +232,7 @@ private fun ItemCard(snap: Snapshot, item: LearningItem, onClick: () -> Unit) {
                 if (item.status == ItemStatus.DONE) {
                     Spacer(Modifier.height(4.dp))
                     StarRating(item.rating, size = 16)
-                    if (item.takeaway.isNotBlank()) Text("💡 ${item.takeaway}", style = MaterialTheme.typography.bodySmall, maxLines = 2,
+                    if (item.takeaway.isNotBlank()) Text("“${item.takeaway}”", style = MaterialTheme.typography.bodySmall, maxLines = 2,
                         overflow = TextOverflow.Ellipsis)
                 }
             }
@@ -254,9 +261,9 @@ private fun ItemEditorSheet(
             Text(stringResource(if (isNew) R.string.lib_add_title else R.string.lib_edit_title), style = MaterialTheme.typography.headlineSmall)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 snap.categories.forEach { c ->
-                    FilterChip(cat.key == c.key, { item = item.copy(type = c.type, categoryId = c.customId) }, { Text("${c.emoji} ${c.label.str()}") })
+                    FilterChip(cat.key == c.key, { item = item.copy(type = c.type, categoryId = c.customId) }, { Text(c.label.str()) }, leadingIcon = { Glyph(c.glyph, size = 18.dp, fallback = Glyphs.CATEGORY_DEFAULT) })
                 }
-                if (cat == com.rayaurelius.sophinity.domain.Categories.OTHER) FilterChip(true, {}, { Text("📌 " + stringResource(R.string.type_other)) })
+                if (cat == com.rayaurelius.sophinity.domain.Categories.OTHER) FilterChip(true, {}, { Text(stringResource(R.string.type_other)) }, leadingIcon = { Glyph(Glyphs.CATEGORY_DEFAULT, size = 18.dp) })
                 AssistChip(onClick = { newCategory = true }, label = { Text(stringResource(R.string.lib_new_category)) })
             }
             OutlinedTextField(item.title, { item = item.copy(title = it) }, label = { Text(stringResource(R.string.lib_field_title)) }, singleLine = true, modifier = Modifier.fillMaxWidth())

@@ -39,8 +39,9 @@ object DemoData {
         val repo = app.container.repo
         // Settings live in a process-wide DataStore, so reset fully: earlier tests may have changed them.
         app.container.settingsStore.update { com.rayaurelius.sophinity.data.AppSettings(onboarded = true, seenTitleRank = 8) }
-        val subjects = listOf("🗣️" to "Spanish", "💻" to "Programming", "💰" to "Personal finance", "🧠" to "Psychology")
-            .mapIndexed { i, (e, n) -> repo.addSubject(Subject(name = n, emoji = e, color = Brand.subjectPalette[i])) }
+        // Spanish keeps an emoji, as saved by versions before 1.5, to show it maps to a glyph.
+        val subjects = listOf("🗣️" to "Spanish", "gear" to "Programming", "scales" to "Personal finance", "butterfly" to "Psychology")
+            .mapIndexed { i, (e, n) -> repo.addSubject(Subject(name = n, icon = e, color = Brand.subjectPalette[i])) }
         val zone = ZoneId.systemDefault()
         val today = LocalDate.now()
         val rnd = Random(7)
@@ -59,7 +60,7 @@ object DemoData {
         val now = System.currentTimeMillis()
         repo.saveItem(LearningItem(type = ItemType.BOOK, title = "The Curious Learner's Handbook", creator = "M. Alvarez", subjectId = subjects[3], totalUnits = 320, progressUnits = 212))
         repo.saveItem(LearningItem(type = ItemType.COURSE, title = "Intro to Data Structures", creator = "Open University", subjectId = subjects[1], totalUnits = 12, progressUnits = 5))
-        val workshop = repo.saveCategory(CustomCategory(name = "Workshop", emoji = "🛠️", unitLabel = "sessions"))
+        val workshop = repo.saveCategory(CustomCategory(name = "Workshop", icon = "anvil", unitLabel = "sessions"))
         val audiobookId = repo.saveItem(LearningItem(type = ItemType.AUDIOBOOK, title = "Habits of Curious People", creator = "L. Park", subjectId = subjects[3],
             totalUnits = 24, progressUnits = 9, runtimeMin = 9 * 60 + 30, priorSec = 2 * 3600L, playbackSpeed = 1.5f))
         repeat(3) { d ->

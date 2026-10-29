@@ -51,6 +51,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.rayaurelius.sophinity.ui.glyphs.Glyph
+import com.rayaurelius.sophinity.ui.glyphs.GlyphTile
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -93,7 +95,7 @@ fun SectionCard(
 
 @Composable
 fun StatTile(
-    emoji: String,
+    glyph: String,
     value: String,
     label: String,
     modifier: Modifier = Modifier,
@@ -101,7 +103,7 @@ fun StatTile(
 ) {
     Surface(modifier, shape = MaterialTheme.shapes.medium, color = container) {
         Column(Modifier.padding(horizontal = 12.dp, vertical = 14.dp)) {
-            Text(emoji, style = MaterialTheme.typography.titleLarge)
+            Glyph(glyph, size = 26.dp, tint = MaterialTheme.colorScheme.primary)
             Spacer(Modifier.height(6.dp))
             // Shrinks to fit rather than truncating (narrow layouts, large text, long translations).
             Text(value, style = MaterialTheme.typography.titleLarge, maxLines = 1,
@@ -112,9 +114,9 @@ fun StatTile(
 }
 
 @Composable
-fun EmptyState(emoji: String, title: String, body: String, modifier: Modifier = Modifier, action: (@Composable () -> Unit)? = null) {
+fun EmptyState(glyph: String, title: String, body: String, modifier: Modifier = Modifier, action: (@Composable () -> Unit)? = null) {
     Column(modifier.fillMaxWidth().padding(32.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(emoji, style = MaterialTheme.typography.displayMedium)
+        GlyphTile(glyph, size = 72.dp)
         Spacer(Modifier.height(12.dp))
         Text(title, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
         Spacer(Modifier.height(4.dp))
@@ -146,7 +148,7 @@ fun SubjectPicker(
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
         ) {
             Row(Modifier.padding(start = 12.dp, end = 6.dp, top = 8.dp, bottom = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                if (sel != null) { Text(sel.emoji); Spacer(Modifier.width(6.dp)) }
+                if (sel != null) { Glyph(sel.icon, size = 18.dp, tint = Color(sel.color)); Spacer(Modifier.width(6.dp)) }
                 Text(sel?.name ?: noneLabel, style = MaterialTheme.typography.labelLarge, maxLines = 1)
                 Icon(Icons.Default.ArrowDropDown, null)
             }
@@ -155,8 +157,8 @@ fun SubjectPicker(
             DropdownMenuItem(text = { Text(noneLabel) }, onClick = { onSelect(null); open = false })
             subjects.filter { !it.archived }.forEach { s ->
                 DropdownMenuItem(
-                    text = { Text("${s.emoji}  ${s.name}") },
-                    leadingIcon = { SubjectDot(s.color) },
+                    text = { Text(s.name) },
+                    leadingIcon = { Glyph(s.icon, size = 20.dp, tint = Color(s.color)) },
                     onClick = { onSelect(s.id); open = false },
                 )
             }
@@ -185,9 +187,9 @@ fun StarRating(rating: Int?, onChange: ((Int?) -> Unit)? = null, size: Int = 28)
 /** 1–5 focus self-rating. Noticing focus quality is a core metacognitive skill. */
 @Composable
 fun FocusRating(value: Int?, onChange: (Int?) -> Unit) {
-    val faces = listOf("😵‍💫" to R.string.focus_1, "😕" to R.string.focus_2, "🙂" to R.string.focus_3, "😃" to R.string.focus_4, "🤩" to R.string.focus_5)
+    val labels = listOf(R.string.focus_1, R.string.focus_2, R.string.focus_3, R.string.focus_4, R.string.focus_5)
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        faces.forEachIndexed { i, (emoji, label) ->
+        labels.forEachIndexed { i, label ->
             val n = i + 1
             val sel = value == n
             Column(
@@ -197,9 +199,28 @@ fun FocusRating(value: Int?, onChange: (Int?) -> Unit) {
                     .padding(horizontal = 6.dp, vertical = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text(emoji, style = MaterialTheme.typography.headlineSmall)
+                FocusColumns(n, if (sel) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
+                Spacer(Modifier.height(4.dp))
                 Text(stringResource(label), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
+        }
+    }
+}
+
+/** [level] of five rising columns filled in: a small Greek bar chart for focus quality. */
+@Composable
+fun FocusColumns(level: Int, color: Color, modifier: Modifier = Modifier) {
+    val empty = MaterialTheme.colorScheme.outlineVariant
+    androidx.compose.foundation.Canvas(modifier.size(width = 34.dp, height = 22.dp)) {
+        val w = size.width / 5f
+        for (i in 0 until 5) {
+            val h = size.height * (0.32f + 0.17f * i)
+            drawRoundRect(
+                if (i < level) color else empty,
+                topLeft = androidx.compose.ui.geometry.Offset(i * w + w * 0.18f, size.height - h),
+                size = androidx.compose.ui.geometry.Size(w * 0.64f, h),
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(w * 0.2f),
+            )
         }
     }
 }
