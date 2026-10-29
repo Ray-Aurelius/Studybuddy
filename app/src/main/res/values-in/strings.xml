@@ -642,6 +642,11 @@
     <string name="notes_delete_body">Catatan akan dihapus selamanya.</string>
     <string name="tb_notes_hidden_sub">Tetap bisa dibuka dari setiap item pustaka saat disembunyikan</string>
     <string name="notes_save_item_first">Simpan item ini dulu, lalu kamu bisa menulis catatan tentangnya di sini.</string>
+    <string name="set_link_timer">Mulai timer saat aku membuka tautan</string>
+    <string name="set_link_timer_sub">Membuka tautan web item pustaka akan memulai stopwatch untuk item itu. Jika kamu sedang mengukur hal lain, sesi itu disimpan dulu.</string>
+    <string name="link_timer_started">Timer dimulai untuk %1$s</string>
+    <string name="link_timer_resumed">Timer dilanjutkan untuk %1$s</string>
+    <string name="link_timer_switched">Sesi sebelumnya disimpan. Timer dimulai untuk %1$s</string>
     <plurals name="count_book">
         <item quantity="other">%d buku</item>
     </plurals>

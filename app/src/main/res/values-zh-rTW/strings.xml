@@ -642,6 +642,11 @@
     <string name="notes_delete_body">刪除後無法復原。</string>
     <string name="tb_notes_hidden_sub">隱藏後仍可從每個資料庫項目開啟</string>
     <string name="notes_save_item_first">請先儲存此項目，之後就能在這裡為它寫筆記。</string>
+    <string name="set_link_timer">開啟連結時開始計時</string>
+    <string name="set_link_timer_sub">開啟資料庫項目的網頁連結時，會為該項目開始碼錶計時。如果正在為其他內容計時，會先儲存那段學習紀錄。</string>
+    <string name="link_timer_started">已開始為「%1$s」計時</string>
+    <string name="link_timer_resumed">已繼續為「%1$s」計時</string>
+    <string name="link_timer_switched">已儲存上一段紀錄。已開始為「%1$s」計時</string>
     <plurals name="count_book">
         <item quantity="other">%d 本書</item>
     </plurals>

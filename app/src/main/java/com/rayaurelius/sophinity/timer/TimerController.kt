@@ -146,6 +146,28 @@ class TimerController(
         repo.settingsStore.update { it.copy(lastSubjectId = subjectId) }
     }
 
+    /**
+     * Someone opened [itemId]'s web link: time it. Starts the stopwatch, resumes a paused session on
+     * the same item, or saves a session on something else and starts a new one for this item.
+     */
+    suspend fun startForLink(itemId: Long, subjectId: Long?): LinkTimer.Action = mutex.withLock {
+        val s = current()
+        var action = LinkTimer.decide(s, itemId)
+        when (action) {
+            LinkTimer.Action.ALREADY_TIMING -> Unit
+            LinkTimer.Action.RESUMED -> save(s.copy(status = TimerStatus.RUNNING, segmentStart = System.currentTimeMillis()))
+            LinkTimer.Action.STARTED, LinkTimer.Action.SWITCHED -> {
+                // Under a minute isn't kept, so there's no "saved" to report.
+                if (action == LinkTimer.Action.SWITCHED && finishLocked() == null) action = LinkTimer.Action.STARTED
+                val now = System.currentTimeMillis()
+                save(TimerState(status = TimerStatus.RUNNING, mode = TimerMode.STOPWATCH, startedAt = now, segmentStart = now,
+                    subjectId = subjectId, itemId = itemId))
+                repo.settingsStore.update { it.copy(lastSubjectId = subjectId) }
+            }
+        }
+        action
+    }
+
     suspend fun pause() = mutex.withLock {
         val s = current()
         if (s.status != TimerStatus.RUNNING) return@withLock
@@ -226,5 +248,26 @@ class TimerController(
         } else {
             save(s)
         }
+    }
+}
+
+/** What opening a library item's link does to the timer. Pure, so it is unit-tested. */
+object LinkTimer {
+    enum class Action {
+        /** Nothing was being timed (or a break was on): start the stopwatch on the item. */
+        STARTED,
+        /** A paused session on this same item carries on. */
+        RESUMED,
+        /** This item is already being timed (stopwatch or focus block): leave it alone. */
+        ALREADY_TIMING,
+        /** A session on something else is saved, then the stopwatch starts on this item. */
+        SWITCHED,
+    }
+
+    fun decide(s: TimerState, itemId: Long): Action = when {
+        !s.isActive -> Action.STARTED
+        s.itemId != itemId -> Action.SWITCHED
+        s.status == TimerStatus.PAUSED -> Action.RESUMED
+        else -> Action.ALREADY_TIMING
     }
 }

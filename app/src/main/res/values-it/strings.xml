@@ -642,6 +642,11 @@
     <string name="notes_delete_body">Verrà cancellata per sempre.</string>
     <string name="tb_notes_hidden_sub">Raggiungibile da ogni elemento della libreria anche se nascosta</string>
     <string name="notes_save_item_first">Salva prima questo elemento, poi potrai scrivere qui le note che lo riguardano.</string>
+    <string name="set_link_timer">Avvia il timer quando apro un link</string>
+    <string name="set_link_timer_sub">Aprire il link di un elemento della libreria avvia il cronometro su quell\'elemento. Se stavi cronometrando altro, quella sessione viene salvata prima.</string>
+    <string name="link_timer_started">Timer avviato per %1$s</string>
+    <string name="link_timer_resumed">Timer ripreso per %1$s</string>
+    <string name="link_timer_switched">Sessione precedente salvata. Timer avviato per %1$s</string>
     <plurals name="count_book">
         <item quantity="one">%d libro</item>
         <item quantity="many">%d di libri</item>

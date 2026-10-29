@@ -642,6 +642,11 @@
     <string name="notes_delete_body">Sie wird endgültig gelöscht.</string>
     <string name="tb_notes_hidden_sub">Auch ausgeblendet über jeden Bibliothekseintrag erreichbar</string>
     <string name="notes_save_item_first">Speichere diesen Eintrag zuerst, dann kannst du hier Notizen dazu schreiben.</string>
+    <string name="set_link_timer">Timer starten, wenn ich einen Link öffne</string>
+    <string name="set_link_timer_sub">Öffnest du den Weblink eines Bibliothekseintrags, startet die Stoppuhr für diesen Eintrag. Lief gerade etwas anderes, wird diese Sitzung zuerst gespeichert.</string>
+    <string name="link_timer_started">Timer gestartet für %1$s</string>
+    <string name="link_timer_resumed">Timer fortgesetzt für %1$s</string>
+    <string name="link_timer_switched">Letzte Sitzung gespeichert. Timer gestartet für %1$s</string>
     <plurals name="count_book">
         <item quantity="one">%d Buch</item>
         <item quantity="other">%d Bücher</item>

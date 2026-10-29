@@ -642,6 +642,11 @@
     <string name="notes_delete_body">完全に削除されます。</string>
     <string name="tb_notes_hidden_sub">非表示にしても各ライブラリ項目から開けます</string>
     <string name="notes_save_item_first">まずこの項目を保存すると、ここでノートを書けるようになります。</string>
+    <string name="set_link_timer">リンクを開いたらタイマーを開始</string>
+    <string name="set_link_timer_sub">ライブラリ項目のWebリンクを開くと、その項目のストップウォッチが始まります。別のものを計測中だった場合は、そのセッションを先に保存します。</string>
+    <string name="link_timer_started">%1$sのタイマーを開始しました</string>
+    <string name="link_timer_resumed">%1$sのタイマーを再開しました</string>
+    <string name="link_timer_switched">前のセッションを保存しました。%1$sのタイマーを開始しました</string>
     <plurals name="count_book">
         <item quantity="other">%d冊の本</item>
     </plurals>

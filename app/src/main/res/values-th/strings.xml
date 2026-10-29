@@ -642,6 +642,11 @@
     <string name="notes_delete_body">โน้ตจะถูกลบถาวร</string>
     <string name="tb_notes_hidden_sub">ยังเปิดได้จากทุกรายการในคลังเมื่อซ่อนไว้</string>
     <string name="notes_save_item_first">บันทึกรายการนี้ก่อน แล้วคุณจะเขียนโน้ตเกี่ยวกับรายการนี้ได้ที่นี่</string>
+    <string name="set_link_timer">เริ่มจับเวลาเมื่อฉันเปิดลิงก์</string>
+    <string name="set_link_timer_sub">การเปิดลิงก์เว็บของรายการในคลังจะเริ่มนาฬิกาจับเวลาสำหรับรายการนั้น หากกำลังจับเวลาอย่างอื่นอยู่ เซสชันนั้นจะถูกบันทึกก่อน</string>
+    <string name="link_timer_started">เริ่มจับเวลาสำหรับ %1$s แล้ว</string>
+    <string name="link_timer_resumed">จับเวลาต่อสำหรับ %1$s แล้ว</string>
+    <string name="link_timer_switched">บันทึกเซสชันก่อนหน้าแล้ว เริ่มจับเวลาสำหรับ %1$s</string>
     <plurals name="count_book">
         <item quantity="other">หนังสือ %d เล่ม</item>
     </plurals>

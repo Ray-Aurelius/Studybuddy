@@ -642,6 +642,11 @@
     <string name="notes_delete_body">سيتم حذفها نهائيًا.</string>
     <string name="tb_notes_hidden_sub">يمكن الوصول إليه من كل عنصر في المكتبة حتى لو كان مخفيًا</string>
     <string name="notes_save_item_first">احفظ هذا العنصر أولًا، ثم يمكنك كتابة ملاحظات عنه هنا.</string>
+    <string name="set_link_timer">تشغيل المؤقت عند فتح رابط</string>
+    <string name="set_link_timer_sub">فتح رابط عنصر في المكتبة يشغّل ساعة الإيقاف لهذا العنصر. إذا كنت توقّت شيئًا آخر، تُحفظ تلك الجلسة أولًا.</string>
+    <string name="link_timer_started">بدأ المؤقت لـ %1$s</string>
+    <string name="link_timer_resumed">استُؤنف المؤقت لـ %1$s</string>
+    <string name="link_timer_switched">حُفظت الجلسة السابقة. بدأ المؤقت لـ %1$s</string>
     <plurals name="count_book">
         <item quantity="zero">لا كتب</item>
         <item quantity="one">كتاب واحد</item>

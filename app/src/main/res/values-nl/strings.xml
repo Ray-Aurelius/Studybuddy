@@ -642,6 +642,11 @@
     <string name="notes_delete_body">Hij wordt voorgoed gewist.</string>
     <string name="tb_notes_hidden_sub">Ook verborgen bereikbaar via elk bibliotheekitem</string>
     <string name="notes_save_item_first">Sla dit item eerst op, dan kun je hier notities erover schrijven.</string>
+    <string name="set_link_timer">Timer starten als ik een link open</string>
+    <string name="set_link_timer_sub">Als je de weblink van een bibliotheekitem opent, start de stopwatch voor dat item. Was je iets anders aan het timen, dan wordt die sessie eerst opgeslagen.</string>
+    <string name="link_timer_started">Timer gestart voor %1$s</string>
+    <string name="link_timer_resumed">Timer hervat voor %1$s</string>
+    <string name="link_timer_switched">Vorige sessie opgeslagen. Timer gestart voor %1$s</string>
     <plurals name="count_book">
         <item quantity="one">%d boek</item>
         <item quantity="other">%d boeken</item>

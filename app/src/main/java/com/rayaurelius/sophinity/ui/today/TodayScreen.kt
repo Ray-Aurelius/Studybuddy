@@ -336,7 +336,7 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel, add
                         style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
                     )
                     // Jump back to the seminar, audiobook or course being studied.
-                    timer.itemId?.let { snap.itemsById[it] }?.let { LinkChip(it.url) }
+                    timer.itemId?.let { snap.itemsById[it] }?.let { LinkChip(it) }
                     Spacer(Modifier.height(16.dp))
                     ProgressRing(progress, Modifier.size(220.dp), color = subject?.let { androidx.compose.ui.graphics.Color(it.color) } ?: MaterialTheme.colorScheme.primary) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -524,8 +524,8 @@ private fun ContinueLearning(snap: Snapshot, timer: TimerState, vm: TodayViewMod
                             GlyphTile(snap.categoryOf(item).glyph, size = 36.dp, fallback = Glyphs.CATEGORY_DEFAULT)
                             Spacer(Modifier.weight(1f))
                             if (com.rayaurelius.sophinity.domain.Links.isOpenable(item.url)) {
-                                val uri = androidx.compose.ui.platform.LocalUriHandler.current
-                                IconButton(onClick = { runCatching { uri.openUri(item.url) } }, modifier = Modifier.size(36.dp)) {
+                                val openLink = com.rayaurelius.sophinity.ui.components.rememberItemLinkOpener()
+                                IconButton(onClick = { openLink(item) }, modifier = Modifier.size(36.dp)) {
                                     Icon(
                                         Icons.AutoMirrored.Filled.OpenInNew,
                                         stringResource(R.string.lib_open_link, com.rayaurelius.sophinity.domain.Links.host(item.url)),

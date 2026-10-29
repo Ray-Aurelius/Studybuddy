@@ -642,6 +642,11 @@
     <string name="notes_delete_body">Kalıcı olarak silinecek.</string>
     <string name="tb_notes_hidden_sub">Gizliyken de her kitaplık öğesinden erişilebilir</string>
     <string name="notes_save_item_first">Önce bu öğeyi kaydet, sonra burada onunla ilgili not yazabilirsin.</string>
+    <string name="set_link_timer">Bir bağlantı açtığımda zamanlayıcıyı başlat</string>
+    <string name="set_link_timer_sub">Bir kitaplık öğesinin web bağlantısını açmak, o öğe için kronometreyi başlatır. Başka bir şeyi ölçüyorsan, önce o oturum kaydedilir.</string>
+    <string name="link_timer_started">Zamanlayıcı başladı: %1$s</string>
+    <string name="link_timer_resumed">Zamanlayıcı devam ediyor: %1$s</string>
+    <string name="link_timer_switched">Önceki oturum kaydedildi. Zamanlayıcı başladı: %1$s</string>
     <plurals name="count_book">
         <item quantity="one">%d kitap</item>
         <item quantity="other">%d kitap</item>

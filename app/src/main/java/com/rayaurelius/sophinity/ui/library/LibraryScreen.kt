@@ -229,7 +229,7 @@ private fun ItemCard(snap: Snapshot, item: LearningItem, onClick: () -> Unit) {
                 val meta = listOfNotNull(item.creator.takeIf { it.isNotBlank() }, subject?.name)
                 if (meta.isNotEmpty()) Text(meta.joinToString(" · "), style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                LinkChip(item.url)
+                LinkChip(item)
                 val total = item.totalUnits
                 val media = snap.mediaProgress(item)
                 if (item.status == ItemStatus.ACTIVE && media != null) {
@@ -300,8 +300,8 @@ fun ItemEditorSheet(
                 trailingIcon = {
                     val url = com.rayaurelius.sophinity.domain.Links.normalize(item.url)
                     if (com.rayaurelius.sophinity.domain.Links.isOpenable(url)) {
-                        val uri = androidx.compose.ui.platform.LocalUriHandler.current
-                        IconButton(onClick = { runCatching { uri.openUri(url) } }) {
+                        val openLink = com.rayaurelius.sophinity.ui.components.rememberItemLinkOpener()
+                        IconButton(onClick = { openLink(item.copy(url = url)) }) {
                             Icon(Icons.AutoMirrored.Filled.OpenInNew, stringResource(R.string.lib_open_link, com.rayaurelius.sophinity.domain.Links.host(url)))
                         }
                     }

@@ -72,7 +72,9 @@ class ScreenshotTest {
         tab("Goals"); shot("4_goals")
         tab("Laurels"); shot("5_laurels")
         tab("Sessions"); shot("8_sessions")
-        tab("Notes"); shot("22_notes")
+        tab("Notes")
+        compose.waitUntil(5_000) { compose.onAllNodes(hasTestTag("note")).fetchSemanticsNodes().isNotEmpty() }
+        shot("22_notes")
     }
 
     @Test fun pausedTimerFitsWithLargeText() {
@@ -89,9 +91,35 @@ class ScreenshotTest {
         shot("23_paused_timer_large_text")
     }
 
+    @Test fun openingALinkStartsTheTimer() {
+        tab("Library")
+        compose.onNode(hasContentDescription("Open link on audiobooks.example.com")).performClick()
+        val app = ApplicationProvider.getApplicationContext<SophinityApp>()
+        // The timer is saved off the main thread, so wait for it rather than for Compose.
+        compose.waitUntil(5_000) { runBlocking { app.container.timer.current() }.isActive }
+        val t = runBlocking { app.container.timer.current() }
+        org.junit.Assert.assertEquals(com.rayaurelius.sophinity.timer.TimerStatus.RUNNING, t.status)
+        org.junit.Assert.assertEquals(audiobookId, t.itemId)
+        tab("Today")
+        compose.onNode(hasText("Stop & save")).assertExists()
+        shot("26_timer_from_link")
+    }
+
+    @Test fun linkTimerCanBeTurnedOff() {
+        val app = ApplicationProvider.getApplicationContext<SophinityApp>()
+        runBlocking { app.container.settingsStore.update { it.copy(linkStartsTimer = false) } }
+        tab("Library")
+        compose.onNode(hasContentDescription("Open link on audiobooks.example.com")).performClick()
+        compose.waitForIdle()
+        Thread.sleep(500)
+        org.junit.Assert.assertFalse(runBlocking { app.container.timer.current() }.isActive)
+    }
+
     @Test fun notesLinkToLibraryItems() {
         tab("Notes")
-        compose.onNode(hasText("Questions to try on myself")).assertExists()
+        // Notes load from the database off the main thread; wait for the list.
+        compose.waitUntil(5_000) { compose.onAllNodes(hasTestTag("note")).fetchSemanticsNodes().isNotEmpty() }
+        compose.onNode(hasText("Questions to try on myself"), useUnmergedTree = true).assertExists()
         compose.onAllNodes(hasTestTag("note"))[0].performClick()
         compose.waitForIdle()
         compose.onNode(hasTestTag("note_body")).assertExists()
@@ -103,7 +131,8 @@ class ScreenshotTest {
         compose.onNode(hasText("Habits of Curious People"), useUnmergedTree = true).performClick()
         compose.waitForIdle()
         compose.onNode(hasScrollAction() and hasAnyDescendant(hasText("Run time"))).performScrollToNode(hasText("Write a note"))
-        compose.onNode(hasText("Questions to try on myself")).assertExists()
+        compose.waitUntil(5_000) { compose.onAllNodes(hasTestTag("item_note")).fetchSemanticsNodes().isNotEmpty() }
+        compose.onNode(hasText("Questions to try on myself"), useUnmergedTree = true).assertExists()
         shot("25_item_notes")
     }
 

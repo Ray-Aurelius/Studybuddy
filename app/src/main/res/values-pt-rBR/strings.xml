@@ -642,6 +642,11 @@
     <string name="notes_delete_body">Ela será apagada para sempre.</string>
     <string name="tb_notes_hidden_sub">Ainda acessível em cada item da biblioteca quando oculta</string>
     <string name="notes_save_item_first">Salve este item primeiro e depois você poderá escrever notas sobre ele aqui.</string>
+    <string name="set_link_timer">Iniciar o timer ao abrir um link</string>
+    <string name="set_link_timer_sub">Abrir o link de um item da biblioteca inicia o cronômetro nesse item. Se você estava cronometrando outra coisa, essa sessão é salva antes.</string>
+    <string name="link_timer_started">Timer iniciado para %1$s</string>
+    <string name="link_timer_resumed">Timer retomado para %1$s</string>
+    <string name="link_timer_switched">Sessão anterior salva. Timer iniciado para %1$s</string>
     <plurals name="count_book">
         <item quantity="one">%d livro</item>
         <item quantity="many">%d de livros</item>

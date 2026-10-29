@@ -642,6 +642,11 @@
     <string name="notes_delete_body">Se borrará para siempre.</string>
     <string name="tb_notes_hidden_sub">Accesible desde cada elemento de la biblioteca aunque esté oculta</string>
     <string name="notes_save_item_first">Guarda primero este elemento y luego podrás escribir notas sobre él aquí.</string>
+    <string name="set_link_timer">Iniciar el temporizador al abrir un enlace</string>
+    <string name="set_link_timer_sub">Al abrir el enlace web de un elemento de la biblioteca, el cronómetro empieza para ese elemento. Si estabas cronometrando otra cosa, esa sesión se guarda primero.</string>
+    <string name="link_timer_started">Temporizador iniciado para %1$s</string>
+    <string name="link_timer_resumed">Temporizador reanudado para %1$s</string>
+    <string name="link_timer_switched">Sesión anterior guardada. Temporizador iniciado para %1$s</string>
     <plurals name="count_book">
         <item quantity="one">%d libro</item>
         <item quantity="many">%d de libros</item>

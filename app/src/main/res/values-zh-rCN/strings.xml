@@ -642,6 +642,11 @@
     <string name="notes_delete_body">删除后无法恢复。</string>
     <string name="tb_notes_hidden_sub">隐藏后仍可从每个资料库条目打开</string>
     <string name="notes_save_item_first">请先保存此条目，之后就能在这里为它写笔记。</string>
+    <string name="set_link_timer">打开链接时开始计时</string>
+    <string name="set_link_timer_sub">打开资料库条目的网页链接时，会为该条目开始秒表计时。如果正在为其他内容计时，会先保存那段学习记录。</string>
+    <string name="link_timer_started">已开始为“%1$s”计时</string>
+    <string name="link_timer_resumed">已继续为“%1$s”计时</string>
+    <string name="link_timer_switched">已保存上一段记录。已开始为“%1$s”计时</string>
     <plurals name="count_book">
         <item quantity="other">%d 本书</item>
     </plurals>

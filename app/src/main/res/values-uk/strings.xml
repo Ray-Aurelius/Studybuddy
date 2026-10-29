@@ -642,6 +642,11 @@
     <string name="notes_delete_body">Її буде видалено назавжди.</string>
     <string name="tb_notes_hidden_sub">Доступна з кожного елемента бібліотеки, навіть якщо прихована</string>
     <string name="notes_save_item_first">Спершу збережіть цей елемент, а тоді тут можна буде писати про нього нотатки.</string>
+    <string name="set_link_timer">Запускати таймер, коли я відкриваю посилання</string>
+    <string name="set_link_timer_sub">Якщо відкрити посилання елемента бібліотеки, секундомір запуститься для цього елемента. Якщо йшов відлік для чогось іншого, ту сесію спершу буде збережено.</string>
+    <string name="link_timer_started">Таймер запущено: %1$s</string>
+    <string name="link_timer_resumed">Таймер продовжено: %1$s</string>
+    <string name="link_timer_switched">Попередню сесію збережено. Таймер запущено: %1$s</string>
     <plurals name="count_book">
         <item quantity="one">%d книга</item>
         <item quantity="few">%d книги</item>

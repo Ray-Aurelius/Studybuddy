@@ -642,6 +642,11 @@
     <string name="notes_delete_body">Ghi chú sẽ bị xóa vĩnh viễn.</string>
     <string name="tb_notes_hidden_sub">Vẫn mở được từ từng mục trong thư viện khi bị ẩn</string>
     <string name="notes_save_item_first">Hãy lưu mục này trước, sau đó bạn có thể viết ghi chú về nó tại đây.</string>
+    <string name="set_link_timer">Bắt đầu hẹn giờ khi tôi mở liên kết</string>
+    <string name="set_link_timer_sub">Mở liên kết web của một mục trong thư viện sẽ bắt đầu bấm giờ cho mục đó. Nếu bạn đang bấm giờ cho thứ khác, phiên đó sẽ được lưu trước.</string>
+    <string name="link_timer_started">Đã bắt đầu hẹn giờ cho %1$s</string>
+    <string name="link_timer_resumed">Đã tiếp tục hẹn giờ cho %1$s</string>
+    <string name="link_timer_switched">Đã lưu phiên trước. Đã bắt đầu hẹn giờ cho %1$s</string>
     <plurals name="count_book">
         <item quantity="other">%d cuốn sách</item>
     </plurals>

@@ -642,6 +642,11 @@
     <string name="notes_delete_body">Θα σβηστεί οριστικά.</string>
     <string name="tb_notes_hidden_sub">Προσβάσιμη από κάθε στοιχείο της βιβλιοθήκης ακόμα κι αν είναι κρυφή</string>
     <string name="notes_save_item_first">Αποθήκευσε πρώτα αυτό το στοιχείο και μετά θα μπορείς να γράφεις σημειώσεις γι\' αυτό εδώ.</string>
+    <string name="set_link_timer">Έναρξη χρονομέτρου όταν ανοίγω σύνδεσμο</string>
+    <string name="set_link_timer_sub">Αν ανοίξεις τον σύνδεσμο ενός στοιχείου της βιβλιοθήκης, το χρονόμετρο ξεκινά για αυτό. Αν χρονομετρούσες κάτι άλλο, εκείνη η συνεδρία αποθηκεύεται πρώτα.</string>
+    <string name="link_timer_started">Το χρονόμετρο ξεκίνησε: %1$s</string>
+    <string name="link_timer_resumed">Το χρονόμετρο συνεχίζει: %1$s</string>
+    <string name="link_timer_switched">Η προηγούμενη συνεδρία αποθηκεύτηκε. Το χρονόμετρο ξεκίνησε: %1$s</string>
     <plurals name="count_book">
         <item quantity="one">%d βιβλίο</item>
         <item quantity="other">%d βιβλία</item>

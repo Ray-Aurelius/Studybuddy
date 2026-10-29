@@ -642,6 +642,11 @@
     <string name="notes_delete_body">Она будет удалена навсегда.</string>
     <string name="tb_notes_hidden_sub">Доступна из каждого элемента библиотеки, даже если скрыта</string>
     <string name="notes_save_item_first">Сначала сохраните этот элемент, а потом здесь можно будет писать о нём заметки.</string>
+    <string name="set_link_timer">Запускать таймер при открытии ссылки</string>
+    <string name="set_link_timer_sub">Если открыть ссылку элемента библиотеки, секундомер запустится для этого элемента. Если шёл отсчёт для чего-то другого, та сессия сначала сохранится.</string>
+    <string name="link_timer_started">Таймер запущен: %1$s</string>
+    <string name="link_timer_resumed">Таймер продолжен: %1$s</string>
+    <string name="link_timer_switched">Прошлая сессия сохранена. Таймер запущен: %1$s</string>
     <plurals name="count_book">
         <item quantity="one">%d книга</item>
         <item quantity="few">%d книги</item>

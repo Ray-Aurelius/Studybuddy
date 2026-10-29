@@ -788,4 +788,10 @@
         <item quantity="one">%d note</item>
         <item quantity="other">%d notes</item>
     </plurals>
+    <!-- Opening a library link starts the timer -->
+    <string name="set_link_timer">Start the timer when I open a link</string>
+    <string name="set_link_timer_sub">Opening a library item\'s web link starts the stopwatch on that item. If you were timing something else, that session is saved first.</string>
+    <string name="link_timer_started">Timer started for %1$s</string>
+    <string name="link_timer_resumed">Timer resumed for %1$s</string>
+    <string name="link_timer_switched">Last session saved. Timer started for %1$s</string>
 </resources>
