@@ -69,12 +69,27 @@ class MigrationTest {
     }
 
     @Test
+    fun v3ToV4AddsAnEmptyLink() {
+        helper.createDatabase(dbName, 3).apply {
+            execSQL("INSERT INTO items (id, type, title, creator, status, progressUnits, priorSec, playbackSpeed, takeaway, notes, addedAt) VALUES (1, 'SEMINAR', 'Old Seminar', '', 'ACTIVE', 0, 0, 1.0, '', '', 0)")
+            close()
+        }
+        val db = helper.runMigrationsAndValidate(dbName, 4, true)
+        db.query("SELECT title, url FROM items").use { c ->
+            assertTrue(c.moveToFirst())
+            assertEquals("Old Seminar", c.getString(0))
+            assertEquals("", c.getString(1))
+        }
+        db.close()
+    }
+
+    @Test
     fun v1AllTheWayToCurrent() {
         helper.createDatabase(dbName, 1).apply {
             execSQL("INSERT INTO items (id, type, title, creator, status, progressUnits, takeaway, notes, addedAt) VALUES (1, 'BOOK', 'B', '', 'DONE', 0, '', '', 0)")
             close()
         }
-        helper.runMigrationsAndValidate(dbName, 3, true).use { db ->
+        helper.runMigrationsAndValidate(dbName, 4, true).use { db ->
             db.query("SELECT COUNT(*) FROM items").use { c -> c.moveToFirst(); assertEquals(1, c.getInt(0)) }
         }
     }

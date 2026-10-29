@@ -450,6 +450,9 @@
     <string name="lib_rating">Твоя оценка</string>
     <string name="lib_takeaway">Главный вывод</string>
     <string name="lib_takeaway_hint">Сформулировать его одной строкой — отличный способ запомнить.</string>
+    <string name="lib_link">Ссылка (необязательно)</string>
+    <string name="lib_link_hint">Страница онлайн-семинара, аудиокниги, подкаста или курса</string>
+    <string name="lib_open_link">Открыть ссылку на %1$s</string>
     <string name="lib_notes">Заметки</string>
     <string name="goals_quick_add">Быстро добавить</string>
     <string name="goals_empty_title">Пока нет целей</string>

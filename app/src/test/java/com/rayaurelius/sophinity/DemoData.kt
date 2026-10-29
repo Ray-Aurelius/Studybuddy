@@ -63,7 +63,7 @@ object DemoData {
         repo.saveItem(LearningItem(type = ItemType.BOOK, title = "The Curious Learner's Handbook", creator = "M. Alvarez", subjectId = subjects[3], totalUnits = 320, progressUnits = 212))
         repo.saveItem(LearningItem(type = ItemType.COURSE, title = "Intro to Data Structures", creator = "Open University", subjectId = subjects[1], totalUnits = 12, progressUnits = 5))
         val workshop = repo.saveCategory(CustomCategory(name = "Workshop", icon = "anvil", unitLabel = "sessions"))
-        val audiobookId = repo.saveItem(LearningItem(type = ItemType.AUDIOBOOK, title = "Habits of Curious People", creator = "L. Park", subjectId = subjects[3],
+        val audiobookId = repo.saveItem(LearningItem(type = ItemType.AUDIOBOOK, title = "Habits of Curious People", creator = "L. Park", url = "https://audiobooks.example.com/habits-of-curious-people", subjectId = subjects[3],
             totalUnits = 24, progressUnits = 9, runtimeMin = 9 * 60 + 30, priorSec = 2 * 3600L, playbackSpeed = 1.5f))
         repeat(3) { d ->
             repo.addSession(StudySession(subjectId = subjects[3], itemId = audiobookId,
@@ -71,7 +71,7 @@ object DemoData {
         }
         repo.saveItem(LearningItem(type = ItemType.CUSTOM, categoryId = workshop, title = "Weekend Pottery Workshop", creator = "Clay Studio", totalUnits = 6, progressUnits = 4))
         repo.saveItem(LearningItem(type = ItemType.AUDIOBOOK, title = "A Short History of Numbers", status = ItemStatus.DONE, rating = 4, completedAt = now - 86_400_000L * 6))
-        repo.saveItem(LearningItem(type = ItemType.PODCAST, title = "Money Matters Weekly", creator = "J. Chen", subjectId = subjects[2], totalUnits = 40, progressUnits = 18))
+        repo.saveItem(LearningItem(type = ItemType.PODCAST, title = "Money Matters Weekly", creator = "J. Chen", url = "https://podcasts.example.org/money-matters", subjectId = subjects[2], totalUnits = 40, progressUnits = 18))
         repo.saveItem(LearningItem(type = ItemType.BOOK, title = "Spanish in 90 Days", creator = "R. Ortega", status = ItemStatus.DONE, rating = 5, takeaway = "Speak from day one.", completedAt = now - 86_400_000L * 3))
         repo.saveItem(LearningItem(type = ItemType.SEMINAR, title = "Local Investing Meetup", status = ItemStatus.DONE, rating = 4, completedAt = now - 86_400_000L * 10))
         repo.saveItem(LearningItem(type = ItemType.BOOK, title = "Thinking in Systems Primer", status = ItemStatus.WANT))

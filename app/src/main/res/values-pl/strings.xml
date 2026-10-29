@@ -450,6 +450,9 @@
     <string name="lib_rating">Twoja ocena</string>
     <string name="lib_takeaway">Najważniejszy wniosek</string>
     <string name="lib_takeaway_hint">Streszczenie w jednym zdaniu bardzo pomaga zapamiętać.</string>
+    <string name="lib_link">Link (opcjonalnie)</string>
+    <string name="lib_link_hint">Strona seminarium online, audiobooka, podcastu lub kursu</string>
+    <string name="lib_open_link">Otwórz link w %1$s</string>
     <string name="lib_notes">Notatki</string>
     <string name="goals_quick_add">Szybkie dodawanie</string>
     <string name="goals_empty_title">Brak celów</string>

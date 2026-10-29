@@ -640,3 +640,6 @@ timer_counts_from = menghitung dari %1$s
 timer_start_from_title = Mulai stopwatch dari
 timer_start_from_body = Lupa menekan Mulai? Masukkan berapa lama kamu sudah belajar. Sesi menghitung waktu itu dan lanjut dari sana.
 timer_start_from_reset = Mulai dari nol
+lib_link = Tautan (opsional)
+lib_link_hint = Halaman seminar online, buku audio, podcast, atau kursus
+lib_open_link = Buka tautan di %1$s

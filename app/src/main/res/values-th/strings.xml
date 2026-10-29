@@ -450,6 +450,9 @@
     <string name="lib_rating">คะแนนของคุณ</string>
     <string name="lib_takeaway">สิ่งที่ได้หลักๆ</string>
     <string name="lib_takeaway_hint">สรุปเป็นบรรทัดเดียวช่วยให้จำได้มาก</string>
+    <string name="lib_link">ลิงก์ (ไม่บังคับ)</string>
+    <string name="lib_link_hint">หน้าสัมมนาออนไลน์ หนังสือเสียง พอดแคสต์ หรือคอร์ส</string>
+    <string name="lib_open_link">เปิดลิงก์บน %1$s</string>
     <string name="lib_notes">บันทึก</string>
     <string name="goals_quick_add">เพิ่มด่วน</string>
     <string name="goals_empty_title">ยังไม่มีเป้าหมาย</string>

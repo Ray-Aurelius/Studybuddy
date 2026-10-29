@@ -450,6 +450,9 @@
     <string name="lib_rating">Puanın</string>
     <string name="lib_takeaway">Ana çıkarım</string>
     <string name="lib_takeaway_hint">Tek satırda özetlemek hatırlamaya çok yardımcı olur.</string>
+    <string name="lib_link">Bağlantı (isteğe bağlı)</string>
+    <string name="lib_link_hint">Çevrimiçi seminer, sesli kitap, podcast veya kurs sayfası</string>
+    <string name="lib_open_link">Bağlantıyı %1$s üzerinde aç</string>
     <string name="lib_notes">Notlar</string>
     <string name="goals_quick_add">Hızlı ekle</string>
     <string name="goals_empty_title">Henüz hedef yok</string>

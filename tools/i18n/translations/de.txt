@@ -665,3 +665,6 @@ timer_counts_from = zählt ab %1$s hoch
 timer_start_from_title = Stoppuhr starten bei
 timer_start_from_body = Vergessen, auf Start zu tippen? Gib ein, wie lange du schon lernst. Die Sitzung zählt diese Zeit mit und läuft von dort weiter.
 timer_start_from_reset = Bei null beginnen
+lib_link = Link (optional)
+lib_link_hint = Seite des Online-Seminars, Hörbuchs, Podcasts oder Kurses
+lib_open_link = Link auf %1$s öffnen

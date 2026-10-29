@@ -14,6 +14,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.foundation.layout.widthIn
 import com.rayaurelius.sophinity.R
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
+import com.rayaurelius.sophinity.ui.components.LinkChip
 import com.rayaurelius.sophinity.data.db.ItemType
 import com.rayaurelius.sophinity.ui.library.LibraryViewModel
 import com.rayaurelius.sophinity.ui.library.ItemEditorSheet
@@ -331,6 +333,8 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel, add
                             .joinToString(" · ").ifEmpty { stringResource(R.string.common_learning) },
                         style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
                     )
+                    // Jump back to the seminar, audiobook or course being studied.
+                    timer.itemId?.let { snap.itemsById[it] }?.let { LinkChip(it.url) }
                     Spacer(Modifier.height(16.dp))
                     ProgressRing(progress, Modifier.size(220.dp), color = subject?.let { androidx.compose.ui.graphics.Color(it.color) } ?: MaterialTheme.colorScheme.primary) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -508,7 +512,20 @@ private fun ContinueLearning(snap: Snapshot, timer: TimerState, vm: TodayViewMod
             items(snap.activeItems, key = { it.id }) { item ->
                 OutlinedCard(Modifier.width(200.dp)) {
                     Column(Modifier.padding(14.dp)) {
-                        GlyphTile(snap.categoryOf(item).glyph, size = 36.dp, fallback = Glyphs.CATEGORY_DEFAULT)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            GlyphTile(snap.categoryOf(item).glyph, size = 36.dp, fallback = Glyphs.CATEGORY_DEFAULT)
+                            Spacer(Modifier.weight(1f))
+                            if (com.rayaurelius.sophinity.domain.Links.isOpenable(item.url)) {
+                                val uri = androidx.compose.ui.platform.LocalUriHandler.current
+                                IconButton(onClick = { runCatching { uri.openUri(item.url) } }, modifier = Modifier.size(36.dp)) {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.OpenInNew,
+                                        stringResource(R.string.lib_open_link, com.rayaurelius.sophinity.domain.Links.host(item.url)),
+                                        tint = MaterialTheme.colorScheme.primary,
+                                    )
+                                }
+                            }
+                        }
                         Spacer(Modifier.height(4.dp))
                         Text(item.title, style = MaterialTheme.typography.titleSmall, maxLines = 2, overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.height(40.dp))

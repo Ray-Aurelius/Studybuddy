@@ -690,3 +690,6 @@ timer_counts_from = cuenta desde %1$s
 timer_start_from_title = Iniciar el cronómetro en
 timer_start_from_body = ¿Olvidaste pulsar Iniciar? Indica cuánto llevas aprendiendo. La sesión cuenta ese tiempo y sigue desde ahí.
 timer_start_from_reset = Empezar desde cero
+lib_link = Enlace (opcional)
+lib_link_hint = Página del seminario en línea, audiolibro, pódcast o curso
+lib_open_link = Abrir enlace en %1$s

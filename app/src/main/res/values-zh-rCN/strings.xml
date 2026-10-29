@@ -450,6 +450,9 @@
     <string name="lib_rating">你的评分</string>
     <string name="lib_takeaway">主要收获</string>
     <string name="lib_takeaway_hint">用一句话概括，对记忆大有帮助。</string>
+    <string name="lib_link">链接（可选）</string>
+    <string name="lib_link_hint">在线研讨会、有声书、播客或课程页面</string>
+    <string name="lib_open_link">在 %1$s 打开链接</string>
     <string name="lib_notes">笔记</string>
     <string name="goals_quick_add">快速添加</string>
     <string name="goals_empty_title">还没有目标</string>

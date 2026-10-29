@@ -715,3 +715,6 @@ timer_counts_from = liczy od %1$s
 timer_start_from_title = Uruchom stoper od
 timer_start_from_body = Zapomniałeś nacisnąć Start? Podaj, jak długo już się uczysz. Sesja wliczy ten czas i będzie liczyć dalej.
 timer_start_from_reset = Zacznij od zera
+lib_link = Link (opcjonalnie)
+lib_link_hint = Strona seminarium online, audiobooka, podcastu lub kursu
+lib_open_link = Otwórz link w %1$s

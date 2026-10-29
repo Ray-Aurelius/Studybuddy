@@ -450,6 +450,9 @@
     <string name="lib_rating">Tu valoración</string>
     <string name="lib_takeaway">La gran lección</string>
     <string name="lib_takeaway_hint">Resumirlo en una línea es una forma poderosa de recordarlo.</string>
+    <string name="lib_link">Enlace (opcional)</string>
+    <string name="lib_link_hint">Página del seminario en línea, audiolibro, pódcast o curso</string>
+    <string name="lib_open_link">Abrir enlace en %1$s</string>
     <string name="lib_notes">Notas</string>
     <string name="goals_quick_add">Añadir rápido</string>
     <string name="goals_empty_title">Aún no hay metas</string>

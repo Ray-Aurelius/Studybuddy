@@ -450,6 +450,9 @@
     <string name="lib_rating">Nilaimu</string>
     <string name="lib_takeaway">Pelajaran utama</string>
     <string name="lib_takeaway_hint">Meringkasnya dalam satu baris sangat membantu untuk mengingat.</string>
+    <string name="lib_link">Tautan (opsional)</string>
+    <string name="lib_link_hint">Halaman seminar online, buku audio, podcast, atau kursus</string>
+    <string name="lib_open_link">Buka tautan di %1$s</string>
     <string name="lib_notes">Catatan</string>
     <string name="goals_quick_add">Tambah cepat</string>
     <string name="goals_empty_title">Belum ada target</string>

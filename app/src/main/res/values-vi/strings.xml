@@ -450,6 +450,9 @@
     <string name="lib_rating">Đánh giá của bạn</string>
     <string name="lib_takeaway">Bài học chính</string>
     <string name="lib_takeaway_hint">Tóm tắt trong một dòng giúp bạn nhớ rất nhiều.</string>
+    <string name="lib_link">Liên kết (không bắt buộc)</string>
+    <string name="lib_link_hint">Trang hội thảo trực tuyến, sách nói, podcast hoặc khóa học</string>
+    <string name="lib_open_link">Mở liên kết trên %1$s</string>
     <string name="lib_notes">Ghi chú</string>
     <string name="goals_quick_add">Thêm nhanh</string>
     <string name="goals_empty_title">Chưa có mục tiêu</string>

@@ -640,3 +640,6 @@ timer_counts_from = đếm tiến từ %1$s
 timer_start_from_title = Bắt đầu đồng hồ từ
 timer_start_from_body = Quên bấm Bắt đầu? Nhập bạn đã học được bao lâu. Buổi học sẽ tính thời gian đó và tiếp tục từ đó.
 timer_start_from_reset = Bắt đầu từ 0
+lib_link = Liên kết (không bắt buộc)
+lib_link_hint = Trang hội thảo trực tuyến, sách nói, podcast hoặc khóa học
+lib_open_link = Mở liên kết trên %1$s

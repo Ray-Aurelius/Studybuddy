@@ -115,6 +115,8 @@ data class LearningItem(
     val addedAt: Long = System.currentTimeMillis(),
     val startedAt: Long? = null,
     val completedAt: Long? = null,
+    /** Web link to the media: an online seminar, an audiobook or podcast page, a course, an article. Blank if none. */
+    @ColumnInfo(defaultValue = "") val url: String = "",
 )
 
 @Serializable

@@ -450,6 +450,9 @@
     <string name="lib_rating">내 평점</string>
     <string name="lib_takeaway">핵심 배움</string>
     <string name="lib_takeaway_hint">한 줄로 요약하면 기억에 크게 도움이 돼요.</string>
+    <string name="lib_link">링크 (선택)</string>
+    <string name="lib_link_hint">온라인 세미나, 오디오북, 팟캐스트, 강좌 페이지</string>
+    <string name="lib_open_link">%1$s에서 링크 열기</string>
     <string name="lib_notes">메모</string>
     <string name="goals_quick_add">빠르게 추가</string>
     <string name="goals_empty_title">아직 목표가 없어요</string>

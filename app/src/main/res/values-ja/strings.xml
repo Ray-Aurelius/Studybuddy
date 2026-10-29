@@ -450,6 +450,9 @@
     <string name="lib_rating">あなたの評価</string>
     <string name="lib_takeaway">一番の学び</string>
     <string name="lib_takeaway_hint">1行にまとめると記憶に大いに役立ちます。</string>
+    <string name="lib_link">リンク（任意）</string>
+    <string name="lib_link_hint">オンラインセミナー、オーディオブック、ポッドキャスト、コースのページ</string>
+    <string name="lib_open_link">%1$s でリンクを開く</string>
     <string name="lib_notes">メモ</string>
     <string name="goals_quick_add">クイック追加</string>
     <string name="goals_empty_title">まだ目標がありません</string>

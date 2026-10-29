@@ -450,6 +450,9 @@
     <string name="lib_rating">आपकी रेटिंग</string>
     <string name="lib_takeaway">मुख्य सीख</string>
     <string name="lib_takeaway_hint">इसे एक पंक्ति में लिखना याद रखने में बहुत मदद करता है।</string>
+    <string name="lib_link">लिंक (वैकल्पिक)</string>
+    <string name="lib_link_hint">ऑनलाइन सेमिनार, ऑडियोबुक, पॉडकास्ट या कोर्स का पेज</string>
+    <string name="lib_open_link">%1$s पर लिंक खोलें</string>
     <string name="lib_notes">नोट्स</string>
     <string name="goals_quick_add">झटपट जोड़ें</string>
     <string name="goals_empty_title">अभी कोई लक्ष्य नहीं</string>

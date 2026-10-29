@@ -640,3 +640,6 @@ timer_counts_from = 從 %1$s 開始正計時
 timer_start_from_title = 碼錶起始時間
 timer_start_from_body = 忘了按開始？輸入你已經學習了多久，本次學習會計入這段時間並從那裡繼續。
 timer_start_from_reset = 從零開始
+lib_link = 連結（選填）
+lib_link_hint = 線上研討會、有聲書、Podcast 或課程頁面
+lib_open_link = 在 %1$s 開啟連結

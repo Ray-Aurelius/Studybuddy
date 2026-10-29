@@ -665,3 +665,6 @@ timer_counts_from = %1$s itibarıyla ileri sayar
 timer_start_from_title = Kronometreyi şuradan başlat
 timer_start_from_body = Başlat'a basmayı mı unuttun? Ne kadar süredir öğrendiğini gir. Oturum bu süreyi sayar ve oradan devam eder.
 timer_start_from_reset = Sıfırdan başla
+lib_link = Bağlantı (isteğe bağlı)
+lib_link_hint = Çevrimiçi seminer, sesli kitap, podcast veya kurs sayfası
+lib_open_link = Bağlantıyı %1$s üzerinde aç

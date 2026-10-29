@@ -665,3 +665,6 @@ timer_counts_from = telt op vanaf %1$s
 timer_start_from_title = Stopwatch starten op
 timer_start_from_body = Vergeten op Start te tikken? Vul in hoe lang je al aan het leren bent. De sessie telt die tijd mee en gaat vanaf daar verder.
 timer_start_from_reset = Bij nul beginnen
+lib_link = Link (optioneel)
+lib_link_hint = Pagina van het online seminar, luisterboek, podcast of cursus
+lib_open_link = Link openen op %1$s

@@ -4,6 +4,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.hasAnyDescendant
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.hasTestTag
@@ -103,9 +104,9 @@ class ScreenshotTest {
 
     @Test fun audiobookEditorHasNoDoneCount() {
         tab("Library")
-        compose.onNode(hasText("Habits of Curious People")).performClick()
+        compose.onNode(hasText("Habits of Curious People"), useUnmergedTree = true).performClick()
         compose.waitForIdle()
-        compose.onAllNodes(hasScrollAction()).let { it[it.fetchSemanticsNodes().size - 1] }.performScrollToNode(hasText("Total chapters"))
+        compose.onNode(hasScrollAction() and hasAnyDescendant(hasText("Run time"))).performScrollToNode(hasText("Total chapters"))
         shot("13_audiobook_editor")
     }
 
@@ -141,7 +142,7 @@ class ScreenshotTest {
                 .update { it.copy(choiceStyle = com.rayaurelius.sophinity.data.ChoiceStyle.BUBBLES) }
         }
         tab("Library")
-        compose.onNode(hasText("Habits of Curious People")).performClick()
+        compose.onNode(hasText("Habits of Curious People"), useUnmergedTree = true).performClick()
         compose.waitForIdle()
         shot("19_editor_bubbles")
     }

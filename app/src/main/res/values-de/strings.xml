@@ -450,6 +450,9 @@
     <string name="lib_rating">Deine Bewertung</string>
     <string name="lib_takeaway">Wichtigste Erkenntnis</string>
     <string name="lib_takeaway_hint">Es in einer Zeile zusammenzufassen, hilft enorm beim Erinnern.</string>
+    <string name="lib_link">Link (optional)</string>
+    <string name="lib_link_hint">Seite des Online-Seminars, Hörbuchs, Podcasts oder Kurses</string>
+    <string name="lib_open_link">Link auf %1$s öffnen</string>
     <string name="lib_notes">Notizen</string>
     <string name="goals_quick_add">Schnell hinzufügen</string>
     <string name="goals_empty_title">Noch keine Ziele</string>

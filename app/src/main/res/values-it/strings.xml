@@ -450,6 +450,9 @@
     <string name="lib_rating">Il tuo voto</string>
     <string name="lib_takeaway">Lezione principale</string>
     <string name="lib_takeaway_hint">Riassumerlo in una riga aiuta molto a ricordarlo.</string>
+    <string name="lib_link">Link (facoltativo)</string>
+    <string name="lib_link_hint">Pagina del seminario online, dell\'audiolibro, del podcast o del corso</string>
+    <string name="lib_open_link">Apri il link su %1$s</string>
     <string name="lib_notes">Note</string>
     <string name="goals_quick_add">Aggiunta rapida</string>
     <string name="goals_empty_title">Ancora nessun obiettivo</string>

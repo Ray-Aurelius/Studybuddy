@@ -450,6 +450,9 @@
     <string name="lib_rating">你的評分</string>
     <string name="lib_takeaway">主要收穫</string>
     <string name="lib_takeaway_hint">用一句話概括，對記憶大有幫助。</string>
+    <string name="lib_link">連結（選填）</string>
+    <string name="lib_link_hint">線上研討會、有聲書、Podcast 或課程頁面</string>
+    <string name="lib_open_link">在 %1$s 開啟連結</string>
     <string name="lib_notes">筆記</string>
     <string name="goals_quick_add">快速新增</string>
     <string name="goals_empty_title">還沒有目標</string>

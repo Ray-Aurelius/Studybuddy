@@ -640,3 +640,6 @@ timer_counts_from = 从 %1$s 开始正计时
 timer_start_from_title = 秒表起始时间
 timer_start_from_body = 忘了点开始？输入你已经学习了多久，本次学习会计入这段时间并从那里继续。
 timer_start_from_reset = 从零开始
+lib_link = 链接（可选）
+lib_link_hint = 在线研讨会、有声书、播客或课程页面
+lib_open_link = 在 %1$s 打开链接

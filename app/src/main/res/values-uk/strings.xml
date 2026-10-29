@@ -450,6 +450,9 @@
     <string name="lib_rating">Твоя оцінка</string>
     <string name="lib_takeaway">Головний висновок</string>
     <string name="lib_takeaway_hint">Сформулювати його одним рядком — чудовий спосіб запам\'ятати.</string>
+    <string name="lib_link">Посилання (необов\'язково)</string>
+    <string name="lib_link_hint">Сторінка онлайн-семінару, аудіокниги, подкасту чи курсу</string>
+    <string name="lib_open_link">Відкрити посилання на %1$s</string>
     <string name="lib_notes">Нотатки</string>
     <string name="goals_quick_add">Швидко додати</string>
     <string name="goals_empty_title">Поки немає цілей</string>

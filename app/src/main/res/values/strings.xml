@@ -570,6 +570,9 @@
     <string name="lib_rating">Your rating</string>
     <string name="lib_takeaway">Biggest takeaway</string>
     <string name="lib_takeaway_hint">Summarizing in one line is a powerful way to remember it.</string>
+    <string name="lib_link">Link (optional)</string>
+    <string name="lib_link_hint">Online seminar, audiobook, podcast or course page</string>
+    <string name="lib_open_link">Open link on %1$s</string>
     <string name="lib_notes">Notes</string>
 
     <!-- Goals -->

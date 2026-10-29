@@ -4,6 +4,8 @@ package com.rayaurelius.sophinity.ui.library
 
 import com.rayaurelius.sophinity.domain.str
 import com.rayaurelius.sophinity.R
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
+import com.rayaurelius.sophinity.ui.components.LinkChip
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.IconButton
 import com.rayaurelius.sophinity.ui.components.Choices
@@ -88,6 +90,7 @@ class LibraryViewModel(private val c: AppContainer) : ViewModel() {
     fun save(item: LearningItem, onSaved: (Long) -> Unit = {}) = viewModelScope.launch {
         val now = System.currentTimeMillis()
         val fixed = item.copy(
+            url = com.rayaurelius.sophinity.domain.Links.normalize(item.url),
             startedAt = item.startedAt ?: if (item.status != ItemStatus.WANT) now else null,
             completedAt = if (item.status == ItemStatus.DONE) item.completedAt ?: now else null,
             progressUnits = if (item.status == ItemStatus.DONE && item.totalUnits != null) item.totalUnits else item.progressUnits,
@@ -226,6 +229,7 @@ private fun ItemCard(snap: Snapshot, item: LearningItem, onClick: () -> Unit) {
                 val meta = listOfNotNull(item.creator.takeIf { it.isNotBlank() }, subject?.name)
                 if (meta.isNotEmpty()) Text(meta.joinToString(" · "), style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                LinkChip(item.url)
                 val total = item.totalUnits
                 val media = snap.mediaProgress(item)
                 if (item.status == ItemStatus.ACTIVE && media != null) {
@@ -285,6 +289,24 @@ fun ItemEditorSheet(
                 item.creator, { item = item.copy(creator = it) },
                 label = { Text(stringResource(when (item.type) { ItemType.BOOK, ItemType.ARTICLE -> R.string.lib_author; ItemType.AUDIOBOOK -> R.string.lib_author_narrator; ItemType.PODCAST -> R.string.lib_host; ItemType.SEMINAR -> R.string.lib_speaker; else -> R.string.lib_creator })) },
                 singleLine = true, modifier = Modifier.fillMaxWidth(),
+            )
+            OutlinedTextField(
+                item.url, { item = item.copy(url = it.take(2000)) },
+                label = { Text(stringResource(R.string.lib_link)) },
+                placeholder = { Text("https://") },
+                supportingText = { Text(stringResource(R.string.lib_link_hint)) },
+                singleLine = true,
+                keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Uri),
+                trailingIcon = {
+                    val url = com.rayaurelius.sophinity.domain.Links.normalize(item.url)
+                    if (com.rayaurelius.sophinity.domain.Links.isOpenable(url)) {
+                        val uri = androidx.compose.ui.platform.LocalUriHandler.current
+                        IconButton(onClick = { runCatching { uri.openUri(url) } }) {
+                            Icon(Icons.AutoMirrored.Filled.OpenInNew, stringResource(R.string.lib_open_link, com.rayaurelius.sophinity.domain.Links.host(url)))
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
             )
             Choices(
                 ItemStatus.entries, item.status, { item = item.copy(status = it) }, label = { stringResource(it.labelRes) },

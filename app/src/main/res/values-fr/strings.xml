@@ -450,6 +450,9 @@
     <string name="lib_rating">Ta note</string>
     <string name="lib_takeaway">L\'idée principale</string>
     <string name="lib_takeaway_hint">Le résumer en une ligne est un excellent moyen de s\'en souvenir.</string>
+    <string name="lib_link">Lien (facultatif)</string>
+    <string name="lib_link_hint">Page du séminaire en ligne, du livre audio, du podcast ou du cours</string>
+    <string name="lib_open_link">Ouvrir le lien sur %1$s</string>
     <string name="lib_notes">Notes</string>
     <string name="goals_quick_add">Ajout rapide</string>
     <string name="goals_empty_title">Pas encore d\'objectif</string>

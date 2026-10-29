@@ -450,6 +450,9 @@
     <string name="lib_rating">Η βαθμολογία σου</string>
     <string name="lib_takeaway">Κύριο συμπέρασμα</string>
     <string name="lib_takeaway_hint">Αν το συνοψίσεις σε μία γραμμή, θα το θυμάσαι πολύ καλύτερα.</string>
+    <string name="lib_link">Σύνδεσμος (προαιρετικό)</string>
+    <string name="lib_link_hint">Σελίδα διαδικτυακού σεμιναρίου, ηχητικού βιβλίου, podcast ή μαθήματος</string>
+    <string name="lib_open_link">Άνοιγμα συνδέσμου στο %1$s</string>
     <string name="lib_notes">Σημειώσεις</string>
     <string name="goals_quick_add">Γρήγορη προσθήκη</string>
     <string name="goals_empty_title">Δεν υπάρχουν ακόμα στόχοι</string>

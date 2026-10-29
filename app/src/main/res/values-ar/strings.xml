@@ -450,6 +450,9 @@
     <string name="lib_rating">تقييمك</string>
     <string name="lib_takeaway">الخلاصة الأهم</string>
     <string name="lib_takeaway_hint">تلخيصها في سطر واحد يساعد كثيرًا على التذكّر.</string>
+    <string name="lib_link">رابط (اختياري)</string>
+    <string name="lib_link_hint">صفحة الندوة الإلكترونية أو الكتاب الصوتي أو البودكاست أو الدورة</string>
+    <string name="lib_open_link">افتح الرابط على %1$s</string>
     <string name="lib_notes">ملاحظات</string>
     <string name="goals_quick_add">إضافة سريعة</string>
     <string name="goals_empty_title">لا أهداف بعد</string>

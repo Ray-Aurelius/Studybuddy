@@ -640,3 +640,6 @@ timer_counts_from = %1$s부터 측정
 timer_start_from_title = 스톱워치 시작 시간
 timer_start_from_body = 시작을 누르는 걸 잊었나요? 이미 공부한 시간을 입력하면 그 시간을 포함해 이어서 측정해요.
 timer_start_from_reset = 0부터 시작
+lib_link = 링크 (선택)
+lib_link_hint = 온라인 세미나, 오디오북, 팟캐스트, 강좌 페이지
+lib_open_link = %1$s에서 링크 열기

@@ -690,3 +690,6 @@ timer_counts_from = compte à partir de %1$s
 timer_start_from_title = Démarrer le chronomètre à
 timer_start_from_body = Tu as oublié d'appuyer sur Démarrer ? Indique depuis combien de temps tu apprends. La séance compte ce temps et repart de là.
 timer_start_from_reset = Repartir de zéro
+lib_link = Lien (facultatif)
+lib_link_hint = Page du séminaire en ligne, du livre audio, du podcast ou du cours
+lib_open_link = Ouvrir le lien sur %1$s
