@@ -623,7 +623,6 @@ set_backup_failed = Cadangan terakhir tidak bisa disimpan. Ketuk untuk memilih f
 set_backup_now = Cadangkan sekarang
 set_backup_cloud_note = Sophinity juga termasuk dalam cadangan Google ponselmu jika diaktifkan di setelan Android, jadi kembali saat kamu menyiapkan ponsel baru.
 onb_restore = Pulihkan dari cadangan
-timer_add_media = Tambahkan buku, podcast, atau kursus ke perpustakaan
 app_menus = Menu
 app_bubbles = Tampilkan pilihan sebagai gelembung
 app_bubbles_sub = Tampilkan setiap opsi sebagai gelembung, bukan menu tarik-turun

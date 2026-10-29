@@ -412,7 +412,6 @@
     <string name="timer_start_from_title">Start the stopwatch at</string>
     <string name="timer_start_from_body">Forgot to press Start? Enter how long you\'ve already been learning. The session counts that time and starts from there.</string>
     <string name="timer_start_from_reset">Start from zero</string>
-    <string name="timer_add_media">Add a book, podcast or course to the library</string>
     <string name="app_menus">Menus</string>
     <string name="app_bubbles">Show choices as bubbles</string>
     <string name="app_bubbles_sub">Lay out every option as a tappable bubble instead of a drop-down menu</string>

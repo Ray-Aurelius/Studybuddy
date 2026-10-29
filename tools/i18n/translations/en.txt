@@ -312,7 +312,6 @@ timer_counts_from = counts up from %1$s
 timer_start_from_title = Start the stopwatch at
 timer_start_from_body = Forgot to press Start? Enter how long you've already been learning. The session counts that time and starts from there.
 timer_start_from_reset = Start from zero
-timer_add_media = Add a book, podcast or course to the library
 app_menus = Menus
 app_bubbles = Show choices as bubbles
 app_bubbles_sub = Lay out every option as a tappable bubble instead of a drop-down menu

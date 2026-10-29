@@ -314,7 +314,6 @@
     <string name="timer_start_from_title">Mulai stopwatch dari</string>
     <string name="timer_start_from_body">Lupa menekan Mulai? Masukkan berapa lama kamu sudah belajar. Sesi menghitung waktu itu dan lanjut dari sana.</string>
     <string name="timer_start_from_reset">Mulai dari nol</string>
-    <string name="timer_add_media">Tambahkan buku, podcast, atau kursus ke perpustakaan</string>
     <string name="app_menus">Menu</string>
     <string name="app_bubbles">Tampilkan pilihan sebagai gelembung</string>
     <string name="app_bubbles_sub">Tampilkan setiap opsi sebagai gelembung, bukan menu tarik-turun</string>

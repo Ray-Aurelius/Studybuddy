@@ -314,7 +314,6 @@
     <string name="timer_start_from_title">Запустить секундомер с</string>
     <string name="timer_start_from_body">Забыл нажать «Старт»? Укажи, сколько ты уже учишься. Занятие учтёт это время и продолжит отсчёт.</string>
     <string name="timer_start_from_reset">Начать с нуля</string>
-    <string name="timer_add_media">Добавить книгу, подкаст или курс в библиотеку</string>
     <string name="app_menus">Меню</string>
     <string name="app_bubbles">Показывать варианты пузырьками</string>
     <string name="app_bubbles_sub">Каждый вариант — отдельный пузырёк вместо выпадающего меню</string>

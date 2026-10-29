@@ -314,7 +314,6 @@
     <string name="timer_start_from_title">Stopwatch starten op</string>
     <string name="timer_start_from_body">Vergeten op Start te tikken? Vul in hoe lang je al aan het leren bent. De sessie telt die tijd mee en gaat vanaf daar verder.</string>
     <string name="timer_start_from_reset">Bij nul beginnen</string>
-    <string name="timer_add_media">Boek, podcast of cursus aan de bibliotheek toevoegen</string>
     <string name="app_menus">Menu\'s</string>
     <string name="app_bubbles">Keuzes als bubbels tonen</string>
     <string name="app_bubbles_sub">Toon elke optie als een tikbare bubbel in plaats van een vervolgkeuzemenu</string>

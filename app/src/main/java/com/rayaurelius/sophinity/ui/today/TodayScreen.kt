@@ -12,6 +12,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.foundation.layout.widthIn
 import com.rayaurelius.sophinity.R
 import com.rayaurelius.sophinity.data.db.ItemType
 import com.rayaurelius.sophinity.ui.library.LibraryViewModel
@@ -130,8 +131,24 @@ fun TodayScreen(
     val timer = vm.timer.collectAsStateWithLifecycle().value
     val reflect by vm.reflect.collectAsStateWithLifecycle()
     var showManual by rememberSaveable { mutableStateOf(false) }
+    var addingItem by remember { mutableStateOf(false) }
+    var added by remember { mutableStateOf<AddedItem?>(null) }
 
     if (snap == null || timer == null) return
+
+    if (addingItem) {
+        val library = appViewModel { LibraryViewModel(it) }
+        ItemEditorSheet(
+            snap, LearningItem(type = ItemType.BOOK, title = "", status = ItemStatus.ACTIVE, subjectId = snap.settings.lastSubjectId),
+            onDismiss = { addingItem = false },
+            onSave = { item ->
+                library.save(item) { id -> added = AddedItem(id, item.subjectId) }
+                addingItem = false
+            },
+            onDelete = { addingItem = false },
+            onCreateCategory = { cat, picked -> library.saveCategory(cat, picked) },
+        )
+    }
 
     LazyColumn(
         contentPadding = PaddingValues(
@@ -142,8 +159,8 @@ fun TodayScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxSize(),
     ) {
-        item { Header(snap, onOpenSettings, onOpenBadges) }
-        item { TimerCard(snap, timer, vm) }
+        item { Header(snap, onOpenSettings, onOpenBadges, onAddToLibrary = { addingItem = true }) }
+        item { TimerCard(snap, timer, vm, added, onAddedConsumed = { added = null }) }
         item { QuickStats(snap) }
         item { GoalsGlance(snap, snap.goalProgress, onOpenGoals) }
         if (snap.activeItems.isNotEmpty()) item { ContinueLearning(snap, timer, vm) }
@@ -169,7 +186,7 @@ fun TodayScreen(
 }
 
 @Composable
-private fun Header(snap: Snapshot, onOpenSettings: () -> Unit, onOpenBadges: () -> Unit) {
+private fun Header(snap: Snapshot, onOpenSettings: () -> Unit, onOpenBadges: () -> Unit, onAddToLibrary: () -> Unit) {
     val hour = LocalTime.now().hour
     val greeting = stringResource(when (hour) { in 4..11 -> R.string.greet_morning; in 12..16 -> R.string.greet_afternoon; else -> R.string.greet_evening })
     // Stacked so it never truncates: narrow screens, side toolbar, large text, long translations.
@@ -181,6 +198,7 @@ private fun Header(snap: Snapshot, onOpenSettings: () -> Unit, onOpenBadges: () 
         }
         Text(greeting, style = MaterialTheme.typography.headlineMedium)
         Spacer(Modifier.height(8.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
         Surface(onClick = onOpenBadges, shape = MaterialTheme.shapes.small, color = MaterialTheme.colorScheme.primaryContainer) {
             Row(Modifier.padding(start = 8.dp, end = 10.dp, top = 5.dp, bottom = 5.dp), verticalAlignment = Alignment.CenterVertically) {
                 Glyph(snap.title.current.glyph, size = 18.dp, tint = MaterialTheme.colorScheme.onPrimaryContainer)
@@ -192,11 +210,25 @@ private fun Header(snap: Snapshot, onOpenSettings: () -> Unit, onOpenBadges: () 
                 )
             }
         }
+        Spacer(Modifier.weight(1f).widthIn(min = 8.dp))
+        // Add a book, podcast or course without leaving Today; it's then selected in the timer.
+        FilledTonalButton(onClick = onAddToLibrary, contentPadding = PaddingValues(start = 10.dp, end = 14.dp), modifier = Modifier.height(36.dp)) {
+            Glyph("scroll", size = 18.dp)
+            Spacer(Modifier.width(6.dp))
+            Text(
+                stringResource(R.string.lib_add_title), maxLines = 1, softWrap = false,
+                autoSize = androidx.compose.foundation.text.TextAutoSize.StepBased(minFontSize = 10.sp, maxFontSize = MaterialTheme.typography.labelLarge.fontSize),
+            )
+        }
+        }
     }
 }
 
+/** A library item just created from Today, to select in the timer. */
+private data class AddedItem(val id: Long, val subjectId: Long?)
+
 @Composable
-private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
+private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel, added: AddedItem?, onAddedConsumed: () -> Unit) {
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
     LaunchedEffect(timer.status) {
         while (timer.status == TimerStatus.RUNNING || timer.status == TimerStatus.BREAK) {
@@ -215,19 +247,9 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
     if (pickHeadStart) HeadStartSheet(headStartMin, onDismiss = { pickHeadStart = false }) { headStartMin = it; pickHeadStart = false }
     var subjectId by rememberSaveable { mutableStateOf(snap.settings.lastSubjectId?.takeIf { it in snap.subjectsById }) }
     var itemId by rememberSaveable { mutableStateOf<Long?>(null) }
-    var addingItem by remember { mutableStateOf(false) }
-    if (addingItem) {
-        val library = appViewModel { LibraryViewModel(it) }
-        ItemEditorSheet(
-            snap, LearningItem(type = ItemType.BOOK, title = "", status = ItemStatus.ACTIVE, subjectId = subjectId),
-            onDismiss = { addingItem = false },
-            onSave = { item ->
-                library.save(item) { id -> itemId = id; item.subjectId?.let { subjectId = it } }
-                addingItem = false
-            },
-            onDelete = { addingItem = false },
-            onCreateCategory = { cat, picked -> library.saveCategory(cat, picked) },
-        )
+    // An item just added from the header's "Add to library" is selected for the next session.
+    LaunchedEffect(added) {
+        added?.let { a -> itemId = a.id; a.subjectId?.let { subjectId = it }; onAddedConsumed() }
     }
 
     ElevatedCard(Modifier.fillMaxWidth()) {
@@ -283,12 +305,7 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                             snap.itemsById[id]?.subjectId?.let { subjectId = it }
                         }
                     }
-                    Spacer(Modifier.height(10.dp))
-                    // Add a book, podcast or course right here, without leaving the timer; it's selected once saved.
-                    FilledTonalIconButton(onClick = { addingItem = true }, modifier = Modifier.size(40.dp)) {
-                        Glyph("scroll", size = 22.dp, contentDescription = stringResource(R.string.timer_add_media))
-                    }
-                    Spacer(Modifier.height(10.dp))
+                    Spacer(Modifier.height(16.dp))
                     Button(onClick = { vm.start(mode, subjectId, itemId, if (mode == TimerMode.STOPWATCH) headStartMin * 60_000L else 0); headStartMin = 0 }, modifier = Modifier.fillMaxWidth().height(56.dp)) {
                         Icon(Icons.Default.PlayArrow, null)
                         Spacer(Modifier.width(8.dp))

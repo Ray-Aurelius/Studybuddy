@@ -648,7 +648,6 @@ set_backup_failed = De laatste back-up kon niet worden opgeslagen. Tik om de map
 set_backup_now = Nu back-up maken
 set_backup_cloud_note = Sophinity zit ook in de Google-back-up van je telefoon als die aanstaat in de Android-instellingen, zodat alles terugkomt op een nieuwe telefoon.
 onb_restore = Terugzetten vanuit back-up
-timer_add_media = Boek, podcast of cursus aan de bibliotheek toevoegen
 app_menus = Menu's
 app_bubbles = Keuzes als bubbels tonen
 app_bubbles_sub = Toon elke optie als een tikbare bubbel in plaats van een vervolgkeuzemenu

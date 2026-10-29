@@ -314,7 +314,6 @@
     <string name="timer_start_from_title">스톱워치 시작 시간</string>
     <string name="timer_start_from_body">시작을 누르는 걸 잊었나요? 이미 공부한 시간을 입력하면 그 시간을 포함해 이어서 측정해요.</string>
     <string name="timer_start_from_reset">0부터 시작</string>
-    <string name="timer_add_media">책, 팟캐스트, 강좌를 라이브러리에 추가</string>
     <string name="app_menus">메뉴</string>
     <string name="app_bubbles">선택지를 버블로 표시</string>
     <string name="app_bubbles_sub">드롭다운 메뉴 대신 각 선택지를 탭할 수 있는 버블로 보여 줘요</string>

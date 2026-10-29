@@ -623,7 +623,6 @@ set_backup_failed = 마지막 백업을 저장하지 못했어요. 탭해서 폴
 set_backup_now = 지금 백업
 set_backup_cloud_note = Android 설정에서 Google 백업이 켜져 있으면 Sophinity도 포함되어 새 휴대폰을 설정할 때 다시 돌아와요.
 onb_restore = 백업에서 복원
-timer_add_media = 책, 팟캐스트, 강좌를 라이브러리에 추가
 app_menus = 메뉴
 app_bubbles = 선택지를 버블로 표시
 app_bubbles_sub = 드롭다운 메뉴 대신 각 선택지를 탭할 수 있는 버블로 보여 줘요

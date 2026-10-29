@@ -314,7 +314,6 @@
     <string name="timer_start_from_title">ابدأ ساعة الإيقاف من</string>
     <string name="timer_start_from_body">نسيت الضغط على بدء؟ أدخل المدة التي تتعلّم فيها منذ البداية. ستحتسب الجلسة هذا الوقت وتكمل منه.</string>
     <string name="timer_start_from_reset">البدء من الصفر</string>
-    <string name="timer_add_media">أضف كتابًا أو بودكاست أو دورة إلى المكتبة</string>
     <string name="app_menus">القوائم</string>
     <string name="app_bubbles">عرض الخيارات كفقاعات</string>
     <string name="app_bubbles_sub">اعرض كل خيار كفقاعة قابلة للنقر بدل القائمة المنسدلة</string>

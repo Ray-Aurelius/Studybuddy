@@ -673,7 +673,6 @@ set_backup_failed = Não foi possível salvar o último backup. Toque para escol
 set_backup_now = Fazer backup agora
 set_backup_cloud_note = O Sophinity também entra no backup do Google do seu celular quando ele está ativado nas configurações do Android, então volta quando você configura um celular novo.
 onb_restore = Restaurar de um backup
-timer_add_media = Adicionar livro, podcast ou curso à biblioteca
 app_menus = Menus
 app_bubbles = Mostrar opções como bolhas
 app_bubbles_sub = Mostra cada opção como uma bolha em vez de um menu suspenso

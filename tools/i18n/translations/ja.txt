@@ -623,7 +623,6 @@ set_backup_failed = 前回のバックアップを保存できませんでした
 set_backup_now = 今すぐバックアップ
 set_backup_cloud_note = Androidの設定でGoogleバックアップがオンなら、Sophinityも含まれるため、新しいスマホでも復元されます。
 onb_restore = バックアップから復元
-timer_add_media = 本・ポッドキャスト・コースをライブラリに追加
 app_menus = メニュー
 app_bubbles = 選択肢をバブルで表示
 app_bubbles_sub = ドロップダウンの代わりに、選択肢をタップできるバブルで並べます

@@ -648,7 +648,6 @@ set_backup_failed = Die letzte Sicherung konnte nicht gespeichert werden. Tippe,
 set_backup_now = Jetzt sichern
 set_backup_cloud_note = Sophinity ist auch in der Google-Sicherung deines Handys enthalten, wenn sie in den Android-Einstellungen aktiv ist – so kommt alles auf ein neues Handy mit.
 onb_restore = Aus Sicherung wiederherstellen
-timer_add_media = Buch, Podcast oder Kurs zur Bibliothek hinzufügen
 app_menus = Menüs
 app_bubbles = Auswahl als Blasen anzeigen
 app_bubbles_sub = Jede Option als antippbare Blase statt als Aufklappmenü zeigen

@@ -314,7 +314,6 @@
     <string name="timer_start_from_title">Avvia il cronometro da</string>
     <string name="timer_start_from_body">Hai dimenticato di premere Avvia? Indica da quanto stai studiando. La sessione conta quel tempo e riparte da lì.</string>
     <string name="timer_start_from_reset">Riparti da zero</string>
-    <string name="timer_add_media">Aggiungi un libro, un podcast o un corso alla biblioteca</string>
     <string name="app_menus">Menu</string>
     <string name="app_bubbles">Mostra le scelte come bolle</string>
     <string name="app_bubbles_sub">Mostra ogni opzione come una bolla invece che come menu a tendina</string>

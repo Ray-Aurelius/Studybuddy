@@ -314,7 +314,6 @@
     <string name="timer_start_from_title">ストップウォッチの開始時間</string>
     <string name="timer_start_from_body">開始を押し忘れましたか？すでに学んでいる時間を入力すると、その時間を含めてそこから計測します。</string>
     <string name="timer_start_from_reset">ゼロから始める</string>
-    <string name="timer_add_media">本・ポッドキャスト・コースをライブラリに追加</string>
     <string name="app_menus">メニュー</string>
     <string name="app_bubbles">選択肢をバブルで表示</string>
     <string name="app_bubbles_sub">ドロップダウンの代わりに、選択肢をタップできるバブルで並べます</string>

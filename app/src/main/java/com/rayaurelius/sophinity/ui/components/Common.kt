@@ -1,5 +1,6 @@
 package com.rayaurelius.sophinity.ui.components
 
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.heading
@@ -230,14 +231,45 @@ fun FocusColumns(level: Int, color: Color, modifier: Modifier = Modifier) {
 
 @Composable
 fun NumberField(label: String, value: Int?, onChange: (Int?) -> Unit, modifier: Modifier = Modifier, suffix: String? = null) {
+    // The field keeps its own text and cursor. Rebuilding the text from [value] on every keystroke
+    // moved the cursor, so the next digit could land in front ("3" then "7" became 73, capped to 59).
+    // Zero shows as an empty box with a "0" hint: a real "0" let the cursor sit in front of it,
+    // so typing 3 then 7 made "370" (capped to 59) instead of 37.
+    fun shown(v: Int?) = if (v == null || v == 0) "" else v.toString()
+    var field by remember { mutableStateOf(androidx.compose.ui.text.input.TextFieldValue(shown(value))) }
+    // Follow outside changes (a quick pick, a clamp to the allowed maximum) without fighting typing.
+    val showsValue = if (field.text.isEmpty()) value == null || value == 0 else field.text.toIntOrNull() == value
+    if (!showsValue) {
+        val t = shown(value)
+        field = androidx.compose.ui.text.input.TextFieldValue(t, androidx.compose.ui.text.TextRange(t.length))
+    }
+    // Tapping a box that already holds a number selects it, so typing replaces it: "Log a past
+    // session" starts at 30 minutes, and typing 37 used to make "3037" (capped to 59). The selection
+    // is applied just after the tap, which would otherwise place a cursor at the end.
+    var selectAll by remember { mutableStateOf(false) }
+    LaunchedEffect(selectAll) {
+        if (selectAll) {
+            kotlinx.coroutines.delay(120)
+            field = field.copy(selection = androidx.compose.ui.text.TextRange(0, field.text.length))
+            selectAll = false
+        }
+    }
     OutlinedTextField(
-        value = value?.toString() ?: "",
-        onValueChange = { t -> onChange(t.filter(Char::isDigit).take(6).toIntOrNull()) },
+        value = field,
+        onValueChange = { new ->
+            var digits = new.text.filter(Char::isDigit).take(6)
+            var cursor = new.selection.end.coerceAtMost(digits.length)
+            // "0" then "3" reads as 3, not 03.
+            while (digits.length > 1 && digits.startsWith("0")) { digits = digits.drop(1); cursor = (cursor - 1).coerceAtLeast(0) }
+            field = androidx.compose.ui.text.input.TextFieldValue(digits, androidx.compose.ui.text.TextRange(cursor))
+            onChange(digits.toIntOrNull())
+        },
         label = { Text(label) },
+        placeholder = { Text("0") },
         suffix = suffix?.let { { Text(it) } },
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        modifier = modifier,
+        modifier = modifier.onFocusChanged { if (it.isFocused && field.text.isNotEmpty()) selectAll = true },
     )
 }
 

@@ -314,7 +314,6 @@
     <string name="timer_start_from_title">Iniciar o cronômetro em</string>
     <string name="timer_start_from_body">Esqueceu de tocar em Iniciar? Informe há quanto tempo está aprendendo. A sessão conta esse tempo e continua dali.</string>
     <string name="timer_start_from_reset">Começar do zero</string>
-    <string name="timer_add_media">Adicionar livro, podcast ou curso à biblioteca</string>
     <string name="app_menus">Menus</string>
     <string name="app_bubbles">Mostrar opções como bolhas</string>
     <string name="app_bubbles_sub">Mostra cada opção como uma bolha em vez de um menu suspenso</string>

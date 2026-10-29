@@ -38,7 +38,7 @@ Native Android, Kotlin + Jetpack Compose, Material 3, targeting **Android 17 (AP
 - **Backups that run themselves** — pick a folder once and Sophinity saves a fresh backup there every day (the last 14 are kept, so a bad day can be undone), with "Back up now" and a last-backup status. Files in a shared folder survive the app being uninstalled or its data cleared. Manual export can save to Google Drive, the app is included in Android's Google backup, and the welcome screen offers "Restore from a backup" on a new phone.
 - **Settings from every page** — a gear in the top-right corner of every tab.
 - **Drop-down menus or bubbles** — choices like item type, status, playback speed, goal period and filters are tidy drop-down menus; one switch in Appearance turns them all back into tappable bubbles.
-- **Add media from the timer** — a small scroll button above "Start learning" adds a book, podcast or course to the library without leaving the timer, and selects it for the session.
+- **Add media from the timer** — an "Add to library" button at the top of Today, next to your title, adds a book, podcast or course without leaving the timer, and selects it for the session.
 - **Private by design** — no accounts, ads, or trackers. Data stays on device, in Android Backup, and in JSON export/import. Database upgrades are covered by a migration test so existing data always carries over.
 
 ## The learning science behind it

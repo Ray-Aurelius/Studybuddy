@@ -314,7 +314,6 @@
     <string name="timer_start_from_title">เริ่มนาฬิกาจับเวลาที่</string>
     <string name="timer_start_from_body">ลืมกดเริ่ม? ใส่เวลาที่คุณเรียนไปแล้ว การเรียนจะนับเวลานั้นและนับต่อจากตรงนั้น</string>
     <string name="timer_start_from_reset">เริ่มจากศูนย์</string>
-    <string name="timer_add_media">เพิ่มหนังสือ พอดแคสต์ หรือคอร์สในห้องสมุด</string>
     <string name="app_menus">เมนู</string>
     <string name="app_bubbles">แสดงตัวเลือกแบบฟองอากาศ</string>
     <string name="app_bubbles_sub">แสดงแต่ละตัวเลือกเป็นปุ่มฟองแทนเมนูแบบเลื่อนลง</string>

@@ -123,8 +123,8 @@ class ScreenshotTest {
     }
 
     @Test fun addMediaFromTimer() {
-        compose.onNode(hasContentDescription("Add a book, podcast or course to the library")).performClick()
-        compose.onNode(hasText("Add to library")).assertExists()
+        compose.onNode(hasText("Add to library")).performClick()
+        compose.onNode(hasText("Title")).assertExists()
         shot("17_add_media_from_timer")
     }
 

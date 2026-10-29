@@ -623,7 +623,6 @@ set_backup_failed = Không thể lưu bản sao lưu gần nhất. Chạm để 
 set_backup_now = Sao lưu ngay
 set_backup_cloud_note = Sophinity cũng nằm trong bản sao lưu Google của điện thoại khi tính năng này bật trong cài đặt Android, nên sẽ trở lại khi bạn thiết lập điện thoại mới.
 onb_restore = Khôi phục từ bản sao lưu
-timer_add_media = Thêm sách, podcast hoặc khóa học vào thư viện
 app_menus = Menu
 app_bubbles = Hiện lựa chọn dạng bong bóng
 app_bubbles_sub = Hiện mỗi lựa chọn thành một bong bóng thay vì menu thả xuống

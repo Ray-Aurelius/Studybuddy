@@ -314,7 +314,6 @@
     <string name="timer_start_from_title">Uruchom stoper od</string>
     <string name="timer_start_from_body">Zapomniałeś nacisnąć Start? Podaj, jak długo już się uczysz. Sesja wliczy ten czas i będzie liczyć dalej.</string>
     <string name="timer_start_from_reset">Zacznij od zera</string>
-    <string name="timer_add_media">Dodaj książkę, podcast lub kurs do biblioteki</string>
     <string name="app_menus">Menu</string>
     <string name="app_bubbles">Pokazuj wybory jako bąbelki</string>
     <string name="app_bubbles_sub">Każda opcja jako bąbelek zamiast rozwijanego menu</string>

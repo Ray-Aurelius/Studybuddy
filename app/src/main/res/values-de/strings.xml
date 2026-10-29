@@ -314,7 +314,6 @@
     <string name="timer_start_from_title">Stoppuhr starten bei</string>
     <string name="timer_start_from_body">Vergessen, auf Start zu tippen? Gib ein, wie lange du schon lernst. Die Sitzung zählt diese Zeit mit und läuft von dort weiter.</string>
     <string name="timer_start_from_reset">Bei null beginnen</string>
-    <string name="timer_add_media">Buch, Podcast oder Kurs zur Bibliothek hinzufügen</string>
     <string name="app_menus">Menüs</string>
     <string name="app_bubbles">Auswahl als Blasen anzeigen</string>
     <string name="app_bubbles_sub">Jede Option als antippbare Blase statt als Aufklappmenü zeigen</string>
