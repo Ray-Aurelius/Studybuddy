@@ -308,6 +308,12 @@
     <string name="timer_then_break">फिर %1$s ब्रेक</string>
     <string name="timer_count_up">ऊपर गिनता है, कभी भी रोकें</string>
     <string name="timer_start">सीखना शुरू करें</string>
+    <string name="timer_start_from">पहले शुरू किया था? शुरुआत का समय डालें</string>
+    <string name="timer_change_start">शुरुआत का समय बदलें</string>
+    <string name="timer_counts_from">%1$s से ऊपर गिनता है</string>
+    <string name="timer_start_from_title">स्टॉपवॉच यहाँ से शुरू करें</string>
+    <string name="timer_start_from_body">शुरू दबाना भूल गए? बताएँ कि आप कितनी देर से सीख रहे हैं। सत्र उस समय को गिनेगा और वहीं से आगे चलेगा।</string>
+    <string name="timer_start_from_reset">शून्य से शुरू करें</string>
     <string name="timer_add_media">लाइब्रेरी में किताब, पॉडकास्ट या कोर्स जोड़ें</string>
     <string name="app_menus">मेन्यू</string>
     <string name="app_bubbles">विकल्पों को बबल के रूप में दिखाएँ</string>

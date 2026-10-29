@@ -308,6 +308,12 @@
     <string name="timer_then_break">然后休息 %1$s</string>
     <string name="timer_count_up">正计时，随时可停</string>
     <string name="timer_start">开始学习</string>
+    <string name="timer_start_from">已经开始了？设置起始时间</string>
+    <string name="timer_change_start">更改起始时间</string>
+    <string name="timer_counts_from">从 %1$s 开始正计时</string>
+    <string name="timer_start_from_title">秒表起始时间</string>
+    <string name="timer_start_from_body">忘了点开始？输入你已经学习了多久，本次学习会计入这段时间并从那里继续。</string>
+    <string name="timer_start_from_reset">从零开始</string>
     <string name="timer_add_media">把书、播客或课程加入书库</string>
     <string name="app_menus">菜单</string>
     <string name="app_bubbles">以气泡显示选项</string>

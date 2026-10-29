@@ -308,6 +308,12 @@
     <string name="timer_then_break">dann %1$s Pause</string>
     <string name="timer_count_up">zählt hoch, stopp jederzeit</string>
     <string name="timer_start">Lernen starten</string>
+    <string name="timer_start_from">Früher angefangen? Startzeit festlegen</string>
+    <string name="timer_change_start">Startzeit ändern</string>
+    <string name="timer_counts_from">zählt ab %1$s hoch</string>
+    <string name="timer_start_from_title">Stoppuhr starten bei</string>
+    <string name="timer_start_from_body">Vergessen, auf Start zu tippen? Gib ein, wie lange du schon lernst. Die Sitzung zählt diese Zeit mit und läuft von dort weiter.</string>
+    <string name="timer_start_from_reset">Bei null beginnen</string>
     <string name="timer_add_media">Buch, Podcast oder Kurs zur Bibliothek hinzufügen</string>
     <string name="app_menus">Menüs</string>
     <string name="app_bubbles">Auswahl als Blasen anzeigen</string>

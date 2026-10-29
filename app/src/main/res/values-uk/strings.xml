@@ -308,6 +308,12 @@
     <string name="timer_then_break">потім перерва %1$s</string>
     <string name="timer_count_up">рахує вгору, зупини будь-коли</string>
     <string name="timer_start">Почати навчання</string>
+    <string name="timer_start_from">Почав раніше? Вкажи час старту</string>
+    <string name="timer_change_start">Змінити час старту</string>
+    <string name="timer_counts_from">відлік від %1$s</string>
+    <string name="timer_start_from_title">Запустити секундомір з</string>
+    <string name="timer_start_from_body">Забув натиснути «Старт»? Вкажи, скільки ти вже вчишся. Заняття врахує цей час і продовжить відлік.</string>
+    <string name="timer_start_from_reset">Почати з нуля</string>
     <string name="timer_add_media">Додати книгу, подкаст або курс до бібліотеки</string>
     <string name="app_menus">Меню</string>
     <string name="app_bubbles">Показувати варіанти бульбашками</string>

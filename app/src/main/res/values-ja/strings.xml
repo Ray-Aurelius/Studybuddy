@@ -308,6 +308,12 @@
     <string name="timer_then_break">その後%1$s休憩</string>
     <string name="timer_count_up">カウントアップ、いつでも停止できます</string>
     <string name="timer_start">学習を始める</string>
+    <string name="timer_start_from">先に始めていた？開始時間を設定</string>
+    <string name="timer_change_start">開始時間を変更</string>
+    <string name="timer_counts_from">%1$sからカウントアップ</string>
+    <string name="timer_start_from_title">ストップウォッチの開始時間</string>
+    <string name="timer_start_from_body">開始を押し忘れましたか？すでに学んでいる時間を入力すると、その時間を含めてそこから計測します。</string>
+    <string name="timer_start_from_reset">ゼロから始める</string>
     <string name="timer_add_media">本・ポッドキャスト・コースをライブラリに追加</string>
     <string name="app_menus">メニュー</string>
     <string name="app_bubbles">選択肢をバブルで表示</string>

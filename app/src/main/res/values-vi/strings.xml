@@ -308,6 +308,12 @@
     <string name="timer_then_break">rồi nghỉ %1$s</string>
     <string name="timer_count_up">đếm tiến, dừng bất cứ lúc nào</string>
     <string name="timer_start">Bắt đầu học</string>
+    <string name="timer_start_from">Bắt đầu sớm hơn? Đặt thời điểm bắt đầu</string>
+    <string name="timer_change_start">Đổi thời điểm bắt đầu</string>
+    <string name="timer_counts_from">đếm tiến từ %1$s</string>
+    <string name="timer_start_from_title">Bắt đầu đồng hồ từ</string>
+    <string name="timer_start_from_body">Quên bấm Bắt đầu? Nhập bạn đã học được bao lâu. Buổi học sẽ tính thời gian đó và tiếp tục từ đó.</string>
+    <string name="timer_start_from_reset">Bắt đầu từ 0</string>
     <string name="timer_add_media">Thêm sách, podcast hoặc khóa học vào thư viện</string>
     <string name="app_menus">Menu</string>
     <string name="app_bubbles">Hiện lựa chọn dạng bong bóng</string>

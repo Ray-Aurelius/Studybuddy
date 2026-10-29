@@ -308,6 +308,12 @@
     <string name="timer_then_break">ardından %1$s mola</string>
     <string name="timer_count_up">ileri sayar, istediğin zaman durdur</string>
     <string name="timer_start">Öğrenmeye başla</string>
+    <string name="timer_start_from">Daha önce mi başladın? Başlangıç zamanı ayarla</string>
+    <string name="timer_change_start">Başlangıcı değiştir</string>
+    <string name="timer_counts_from">%1$s itibarıyla ileri sayar</string>
+    <string name="timer_start_from_title">Kronometreyi şuradan başlat</string>
+    <string name="timer_start_from_body">Başlat\'a basmayı mı unuttun? Ne kadar süredir öğrendiğini gir. Oturum bu süreyi sayar ve oradan devam eder.</string>
+    <string name="timer_start_from_reset">Sıfırdan başla</string>
     <string name="timer_add_media">Kütüphaneye kitap, podcast veya kurs ekle</string>
     <string name="app_menus">Menüler</string>
     <string name="app_bubbles">Seçenekleri baloncuk olarak göster</string>

@@ -57,6 +57,11 @@ class TimerController(
 ) {
     private val store = context.timerDataStore
     private val mutex = Mutex()
+
+    companion object {
+        /** A head start can't exceed 16 hours, the same limit as a hand-logged session. */
+        const val MAX_HEAD_START_MS = 16 * 3_600_000L
+    }
     private val notifier = TimerNotifier(context)
 
     private object K {
@@ -123,12 +128,17 @@ class TimerController(
     private suspend fun subjectName(id: Long?): String? =
         id?.let { sid -> repo.subjects.first().firstOrNull { it.id == sid }?.name }
 
-    suspend fun start(mode: TimerMode, subjectId: Long?, itemId: Long?) = mutex.withLock {
+    /**
+     * @param headStartMs for an open session started late ("I forgot to press start"): the stopwatch
+     *   begins at this much time, and the session's start is moved back by the same amount.
+     */
+    suspend fun start(mode: TimerMode, subjectId: Long?, itemId: Long?, headStartMs: Long = 0) = mutex.withLock {
         val now = System.currentTimeMillis()
         val focus = repo.settingsStore.current().focusMinutes
+        val head = if (mode == TimerMode.STOPWATCH) headStartMs.coerceIn(0, MAX_HEAD_START_MS) else 0
         save(
             TimerState(
-                status = TimerStatus.RUNNING, mode = mode, startedAt = now, segmentStart = now,
+                status = TimerStatus.RUNNING, mode = mode, startedAt = now - head, segmentStart = now, accumulatedMs = head,
                 targetMs = if (mode == TimerMode.FOCUS) focus * 60_000L else 0,
                 subjectId = subjectId, itemId = itemId,
             )

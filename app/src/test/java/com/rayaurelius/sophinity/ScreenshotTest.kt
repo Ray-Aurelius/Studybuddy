@@ -146,6 +146,17 @@ class ScreenshotTest {
         shot("19_editor_bubbles")
     }
 
+    @Test fun startStopwatchFromAGivenTime() {
+        compose.onNode(hasText("Started earlier? Set a start time")).performClick()
+        compose.onNode(hasText("Start the stopwatch at")).assertExists()
+        shot("20_head_start_sheet")
+        compose.onNode(hasText("45m")).performClick()
+        compose.onNode(hasText("OK")).performClick()
+        compose.waitForIdle()
+        compose.onNode(hasText("counts up from 45m")).assertExists()
+        shot("21_head_start_set")
+    }
+
     @Test fun laurelMedallions() {
         tab("Laurels")
         compose.onNode(hasScrollAction()).performScrollToNode(hasText("Consistency"))

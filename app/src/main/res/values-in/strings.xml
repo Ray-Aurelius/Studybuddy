@@ -308,6 +308,12 @@
     <string name="timer_then_break">lalu istirahat %1$s</string>
     <string name="timer_count_up">menghitung maju, berhenti kapan saja</string>
     <string name="timer_start">Mulai belajar</string>
+    <string name="timer_start_from">Sudah mulai tadi? Atur waktu mulai</string>
+    <string name="timer_change_start">Ubah waktu mulai</string>
+    <string name="timer_counts_from">menghitung dari %1$s</string>
+    <string name="timer_start_from_title">Mulai stopwatch dari</string>
+    <string name="timer_start_from_body">Lupa menekan Mulai? Masukkan berapa lama kamu sudah belajar. Sesi menghitung waktu itu dan lanjut dari sana.</string>
+    <string name="timer_start_from_reset">Mulai dari nol</string>
     <string name="timer_add_media">Tambahkan buku, podcast, atau kursus ke perpustakaan</string>
     <string name="app_menus">Menu</string>
     <string name="app_bubbles">Tampilkan pilihan sebagai gelembung</string>

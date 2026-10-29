@@ -308,6 +308,12 @@
     <string name="timer_then_break">μετά %1$s διάλειμμα</string>
     <string name="timer_count_up">μετρά προς τα πάνω, σταμάτα όποτε θες</string>
     <string name="timer_start">Ξεκίνα τη μελέτη</string>
+    <string name="timer_start_from">Ξεκίνησες νωρίτερα; Όρισε ώρα έναρξης</string>
+    <string name="timer_change_start">Αλλαγή ώρας έναρξης</string>
+    <string name="timer_counts_from">μετρά από %1$s</string>
+    <string name="timer_start_from_title">Έναρξη χρονομέτρου από</string>
+    <string name="timer_start_from_body">Ξέχασες να πατήσεις Έναρξη; Γράψε πόση ώρα ήδη μελετάς. Η συνεδρία μετρά αυτόν τον χρόνο και συνεχίζει από εκεί.</string>
+    <string name="timer_start_from_reset">Από το μηδέν</string>
     <string name="timer_add_media">Προσθήκη βιβλίου, podcast ή μαθήματος στη βιβλιοθήκη</string>
     <string name="app_menus">Μενού</string>
     <string name="app_bubbles">Επιλογές ως φυσαλίδες</string>

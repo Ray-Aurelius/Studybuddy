@@ -308,6 +308,12 @@
     <string name="timer_then_break">แล้วพัก %1$s</string>
     <string name="timer_count_up">นับขึ้น หยุดได้ทุกเมื่อ</string>
     <string name="timer_start">เริ่มเรียน</string>
+    <string name="timer_start_from">เริ่มไปก่อนแล้ว? ตั้งเวลาเริ่ม</string>
+    <string name="timer_change_start">เปลี่ยนเวลาเริ่ม</string>
+    <string name="timer_counts_from">นับขึ้นจาก %1$s</string>
+    <string name="timer_start_from_title">เริ่มนาฬิกาจับเวลาที่</string>
+    <string name="timer_start_from_body">ลืมกดเริ่ม? ใส่เวลาที่คุณเรียนไปแล้ว การเรียนจะนับเวลานั้นและนับต่อจากตรงนั้น</string>
+    <string name="timer_start_from_reset">เริ่มจากศูนย์</string>
     <string name="timer_add_media">เพิ่มหนังสือ พอดแคสต์ หรือคอร์สในห้องสมุด</string>
     <string name="app_menus">เมนู</string>
     <string name="app_bubbles">แสดงตัวเลือกแบบฟองอากาศ</string>

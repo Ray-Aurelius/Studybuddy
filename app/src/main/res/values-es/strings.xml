@@ -308,6 +308,12 @@
     <string name="timer_then_break">y luego una pausa de %1$s</string>
     <string name="timer_count_up">cuenta hacia arriba, para cuando quieras</string>
     <string name="timer_start">Empezar a aprender</string>
+    <string name="timer_start_from">¿Empezaste antes? Fija la hora de inicio</string>
+    <string name="timer_change_start">Cambiar hora de inicio</string>
+    <string name="timer_counts_from">cuenta desde %1$s</string>
+    <string name="timer_start_from_title">Iniciar el cronómetro en</string>
+    <string name="timer_start_from_body">¿Olvidaste pulsar Iniciar? Indica cuánto llevas aprendiendo. La sesión cuenta ese tiempo y sigue desde ahí.</string>
+    <string name="timer_start_from_reset">Empezar desde cero</string>
     <string name="timer_add_media">Añadir un libro, pódcast o curso a la biblioteca</string>
     <string name="app_menus">Menús</string>
     <string name="app_bubbles">Mostrar opciones como burbujas</string>

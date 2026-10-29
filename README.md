@@ -18,7 +18,7 @@ Native Android, Kotlin + Jetpack Compose, Material 3, targeting **Android 17 (AP
 
 ## Features
 
-- **Learning timer** — open-ended stopwatch or focus blocks (default 25 min) with breaks. Runs from a saved timestamp, so it survives the app being closed or the phone rebooting. Ongoing notification with Pause / Stop & save actions. Discarding a running session asks first.
+- **Learning timer** — open-ended stopwatch or focus blocks (default 25 min) with breaks. Runs from a saved timestamp, so it survives the app being closed or the phone rebooting. Forgot to press Start? Set a start time (quick picks or exact hours and minutes) and the open session counts up from there, with the session's start moved back to match. Ongoing notification with Pause / Stop & save actions. Discarding a running session asks first.
 - **Reflection after every session** — 1–5 focus rating and "one thing I learned."
 - **Stats** — day / week / month / year views, tap-to-inspect bar charts, subject breakdown, 18-week consistency heatmap.
 - **Sessions** — every session grouped by day: what you studied, the date and start time, the length studied, focus rating and reflection. Filter by this week, month, year or subject, and log a past session (optionally linked to a library item). Tap a session to link it to a library item (its time then counts toward that item's progress), or change its subject, focus rating or reflection. Deleting a session always asks first and names the exact session.

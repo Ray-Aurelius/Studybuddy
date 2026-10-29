@@ -33,7 +33,7 @@ class TodayViewModel(private val c: AppContainer) : ViewModel() {
         }
     }
 
-    fun start(mode: TimerMode, subjectId: Long?, itemId: Long?) = viewModelScope.launch { c.timer.start(mode, subjectId, itemId) }
+    fun start(mode: TimerMode, subjectId: Long?, itemId: Long?, headStartMs: Long = 0) = viewModelScope.launch { c.timer.start(mode, subjectId, itemId, headStartMs) }
     fun pause() = viewModelScope.launch { c.timer.pause() }
     fun resume() = viewModelScope.launch { c.timer.resume() }
     fun discard() = viewModelScope.launch { c.timer.discard() }

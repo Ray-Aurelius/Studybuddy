@@ -308,6 +308,12 @@
     <string name="timer_then_break">然後休息 %1$s</string>
     <string name="timer_count_up">正計時，隨時可停</string>
     <string name="timer_start">開始學習</string>
+    <string name="timer_start_from">已經開始了？設定起始時間</string>
+    <string name="timer_change_start">更改起始時間</string>
+    <string name="timer_counts_from">從 %1$s 開始正計時</string>
+    <string name="timer_start_from_title">碼錶起始時間</string>
+    <string name="timer_start_from_body">忘了按開始？輸入你已經學習了多久，本次學習會計入這段時間並從那裡繼續。</string>
+    <string name="timer_start_from_reset">從零開始</string>
     <string name="timer_add_media">把書、Podcast 或課程加入書庫</string>
     <string name="app_menus">選單</string>
     <string name="app_bubbles">以泡泡顯示選項</string>

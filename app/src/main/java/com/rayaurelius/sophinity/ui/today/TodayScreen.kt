@@ -6,6 +6,12 @@ import com.rayaurelius.sophinity.ui.i18n.goalTitle
 import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
 import com.rayaurelius.sophinity.domain.str
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.SuggestionChip
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.runtime.mutableIntStateOf
 import com.rayaurelius.sophinity.R
 import com.rayaurelius.sophinity.data.db.ItemType
 import com.rayaurelius.sophinity.ui.library.LibraryViewModel
@@ -203,6 +209,10 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
     }
 
     var mode by rememberSaveable { mutableStateOf(TimerMode.STOPWATCH) }
+    /** Minutes the open session will start at, for when you forgot to press Start. */
+    var headStartMin by rememberSaveable { mutableIntStateOf(0) }
+    var pickHeadStart by remember { mutableStateOf(false) }
+    if (pickHeadStart) HeadStartSheet(headStartMin, onDismiss = { pickHeadStart = false }) { headStartMin = it; pickHeadStart = false }
     var subjectId by rememberSaveable { mutableStateOf(snap.settings.lastSubjectId?.takeIf { it in snap.subjectsById }) }
     var itemId by rememberSaveable { mutableStateOf<Long?>(null) }
     var addingItem by remember { mutableStateOf(false) }
@@ -233,16 +243,36 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                         }
                     }
                     Spacer(Modifier.height(20.dp))
-                    ProgressRing(0f, Modifier.size(200.dp)) {
+                    val stopwatch = mode == TimerMode.STOPWATCH
+                    val head = if (stopwatch) headStartMin else 0
+                    ProgressRing(
+                        0f,
+                        Modifier.size(200.dp).clip(CircleShape)
+                            .then(if (stopwatch) Modifier.clickable(onClickLabel = stringResource(R.string.timer_start_from)) { pickHeadStart = true } else Modifier),
+                    ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
-                                if (mode == TimerMode.FOCUS) "%02d:00".format(snap.settings.focusMinutes) else "00:00",
-                                style = TimerDigits,
+                                when {
+                                    !stopwatch -> "%02d:00".format(snap.settings.focusMinutes)
+                                    else -> StudyMath.formatClock(head * 60_000L)
+                                },
+                                style = if (head >= 60) MediaDigits else TimerDigits,
                             )
                             Text(
-                                if (mode == TimerMode.FOCUS) stringResource(R.string.timer_then_break, StudyMath.formatDuration(snap.settings.breakMinutes * 60L, true)) else stringResource(R.string.timer_count_up),
+                                when {
+                                    !stopwatch -> stringResource(R.string.timer_then_break, StudyMath.formatDuration(snap.settings.breakMinutes * 60L, true))
+                                    head > 0 -> stringResource(R.string.timer_counts_from, StudyMath.formatDuration(head * 60L))
+                                    else -> stringResource(R.string.timer_count_up)
+                                },
                                 style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
+                        }
+                    }
+                    if (stopwatch) {
+                        TextButton(onClick = { pickHeadStart = true }) {
+                            Glyph("hourglass", size = 18.dp)
+                            Spacer(Modifier.width(6.dp))
+                            Text(stringResource(if (head > 0) R.string.timer_change_start else R.string.timer_start_from))
                         }
                     }
                     Spacer(Modifier.height(20.dp))
@@ -259,7 +289,7 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                         Glyph("scroll", size = 22.dp, contentDescription = stringResource(R.string.timer_add_media))
                     }
                     Spacer(Modifier.height(10.dp))
-                    Button(onClick = { vm.start(mode, subjectId, itemId) }, modifier = Modifier.fillMaxWidth().height(56.dp)) {
+                    Button(onClick = { vm.start(mode, subjectId, itemId, if (mode == TimerMode.STOPWATCH) headStartMin * 60_000L else 0); headStartMin = 0 }, modifier = Modifier.fillMaxWidth().height(56.dp)) {
                         Icon(Icons.Default.PlayArrow, null)
                         Spacer(Modifier.width(8.dp))
                         Text(stringResource(R.string.timer_start), style = MaterialTheme.typography.titleMedium)
@@ -710,5 +740,41 @@ private fun TitleCelebration(title: com.rayaurelius.sophinity.domain.LearnerTitl
             confirmButton = { Button(onClick = onSeen) { Text(stringResource(R.string.title_onward)) } },
         )
         Confetti()
+    }
+}
+
+/**
+ * Forgot to press Start? Pick how long you've already been learning; the open session's
+ * stopwatch then starts from there. Quick picks cover the usual cases, the fields anything else.
+ */
+@OptIn(ExperimentalMaterial3Api::class, androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
+@Composable
+private fun HeadStartSheet(initialMin: Int, onDismiss: () -> Unit, onSet: (Int) -> Unit) {
+    var hours by remember { mutableStateOf<Int?>(initialMin / 60) }
+    var minutes by remember { mutableStateOf<Int?>(initialMin % 60) }
+    val total = (hours ?: 0) * 60 + (minutes ?: 0)
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+        Column(
+            Modifier.padding(horizontal = 24.dp).padding(bottom = 24.dp).imePadding(),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            Text(stringResource(R.string.timer_start_from_title), style = MaterialTheme.typography.headlineSmall)
+            Text(stringResource(R.string.timer_start_from_body), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            androidx.compose.foundation.layout.FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                listOf(5, 10, 15, 30, 45, 60).forEach { m ->
+                    SuggestionChip(onClick = { hours = m / 60; minutes = m % 60 }, label = { Text(StudyMath.formatDuration(m * 60L)) })
+                }
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                NumberField(stringResource(R.string.field_hours), hours, { hours = it?.coerceAtMost(15) }, Modifier.weight(1f))
+                NumberField(stringResource(R.string.field_minutes), minutes, { minutes = it?.coerceAtMost(59) }, Modifier.weight(1f))
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (initialMin > 0) TextButton(onClick = { onSet(0) }) { Text(stringResource(R.string.timer_start_from_reset)) }
+                Spacer(Modifier.weight(1f))
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
+                Button(onClick = { onSet(total) }, enabled = total > 0) { Text(stringResource(R.string.common_ok)) }
+            }
+        }
     }
 }
