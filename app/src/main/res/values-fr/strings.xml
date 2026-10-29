@@ -259,6 +259,14 @@
     <string name="nav_sessions">Séances</string>
     <string name="sessions_title">Séances</string>
     <string name="sessions_this_month">Ce mois-ci</string>
+    <string name="sessions_this_year">Cette année</string>
+    <string name="sessions_edit">Modifier la séance</string>
+    <string name="sessions_link_item">Élément de la bibliothèque</string>
+    <string name="sessions_link_hint">Ce temps comptera dans la progression de l\'élément lié.</string>
+    <string name="sessions_not_linked">Non liée à la bibliothèque</string>
+    <string name="timer_stop_save">Arrêter et enregistrer</string>
+    <string name="timer_discard_title">Abandonner cette séance ?</string>
+    <string name="timer_discard_body">Le temps du minuteur ne sera pas enregistré.</string>
     <string name="sessions_manual">Saisie à la main</string>
     <string name="sessions_delete_warning">Elle sera retirée de tes statistiques, de ta série et de tes objectifs. Action irréversible.</string>
     <string name="sessions_focus">Concentration %1$d sur 5</string>

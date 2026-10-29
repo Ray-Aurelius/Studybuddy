@@ -259,6 +259,14 @@
     <string name="nav_sessions">Sesiones</string>
     <string name="sessions_title">Sesiones</string>
     <string name="sessions_this_month">Este mes</string>
+    <string name="sessions_this_year">Este año</string>
+    <string name="sessions_edit">Editar sesión</string>
+    <string name="sessions_link_item">Elemento de la biblioteca</string>
+    <string name="sessions_link_hint">Al vincularla, este tiempo cuenta para el progreso del elemento.</string>
+    <string name="sessions_not_linked">Sin vincular a la biblioteca</string>
+    <string name="timer_stop_save">Parar y guardar</string>
+    <string name="timer_discard_title">¿Descartar esta sesión?</string>
+    <string name="timer_discard_body">No se guardará el tiempo del temporizador.</string>
     <string name="sessions_manual">Registrada a mano</string>
     <string name="sessions_delete_warning">Se quitará de tus estadísticas, tu racha y tus metas. No se puede deshacer.</string>
     <string name="sessions_focus">Concentración %1$d de 5</string>

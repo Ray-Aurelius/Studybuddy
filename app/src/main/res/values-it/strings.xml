@@ -259,6 +259,14 @@
     <string name="nav_sessions">Sessioni</string>
     <string name="sessions_title">Sessioni</string>
     <string name="sessions_this_month">Questo mese</string>
+    <string name="sessions_this_year">Quest\'anno</string>
+    <string name="sessions_edit">Modifica sessione</string>
+    <string name="sessions_link_item">Elemento della biblioteca</string>
+    <string name="sessions_link_hint">Collegandola, questo tempo conta nei progressi dell\'elemento.</string>
+    <string name="sessions_not_linked">Non collegata alla biblioteca</string>
+    <string name="timer_stop_save">Ferma e salva</string>
+    <string name="timer_discard_title">Scartare questa sessione?</string>
+    <string name="timer_discard_body">Il tempo del timer non verrà salvato.</string>
     <string name="sessions_manual">Inserita a mano</string>
     <string name="sessions_delete_warning">Verrà rimossa da statistiche, serie e obiettivi. Non si può annullare.</string>
     <string name="sessions_focus">Concentrazione %1$d su 5</string>

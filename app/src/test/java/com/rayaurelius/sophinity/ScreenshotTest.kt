@@ -4,6 +4,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollAction
 import androidx.compose.ui.test.performScrollToNode
@@ -78,6 +79,32 @@ class ScreenshotTest {
         compose.onNode(hasText("Cancel")).performClick()
         compose.waitForIdle()
         compose.onAllNodes(hasContentDescription("Delete session"))[0].assertExists()
+    }
+
+    @Test fun sessionEditorLinksToLibrary() {
+        tab("Sessions")
+        compose.onAllNodes(hasTestTag("session"))[0].performClick()
+        compose.onNode(hasText("Library item")).assertExists()
+        shot("11_session_editor")
+    }
+
+    @Test fun timerButtonsWithLargeText() {
+        val app = ApplicationProvider.getApplicationContext<SophinityApp>()
+        runBlocking {
+            app.container.settingsStore.update { it.copy(textScale = 1.3f) }
+            app.container.timer.start(com.rayaurelius.sophinity.timer.TimerMode.STOPWATCH, null, null)
+        }
+        compose.mainClock.advanceTimeBy(1_000)
+        compose.onNode(hasText("Stop & save")).assertExists()
+        shot("12_timer_large_text")
+    }
+
+    @Test fun audiobookEditorHasNoDoneCount() {
+        tab("Library")
+        compose.onNode(hasText("Habits of Curious People")).performClick()
+        compose.waitForIdle()
+        compose.onAllNodes(hasScrollAction()).let { it[it.fetchSemanticsNodes().size - 1] }.performScrollToNode(hasText("Total chapters"))
+        shot("13_audiobook_editor")
     }
 
     @Test fun laurelMedallions() {

@@ -5,6 +5,7 @@ package com.rayaurelius.sophinity.ui.today
 import com.rayaurelius.sophinity.ui.i18n.goalTitle
 import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
 import com.rayaurelius.sophinity.domain.str
+import androidx.compose.ui.unit.sp
 import com.rayaurelius.sophinity.R
 import com.rayaurelius.sophinity.ui.glyphs.Glyph
 import com.rayaurelius.sophinity.ui.glyphs.GlyphTile
@@ -310,21 +311,30 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                         }
                     }
                     Spacer(Modifier.height(20.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                        FilledTonalIconButton(onClick = { vm.discard() }, modifier = Modifier.size(52.dp)) { Icon(Icons.Default.Close, stringResource(R.string.timer_discard)) }
-                        if (timer.status == TimerStatus.RUNNING) {
-                            FilledTonalButton(onClick = { vm.pause() }, modifier = Modifier.height(52.dp)) {
-                                Icon(Icons.Default.Pause, null); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.common_pause))
-                            }
-                        } else {
-                            FilledTonalButton(onClick = { vm.resume() }, modifier = Modifier.height(52.dp)) {
-                                Icon(Icons.Default.PlayArrow, null); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.common_resume))
-                            }
+                    // Labels shrink rather than wrap, so large text never breaks a word across lines.
+                    val oneLine = MaterialTheme.typography.labelLarge
+                    val autoSize = androidx.compose.foundation.text.TextAutoSize.StepBased(minFontSize = 11.sp, maxFontSize = oneLine.fontSize)
+                    var confirmDiscard by remember { mutableStateOf(false) }
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
+                        FilledTonalIconButton(onClick = { confirmDiscard = true }, modifier = Modifier.size(52.dp)) { Icon(Icons.Default.Close, stringResource(R.string.timer_discard)) }
+                        val running = timer.status == TimerStatus.RUNNING
+                        FilledTonalButton(onClick = { if (running) vm.pause() else vm.resume() }, modifier = Modifier.weight(1f).height(52.dp),
+                            contentPadding = PaddingValues(horizontal = 12.dp)) {
+                            Icon(if (running) Icons.Default.Pause else Icons.Default.PlayArrow, null); Spacer(Modifier.width(6.dp))
+                            Text(stringResource(if (running) R.string.common_pause else R.string.common_resume), maxLines = 1, softWrap = false, autoSize = autoSize)
                         }
-                        Button(onClick = { vm.finish() }, modifier = Modifier.height(52.dp)) {
-                            Icon(Icons.Default.Stop, null); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.common_finish))
+                        Button(onClick = { vm.finish() }, modifier = Modifier.weight(1.25f).height(52.dp), contentPadding = PaddingValues(horizontal = 12.dp)) {
+                            Icon(Icons.Default.Stop, null); Spacer(Modifier.width(6.dp))
+                            Text(stringResource(R.string.timer_stop_save), maxLines = 1, softWrap = false, autoSize = autoSize)
                         }
                     }
+                    if (confirmDiscard) AlertDialog(
+                        onDismissRequest = { confirmDiscard = false },
+                        title = { Text(stringResource(R.string.timer_discard_title)) },
+                        text = { Text(stringResource(R.string.timer_discard_body)) },
+                        confirmButton = { TextButton(onClick = { confirmDiscard = false; vm.discard() }) { Text(stringResource(R.string.timer_discard), color = MaterialTheme.colorScheme.error) } },
+                        dismissButton = { TextButton(onClick = { confirmDiscard = false }) { Text(stringResource(R.string.common_cancel)) } },
+                    )
                 }
 
                 TimerStatus.BREAK -> {
@@ -437,7 +447,7 @@ private fun ContinueLearning(snap: Snapshot, timer: TimerState, vm: TodayViewMod
                         if (media != null) {
                             Spacer(Modifier.height(6.dp))
                             MediaMeter(media, compact = true)
-                        } else if (total != null && total > 0) {
+                        } else if (total != null && total > 0 && !com.rayaurelius.sophinity.domain.MediaTime.supportsRuntime(item.type)) {
                             Spacer(Modifier.height(6.dp))
                             LinearMeter(item.progressUnits.toFloat() / total, Modifier.fillMaxWidth())
                             Text(stringResource(R.string.units_of, item.progressUnits, total, snap.categoryOf(item).unit.str()), style = MaterialTheme.typography.labelSmall,

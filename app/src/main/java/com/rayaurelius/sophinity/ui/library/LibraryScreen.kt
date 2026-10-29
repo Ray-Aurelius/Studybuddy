@@ -219,7 +219,7 @@ private fun ItemCard(snap: Snapshot, item: LearningItem, onClick: () -> Unit) {
                 if (item.status == ItemStatus.ACTIVE && media != null) {
                     Spacer(Modifier.height(8.dp))
                     MediaMeter(media)
-                } else if (item.status == ItemStatus.ACTIVE && total != null && total > 0) {
+                } else if (item.status == ItemStatus.ACTIVE && total != null && total > 0 && !MediaTime.supportsRuntime(item.type)) {
                     Spacer(Modifier.height(8.dp))
                     LinearMeter(item.progressUnits.toFloat() / total, Modifier.fillMaxWidth())
                     Spacer(Modifier.height(2.dp))
@@ -272,8 +272,10 @@ private fun ItemEditorSheet(
                 label = { Text(stringResource(when (item.type) { ItemType.BOOK, ItemType.ARTICLE -> R.string.lib_author; ItemType.AUDIOBOOK -> R.string.lib_author_narrator; ItemType.PODCAST -> R.string.lib_host; ItemType.SEMINAR -> R.string.lib_speaker; else -> R.string.lib_creator })) },
                 singleLine = true, modifier = Modifier.fillMaxWidth(),
             )
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                ItemStatus.entries.forEach { st -> FilterChip(item.status == st, { item = item.copy(status = st) }, { Text(stringResource(st.labelRes)) }) }
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                ItemStatus.entries.forEach { st ->
+                    FilterChip(item.status == st, { item = item.copy(status = st) }, { Text(stringResource(st.labelRes), maxLines = 1, softWrap = false) })
+                }
             }
             SubjectPicker(snap.activeSubjects, item.subjectId, { item = item.copy(subjectId = it) })
             if (MediaTime.supportsRuntime(item.type)) {
@@ -282,10 +284,10 @@ private fun ItemEditorSheet(
                     stringResource(R.string.lib_runtime_hint),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                DurationFields(stringResource(R.string.field_total), item.runtimeMin?.times(60L), { sec -> item = item.copy(runtimeMin = sec?.let { (it / 60).toInt() }?.takeIf { it > 0 }) })
+                DurationFields(stringResource(R.string.field_hours), item.runtimeMin?.times(60L), { sec -> item = item.copy(runtimeMin = sec?.let { (it / 60).toInt() }?.takeIf { it > 0 }) })
                 if (item.runtimeMin != null && item.status == ItemStatus.ACTIVE) {
                     Text(stringResource(R.string.lib_prior), style = MaterialTheme.typography.labelLarge)
-                    DurationFields(stringResource(R.string.field_done), item.priorSec.takeIf { it > 0 }, { sec -> item = item.copy(priorSec = sec ?: 0) })
+                    DurationFields(stringResource(R.string.field_hours), item.priorSec.takeIf { it > 0 }, { sec -> item = item.copy(priorSec = sec ?: 0) })
                 }
                 if (item.runtimeMin != null && MediaTime.supportsSpeed(item.type)) {
                     Text(stringResource(R.string.lib_speed), style = MaterialTheme.typography.labelLarge)
@@ -298,7 +300,11 @@ private fun ItemEditorSheet(
                 if (!isNew) snap.mediaProgress(item)?.let { MediaMeter(it) }
             }
             if (item.status != ItemStatus.WANT) {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                // Audiobooks, podcasts, courses, videos and seminars track progress by run time,
+                // so they only keep an optional size (e.g. 12 chapters), not a "done" count.
+                if (MediaTime.supportsRuntime(item.type)) {
+                    NumberField(stringResource(R.string.lib_total_units, cat.unit.str()), item.totalUnits, { item = item.copy(totalUnits = it) }, Modifier.fillMaxWidth())
+                } else Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     NumberField(stringResource(R.string.field_done), item.progressUnits, { item = item.copy(progressUnits = it ?: 0) }, Modifier.weight(1f))
                     NumberField(stringResource(R.string.lib_total_units, cat.unit.str()), item.totalUnits, { item = item.copy(totalUnits = it) }, Modifier.weight(1f))
                 }

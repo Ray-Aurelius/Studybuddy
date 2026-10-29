@@ -259,6 +259,14 @@
     <string name="nav_sessions">Oturumlar</string>
     <string name="sessions_title">Oturumlar</string>
     <string name="sessions_this_month">Bu ay</string>
+    <string name="sessions_this_year">Bu yıl</string>
+    <string name="sessions_edit">Oturumu düzenle</string>
+    <string name="sessions_link_item">Kütüphane öğesi</string>
+    <string name="sessions_link_hint">Bağladığında bu süre öğenin ilerlemesine sayılır.</string>
+    <string name="sessions_not_linked">Kütüphaneye bağlı değil</string>
+    <string name="timer_stop_save">Durdur ve kaydet</string>
+    <string name="timer_discard_title">Bu oturum silinsin mi?</string>
+    <string name="timer_discard_body">Zamanlayıcıdaki süre kaydedilmeyecek.</string>
     <string name="sessions_manual">Elle eklendi</string>
     <string name="sessions_delete_warning">İstatistiklerinden, serinden ve hedeflerinden kaldırılacak. Bu işlem geri alınamaz.</string>
     <string name="sessions_focus">Odak 5 üzerinden %1$d</string>

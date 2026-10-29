@@ -259,6 +259,14 @@
     <string name="nav_sessions">Sessies</string>
     <string name="sessions_title">Sessies</string>
     <string name="sessions_this_month">Deze maand</string>
+    <string name="sessions_this_year">Dit jaar</string>
+    <string name="sessions_edit">Sessie bewerken</string>
+    <string name="sessions_link_item">Bibliotheekitem</string>
+    <string name="sessions_link_hint">Door te koppelen telt deze tijd mee voor de voortgang van het item.</string>
+    <string name="sessions_not_linked">Niet gekoppeld aan de bibliotheek</string>
+    <string name="timer_stop_save">Stop en bewaar</string>
+    <string name="timer_discard_title">Deze sessie weggooien?</string>
+    <string name="timer_discard_body">De tijd op de timer wordt niet bewaard.</string>
     <string name="sessions_manual">Handmatig ingevoerd</string>
     <string name="sessions_delete_warning">Ze wordt verwijderd uit je statistieken, reeks en doelen. Dit kan niet ongedaan worden gemaakt.</string>
     <string name="sessions_focus">Focus %1$d van 5</string>

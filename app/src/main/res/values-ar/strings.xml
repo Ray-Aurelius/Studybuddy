@@ -259,6 +259,14 @@
     <string name="nav_sessions">الجلسات</string>
     <string name="sessions_title">الجلسات</string>
     <string name="sessions_this_month">هذا الشهر</string>
+    <string name="sessions_this_year">هذا العام</string>
+    <string name="sessions_edit">تعديل الجلسة</string>
+    <string name="sessions_link_item">عنصر من المكتبة</string>
+    <string name="sessions_link_hint">عند الربط يُحتسب هذا الوقت في تقدّم العنصر.</string>
+    <string name="sessions_not_linked">غير مرتبطة بالمكتبة</string>
+    <string name="timer_stop_save">إيقاف وحفظ</string>
+    <string name="timer_discard_title">تجاهل هذه الجلسة؟</string>
+    <string name="timer_discard_body">لن يُحفظ الوقت المسجّل على المؤقّت.</string>
     <string name="sessions_manual">أُضيفت يدويًا</string>
     <string name="sessions_delete_warning">ستُزال من إحصاءاتك وسلسلتك وأهدافك. لا يمكن التراجع عن ذلك.</string>
     <string name="sessions_focus">التركيز %1$d من 5</string>

@@ -18,10 +18,10 @@ Native Android, Kotlin + Jetpack Compose, Material 3, targeting **Android 17 (AP
 
 ## Features
 
-- **Learning timer** — open-ended stopwatch or focus blocks (default 25 min) with breaks. Runs from a saved timestamp, so it survives the app being closed or the phone rebooting. Ongoing notification with Pause / Finish actions.
+- **Learning timer** — open-ended stopwatch or focus blocks (default 25 min) with breaks. Runs from a saved timestamp, so it survives the app being closed or the phone rebooting. Ongoing notification with Pause / Stop & save actions. Discarding a running session asks first.
 - **Reflection after every session** — 1–5 focus rating and "one thing I learned."
 - **Stats** — day / week / month / year views, tap-to-inspect bar charts, subject breakdown, 18-week consistency heatmap.
-- **Sessions** — every session grouped by day: what you studied, the date and start time, the length studied, focus rating and reflection. Filter by this week, this month or subject, and log a past session. Deleting a session always asks first and names the exact session.
+- **Sessions** — every session grouped by day: what you studied, the date and start time, the length studied, focus rating and reflection. Filter by this week, month, year or subject, and log a past session. Tap a session to link it to a library item (its time then counts toward that item's progress), or change its subject, focus rating or reflection. Deleting a session always asks first and names the exact session.
 - **Streaks with rest days** — configurable minimum minutes per day and rest days per week.
 - **Goals** — study-time goals (daily / weekly / monthly) and "finish things" goals (e.g. 2 books a month, 12 books by Dec 31), with a hit-rate history.
 - **Media run time** — enter the total length of audiobooks, podcasts, video courses and seminars, plus time already completed and playback speed. The timer shows live progress ("5:00:00 of 9:30:00 · 52%"), and time studied at 1.5× counts as 1.5× of the media.

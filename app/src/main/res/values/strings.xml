@@ -349,6 +349,14 @@
     <string name="nav_sessions">Sessions</string>
     <string name="sessions_title">Sessions</string>
     <string name="sessions_this_month">This month</string>
+    <string name="sessions_this_year">This year</string>
+    <string name="sessions_edit">Edit session</string>
+    <string name="sessions_link_item">Library item</string>
+    <string name="sessions_link_hint">Linking counts this time toward the item\'s progress.</string>
+    <string name="sessions_not_linked">Not linked to the library</string>
+    <string name="timer_stop_save">Stop &amp; save</string>
+    <string name="timer_discard_title">Discard this session?</string>
+    <string name="timer_discard_body">The time on the timer won\'t be saved.</string>
     <string name="sessions_manual">Logged by hand</string>
     <string name="sessions_delete_warning">It will be removed from your stats, streak and goals. This can\'t be undone.</string>
     <string name="sessions_focus">Focus %1$d of 5</string>

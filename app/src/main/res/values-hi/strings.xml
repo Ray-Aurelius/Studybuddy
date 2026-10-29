@@ -259,6 +259,14 @@
     <string name="nav_sessions">सत्र</string>
     <string name="sessions_title">सत्र</string>
     <string name="sessions_this_month">इस महीने</string>
+    <string name="sessions_this_year">इस साल</string>
+    <string name="sessions_edit">सत्र संपादित करें</string>
+    <string name="sessions_link_item">लाइब्रेरी आइटम</string>
+    <string name="sessions_link_hint">जोड़ने पर यह समय आइटम की प्रगति में गिना जाएगा।</string>
+    <string name="sessions_not_linked">लाइब्रेरी से नहीं जुड़ा</string>
+    <string name="timer_stop_save">रोकें और सहेजें</string>
+    <string name="timer_discard_title">यह सत्र हटाएँ?</string>
+    <string name="timer_discard_body">टाइमर का समय सहेजा नहीं जाएगा।</string>
     <string name="sessions_manual">हाथ से दर्ज</string>
     <string name="sessions_delete_warning">इसे आपके आँकड़ों, सीरीज़ और लक्ष्यों से हटा दिया जाएगा। इसे पहले जैसा नहीं किया जा सकता।</string>
     <string name="sessions_focus">फ़ोकस 5 में से %1$d</string>

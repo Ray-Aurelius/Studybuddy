@@ -259,6 +259,14 @@
     <string name="nav_sessions">学习记录</string>
     <string name="sessions_title">学习记录</string>
     <string name="sessions_this_month">本月</string>
+    <string name="sessions_this_year">今年</string>
+    <string name="sessions_edit">编辑学习记录</string>
+    <string name="sessions_link_item">书库条目</string>
+    <string name="sessions_link_hint">关联后，这段时间会计入该条目的进度。</string>
+    <string name="sessions_not_linked">未关联书库</string>
+    <string name="timer_stop_save">停止并保存</string>
+    <string name="timer_discard_title">放弃本次学习？</string>
+    <string name="timer_discard_body">计时器上的时间不会被保存。</string>
     <string name="sessions_manual">手动记录</string>
     <string name="sessions_delete_warning">它将从你的统计、连续记录和目标中移除，且无法撤销。</string>
     <string name="sessions_focus">专注度 %1$d/5</string>

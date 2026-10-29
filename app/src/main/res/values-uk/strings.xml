@@ -259,6 +259,14 @@
     <string name="nav_sessions">Заняття</string>
     <string name="sessions_title">Заняття</string>
     <string name="sessions_this_month">Цей місяць</string>
+    <string name="sessions_this_year">Цей рік</string>
+    <string name="sessions_edit">Змінити заняття</string>
+    <string name="sessions_link_item">Елемент бібліотеки</string>
+    <string name="sessions_link_hint">Після прив\'язки цей час піде в прогрес елемента.</string>
+    <string name="sessions_not_linked">Не прив\'язано до бібліотеки</string>
+    <string name="timer_stop_save">Стоп і зберегти</string>
+    <string name="timer_discard_title">Скасувати це заняття?</string>
+    <string name="timer_discard_body">Час на таймері не збережеться.</string>
     <string name="sessions_manual">Додано вручну</string>
     <string name="sessions_delete_warning">Його буде видалено зі статистики, серії та цілей. Це не можна скасувати.</string>
     <string name="sessions_focus">Фокус %1$d з 5</string>

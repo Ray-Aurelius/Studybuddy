@@ -259,6 +259,14 @@
     <string name="nav_sessions">Buổi học</string>
     <string name="sessions_title">Buổi học</string>
     <string name="sessions_this_month">Tháng này</string>
+    <string name="sessions_this_year">Năm nay</string>
+    <string name="sessions_edit">Sửa buổi học</string>
+    <string name="sessions_link_item">Mục trong thư viện</string>
+    <string name="sessions_link_hint">Khi liên kết, thời gian này được tính vào tiến độ của mục.</string>
+    <string name="sessions_not_linked">Chưa liên kết với thư viện</string>
+    <string name="timer_stop_save">Dừng và lưu</string>
+    <string name="timer_discard_title">Hủy buổi học này?</string>
+    <string name="timer_discard_body">Thời gian trên đồng hồ sẽ không được lưu.</string>
     <string name="sessions_manual">Ghi thủ công</string>
     <string name="sessions_delete_warning">Buổi học sẽ bị xóa khỏi thống kê, chuỗi ngày và mục tiêu. Không thể hoàn tác.</string>
     <string name="sessions_focus">Tập trung %1$d/5</string>

@@ -259,6 +259,14 @@
     <string name="nav_sessions">การเรียน</string>
     <string name="sessions_title">การเรียน</string>
     <string name="sessions_this_month">เดือนนี้</string>
+    <string name="sessions_this_year">ปีนี้</string>
+    <string name="sessions_edit">แก้ไขการเรียน</string>
+    <string name="sessions_link_item">รายการในห้องสมุด</string>
+    <string name="sessions_link_hint">เมื่อเชื่อมโยงแล้ว เวลานี้จะนับเป็นความคืบหน้าของรายการ</string>
+    <string name="sessions_not_linked">ยังไม่ได้เชื่อมกับห้องสมุด</string>
+    <string name="timer_stop_save">หยุดและบันทึก</string>
+    <string name="timer_discard_title">ทิ้งการเรียนครั้งนี้ไหม</string>
+    <string name="timer_discard_body">เวลาบนตัวจับเวลาจะไม่ถูกบันทึก</string>
     <string name="sessions_manual">บันทึกเอง</string>
     <string name="sessions_delete_warning">จะถูกลบออกจากสถิติ สถิติต่อเนื่อง และเป้าหมายของคุณ และย้อนกลับไม่ได้</string>
     <string name="sessions_focus">สมาธิ %1$d จาก 5</string>

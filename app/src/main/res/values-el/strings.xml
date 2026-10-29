@@ -259,6 +259,14 @@
     <string name="nav_sessions">Συνεδρίες</string>
     <string name="sessions_title">Συνεδρίες</string>
     <string name="sessions_this_month">Αυτόν τον μήνα</string>
+    <string name="sessions_this_year">Φέτος</string>
+    <string name="sessions_edit">Επεξεργασία συνεδρίας</string>
+    <string name="sessions_link_item">Στοιχείο βιβλιοθήκης</string>
+    <string name="sessions_link_hint">Με τη σύνδεση, ο χρόνος μετράει στην πρόοδο του στοιχείου.</string>
+    <string name="sessions_not_linked">Χωρίς σύνδεση με τη βιβλιοθήκη</string>
+    <string name="timer_stop_save">Διακοπή &amp; αποθήκευση</string>
+    <string name="timer_discard_title">Απόρριψη αυτής της συνεδρίας;</string>
+    <string name="timer_discard_body">Ο χρόνος του χρονομέτρου δεν θα αποθηκευτεί.</string>
     <string name="sessions_manual">Καταχωρίστηκε χειροκίνητα</string>
     <string name="sessions_delete_warning">Θα αφαιρεθεί από τα στατιστικά, το σερί και τους στόχους σου. Δεν αναιρείται.</string>
     <string name="sessions_focus">Συγκέντρωση %1$d από 5</string>

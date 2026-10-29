@@ -259,6 +259,14 @@
     <string name="nav_sessions">Занятия</string>
     <string name="sessions_title">Занятия</string>
     <string name="sessions_this_month">Этот месяц</string>
+    <string name="sessions_this_year">Этот год</string>
+    <string name="sessions_edit">Изменить занятие</string>
+    <string name="sessions_link_item">Элемент библиотеки</string>
+    <string name="sessions_link_hint">После привязки это время пойдёт в прогресс элемента.</string>
+    <string name="sessions_not_linked">Не привязано к библиотеке</string>
+    <string name="timer_stop_save">Стоп и сохранить</string>
+    <string name="timer_discard_title">Отменить это занятие?</string>
+    <string name="timer_discard_body">Время на таймере не сохранится.</string>
     <string name="sessions_manual">Добавлено вручную</string>
     <string name="sessions_delete_warning">Оно будет удалено из статистики, серии и целей. Это нельзя отменить.</string>
     <string name="sessions_focus">Фокус %1$d из 5</string>

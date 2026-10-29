@@ -259,6 +259,14 @@
     <string name="nav_sessions">セッション</string>
     <string name="sessions_title">セッション</string>
     <string name="sessions_this_month">今月</string>
+    <string name="sessions_this_year">今年</string>
+    <string name="sessions_edit">セッションを編集</string>
+    <string name="sessions_link_item">ライブラリの項目</string>
+    <string name="sessions_link_hint">リンクすると、この時間が項目の進捗に加算されます。</string>
+    <string name="sessions_not_linked">ライブラリにリンクされていません</string>
+    <string name="timer_stop_save">停止して保存</string>
+    <string name="timer_discard_title">このセッションを破棄しますか？</string>
+    <string name="timer_discard_body">タイマーの時間は保存されません。</string>
     <string name="sessions_manual">手動で記録</string>
     <string name="sessions_delete_warning">統計、連続記録、目標から削除されます。この操作は取り消せません。</string>
     <string name="sessions_focus">集中度 %1$d/5</string>

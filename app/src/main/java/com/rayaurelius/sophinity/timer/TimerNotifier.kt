@@ -95,14 +95,14 @@ class TimerNotifier(private val base: Context) {
                     b.setWhen(now - s.elapsedMs(now)).setContentText(mediaLine ?: context.getString(R.string.notif_every_minute))
                 }
                 b.addAction(0, context.getString(R.string.common_pause), action(TimerActionReceiver.PAUSE, 1))
-                b.addAction(0, context.getString(R.string.common_finish), action(TimerActionReceiver.FINISH, 2))
+                b.addAction(0, context.getString(R.string.timer_stop_save), action(TimerActionReceiver.FINISH, 2))
             }
             TimerStatus.PAUSED -> {
                 b.setContentTitle(context.getString(R.string.notif_paused_title, StudyMath.formatClock(s.elapsedMs(now))))
                     .setContentText(mediaLine ?: subjectName ?: context.getString(R.string.notif_tap_resume))
                     .setShowWhen(false)
                 b.addAction(0, context.getString(R.string.common_resume), action(TimerActionReceiver.RESUME, 3))
-                b.addAction(0, context.getString(R.string.common_finish), action(TimerActionReceiver.FINISH, 2))
+                b.addAction(0, context.getString(R.string.timer_stop_save), action(TimerActionReceiver.FINISH, 2))
             }
             TimerStatus.BREAK -> {
                 b.setContentTitle(context.getString(R.string.notif_break_title))

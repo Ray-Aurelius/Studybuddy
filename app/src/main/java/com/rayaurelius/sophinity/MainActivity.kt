@@ -1,5 +1,6 @@
 package com.rayaurelius.sophinity
 
+import androidx.compose.ui.unit.sp
 import com.rayaurelius.sophinity.ui.glyphs.Glyph
 import com.rayaurelius.sophinity.ui.sessions.SessionsScreen
 import androidx.compose.ui.text.style.TextOverflow
@@ -155,7 +156,7 @@ private fun AppShell(settings: AppSettings) {
                     selected = selected,
                     onClick = { go(t.route) },
                     icon = { Glyph(t.glyph, contentDescription = if (settings.navLabels) null else stringResource(t.label)) },
-                    label = if (settings.navLabels) ({ Text(stringResource(t.label), maxLines = 1, overflow = TextOverflow.Ellipsis) }) else null,
+                    label = if (settings.navLabels) ({ NavLabel(stringResource(t.label)) }) else null,
                     alwaysShowLabel = settings.navLabels,
                 )
             }
@@ -185,7 +186,7 @@ private fun AppShell(settings: AppSettings) {
                                             selected = selected,
                                             onClick = { go(t.route) },
                                             icon = { Glyph(t.glyph, contentDescription = if (settings.navLabels) null else stringResource(t.label)) },
-                                            label = if (settings.navLabels) ({ Text(stringResource(t.label), maxLines = 1, overflow = TextOverflow.Ellipsis) }) else null,
+                                            label = if (settings.navLabels) ({ NavLabel(stringResource(t.label)) }) else null,
                                             alwaysShowLabel = settings.navLabels,
                                         )
                                     }
@@ -228,4 +229,14 @@ private fun RestoreDirection(content: @Composable () -> Unit) {
     val config = androidx.compose.ui.platform.LocalConfiguration.current
     val dir = if (config.layoutDirection == android.view.View.LAYOUT_DIRECTION_RTL) LayoutDirection.Rtl else LayoutDirection.Ltr
     CompositionLocalProvider(LocalLayoutDirection provides dir, content = content)
+}
+
+/** Tab label that shrinks to fit (six tabs, long translations, large text) rather than cutting the word off. */
+@Composable
+private fun NavLabel(text: String) {
+    val max = MaterialTheme.typography.labelMedium.fontSize
+    Text(
+        text, maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis,
+        autoSize = androidx.compose.foundation.text.TextAutoSize.StepBased(minFontSize = 9.sp, maxFontSize = max),
+    )
 }

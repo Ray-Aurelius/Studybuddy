@@ -259,6 +259,14 @@
     <string name="nav_sessions">Sesi</string>
     <string name="sessions_title">Sesi</string>
     <string name="sessions_this_month">Bulan ini</string>
+    <string name="sessions_this_year">Tahun ini</string>
+    <string name="sessions_edit">Edit sesi</string>
+    <string name="sessions_link_item">Item perpustakaan</string>
+    <string name="sessions_link_hint">Jika ditautkan, waktu ini dihitung ke kemajuan item.</string>
+    <string name="sessions_not_linked">Tidak ditautkan ke perpustakaan</string>
+    <string name="timer_stop_save">Henti &amp; simpan</string>
+    <string name="timer_discard_title">Buang sesi ini?</string>
+    <string name="timer_discard_body">Waktu di timer tidak akan disimpan.</string>
     <string name="sessions_manual">Dicatat manual</string>
     <string name="sessions_delete_warning">Sesi ini akan dihapus dari statistik, rentetan, dan targetmu. Tindakan ini tidak bisa dibatalkan.</string>
     <string name="sessions_focus">Fokus %1$d dari 5</string>

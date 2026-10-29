@@ -1,6 +1,22 @@
 package com.rayaurelius.sophinity.ui.sessions
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.rememberModalBottomSheetState
+import com.rayaurelius.sophinity.data.db.ItemStatus
+import com.rayaurelius.sophinity.ui.components.FocusRating
+import com.rayaurelius.sophinity.ui.components.SubjectPicker
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,6 +51,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -69,6 +86,7 @@ import java.time.LocalDate
 class SessionsViewModel(private val c: AppContainer) : ViewModel() {
     val snapshot = c.repo.snapshot.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
     fun delete(s: StudySession) = viewModelScope.launch { c.repo.deleteSession(s) }
+    fun update(s: StudySession) = viewModelScope.launch { c.repo.updateSession(s) }
     fun addManual(subjectId: Long?, itemId: Long?, startedAt: Long, minutes: Int, note: String) = viewModelScope.launch {
         if (minutes <= 0) return@launch
         c.repo.addSession(
@@ -80,7 +98,9 @@ class SessionsViewModel(private val c: AppContainer) : ViewModel() {
     }
 }
 
-private enum class Span(val label: Int) { ALL(R.string.lib_all), WEEK(R.string.stats_this_week), MONTH(R.string.sessions_this_month) }
+private enum class Span(val label: Int) {
+    ALL(R.string.lib_all), WEEK(R.string.stats_this_week), MONTH(R.string.sessions_this_month), YEAR(R.string.sessions_this_year)
+}
 
 /** Every learning session, newest first, grouped by day. Deleting one always asks first. */
 @Composable
@@ -90,12 +110,14 @@ fun SessionsScreen(contentPadding: PaddingValues) {
     var span by rememberSaveable { mutableStateOf(Span.ALL) }
     var subjectFilter by rememberSaveable { mutableStateOf<Long?>(null) }
     var confirmDelete by remember { mutableStateOf<StudySession?>(null) }
+    var editing by remember { mutableStateOf<StudySession?>(null) }
     var showManual by remember { mutableStateOf(false) }
 
     val from: LocalDate? = when (span) {
         Span.ALL -> null
         Span.WEEK -> StudyMath.weekRange(snap.today, snap.settings.weekStart).start
         Span.MONTH -> StudyMath.monthRange(snap.today).start
+        Span.YEAR -> StudyMath.yearRange(snap.today).start
     }
     val shown = snap.sessions
         .filter { from == null || !StudyMath.dayOf(it.startedAt, snap.zone).isBefore(from) }
@@ -135,7 +157,7 @@ fun SessionsScreen(contentPadding: PaddingValues) {
             }
             byDay.forEach { (day, list) ->
                 item(key = "d$day") { DayHeader(snap, day, list.sumOf { it.durationSec }) }
-                items(list, key = { it.id }) { s -> SessionCard(snap, s, onDelete = { confirmDelete = s }) }
+                items(list, key = { it.id }) { s -> SessionCard(snap, s, onOpen = { editing = s }, onDelete = { confirmDelete = s }) }
             }
         }
         ExtendedFloatingActionButton(
@@ -145,6 +167,13 @@ fun SessionsScreen(contentPadding: PaddingValues) {
         )
     }
 
+    editing?.let { s ->
+        SessionEditor(
+            snap, s, onDismiss = { editing = null },
+            onSave = { vm.update(it); editing = null },
+            onDelete = { editing = null; confirmDelete = s },
+        )
+    }
     confirmDelete?.let { s -> DeleteDialog(snap, s, onConfirm = { vm.delete(s); confirmDelete = null }, onDismiss = { confirmDelete = null }) }
     if (showManual) ManualSessionDialog(snap, onDismiss = { showManual = false }) { subj, item, start, mins, note ->
         vm.addManual(subj, item, start, mins, note); showManual = false
@@ -179,11 +208,11 @@ private fun sessionGlyph(snap: Snapshot, s: StudySession): String {
 }
 
 @Composable
-private fun SessionCard(snap: Snapshot, s: StudySession, onDelete: () -> Unit) {
+private fun SessionCard(snap: Snapshot, s: StudySession, onOpen: () -> Unit, onDelete: () -> Unit) {
     val item = s.itemId?.let { snap.itemsById[it] }
     val subject = s.subjectId?.let { snap.subjectsById[it] }
     val time = Instant.ofEpochMilli(s.startedAt).atZone(snap.zone)
-    ElevatedCard(Modifier.fillMaxWidth()) {
+    ElevatedCard(onClick = onOpen, modifier = Modifier.fillMaxWidth().testTag("session")) {
         Row(Modifier.padding(start = 14.dp, top = 12.dp, bottom = 12.dp, end = 4.dp), verticalAlignment = Alignment.Top) {
             GlyphTile(
                 sessionGlyph(snap, s), size = 40.dp, fallback = Glyphs.CATEGORY_DEFAULT,
@@ -259,4 +288,83 @@ private fun DeleteDialog(snap: Snapshot, s: StudySession, onConfirm: () -> Unit,
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } },
     )
+}
+
+/**
+ * Edit a logged session: link it to something in the library (so its time counts toward that
+ * item's progress), change the subject, the reflection or the focus rating.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SessionEditor(snap: Snapshot, initial: StudySession, onDismiss: () -> Unit, onSave: (StudySession) -> Unit, onDelete: () -> Unit) {
+    var s by remember { mutableStateOf(initial) }
+    val time = Instant.ofEpochMilli(s.startedAt).atZone(snap.zone)
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+        Column(
+            Modifier.padding(horizontal = 24.dp).padding(bottom = 24.dp).verticalScroll(rememberScrollState()).imePadding(),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            Text(stringResource(R.string.sessions_edit), style = MaterialTheme.typography.headlineSmall)
+            Text(
+                "${time.format(rememberDateFormat("yMMMEd"))} · ${time.format(rememberDateFormat("jmm"))} · ${StudyMath.formatDuration(s.durationSec)}",
+                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Text(stringResource(R.string.sessions_link_item), style = MaterialTheme.typography.titleSmall)
+            LibraryItemPicker(snap, s.itemId) { id ->
+                val item = id?.let { snap.itemsById[it] }
+                // Linking to an item also files the session under that item's subject, unless one is already set.
+                s = s.copy(itemId = id, subjectId = s.subjectId ?: item?.subjectId)
+            }
+            Text(stringResource(R.string.sessions_link_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            SubjectPicker(snap.activeSubjects, s.subjectId, { s = s.copy(subjectId = it) })
+            Text(stringResource(R.string.reflect_focus_q), style = MaterialTheme.typography.titleSmall)
+            FocusRating(s.focus) { s = s.copy(focus = it) }
+            OutlinedTextField(
+                s.note, { s = s.copy(note = it) }, label = { Text(stringResource(R.string.reflect_learned)) },
+                modifier = Modifier.fillMaxWidth(), minLines = 2,
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                TextButton(onClick = onDelete) { Text(stringResource(R.string.common_delete), color = MaterialTheme.colorScheme.error) }
+                Spacer(Modifier.weight(1f))
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
+                Button(onClick = { onSave(s.copy(note = s.note.trim())) }) { Text(stringResource(R.string.common_save)) }
+            }
+        }
+    }
+}
+
+/** Every library item (in progress first, then want-to, then finished), or none. */
+@Composable
+private fun LibraryItemPicker(snap: Snapshot, selectedId: Long?, onSelect: (Long?) -> Unit) {
+    var open by remember { mutableStateOf(false) }
+    val order = listOf(ItemStatus.ACTIVE, ItemStatus.WANT, ItemStatus.DONE)
+    val items = snap.items.sortedWith(compareBy({ order.indexOf(it.status) }, { it.title.lowercase() }))
+    val sel = selectedId?.let { snap.itemsById[it] }
+    Box {
+        OutlinedCard(onClick = { open = true }, modifier = Modifier.fillMaxWidth()) {
+            Row(Modifier.padding(horizontal = 14.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+                Glyph(sel?.let { snap.categoryOf(it).glyph } ?: "scroll", size = 22.dp, fallback = Glyphs.CATEGORY_DEFAULT,
+                    tint = if (sel != null) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
+                Spacer(Modifier.width(12.dp))
+                Text(sel?.title ?: stringResource(R.string.sessions_not_linked), Modifier.weight(1f), maxLines = 2, overflow = TextOverflow.Ellipsis,
+                    color = if (sel != null) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant)
+                Icon(Icons.Default.ArrowDropDown, null)
+            }
+        }
+        DropdownMenu(open, { open = false }, Modifier.heightIn(max = 360.dp)) {
+            DropdownMenuItem(text = { Text(stringResource(R.string.sessions_not_linked)) }, onClick = { onSelect(null); open = false })
+            items.forEach { item ->
+                DropdownMenuItem(
+                    text = {
+                        Column {
+                            Text(item.title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            Text(stringResource(item.status.labelRes), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    },
+                    leadingIcon = { Glyph(snap.categoryOf(item).glyph, size = 20.dp, fallback = Glyphs.CATEGORY_DEFAULT) },
+                    onClick = { onSelect(item.id); open = false },
+                )
+            }
+        }
+    }
 }

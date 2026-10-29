@@ -259,6 +259,14 @@
     <string name="nav_sessions">Sitzungen</string>
     <string name="sessions_title">Sitzungen</string>
     <string name="sessions_this_month">Diesen Monat</string>
+    <string name="sessions_this_year">Dieses Jahr</string>
+    <string name="sessions_edit">Sitzung bearbeiten</string>
+    <string name="sessions_link_item">Bibliothekseintrag</string>
+    <string name="sessions_link_hint">Mit Verknüpfung zählt diese Zeit zum Fortschritt des Eintrags.</string>
+    <string name="sessions_not_linked">Nicht mit der Bibliothek verknüpft</string>
+    <string name="timer_stop_save">Stopp &amp; speichern</string>
+    <string name="timer_discard_title">Diese Sitzung verwerfen?</string>
+    <string name="timer_discard_body">Die Zeit auf dem Timer wird nicht gespeichert.</string>
     <string name="sessions_manual">Von Hand eingetragen</string>
     <string name="sessions_delete_warning">Sie wird aus deiner Statistik, Serie und deinen Zielen entfernt. Das lässt sich nicht rückgängig machen.</string>
     <string name="sessions_focus">Fokus %1$d von 5</string>

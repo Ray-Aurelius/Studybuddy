@@ -259,6 +259,14 @@
     <string name="nav_sessions">Sesje</string>
     <string name="sessions_title">Sesje</string>
     <string name="sessions_this_month">Ten miesiąc</string>
+    <string name="sessions_this_year">Ten rok</string>
+    <string name="sessions_edit">Edytuj sesję</string>
+    <string name="sessions_link_item">Pozycja z biblioteki</string>
+    <string name="sessions_link_hint">Po połączeniu ten czas liczy się do postępu pozycji.</string>
+    <string name="sessions_not_linked">Niepołączona z biblioteką</string>
+    <string name="timer_stop_save">Zatrzymaj i zapisz</string>
+    <string name="timer_discard_title">Odrzucić tę sesję?</string>
+    <string name="timer_discard_body">Czas z minutnika nie zostanie zapisany.</string>
     <string name="sessions_manual">Dodana ręcznie</string>
     <string name="sessions_delete_warning">Zostanie usunięta ze statystyk, serii i celów. Tego nie można cofnąć.</string>
     <string name="sessions_focus">Skupienie %1$d z 5</string>
