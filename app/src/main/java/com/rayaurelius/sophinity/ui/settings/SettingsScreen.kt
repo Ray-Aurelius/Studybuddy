@@ -10,6 +10,9 @@ import com.rayaurelius.sophinity.data.BackupException
 import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
 import com.rayaurelius.sophinity.ui.i18n.AppLocale
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.data.ChoiceStyle
+import com.rayaurelius.sophinity.ui.components.LocalChoiceStyle
+import com.rayaurelius.sophinity.ui.components.Choices
 import com.rayaurelius.sophinity.data.AutoBackup
 import androidx.compose.ui.graphics.Color
 import com.rayaurelius.sophinity.ui.glyphs.GlyphPicker
@@ -306,12 +309,12 @@ fun SettingsScreen(
                 ListItem(
                     headlineContent = { Text(stringResource(R.string.set_week_starts)) },
                     trailingContent = {
-                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                            val loc = LocalConfiguration.current.locales[0]
-                            listOf(DayOfWeek.MONDAY, DayOfWeek.SUNDAY, DayOfWeek.SATURDAY).map { it to it.getDisplayName(java.time.format.TextStyle.SHORT, loc) }.forEach { (d, l) ->
-                                FilterChip(s.weekStart == d, { vm.update { it.copy(weekStart = d) } }, { Text(l) })
-                            }
-                        }
+                        val loc = LocalConfiguration.current.locales[0]
+                        Choices(
+                            listOf(DayOfWeek.MONDAY, DayOfWeek.SUNDAY, DayOfWeek.SATURDAY), s.weekStart, { d -> vm.update { it.copy(weekStart = d) } },
+                            label = { it.getDisplayName(java.time.format.TextStyle.FULL, loc) },
+                            modifier = if (LocalChoiceStyle.current == ChoiceStyle.DROPDOWN) Modifier.width(160.dp) else Modifier,
+                        )
                     },
                 )
             }

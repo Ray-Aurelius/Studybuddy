@@ -66,6 +66,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.rayaurelius.sophinity.AppContainer
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.data.ChoiceStyle
+import com.rayaurelius.sophinity.ui.components.LocalChoiceStyle
+import com.rayaurelius.sophinity.ui.components.Choices
 import com.rayaurelius.sophinity.ui.components.PageHeader
 import com.rayaurelius.sophinity.data.Snapshot
 import com.rayaurelius.sophinity.data.db.SessionSource
@@ -137,14 +140,28 @@ fun SessionsScreen(contentPadding: PaddingValues) {
         ) {
             item { PageHeader(stringResource(R.string.sessions_title)) }
             item {
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(Span.entries) { s -> FilterChip(span == s, { span = s }, { Text(stringResource(s.label)) }) }
-                    items(subjects, key = { it.id }) { sub ->
-                        FilterChip(
-                            subjectFilter == sub.id, { subjectFilter = if (subjectFilter == sub.id) null else sub.id }, { Text(sub.name) },
-                            leadingIcon = { Glyph(sub.icon, size = 18.dp, tint = Color(sub.color)) },
-                        )
+                val periodChoice: @Composable (Modifier) -> Unit = { m ->
+                    Choices(Span.entries, span, { span = it }, label = { stringResource(it.label) },
+                        title = stringResource(R.string.choice_period), scroll = true, titleOverBubbles = false, modifier = m)
+                }
+                val subjectChoice: @Composable (Modifier) -> Unit = { m ->
+                    Choices(
+                        listOf<Long?>(null) + subjects.map { it.id }, subjectFilter, { subjectFilter = it },
+                        label = { id -> id?.let { snap.subjectsById[it]?.name } ?: stringResource(R.string.goal_any_subject) },
+                        icon = { id -> val sub = id?.let { snap.subjectsById[it] }
+                            Glyph(sub?.icon ?: "meander", size = 18.dp, tint = sub?.let { Color(it.color) } ?: MaterialTheme.colorScheme.onSurfaceVariant) },
+                        title = stringResource(R.string.choice_subject), scroll = true, titleOverBubbles = false, modifier = m,
+                    )
+                }
+                // Drop-downs sit side by side; bubbles get a row each.
+                if (LocalChoiceStyle.current == ChoiceStyle.DROPDOWN) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        periodChoice(Modifier.weight(1f))
+                        if (subjects.isNotEmpty()) subjectChoice(Modifier.weight(1f))
                     }
+                } else Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    periodChoice(Modifier)
+                    if (subjects.isNotEmpty()) subjectChoice(Modifier)
                 }
             }
             item {

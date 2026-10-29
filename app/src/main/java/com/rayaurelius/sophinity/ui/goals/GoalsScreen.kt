@@ -6,6 +6,7 @@ import com.rayaurelius.sophinity.ui.i18n.goalTitle
 import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
 import com.rayaurelius.sophinity.domain.str
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.ui.components.Choices
 import com.rayaurelius.sophinity.ui.components.PageHeader
 import com.rayaurelius.sophinity.ui.glyphs.Glyph
 import com.rayaurelius.sophinity.ui.glyphs.Glyphs
@@ -205,17 +206,18 @@ private fun GoalEditor(snap: Snapshot, initial: Goal, onDismiss: () -> Unit, onS
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             Text(stringResource(if (isNew) R.string.goals_new else R.string.goals_edit), style = MaterialTheme.typography.headlineSmall)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FilterChip(g.kind == GoalKind.TIME, { g = g.copy(kind = GoalKind.TIME, target = if (g.kind != GoalKind.TIME) 180 else g.target) }, { Text(stringResource(R.string.goal_kind_time)) })
-                FilterChip(g.kind == GoalKind.ITEMS, { g = g.copy(kind = GoalKind.ITEMS, target = if (g.kind != GoalKind.ITEMS) 1 else g.target) }, { Text(stringResource(R.string.goal_kind_items)) })
-            }
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                GoalPeriod.entries.forEach { p ->
-                    FilterChip(g.period == p, {
-                        g = g.copy(period = p, deadlineEpochDay = if (p == GoalPeriod.BY_DATE) g.deadlineEpochDay ?: snap.today.plusMonths(3).toEpochDay() else null)
-                    }, { Text(stringResource(p.labelRes)) })
-                }
-            }
+            Choices(
+                GoalKind.entries, g.kind,
+                { k -> if (k != g.kind) g = g.copy(kind = k, target = if (k == GoalKind.TIME) 180 else 1) },
+                label = { stringResource(if (it == GoalKind.TIME) R.string.goal_kind_time else R.string.goal_kind_items) },
+                icon = { Glyph(if (it == GoalKind.TIME) "hourglass" else "check", size = 20.dp) },
+                title = stringResource(R.string.choice_goal_kind), modifier = Modifier.fillMaxWidth(),
+            )
+            Choices(
+                GoalPeriod.entries, g.period,
+                { p -> g = g.copy(period = p, deadlineEpochDay = if (p == GoalPeriod.BY_DATE) g.deadlineEpochDay ?: snap.today.plusMonths(3).toEpochDay() else null) },
+                label = { stringResource(it.labelRes) }, title = stringResource(R.string.choice_repeats), modifier = Modifier.fillMaxWidth(),
+            )
             if (g.kind == GoalKind.TIME) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     NumberField(stringResource(R.string.field_hours), g.target / 60, { g = g.copy(target = (it ?: 0) * 60 + g.target % 60) }, Modifier.weight(1f))
@@ -224,12 +226,14 @@ private fun GoalEditor(snap: Snapshot, initial: Goal, onDismiss: () -> Unit, onS
                 SubjectPicker(snap.activeSubjects, g.subjectId, { g = g.copy(subjectId = it) }, noneLabel = stringResource(R.string.goal_any_subject))
             } else {
                 NumberField(stringResource(R.string.goal_how_many), g.target, { g = g.copy(target = it ?: 0) }, Modifier.fillMaxWidth())
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(g.itemType == null, { g = g.copy(itemType = null, categoryId = null) }, { Text(stringResource(R.string.goal_anything)) })
-                    snap.categories.forEach { c ->
-                        FilterChip(c.matchesGoal(g), { g = g.copy(itemType = c.type, categoryId = c.customId) }, { Text(c.plural.str()) }, leadingIcon = { Glyph(c.glyph, size = 18.dp, fallback = Glyphs.CATEGORY_DEFAULT) })
-                    }
-                }
+                Choices(
+                    listOf<com.rayaurelius.sophinity.domain.CategoryInfo?>(null) + snap.categories,
+                    if (g.itemType == null) null else snap.categories.firstOrNull { it.matchesGoal(g) },
+                    { c -> g = g.copy(itemType = c?.type, categoryId = c?.customId) },
+                    label = { it?.plural?.str() ?: stringResource(R.string.goal_anything) },
+                    icon = { Glyph(it?.glyph ?: "scroll_stack", size = 20.dp, fallback = Glyphs.CATEGORY_DEFAULT) },
+                    title = stringResource(R.string.choice_counts), modifier = Modifier.fillMaxWidth(),
+                )
             }
             if (g.period == GoalPeriod.BY_DATE) {
                 val d = LocalDate.ofEpochDay(g.deadlineEpochDay ?: snap.today.toEpochDay())

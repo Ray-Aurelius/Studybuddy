@@ -7,6 +7,9 @@ import com.rayaurelius.sophinity.ui.i18n.rememberDateFormat
 import com.rayaurelius.sophinity.domain.str
 import androidx.compose.ui.unit.sp
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.data.db.ItemType
+import com.rayaurelius.sophinity.ui.library.LibraryViewModel
+import com.rayaurelius.sophinity.ui.library.ItemEditorSheet
 import com.rayaurelius.sophinity.ui.components.LibraryItemPicker
 import com.rayaurelius.sophinity.ui.glyphs.Glyph
 import com.rayaurelius.sophinity.ui.glyphs.GlyphTile
@@ -202,6 +205,20 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
     var mode by rememberSaveable { mutableStateOf(TimerMode.STOPWATCH) }
     var subjectId by rememberSaveable { mutableStateOf(snap.settings.lastSubjectId?.takeIf { it in snap.subjectsById }) }
     var itemId by rememberSaveable { mutableStateOf<Long?>(null) }
+    var addingItem by remember { mutableStateOf(false) }
+    if (addingItem) {
+        val library = appViewModel { LibraryViewModel(it) }
+        ItemEditorSheet(
+            snap, LearningItem(type = ItemType.BOOK, title = "", status = ItemStatus.ACTIVE, subjectId = subjectId),
+            onDismiss = { addingItem = false },
+            onSave = { item ->
+                library.save(item) { id -> itemId = id; item.subjectId?.let { subjectId = it } }
+                addingItem = false
+            },
+            onDelete = { addingItem = false },
+            onCreateCategory = { cat, picked -> library.saveCategory(cat, picked) },
+        )
+    }
 
     ElevatedCard(Modifier.fillMaxWidth()) {
         Column(Modifier.fillMaxWidth().padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -236,7 +253,12 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel) {
                             snap.itemsById[id]?.subjectId?.let { subjectId = it }
                         }
                     }
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(10.dp))
+                    // Add a book, podcast or course right here, without leaving the timer; it's selected once saved.
+                    FilledTonalIconButton(onClick = { addingItem = true }, modifier = Modifier.size(40.dp)) {
+                        Glyph("scroll", size = 22.dp, contentDescription = stringResource(R.string.timer_add_media))
+                    }
+                    Spacer(Modifier.height(10.dp))
                     Button(onClick = { vm.start(mode, subjectId, itemId) }, modifier = Modifier.fillMaxWidth().height(56.dp)) {
                         Icon(Icons.Default.PlayArrow, null)
                         Spacer(Modifier.width(8.dp))

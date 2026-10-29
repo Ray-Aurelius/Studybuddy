@@ -5,6 +5,8 @@ package com.rayaurelius.sophinity.ui.settings
 import com.rayaurelius.sophinity.domain.StudyMath
 import androidx.annotation.StringRes
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.data.ChoiceStyle
+import com.rayaurelius.sophinity.ui.components.Choices
 import androidx.compose.ui.res.stringResource
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -133,12 +135,16 @@ fun AppearanceScreen(onBack: () -> Unit) {
     SubPage(stringResource(R.string.set_appearance), onBack) { s, vm ->
         item { Header(stringResource(R.string.app_light_dark)) }
         item {
-            Row(Modifier.padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                ThemeMode.entries.forEach { m ->
-                    FilterChip(s.themeMode == m, { vm.update { it.copy(themeMode = m) } }, {
-                        Text(stringResource(when (m) { ThemeMode.SYSTEM -> R.string.common_match_phone; ThemeMode.LIGHT -> R.string.mode_light; ThemeMode.DARK -> R.string.mode_dark }))
-                    })
-                }
+            Choices(
+                ThemeMode.entries, s.themeMode, { m -> vm.update { it.copy(themeMode = m) } },
+                label = { m -> stringResource(when (m) { ThemeMode.SYSTEM -> R.string.common_match_phone; ThemeMode.LIGHT -> R.string.mode_light; ThemeMode.DARK -> R.string.mode_dark }) },
+                modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+            )
+        }
+        item { Header(stringResource(R.string.app_menus)) }
+        item {
+            ToggleRow(stringResource(R.string.app_bubbles), stringResource(R.string.app_bubbles_sub), s.choiceStyle == ChoiceStyle.BUBBLES) { on ->
+                vm.update { it.copy(choiceStyle = if (on) ChoiceStyle.BUBBLES else ChoiceStyle.DROPDOWN) }
             }
         }
 
@@ -359,11 +365,11 @@ fun AccessibilityScreen(onBack: () -> Unit) {
                 Text(stringResource(R.string.a11y_reduce_motion), style = MaterialTheme.typography.bodyLarge)
                 Text(stringResource(R.string.a11y_reduce_motion_sub), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Spacer(Modifier.height(8.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(s.reduceMotion == null, { vm.update { it.copy(reduceMotion = null) } }, { Text(stringResource(R.string.common_match_phone)) })
-                    FilterChip(s.reduceMotion == true, { vm.update { it.copy(reduceMotion = true) } }, { Text(stringResource(R.string.common_on)) })
-                    FilterChip(s.reduceMotion == false, { vm.update { it.copy(reduceMotion = false) } }, { Text(stringResource(R.string.common_off)) })
-                }
+                Choices(
+                    listOf(null, true, false), s.reduceMotion, { v -> vm.update { it.copy(reduceMotion = v) } },
+                    label = { v -> stringResource(when (v) { null -> R.string.common_match_phone; true -> R.string.common_on; false -> R.string.common_off }) },
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
         }
         item {

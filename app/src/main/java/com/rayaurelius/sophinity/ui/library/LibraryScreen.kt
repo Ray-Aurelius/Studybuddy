@@ -4,6 +4,9 @@ package com.rayaurelius.sophinity.ui.library
 
 import com.rayaurelius.sophinity.domain.str
 import com.rayaurelius.sophinity.R
+import androidx.compose.ui.unit.sp
+import androidx.compose.material3.IconButton
+import com.rayaurelius.sophinity.ui.components.Choices
 import com.rayaurelius.sophinity.ui.components.PageHeader
 import com.rayaurelius.sophinity.ui.glyphs.Glyph
 import com.rayaurelius.sophinity.ui.glyphs.GlyphTile
@@ -82,14 +85,14 @@ import kotlinx.coroutines.launch
 
 class LibraryViewModel(private val c: AppContainer) : ViewModel() {
     val snapshot = c.repo.snapshot.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
-    fun save(item: LearningItem) = viewModelScope.launch {
+    fun save(item: LearningItem, onSaved: (Long) -> Unit = {}) = viewModelScope.launch {
         val now = System.currentTimeMillis()
         val fixed = item.copy(
             startedAt = item.startedAt ?: if (item.status != ItemStatus.WANT) now else null,
             completedAt = if (item.status == ItemStatus.DONE) item.completedAt ?: now else null,
             progressUnits = if (item.status == ItemStatus.DONE && item.totalUnits != null) item.totalUnits else item.progressUnits,
         )
-        c.repo.saveItem(fixed)
+        onSaved(c.repo.saveItem(fixed))
     }
     fun delete(item: LearningItem) = viewModelScope.launch { c.repo.deleteItem(item) }
     fun saveCategory(cat: CustomCategory, onSaved: (Long) -> Unit = {}) = viewModelScope.launch { onSaved(c.repo.saveCategory(cat)) }
@@ -119,20 +122,28 @@ fun LibraryScreen(contentPadding: PaddingValues) {
                 SecondaryTabRow(selectedTabIndex = ItemStatus.entries.indexOf(status)) {
                     ItemStatus.entries.forEach { st ->
                         val n = snap.items.count { it.status == st }
-                        Tab(status == st, { status = st }, text = { Text(stringResource(R.string.lib_tab, stringResource(st.labelRes), n)) })
+                        Tab(status == st, { status = st }, text = {
+                            Text(
+                                stringResource(R.string.lib_tab, stringResource(st.labelRes), n), maxLines = 1, softWrap = false,
+                                autoSize = androidx.compose.foundation.text.TextAutoSize.StepBased(minFontSize = 10.sp, maxFontSize = MaterialTheme.typography.titleSmall.fontSize),
+                            )
+                        })
                     }
                 }
             }
             item {
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    item { FilterChip(filter == null, { filterKey = null }, { Text(stringResource(R.string.lib_all)) }) }
-                    // Only show categories that have something in them, plus the built-ins people use most.
-                    val used = snap.items.map { snap.categoryOf(it).key }.toSet()
-                    val shown = snap.categories.filter { it.key in used || it.type in pinned || it.key == filterKey }
-                    items(shown, key = { it.key }) { c ->
-                        FilterChip(filter?.key == c.key, { filterKey = if (filterKey == c.key) null else c.key }, { Text(c.plural.str()) }, leadingIcon = { Glyph(c.glyph, size = 18.dp, fallback = Glyphs.CATEGORY_DEFAULT) })
-                    }
-                    item { AssistChip(onClick = { newCategory = true }, label = { Text(stringResource(R.string.lib_new_category)) }) }
+                // Only offer categories that have something in them, plus the built-ins people use most.
+                val used = snap.items.map { snap.categoryOf(it).key }.toSet()
+                val shown = listOf<CategoryInfo?>(null) + snap.categories.filter { it.key in used || it.type in pinned || it.key == filterKey }
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Choices(
+                        shown, filter, { filterKey = it?.key },
+                        label = { it?.plural?.str() ?: stringResource(R.string.lib_all) },
+                        icon = { Glyph(it?.glyph ?: "scroll_stack", size = 20.dp, fallback = Glyphs.CATEGORY_DEFAULT) },
+                        title = stringResource(R.string.choice_show), scroll = true, titleOverBubbles = false,
+                        modifier = Modifier.weight(1f),
+                    )
+                    IconButton(onClick = { newCategory = true }) { Icon(Icons.Default.Add, stringResource(R.string.lib_new_category)) }
                 }
             }
             if (list.isEmpty()) {
@@ -242,7 +253,7 @@ private fun ItemCard(snap: Snapshot, item: LearningItem, onClick: () -> Unit) {
 }
 
 @Composable
-private fun ItemEditorSheet(
+fun ItemEditorSheet(
     snap: Snapshot,
     initial: LearningItem,
     onDismiss: () -> Unit,
@@ -260,12 +271,14 @@ private fun ItemEditorSheet(
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             Text(stringResource(if (isNew) R.string.lib_add_title else R.string.lib_edit_title), style = MaterialTheme.typography.headlineSmall)
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                snap.categories.forEach { c ->
-                    FilterChip(cat.key == c.key, { item = item.copy(type = c.type, categoryId = c.customId) }, { Text(c.label.str()) }, leadingIcon = { Glyph(c.glyph, size = 18.dp, fallback = Glyphs.CATEGORY_DEFAULT) })
-                }
-                if (cat == com.rayaurelius.sophinity.domain.Categories.OTHER) FilterChip(true, {}, { Text(stringResource(R.string.type_other)) }, leadingIcon = { Glyph(Glyphs.CATEGORY_DEFAULT, size = 18.dp) })
-                AssistChip(onClick = { newCategory = true }, label = { Text(stringResource(R.string.lib_new_category)) })
+            val catOptions = snap.categories + listOfNotNull(cat.takeIf { it == com.rayaurelius.sophinity.domain.Categories.OTHER })
+            Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Choices(
+                    catOptions, cat, { c -> if (c != com.rayaurelius.sophinity.domain.Categories.OTHER) item = item.copy(type = c.type, categoryId = c.customId) },
+                    label = { it.label.str() }, icon = { Glyph(it.glyph, size = 20.dp, fallback = Glyphs.CATEGORY_DEFAULT) },
+                    title = stringResource(R.string.choice_type), modifier = Modifier.weight(1f),
+                )
+                IconButton(onClick = { newCategory = true }) { Icon(Icons.Default.Add, stringResource(R.string.lib_new_category)) }
             }
             OutlinedTextField(item.title, { item = item.copy(title = it) }, label = { Text(stringResource(R.string.lib_field_title)) }, singleLine = true, modifier = Modifier.fillMaxWidth())
             OutlinedTextField(
@@ -273,11 +286,10 @@ private fun ItemEditorSheet(
                 label = { Text(stringResource(when (item.type) { ItemType.BOOK, ItemType.ARTICLE -> R.string.lib_author; ItemType.AUDIOBOOK -> R.string.lib_author_narrator; ItemType.PODCAST -> R.string.lib_host; ItemType.SEMINAR -> R.string.lib_speaker; else -> R.string.lib_creator })) },
                 singleLine = true, modifier = Modifier.fillMaxWidth(),
             )
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                ItemStatus.entries.forEach { st ->
-                    FilterChip(item.status == st, { item = item.copy(status = st) }, { Text(stringResource(st.labelRes), maxLines = 1, softWrap = false) })
-                }
-            }
+            Choices(
+                ItemStatus.entries, item.status, { item = item.copy(status = it) }, label = { stringResource(it.labelRes) },
+                title = stringResource(R.string.choice_status), modifier = Modifier.fillMaxWidth(),
+            )
             SubjectPicker(snap.activeSubjects, item.subjectId, { item = item.copy(subjectId = it) })
             if (MediaTime.supportsRuntime(item.type)) {
                 Text(stringResource(R.string.lib_runtime), style = MaterialTheme.typography.titleSmall)
@@ -291,12 +303,10 @@ private fun ItemEditorSheet(
                     DurationFields(stringResource(R.string.field_hours), item.priorSec.takeIf { it > 0 }, { sec -> item = item.copy(priorSec = sec ?: 0) })
                 }
                 if (item.runtimeMin != null && MediaTime.supportsSpeed(item.type)) {
-                    Text(stringResource(R.string.lib_speed), style = MaterialTheme.typography.labelLarge)
-                    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                        MediaTime.SPEEDS.forEach { sp ->
-                            FilterChip(item.playbackSpeed == sp, { item = item.copy(playbackSpeed = sp) }, { Text(MediaTime.formatSpeed(sp)) })
-                        }
-                    }
+                    Choices(
+                        MediaTime.SPEEDS, item.playbackSpeed, { item = item.copy(playbackSpeed = it) }, label = { MediaTime.formatSpeed(it) },
+                        title = stringResource(R.string.lib_speed), modifier = Modifier.fillMaxWidth(),
+                    )
                 }
                 if (!isNew) snap.mediaProgress(item)?.let { MediaMeter(it) }
             }

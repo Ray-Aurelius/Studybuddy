@@ -169,6 +169,7 @@ fun SophinityTheme(settings: AppSettings = AppSettings(), content: @Composable (
         LocalGold provides gold,
         LocalReduceMotion provides (settings.reduceMotion ?: systemNoAnimations),
         LocalHeadingFont provides heading,
+        com.rayaurelius.sophinity.ui.components.LocalChoiceStyle provides settings.choiceStyle,
         LocalDensity provides Density(density.density, density.fontScale * settings.textScale),
     ) {
         MaterialTheme(

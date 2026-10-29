@@ -3,6 +3,7 @@
 package com.rayaurelius.sophinity.ui.components
 
 import com.rayaurelius.sophinity.R
+import com.rayaurelius.sophinity.ui.components.Choices
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.border
@@ -58,10 +59,8 @@ fun CategoryDialog(
                     singleLine = true, modifier = Modifier.fillMaxWidth(),
                 )
                 GlyphPicker(Glyphs.categoryChoices, c.icon, { c = c.copy(icon = it) }, fallback = Glyphs.CATEGORY_DEFAULT)
-                Text(stringResource(R.string.cat_track_in), style = MaterialTheme.typography.labelLarge)
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    unitSuggestions.forEach { id -> val u = stringResource(id); FilterChip(c.unitLabel == u, { c = c.copy(unitLabel = u) }, { Text(u) }) }
-                }
+                val units = unitSuggestions.map { stringResource(it) }.let { if (c.unitLabel in it) it else listOf(c.unitLabel) + it }
+                Choices(units, c.unitLabel, { c = c.copy(unitLabel = it) }, label = { it }, title = stringResource(R.string.cat_track_in), modifier = Modifier.fillMaxWidth())
             }
         },
         confirmButton = {

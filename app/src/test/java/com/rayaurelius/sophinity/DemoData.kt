@@ -39,6 +39,8 @@ object DemoData {
         val repo = app.container.repo
         // Settings live in a process-wide DataStore, so reset fully: earlier tests may have changed them.
         app.container.settingsStore.update { com.rayaurelius.sophinity.data.AppSettings(onboarded = true, seenTitleRank = 8) }
+        // The timer is process-wide too; a test that started it must not leave it running for the next.
+        app.container.timer.discard()
         // Spanish keeps an emoji, as saved by versions before 1.5, to show it maps to a glyph.
         val subjects = listOf("🗣️" to "Spanish", "gear" to "Programming", "scales" to "Personal finance", "butterfly" to "Psychology")
             .mapIndexed { i, (e, n) -> repo.addSubject(Subject(name = n, icon = e, color = Brand.subjectPalette[i])) }

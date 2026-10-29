@@ -4,6 +4,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasContentDescription
@@ -119,6 +120,30 @@ class ScreenshotTest {
         compose.onNode(hasContentDescription("Settings")).performClick()
         compose.onNode(hasScrollAction()).performScrollToNode(hasText("Automatic daily backups"))
         shot("15_backups")
+    }
+
+    @Test fun addMediaFromTimer() {
+        compose.onNode(hasContentDescription("Add a book, podcast or course to the library")).performClick()
+        compose.onNode(hasText("Add to library")).assertExists()
+        shot("17_add_media_from_timer")
+    }
+
+    @Test fun libraryFilterIsADropDown() {
+        tab("Library")
+        compose.onNode(hasText("Show")).performClick()
+        compose.onNode(hasText("Audiobooks")).assertExists()
+        shot("18_library_dropdown_open")
+    }
+
+    @Test fun bubblesCanComeBack() {
+        runBlocking {
+            ApplicationProvider.getApplicationContext<SophinityApp>().container.settingsStore
+                .update { it.copy(choiceStyle = com.rayaurelius.sophinity.data.ChoiceStyle.BUBBLES) }
+        }
+        tab("Library")
+        compose.onNode(hasText("Habits of Curious People")).performClick()
+        compose.waitForIdle()
+        shot("19_editor_bubbles")
     }
 
     @Test fun laurelMedallions() {

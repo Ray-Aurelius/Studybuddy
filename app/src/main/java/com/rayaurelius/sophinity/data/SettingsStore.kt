@@ -21,6 +21,9 @@ enum class ThemeMode { SYSTEM, LIGHT, DARK }
 enum class NavPosition { BOTTOM, LEFT, RIGHT }
 
 /** Tabs that can be hidden from the toolbar. Today is always shown. */
+/** How single-choice options (type, status, period, …) are shown: a drop-down menu, or a row of bubbles. */
+enum class ChoiceStyle { DROPDOWN, BUBBLES }
+
 enum class TabId { STATS, SESSIONS, LIBRARY, GOALS, LAURELS }
 
 data class AppSettings(
@@ -62,6 +65,7 @@ data class AppSettings(
     val navPosition: NavPosition = NavPosition.BOTTOM,
     val hiddenTabs: Set<TabId> = emptySet(),
     val navLabels: Boolean = true,
+    val choiceStyle: ChoiceStyle = ChoiceStyle.DROPDOWN,
     val lastSubjectId: Long? = null,
     /** Highest title rank already celebrated, so each new title is celebrated once. */
     val seenTitleRank: Int = 1,
@@ -105,6 +109,7 @@ class SettingsStore(private val context: Context) {
         val navLabels = booleanPreferencesKey("nav_labels")
         val lastSubject = longPreferencesKey("last_subject")
         val seenTitle = intPreferencesKey("seen_title_rank")
+        val choiceStyle = stringPreferencesKey("choice_style")
         val autoBackup = booleanPreferencesKey("auto_backup")
         val backupFolder = stringPreferencesKey("backup_folder")
         val lastBackup = longPreferencesKey("last_backup_at")
@@ -145,6 +150,7 @@ class SettingsStore(private val context: Context) {
             prefs[K.navLabels] = s.navLabels
             prefs[K.seenTitle] = s.seenTitleRank
             if (s.lastSubjectId != null) prefs[K.lastSubject] = s.lastSubjectId else prefs.remove(K.lastSubject)
+            prefs[K.choiceStyle] = s.choiceStyle.name
             prefs[K.autoBackup] = s.autoBackup
             if (s.backupFolder != null) prefs[K.backupFolder] = s.backupFolder else prefs.remove(K.backupFolder)
             if (s.lastBackupAt != null) prefs[K.lastBackup] = s.lastBackupAt else prefs.remove(K.lastBackup)
@@ -181,6 +187,7 @@ class SettingsStore(private val context: Context) {
             navLabels = this[K.navLabels] ?: d.navLabels,
             lastSubjectId = this[K.lastSubject],
             seenTitleRank = this[K.seenTitle] ?: d.seenTitleRank,
+            choiceStyle = this[K.choiceStyle]?.let { runCatching { ChoiceStyle.valueOf(it) }.getOrNull() } ?: d.choiceStyle,
             autoBackup = this[K.autoBackup] ?: d.autoBackup,
             backupFolder = this[K.backupFolder],
             lastBackupAt = this[K.lastBackup],
