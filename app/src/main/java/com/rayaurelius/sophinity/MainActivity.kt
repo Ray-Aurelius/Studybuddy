@@ -98,6 +98,7 @@ import kotlin.reflect.KClass
 @Serializable object StatsRoute
 @Serializable object SessionsRoute
 @Serializable object LibraryRoute
+@Serializable object NotesRoute
 @Serializable object GoalsRoute
 @Serializable object BadgesRoute
 @Serializable object SettingsRoute
@@ -112,6 +113,7 @@ private val tabs = listOf(
     Tab(StatsRoute, StatsRoute::class, R.string.nav_stats, "columns", TabId.STATS),
     Tab(SessionsRoute, SessionsRoute::class, R.string.nav_sessions, "hourglass", TabId.SESSIONS),
     Tab(LibraryRoute, LibraryRoute::class, R.string.nav_library, "scroll_stack", TabId.LIBRARY),
+    Tab(NotesRoute, NotesRoute::class, R.string.nav_notes, "tablet", TabId.NOTES),
     Tab(GoalsRoute, GoalsRoute::class, R.string.nav_goals, "target", TabId.GOALS),
     Tab(BadgesRoute, BadgesRoute::class, R.string.nav_laurels, "wreath", TabId.LAURELS),
 )
@@ -213,6 +215,7 @@ private fun AppShell(settings: AppSettings) {
                                 composable<StatsRoute> { StatsScreen(pad, onOpenSessions = { go(SessionsRoute) }) }
                                 composable<SessionsRoute> { SessionsScreen(pad) }
                                 composable<LibraryRoute> { LibraryScreen(pad) }
+                                composable<NotesRoute> { com.rayaurelius.sophinity.ui.notes.NotesScreen(pad) }
                                 composable<GoalsRoute> { GoalsScreen(pad) }
                                 composable<BadgesRoute> { BadgesScreen(pad) }
                                 composable<SettingsRoute> {
@@ -249,9 +252,12 @@ private fun RestoreDirection(content: @Composable () -> Unit) {
 @Composable
 private fun NavLabel(text: String) {
     val max = MaterialTheme.typography.labelMedium.fontSize
+    // sp grows with the text-size setting, so a fixed 9sp floor can still be too wide for seven
+    // tabs at large text. Let the floor shrink back toward 9sp at normal size.
+    val min = (9f / androidx.compose.ui.platform.LocalDensity.current.fontScale).coerceAtLeast(6f).sp
     Text(
         text, maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis,
-        autoSize = androidx.compose.foundation.text.TextAutoSize.StepBased(minFontSize = 9.sp, maxFontSize = max),
+        autoSize = androidx.compose.foundation.text.TextAutoSize.StepBased(minFontSize = min, maxFontSize = max, stepSize = 0.25.sp),
     )
 }
 

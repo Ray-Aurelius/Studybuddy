@@ -620,6 +620,28 @@
     <string name="tb_today_sub">始终显示：这是你的主屏幕</string>
     <string name="tb_always_on">始终开启</string>
     <string name="tb_hidden_sub">隐藏后仍可从「今天」进入</string>
+    <string name="nav_notes">笔记</string>
+    <string name="notes_title">笔记</string>
+    <string name="notes_new">新建笔记</string>
+    <string name="notes_edit">编辑笔记</string>
+    <string name="notes_write">写笔记</string>
+    <string name="notes_field_title">标题（可选）</string>
+    <string name="notes_field_body">笔记</string>
+    <string name="notes_linked_to">关联到</string>
+    <string name="notes_link_hint">把笔记关联到资料库里的书、课程或任何内容，也能在那里看到它。</string>
+    <string name="notes_all">全部笔记</string>
+    <string name="notes_unlinked">未关联</string>
+    <string name="notes_search">搜索笔记</string>
+    <string name="notes_clear_search">清除搜索</string>
+    <string name="notes_untitled">无标题笔记</string>
+    <string name="notes_empty_title">还没有笔记</string>
+    <string name="notes_empty_body">学习时随手记下想法、摘录和问题，并关联到你正在学的内容。</string>
+    <string name="notes_no_match_title">没有匹配的笔记</string>
+    <string name="notes_no_match_body">换个词试试，或显示全部笔记。</string>
+    <string name="notes_delete_title">删除这条笔记？</string>
+    <string name="notes_delete_body">删除后无法恢复。</string>
+    <string name="tb_notes_hidden_sub">隐藏后仍可从每个资料库条目打开</string>
+    <string name="notes_save_item_first">请先保存此条目，之后就能在这里为它写笔记。</string>
     <plurals name="count_book">
         <item quantity="other">%d 本书</item>
     </plurals>
@@ -694,5 +716,8 @@
     </plurals>
     <plurals name="set_cat_items">
         <item quantity="other">%1$d 项 · 进度单位：%2$s</item>
+    </plurals>
+    <plurals name="notes_count">
+        <item quantity="other">%d 条笔记</item>
     </plurals>
 </resources>

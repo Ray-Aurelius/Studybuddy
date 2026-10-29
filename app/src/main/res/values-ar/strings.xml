@@ -620,6 +620,28 @@
     <string name="tb_today_sub">ظاهر دائمًا: هذه شاشتك الرئيسية</string>
     <string name="tb_always_on">يعمل دائمًا</string>
     <string name="tb_hidden_sub">يمكن الوصول إليه من «اليوم» حتى لو كان مخفيًا</string>
+    <string name="nav_notes">الملاحظات</string>
+    <string name="notes_title">الملاحظات</string>
+    <string name="notes_new">ملاحظة جديدة</string>
+    <string name="notes_edit">تعديل الملاحظة</string>
+    <string name="notes_write">اكتب ملاحظة</string>
+    <string name="notes_field_title">العنوان (اختياري)</string>
+    <string name="notes_field_body">الملاحظة</string>
+    <string name="notes_linked_to">مرتبطة بـ</string>
+    <string name="notes_link_hint">اربط الملاحظة بكتاب أو دورة أو أي شيء في مكتبتك، وستجدها هناك أيضًا.</string>
+    <string name="notes_all">كل الملاحظات</string>
+    <string name="notes_unlinked">غير مرتبطة</string>
+    <string name="notes_search">ابحث في الملاحظات</string>
+    <string name="notes_clear_search">مسح البحث</string>
+    <string name="notes_untitled">ملاحظة بلا عنوان</string>
+    <string name="notes_empty_title">لا توجد ملاحظات بعد</string>
+    <string name="notes_empty_body">دوّن الأفكار والاقتباسات والأسئلة أثناء التعلّم، واربطها بما تدرسه.</string>
+    <string name="notes_no_match_title">لا توجد ملاحظات مطابقة</string>
+    <string name="notes_no_match_body">جرّب كلمة أخرى، أو اعرض كل الملاحظات.</string>
+    <string name="notes_delete_title">هل تريد حذف هذه الملاحظة؟</string>
+    <string name="notes_delete_body">سيتم حذفها نهائيًا.</string>
+    <string name="tb_notes_hidden_sub">يمكن الوصول إليه من كل عنصر في المكتبة حتى لو كان مخفيًا</string>
+    <string name="notes_save_item_first">احفظ هذا العنصر أولًا، ثم يمكنك كتابة ملاحظات عنه هنا.</string>
     <plurals name="count_book">
         <item quantity="zero">لا كتب</item>
         <item quantity="one">كتاب واحد</item>
@@ -819,5 +841,13 @@
         <item quantity="few">%1$d عناصر · التقدّم بـ%2$s</item>
         <item quantity="many">%1$d عنصرًا · التقدّم بـ%2$s</item>
         <item quantity="other">%1$d عنصر · التقدّم بـ%2$s</item>
+    </plurals>
+    <plurals name="notes_count">
+        <item quantity="zero">لا توجد ملاحظات</item>
+        <item quantity="one">ملاحظة واحدة</item>
+        <item quantity="two">ملاحظتان</item>
+        <item quantity="few">%d ملاحظات</item>
+        <item quantity="many">%d ملاحظة</item>
+        <item quantity="other">%d ملاحظة</item>
     </plurals>
 </resources>

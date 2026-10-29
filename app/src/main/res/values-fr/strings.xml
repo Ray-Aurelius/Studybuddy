@@ -620,6 +620,28 @@
     <string name="tb_today_sub">Toujours affiché : c\'est l\'accueil</string>
     <string name="tb_always_on">Toujours affiché</string>
     <string name="tb_hidden_sub">Toujours accessible depuis Aujourd\'hui une fois masqué</string>
+    <string name="nav_notes">Notes</string>
+    <string name="notes_title">Notes</string>
+    <string name="notes_new">Nouvelle note</string>
+    <string name="notes_edit">Modifier la note</string>
+    <string name="notes_write">Écrire une note</string>
+    <string name="notes_field_title">Titre (facultatif)</string>
+    <string name="notes_field_body">Note</string>
+    <string name="notes_linked_to">Liée à</string>
+    <string name="notes_link_hint">Lie une note à un livre, un cours ou tout autre élément de ta bibliothèque : tu la retrouveras aussi là-bas.</string>
+    <string name="notes_all">Toutes les notes</string>
+    <string name="notes_unlinked">Non liées</string>
+    <string name="notes_search">Rechercher dans les notes</string>
+    <string name="notes_clear_search">Effacer la recherche</string>
+    <string name="notes_untitled">Note sans titre</string>
+    <string name="notes_empty_title">Aucune note pour l\'instant</string>
+    <string name="notes_empty_body">Note tes idées, citations et questions en apprenant, et lie-les à ce que tu étudies.</string>
+    <string name="notes_no_match_title">Aucune note correspondante</string>
+    <string name="notes_no_match_body">Essaie un autre mot ou affiche toutes les notes.</string>
+    <string name="notes_delete_title">Supprimer cette note ?</string>
+    <string name="notes_delete_body">Elle sera effacée définitivement.</string>
+    <string name="tb_notes_hidden_sub">Accessible depuis chaque élément de la bibliothèque même masqué</string>
+    <string name="notes_save_item_first">Enregistre d\'abord cet élément, puis tu pourras écrire des notes à son sujet ici.</string>
     <plurals name="count_book">
         <item quantity="one">%d livre</item>
         <item quantity="many">%d de livres</item>
@@ -744,5 +766,10 @@
         <item quantity="one">%1$d élément · progression en %2$s</item>
         <item quantity="many">%1$d d\'éléments · progression en %2$s</item>
         <item quantity="other">%1$d éléments · progression en %2$s</item>
+    </plurals>
+    <plurals name="notes_count">
+        <item quantity="one">%d note</item>
+        <item quantity="many">%d de notes</item>
+        <item quantity="other">%d notes</item>
     </plurals>
 </resources>

@@ -620,6 +620,28 @@
     <string name="tb_today_sub">हमेशा दिखता है: यही आपकी होम स्क्रीन है</string>
     <string name="tb_always_on">हमेशा चालू</string>
     <string name="tb_hidden_sub">छिपा होने पर भी आज से खुल जाता है</string>
+    <string name="nav_notes">नोट्स</string>
+    <string name="notes_title">नोट्स</string>
+    <string name="notes_new">नया नोट</string>
+    <string name="notes_edit">नोट बदलें</string>
+    <string name="notes_write">नोट लिखें</string>
+    <string name="notes_field_title">शीर्षक (वैकल्पिक)</string>
+    <string name="notes_field_body">नोट</string>
+    <string name="notes_linked_to">इससे जुड़ा</string>
+    <string name="notes_link_hint">किसी नोट को अपनी लाइब्रेरी की किताब, कोर्स या किसी भी चीज़ से जोड़ें, फिर वह वहाँ भी दिखेगा।</string>
+    <string name="notes_all">सभी नोट्स</string>
+    <string name="notes_unlinked">जुड़े नहीं</string>
+    <string name="notes_search">नोट्स खोजें</string>
+    <string name="notes_clear_search">खोज साफ़ करें</string>
+    <string name="notes_untitled">बिना शीर्षक का नोट</string>
+    <string name="notes_empty_title">अभी कोई नोट नहीं</string>
+    <string name="notes_empty_body">सीखते समय विचार, उद्धरण और सवाल लिख लें, और उन्हें उस चीज़ से जोड़ें जो आप पढ़ रहे हैं।</string>
+    <string name="notes_no_match_title">कोई मिलता-जुलता नोट नहीं</string>
+    <string name="notes_no_match_body">कोई और शब्द आज़माएँ या सभी नोट्स दिखाएँ।</string>
+    <string name="notes_delete_title">यह नोट हटाएँ?</string>
+    <string name="notes_delete_body">यह हमेशा के लिए मिट जाएगा।</string>
+    <string name="tb_notes_hidden_sub">छिपा होने पर भी लाइब्रेरी के हर आइटम से उपलब्ध</string>
+    <string name="notes_save_item_first">पहले यह आइटम सेव करें, फिर आप यहाँ इसके बारे में नोट्स लिख सकेंगे।</string>
     <plurals name="count_book">
         <item quantity="one">%d किताब</item>
         <item quantity="other">%d किताबें</item>
@@ -719,5 +741,9 @@
     <plurals name="set_cat_items">
         <item quantity="one">%1$d आइटम · प्रगति %2$s में</item>
         <item quantity="other">%1$d आइटम · प्रगति %2$s में</item>
+    </plurals>
+    <plurals name="notes_count">
+        <item quantity="one">%d नोट</item>
+        <item quantity="other">%d नोट्स</item>
     </plurals>
 </resources>

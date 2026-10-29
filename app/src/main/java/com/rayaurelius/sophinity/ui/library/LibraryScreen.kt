@@ -352,7 +352,7 @@ fun ItemEditorSheet(
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
-            OutlinedTextField(item.notes, { item = item.copy(notes = it) }, label = { Text(stringResource(R.string.lib_notes)) }, minLines = 2, modifier = Modifier.fillMaxWidth())
+            com.rayaurelius.sophinity.ui.notes.ItemNotesSection(snap, initial.id)
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (!isNew) TextButton(onClick = { onDelete(initial) }) { Text(stringResource(R.string.common_delete), color = MaterialTheme.colorScheme.error) }
                 Spacer(Modifier.weight(1f))

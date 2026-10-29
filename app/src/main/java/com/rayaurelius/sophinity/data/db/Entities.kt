@@ -111,6 +111,7 @@ data class LearningItem(
     @ColumnInfo(defaultValue = "1.0") val playbackSpeed: Float = 1f,
     val rating: Int? = null,
     val takeaway: String = "",
+    /** Superseded by [Note] in v5: migrated into a linked note, then left empty. */
     val notes: String = "",
     val addedAt: Long = System.currentTimeMillis(),
     val startedAt: Long? = null,
@@ -145,3 +146,19 @@ data class UnlockedMilestone(
     val unlockedAt: Long,
     val seen: Boolean = false,
 )
+
+/** A free-form note, optionally linked to something in the library. Added in DB version 5. */
+@Serializable
+@Entity(tableName = "notes", indices = [Index("itemId"), Index("updatedAt")])
+data class Note(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val title: String = "",
+    val body: String = "",
+    val itemId: Long? = null,
+    val createdAt: Long = System.currentTimeMillis(),
+    val updatedAt: Long = createdAt,
+) {
+    /** The title, or the note's first line when it has none. */
+    val heading: String get() = title.ifBlank { body.trim().lineSequence().firstOrNull().orEmpty() }
+    val isEmpty: Boolean get() = title.isBlank() && body.isBlank()
+}

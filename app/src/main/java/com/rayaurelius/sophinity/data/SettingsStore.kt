@@ -24,7 +24,7 @@ enum class NavPosition { BOTTOM, LEFT, RIGHT }
 /** How single-choice options (type, status, period, …) are shown: a drop-down menu, or a row of bubbles. */
 enum class ChoiceStyle { DROPDOWN, BUBBLES }
 
-enum class TabId { STATS, SESSIONS, LIBRARY, GOALS, LAURELS }
+enum class TabId { STATS, SESSIONS, LIBRARY, NOTES, GOALS, LAURELS }
 
 data class AppSettings(
     val onboarded: Boolean = false,

@@ -620,6 +620,28 @@
     <string name="tb_today_sub">Всегда видна: это главный экран</string>
     <string name="tb_always_on">Всегда вкл.</string>
     <string name="tb_hidden_sub">Доступна со вкладки «Сегодня», даже если скрыта</string>
+    <string name="nav_notes">Заметки</string>
+    <string name="notes_title">Заметки</string>
+    <string name="notes_new">Новая заметка</string>
+    <string name="notes_edit">Изменить заметку</string>
+    <string name="notes_write">Написать заметку</string>
+    <string name="notes_field_title">Заголовок (необязательно)</string>
+    <string name="notes_field_body">Заметка</string>
+    <string name="notes_linked_to">Связана с</string>
+    <string name="notes_link_hint">Свяжите заметку с книгой, курсом или чем-то ещё из библиотеки — и она будет видна и там.</string>
+    <string name="notes_all">Все заметки</string>
+    <string name="notes_unlinked">Без связи</string>
+    <string name="notes_search">Поиск по заметкам</string>
+    <string name="notes_clear_search">Очистить поиск</string>
+    <string name="notes_untitled">Заметка без названия</string>
+    <string name="notes_empty_title">Заметок пока нет</string>
+    <string name="notes_empty_body">Записывайте идеи, цитаты и вопросы по ходу учёбы и связывайте их с тем, что изучаете.</string>
+    <string name="notes_no_match_title">Подходящих заметок нет</string>
+    <string name="notes_no_match_body">Попробуйте другое слово или покажите все заметки.</string>
+    <string name="notes_delete_title">Удалить эту заметку?</string>
+    <string name="notes_delete_body">Она будет удалена навсегда.</string>
+    <string name="tb_notes_hidden_sub">Доступна из каждого элемента библиотеки, даже если скрыта</string>
+    <string name="notes_save_item_first">Сначала сохраните этот элемент, а потом здесь можно будет писать о нём заметки.</string>
     <plurals name="count_book">
         <item quantity="one">%d книга</item>
         <item quantity="few">%d книги</item>
@@ -769,5 +791,11 @@
         <item quantity="few">%1$d элемента · прогресс в: %2$s</item>
         <item quantity="many">%1$d элементов · прогресс в: %2$s</item>
         <item quantity="other">%1$d элемента · прогресс в: %2$s</item>
+    </plurals>
+    <plurals name="notes_count">
+        <item quantity="one">%d заметка</item>
+        <item quantity="few">%d заметки</item>
+        <item quantity="many">%d заметок</item>
+        <item quantity="other">%d заметки</item>
     </plurals>
 </resources>

@@ -760,4 +760,32 @@
     <string name="tb_today_sub">Always shown: it\'s home</string>
     <string name="tb_always_on">Always on</string>
     <string name="tb_hidden_sub">Still reachable from Today when hidden</string>
+
+    <!-- Notes -->
+    <string name="nav_notes">Notes</string>
+    <string name="notes_title">Notes</string>
+    <string name="notes_new">New note</string>
+    <string name="notes_edit">Edit note</string>
+    <string name="notes_write">Write a note</string>
+    <string name="notes_field_title">Title (optional)</string>
+    <string name="notes_field_body">Note</string>
+    <string name="notes_linked_to">Linked to</string>
+    <string name="notes_link_hint">Link a note to a book, course or anything else in your library, and you\'ll find it there too.</string>
+    <string name="notes_all">All notes</string>
+    <string name="notes_unlinked">Not linked</string>
+    <string name="notes_search">Search notes</string>
+    <string name="notes_clear_search">Clear search</string>
+    <string name="notes_untitled">Untitled note</string>
+    <string name="notes_empty_title">No notes yet</string>
+    <string name="notes_empty_body">Jot down ideas, quotes and questions as you learn, and link them to what you\'re studying.</string>
+    <string name="notes_no_match_title">No matching notes</string>
+    <string name="notes_no_match_body">Try another word, or show all notes.</string>
+    <string name="notes_delete_title">Delete this note?</string>
+    <string name="notes_delete_body">It will be gone for good.</string>
+    <string name="tb_notes_hidden_sub">Still reachable from each library item when hidden</string>
+    <string name="notes_save_item_first">Save this item first, then you can write notes about it here.</string>
+    <plurals name="notes_count">
+        <item quantity="one">%d note</item>
+        <item quantity="other">%d notes</item>
+    </plurals>
 </resources>

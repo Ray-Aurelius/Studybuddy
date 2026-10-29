@@ -620,6 +620,28 @@
     <string name="tb_today_sub">常に表示：ホーム画面です</string>
     <string name="tb_always_on">常にオン</string>
     <string name="tb_hidden_sub">非表示でも「今日」から開けます</string>
+    <string name="nav_notes">ノート</string>
+    <string name="notes_title">ノート</string>
+    <string name="notes_new">新しいノート</string>
+    <string name="notes_edit">ノートを編集</string>
+    <string name="notes_write">ノートを書く</string>
+    <string name="notes_field_title">タイトル（任意）</string>
+    <string name="notes_field_body">ノート</string>
+    <string name="notes_linked_to">リンク先</string>
+    <string name="notes_link_hint">ノートをライブラリの本や講座などにリンクすると、そこからも見られます。</string>
+    <string name="notes_all">すべてのノート</string>
+    <string name="notes_unlinked">リンクなし</string>
+    <string name="notes_search">ノートを検索</string>
+    <string name="notes_clear_search">検索をクリア</string>
+    <string name="notes_untitled">無題のノート</string>
+    <string name="notes_empty_title">まだノートはありません</string>
+    <string name="notes_empty_body">学びながら、アイデアや引用、疑問を書き留めて、学んでいるものにリンクしましょう。</string>
+    <string name="notes_no_match_title">一致するノートはありません</string>
+    <string name="notes_no_match_body">別の言葉で探すか、すべてのノートを表示してください。</string>
+    <string name="notes_delete_title">このノートを削除しますか？</string>
+    <string name="notes_delete_body">完全に削除されます。</string>
+    <string name="tb_notes_hidden_sub">非表示にしても各ライブラリ項目から開けます</string>
+    <string name="notes_save_item_first">まずこの項目を保存すると、ここでノートを書けるようになります。</string>
     <plurals name="count_book">
         <item quantity="other">%d冊の本</item>
     </plurals>
@@ -694,5 +716,8 @@
     </plurals>
     <plurals name="set_cat_items">
         <item quantity="other">%1$d件 · 進捗の単位：%2$s</item>
+    </plurals>
+    <plurals name="notes_count">
+        <item quantity="other">%d件のノート</item>
     </plurals>
 </resources>

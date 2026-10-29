@@ -6,6 +6,7 @@ import com.rayaurelius.sophinity.data.db.CustomCategory
 import com.rayaurelius.sophinity.data.db.Goal
 import com.rayaurelius.sophinity.data.db.ItemStatus
 import com.rayaurelius.sophinity.data.db.LearningItem
+import com.rayaurelius.sophinity.data.db.Note
 import com.rayaurelius.sophinity.data.db.StudySession
 import com.rayaurelius.sophinity.data.db.Subject
 import com.rayaurelius.sophinity.data.db.UnlockedMilestone
@@ -75,6 +76,8 @@ class StudyRepository(private val db: AppDatabase, val settingsStore: SettingsSt
     val items = db.items().observeAll()
     val goals = db.goals().observeActive()
     val milestones = db.milestones().observeAll()
+    val notes: Flow<List<Note>> = db.notes().observeAll()
+    fun notesFor(itemId: Long): Flow<List<Note>> = db.notes().observeFor(itemId)
     val settings = settingsStore.settings
 
     private data class Raw(
@@ -139,8 +142,19 @@ class StudyRepository(private val db: AppDatabase, val settingsStore: SettingsSt
 
     suspend fun deleteItem(item: LearningItem) = db.withTransaction {
         db.sessions().detachItem(item.id)
+        db.notes().detachItem(item.id)
         db.items().delete(item)
     }
+
+    // --- Notes
+    /** Saves a note (stamping when it changed); an empty note is not kept. Returns its id, or null. */
+    suspend fun saveNote(note: Note, now: Long = System.currentTimeMillis()): Long? {
+        val n = note.copy(title = note.title.trim(), body = note.body.trimEnd())
+        if (n.isEmpty) { if (n.id != 0L) db.notes().delete(n); return null }
+        return if (n.id == 0L) db.notes().insert(n.copy(createdAt = now, updatedAt = now))
+        else { db.notes().update(n.copy(updatedAt = now)); n.id }
+    }
+    suspend fun deleteNote(note: Note) = db.notes().delete(note)
 
     // --- Goals
     suspend fun saveGoal(goal: Goal): Long =
@@ -167,13 +181,16 @@ class StudyRepository(private val db: AppDatabase, val settingsStore: SettingsSt
             items = db.items().getAll(),
             goals = db.goals().getAll(),
             milestones = db.milestones().getAll(),
+            notes = db.notes().getAll(),
             streakMinutes = s.streakMinutes,
             restDaysPerWeek = s.restDaysPerWeek,
         )
     }
 
-    suspend fun importData(data: BackupData) {
+    suspend fun importData(backup: BackupData) {
+        val data = backup.withItemNotesMoved()
         db.withTransaction {
+            db.notes().clear()
             db.sessions().clear(); db.items().clear(); db.goals().clear()
             db.subjects().clear(); db.milestones().clear(); db.categories().clear()
             db.subjects().insertAll(data.subjects)
@@ -182,6 +199,7 @@ class StudyRepository(private val db: AppDatabase, val settingsStore: SettingsSt
             db.sessions().insertAll(data.sessions)
             db.goals().insertAll(data.goals)
             db.milestones().insertAll(data.milestones.map { it.copy(seen = true) })
+            db.notes().insertAll(data.notes)
         }
         settingsStore.update {
             it.copy(onboarded = true, streakMinutes = data.streakMinutes, restDaysPerWeek = data.restDaysPerWeek)

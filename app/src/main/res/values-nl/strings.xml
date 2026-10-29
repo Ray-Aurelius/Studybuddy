@@ -620,6 +620,28 @@
     <string name="tb_today_sub">Altijd zichtbaar: dit is je startscherm</string>
     <string name="tb_always_on">Altijd aan</string>
     <string name="tb_hidden_sub">Ook verborgen bereikbaar via Vandaag</string>
+    <string name="nav_notes">Notities</string>
+    <string name="notes_title">Notities</string>
+    <string name="notes_new">Nieuwe notitie</string>
+    <string name="notes_edit">Notitie bewerken</string>
+    <string name="notes_write">Notitie schrijven</string>
+    <string name="notes_field_title">Titel (optioneel)</string>
+    <string name="notes_field_body">Notitie</string>
+    <string name="notes_linked_to">Gekoppeld aan</string>
+    <string name="notes_link_hint">Koppel een notitie aan een boek, cursus of iets anders in je bibliotheek, dan vind je hem daar ook.</string>
+    <string name="notes_all">Alle notities</string>
+    <string name="notes_unlinked">Niet gekoppeld</string>
+    <string name="notes_search">Notities doorzoeken</string>
+    <string name="notes_clear_search">Zoekopdracht wissen</string>
+    <string name="notes_untitled">Notitie zonder titel</string>
+    <string name="notes_empty_title">Nog geen notities</string>
+    <string name="notes_empty_body">Noteer ideeën, citaten en vragen terwijl je leert, en koppel ze aan wat je bestudeert.</string>
+    <string name="notes_no_match_title">Geen notities gevonden</string>
+    <string name="notes_no_match_body">Probeer een ander woord of toon alle notities.</string>
+    <string name="notes_delete_title">Deze notitie verwijderen?</string>
+    <string name="notes_delete_body">Hij wordt voorgoed gewist.</string>
+    <string name="tb_notes_hidden_sub">Ook verborgen bereikbaar via elk bibliotheekitem</string>
+    <string name="notes_save_item_first">Sla dit item eerst op, dan kun je hier notities erover schrijven.</string>
     <plurals name="count_book">
         <item quantity="one">%d boek</item>
         <item quantity="other">%d boeken</item>
@@ -719,5 +741,9 @@
     <plurals name="set_cat_items">
         <item quantity="one">%1$d item · voortgang in %2$s</item>
         <item quantity="other">%1$d items · voortgang in %2$s</item>
+    </plurals>
+    <plurals name="notes_count">
+        <item quantity="one">%d notitie</item>
+        <item quantity="other">%d notities</item>
     </plurals>
 </resources>

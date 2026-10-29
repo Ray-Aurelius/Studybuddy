@@ -620,6 +620,28 @@
     <string name="tb_today_sub">항상 표시: 홈 화면이에요</string>
     <string name="tb_always_on">항상 켜짐</string>
     <string name="tb_hidden_sub">숨겨도 오늘 탭에서 열 수 있어요</string>
+    <string name="nav_notes">노트</string>
+    <string name="notes_title">노트</string>
+    <string name="notes_new">새 노트</string>
+    <string name="notes_edit">노트 편집</string>
+    <string name="notes_write">노트 쓰기</string>
+    <string name="notes_field_title">제목(선택)</string>
+    <string name="notes_field_body">노트</string>
+    <string name="notes_linked_to">연결 대상</string>
+    <string name="notes_link_hint">노트를 라이브러리의 책, 강좌 등 무엇이든에 연결하면 그곳에서도 볼 수 있어요.</string>
+    <string name="notes_all">모든 노트</string>
+    <string name="notes_unlinked">연결 안 됨</string>
+    <string name="notes_search">노트 검색</string>
+    <string name="notes_clear_search">검색 지우기</string>
+    <string name="notes_untitled">제목 없는 노트</string>
+    <string name="notes_empty_title">아직 노트가 없어요</string>
+    <string name="notes_empty_body">배우면서 떠오른 생각, 인용구, 질문을 적고 공부 중인 항목에 연결해 보세요.</string>
+    <string name="notes_no_match_title">일치하는 노트가 없어요</string>
+    <string name="notes_no_match_body">다른 단어로 찾거나 모든 노트를 표시해 보세요.</string>
+    <string name="notes_delete_title">이 노트를 삭제할까요?</string>
+    <string name="notes_delete_body">영구적으로 삭제됩니다.</string>
+    <string name="tb_notes_hidden_sub">숨겨도 각 라이브러리 항목에서 열 수 있음</string>
+    <string name="notes_save_item_first">먼저 이 항목을 저장하면 여기에서 노트를 쓸 수 있어요.</string>
     <plurals name="count_book">
         <item quantity="other">책 %d권</item>
     </plurals>
@@ -694,5 +716,8 @@
     </plurals>
     <plurals name="set_cat_items">
         <item quantity="other">%1$d개 항목 · 진행 단위: %2$s</item>
+    </plurals>
+    <plurals name="notes_count">
+        <item quantity="other">노트 %d개</item>
     </plurals>
 </resources>

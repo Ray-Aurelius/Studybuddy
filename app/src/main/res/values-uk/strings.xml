@@ -620,6 +620,28 @@
     <string name="tb_today_sub">Завжди видима: це головний екран</string>
     <string name="tb_always_on">Завжди ввімк.</string>
     <string name="tb_hidden_sub">Доступна з вкладки «Сьогодні», навіть якщо прихована</string>
+    <string name="nav_notes">Нотатки</string>
+    <string name="notes_title">Нотатки</string>
+    <string name="notes_new">Нова нотатка</string>
+    <string name="notes_edit">Редагувати нотатку</string>
+    <string name="notes_write">Написати нотатку</string>
+    <string name="notes_field_title">Заголовок (необов’язково)</string>
+    <string name="notes_field_body">Нотатка</string>
+    <string name="notes_linked_to">Пов’язана з</string>
+    <string name="notes_link_hint">Пов’яжіть нотатку з книжкою, курсом чи чимось іншим із бібліотеки — і вона буде видна і там.</string>
+    <string name="notes_all">Усі нотатки</string>
+    <string name="notes_unlinked">Без зв’язку</string>
+    <string name="notes_search">Пошук у нотатках</string>
+    <string name="notes_clear_search">Очистити пошук</string>
+    <string name="notes_untitled">Нотатка без назви</string>
+    <string name="notes_empty_title">Нотаток ще немає</string>
+    <string name="notes_empty_body">Записуйте ідеї, цитати й запитання під час навчання та пов’язуйте їх із тим, що вивчаєте.</string>
+    <string name="notes_no_match_title">Немає відповідних нотаток</string>
+    <string name="notes_no_match_body">Спробуйте інше слово або покажіть усі нотатки.</string>
+    <string name="notes_delete_title">Видалити цю нотатку?</string>
+    <string name="notes_delete_body">Її буде видалено назавжди.</string>
+    <string name="tb_notes_hidden_sub">Доступна з кожного елемента бібліотеки, навіть якщо прихована</string>
+    <string name="notes_save_item_first">Спершу збережіть цей елемент, а тоді тут можна буде писати про нього нотатки.</string>
     <plurals name="count_book">
         <item quantity="one">%d книга</item>
         <item quantity="few">%d книги</item>
@@ -769,5 +791,11 @@
         <item quantity="few">%1$d елементи · прогрес у: %2$s</item>
         <item quantity="many">%1$d елементів · прогрес у: %2$s</item>
         <item quantity="other">%1$d елемента · прогрес у: %2$s</item>
+    </plurals>
+    <plurals name="notes_count">
+        <item quantity="one">%d нотатка</item>
+        <item quantity="few">%d нотатки</item>
+        <item quantity="many">%d нотаток</item>
+        <item quantity="other">%d нотатки</item>
     </plurals>
 </resources>

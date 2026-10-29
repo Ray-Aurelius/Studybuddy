@@ -620,6 +620,28 @@
     <string name="tb_today_sub">始終顯示：這是你的主螢幕</string>
     <string name="tb_always_on">始終開啟</string>
     <string name="tb_hidden_sub">隱藏後仍可從「今天」進入</string>
+    <string name="nav_notes">筆記</string>
+    <string name="notes_title">筆記</string>
+    <string name="notes_new">新增筆記</string>
+    <string name="notes_edit">編輯筆記</string>
+    <string name="notes_write">寫筆記</string>
+    <string name="notes_field_title">標題（選填）</string>
+    <string name="notes_field_body">筆記</string>
+    <string name="notes_linked_to">連結到</string>
+    <string name="notes_link_hint">將筆記連結到資料庫裡的書、課程或任何項目，也能在那裡看到它。</string>
+    <string name="notes_all">所有筆記</string>
+    <string name="notes_unlinked">未連結</string>
+    <string name="notes_search">搜尋筆記</string>
+    <string name="notes_clear_search">清除搜尋</string>
+    <string name="notes_untitled">無標題筆記</string>
+    <string name="notes_empty_title">還沒有筆記</string>
+    <string name="notes_empty_body">學習時隨手記下想法、摘錄和問題，並連結到你正在學的內容。</string>
+    <string name="notes_no_match_title">沒有符合的筆記</string>
+    <string name="notes_no_match_body">換個詞試試，或顯示所有筆記。</string>
+    <string name="notes_delete_title">要刪除這則筆記嗎？</string>
+    <string name="notes_delete_body">刪除後無法復原。</string>
+    <string name="tb_notes_hidden_sub">隱藏後仍可從每個資料庫項目開啟</string>
+    <string name="notes_save_item_first">請先儲存此項目，之後就能在這裡為它寫筆記。</string>
     <plurals name="count_book">
         <item quantity="other">%d 本書</item>
     </plurals>
@@ -694,5 +716,8 @@
     </plurals>
     <plurals name="set_cat_items">
         <item quantity="other">%1$d 項 · 進度單位：%2$s</item>
+    </plurals>
+    <plurals name="notes_count">
+        <item quantity="other">%d 則筆記</item>
     </plurals>
 </resources>

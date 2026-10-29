@@ -620,6 +620,28 @@
     <string name="tb_today_sub">Zawsze widoczna: to twój ekran główny</string>
     <string name="tb_always_on">Zawsze wł.</string>
     <string name="tb_hidden_sub">Dostępna z ekranu Dziś, nawet gdy ukryta</string>
+    <string name="nav_notes">Notatki</string>
+    <string name="notes_title">Notatki</string>
+    <string name="notes_new">Nowa notatka</string>
+    <string name="notes_edit">Edytuj notatkę</string>
+    <string name="notes_write">Napisz notatkę</string>
+    <string name="notes_field_title">Tytuł (opcjonalnie)</string>
+    <string name="notes_field_body">Notatka</string>
+    <string name="notes_linked_to">Powiązana z</string>
+    <string name="notes_link_hint">Powiąż notatkę z książką, kursem lub czymkolwiek w bibliotece, a znajdziesz ją też tam.</string>
+    <string name="notes_all">Wszystkie notatki</string>
+    <string name="notes_unlinked">Bez powiązania</string>
+    <string name="notes_search">Szukaj w notatkach</string>
+    <string name="notes_clear_search">Wyczyść wyszukiwanie</string>
+    <string name="notes_untitled">Notatka bez tytułu</string>
+    <string name="notes_empty_title">Nie ma jeszcze notatek</string>
+    <string name="notes_empty_body">Zapisuj pomysły, cytaty i pytania podczas nauki i wiąż je z tym, czego się uczysz.</string>
+    <string name="notes_no_match_title">Brak pasujących notatek</string>
+    <string name="notes_no_match_body">Spróbuj innego słowa albo pokaż wszystkie notatki.</string>
+    <string name="notes_delete_title">Usunąć tę notatkę?</string>
+    <string name="notes_delete_body">Zostanie usunięta na zawsze.</string>
+    <string name="tb_notes_hidden_sub">Dostępna z każdego elementu biblioteki nawet po ukryciu</string>
+    <string name="notes_save_item_first">Najpierw zapisz ten element, potem możesz tu pisać o nim notatki.</string>
     <plurals name="count_book">
         <item quantity="one">%d książka</item>
         <item quantity="few">%d książki</item>
@@ -769,5 +791,11 @@
         <item quantity="few">%1$d pozycje · postęp w: %2$s</item>
         <item quantity="many">%1$d pozycji · postęp w: %2$s</item>
         <item quantity="other">%1$d pozycji · postęp w: %2$s</item>
+    </plurals>
+    <plurals name="notes_count">
+        <item quantity="one">%d notatka</item>
+        <item quantity="few">%d notatki</item>
+        <item quantity="many">%d notatek</item>
+        <item quantity="other">%d notatki</item>
     </plurals>
 </resources>

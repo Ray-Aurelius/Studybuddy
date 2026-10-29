@@ -84,6 +84,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.testTag
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -392,14 +394,20 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel, add
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
                         FilledTonalIconButton(onClick = { confirmDiscard = true }, modifier = Modifier.size(52.dp)) { Icon(Icons.Default.Close, stringResource(R.string.timer_discard)) }
                         val running = timer.status == TimerStatus.RUNNING
-                        FilledTonalButton(onClick = { if (running) vm.pause() else vm.resume() }, modifier = Modifier.weight(1f).height(52.dp),
-                            contentPadding = PaddingValues(horizontal = 12.dp)) {
-                            Icon(if (running) Icons.Default.Pause else Icons.Default.PlayArrow, null); Spacer(Modifier.width(6.dp))
-                            Text(stringResource(if (running) R.string.common_pause else R.string.common_resume), maxLines = 1, softWrap = false, autoSize = autoSize)
-                        }
-                        Button(onClick = { vm.finish() }, modifier = Modifier.weight(1.25f).height(52.dp), contentPadding = PaddingValues(horizontal = 12.dp)) {
+                        // Pause/resume is a round icon button like discard, so no label can be clipped at
+                        // large text sizes and "Stop & save" gets the rest of the row.
+                        val pauseLabel = stringResource(if (running) R.string.common_pause else R.string.common_resume)
+                        androidx.compose.material3.FilledIconButton(
+                            onClick = { if (running) vm.pause() else vm.resume() },
+                            modifier = Modifier.size(52.dp).testTag("pause_resume"),
+                            colors = androidx.compose.material3.IconButtonDefaults.filledIconButtonColors(
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                            ),
+                        ) { Icon(if (running) Icons.Default.Pause else Icons.Default.PlayArrow, pauseLabel, Modifier.size(28.dp)) }
+                        Button(onClick = { vm.finish() }, modifier = Modifier.weight(1f).heightIn(min = 52.dp), contentPadding = PaddingValues(horizontal = 12.dp)) {
                             Icon(Icons.Default.Stop, null); Spacer(Modifier.width(6.dp))
-                            Text(stringResource(R.string.timer_stop_save), maxLines = 1, softWrap = false, autoSize = autoSize)
+                            Text(stringResource(R.string.timer_stop_save), maxLines = 2, textAlign = TextAlign.Center, autoSize = autoSize)
                         }
                     }
                     if (confirmDiscard) AlertDialog(

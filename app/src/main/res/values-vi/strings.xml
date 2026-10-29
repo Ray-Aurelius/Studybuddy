@@ -620,6 +620,28 @@
     <string name="tb_today_sub">Luôn hiển thị: đây là màn hình chính</string>
     <string name="tb_always_on">Luôn bật</string>
     <string name="tb_hidden_sub">Vẫn mở được từ Hôm nay dù đã ẩn</string>
+    <string name="nav_notes">Ghi chú</string>
+    <string name="notes_title">Ghi chú</string>
+    <string name="notes_new">Ghi chú mới</string>
+    <string name="notes_edit">Sửa ghi chú</string>
+    <string name="notes_write">Viết ghi chú</string>
+    <string name="notes_field_title">Tiêu đề (không bắt buộc)</string>
+    <string name="notes_field_body">Ghi chú</string>
+    <string name="notes_linked_to">Liên kết với</string>
+    <string name="notes_link_hint">Liên kết ghi chú với một cuốn sách, khóa học hay bất cứ thứ gì trong thư viện, bạn sẽ thấy nó ở đó nữa.</string>
+    <string name="notes_all">Tất cả ghi chú</string>
+    <string name="notes_unlinked">Chưa liên kết</string>
+    <string name="notes_search">Tìm ghi chú</string>
+    <string name="notes_clear_search">Xóa tìm kiếm</string>
+    <string name="notes_untitled">Ghi chú không tiêu đề</string>
+    <string name="notes_empty_title">Chưa có ghi chú</string>
+    <string name="notes_empty_body">Ghi lại ý tưởng, trích dẫn và câu hỏi khi học, rồi liên kết chúng với thứ bạn đang học.</string>
+    <string name="notes_no_match_title">Không có ghi chú phù hợp</string>
+    <string name="notes_no_match_body">Thử từ khác hoặc hiện tất cả ghi chú.</string>
+    <string name="notes_delete_title">Xóa ghi chú này?</string>
+    <string name="notes_delete_body">Ghi chú sẽ bị xóa vĩnh viễn.</string>
+    <string name="tb_notes_hidden_sub">Vẫn mở được từ từng mục trong thư viện khi bị ẩn</string>
+    <string name="notes_save_item_first">Hãy lưu mục này trước, sau đó bạn có thể viết ghi chú về nó tại đây.</string>
     <plurals name="count_book">
         <item quantity="other">%d cuốn sách</item>
     </plurals>
@@ -694,5 +716,8 @@
     </plurals>
     <plurals name="set_cat_items">
         <item quantity="other">%1$d mục · tiến độ theo %2$s</item>
+    </plurals>
+    <plurals name="notes_count">
+        <item quantity="other">%d ghi chú</item>
     </plurals>
 </resources>

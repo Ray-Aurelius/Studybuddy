@@ -620,6 +620,28 @@
     <string name="tb_today_sub">Siempre visible: es el inicio</string>
     <string name="tb_always_on">Siempre activa</string>
     <string name="tb_hidden_sub">Accesible desde Hoy aunque esté oculta</string>
+    <string name="nav_notes">Notas</string>
+    <string name="notes_title">Notas</string>
+    <string name="notes_new">Nueva nota</string>
+    <string name="notes_edit">Editar nota</string>
+    <string name="notes_write">Escribir una nota</string>
+    <string name="notes_field_title">Título (opcional)</string>
+    <string name="notes_field_body">Nota</string>
+    <string name="notes_linked_to">Vinculada a</string>
+    <string name="notes_link_hint">Vincula una nota a un libro, un curso o cualquier cosa de tu biblioteca y también la encontrarás allí.</string>
+    <string name="notes_all">Todas las notas</string>
+    <string name="notes_unlinked">Sin vincular</string>
+    <string name="notes_search">Buscar notas</string>
+    <string name="notes_clear_search">Borrar búsqueda</string>
+    <string name="notes_untitled">Nota sin título</string>
+    <string name="notes_empty_title">Aún no hay notas</string>
+    <string name="notes_empty_body">Apunta ideas, citas y preguntas mientras aprendes, y vincúlalas a lo que estás estudiando.</string>
+    <string name="notes_no_match_title">No hay notas que coincidan</string>
+    <string name="notes_no_match_body">Prueba con otra palabra o muestra todas las notas.</string>
+    <string name="notes_delete_title">¿Eliminar esta nota?</string>
+    <string name="notes_delete_body">Se borrará para siempre.</string>
+    <string name="tb_notes_hidden_sub">Accesible desde cada elemento de la biblioteca aunque esté oculta</string>
+    <string name="notes_save_item_first">Guarda primero este elemento y luego podrás escribir notas sobre él aquí.</string>
     <plurals name="count_book">
         <item quantity="one">%d libro</item>
         <item quantity="many">%d de libros</item>
@@ -744,5 +766,10 @@
         <item quantity="one">%1$d elemento · progreso en %2$s</item>
         <item quantity="many">%1$d de elementos · progreso en %2$s</item>
         <item quantity="other">%1$d elementos · progreso en %2$s</item>
+    </plurals>
+    <plurals name="notes_count">
+        <item quantity="one">%d nota</item>
+        <item quantity="many">%d de notas</item>
+        <item quantity="other">%d notas</item>
     </plurals>
 </resources>

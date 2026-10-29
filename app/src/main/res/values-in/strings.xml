@@ -620,6 +620,28 @@
     <string name="tb_today_sub">Selalu tampil: ini layar utamamu</string>
     <string name="tb_always_on">Selalu aktif</string>
     <string name="tb_hidden_sub">Tetap bisa dibuka dari Hari ini meski disembunyikan</string>
+    <string name="nav_notes">Catatan</string>
+    <string name="notes_title">Catatan</string>
+    <string name="notes_new">Catatan baru</string>
+    <string name="notes_edit">Edit catatan</string>
+    <string name="notes_write">Tulis catatan</string>
+    <string name="notes_field_title">Judul (opsional)</string>
+    <string name="notes_field_body">Catatan</string>
+    <string name="notes_linked_to">Ditautkan ke</string>
+    <string name="notes_link_hint">Tautkan catatan ke buku, kursus, atau apa pun di pustakamu, dan kamu juga akan menemukannya di sana.</string>
+    <string name="notes_all">Semua catatan</string>
+    <string name="notes_unlinked">Tidak ditautkan</string>
+    <string name="notes_search">Cari catatan</string>
+    <string name="notes_clear_search">Hapus pencarian</string>
+    <string name="notes_untitled">Catatan tanpa judul</string>
+    <string name="notes_empty_title">Belum ada catatan</string>
+    <string name="notes_empty_body">Tuliskan ide, kutipan, dan pertanyaan saat belajar, lalu tautkan ke materi yang kamu pelajari.</string>
+    <string name="notes_no_match_title">Tidak ada catatan yang cocok</string>
+    <string name="notes_no_match_body">Coba kata lain, atau tampilkan semua catatan.</string>
+    <string name="notes_delete_title">Hapus catatan ini?</string>
+    <string name="notes_delete_body">Catatan akan dihapus selamanya.</string>
+    <string name="tb_notes_hidden_sub">Tetap bisa dibuka dari setiap item pustaka saat disembunyikan</string>
+    <string name="notes_save_item_first">Simpan item ini dulu, lalu kamu bisa menulis catatan tentangnya di sini.</string>
     <plurals name="count_book">
         <item quantity="other">%d buku</item>
     </plurals>
@@ -694,5 +716,8 @@
     </plurals>
     <plurals name="set_cat_items">
         <item quantity="other">%1$d item · kemajuan dalam %2$s</item>
+    </plurals>
+    <plurals name="notes_count">
+        <item quantity="other">%d catatan</item>
     </plurals>
 </resources>

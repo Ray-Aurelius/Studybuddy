@@ -84,12 +84,33 @@ class MigrationTest {
     }
 
     @Test
+    fun v4ToV5MovesItemNotesIntoLinkedNotes() {
+        helper.createDatabase(dbName, 4).apply {
+            execSQL("INSERT INTO items (id, type, title, creator, status, progressUnits, priorSec, playbackSpeed, takeaway, notes, addedAt, url) VALUES (1, 'BOOK', 'Has notes', '', 'ACTIVE', 0, 0, 1.0, '', '  Chapter 3 matters  ', 1000, '')")
+            execSQL("INSERT INTO items (id, type, title, creator, status, progressUnits, priorSec, playbackSpeed, takeaway, notes, addedAt, url) VALUES (2, 'BOOK', 'No notes', '', 'ACTIVE', 0, 0, 1.0, '', '   ', 2000, '')")
+            close()
+        }
+        val db = helper.runMigrationsAndValidate(dbName, 5, true)
+        db.query("SELECT title, body, itemId, createdAt, updatedAt FROM notes").use { c ->
+            assertEquals(1, c.count)
+            assertTrue(c.moveToFirst())
+            assertEquals("", c.getString(0))
+            assertEquals("Chapter 3 matters", c.getString(1))
+            assertEquals(1L, c.getLong(2))
+            assertEquals(1000L, c.getLong(3))
+            assertEquals(1000L, c.getLong(4))
+        }
+        db.query("SELECT COUNT(*) FROM items WHERE notes != ''").use { c -> c.moveToFirst(); assertEquals(0, c.getInt(0)) }
+        db.close()
+    }
+
+    @Test
     fun v1AllTheWayToCurrent() {
         helper.createDatabase(dbName, 1).apply {
             execSQL("INSERT INTO items (id, type, title, creator, status, progressUnits, takeaway, notes, addedAt) VALUES (1, 'BOOK', 'B', '', 'DONE', 0, '', '', 0)")
             close()
         }
-        helper.runMigrationsAndValidate(dbName, 4, true).use { db ->
+        helper.runMigrationsAndValidate(dbName, 5, true).use { db ->
             db.query("SELECT COUNT(*) FROM items").use { c -> c.moveToFirst(); assertEquals(1, c.getInt(0)) }
         }
     }

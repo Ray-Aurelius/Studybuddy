@@ -11,6 +11,8 @@ import androidx.room.Query
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.Update
+import androidx.room.migration.AutoMigrationSpec
+import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -119,12 +121,42 @@ interface MilestoneDao {
     @Query("DELETE FROM milestones") suspend fun clear()
 }
 
+@Dao
+interface NoteDao {
+    @Query("SELECT * FROM notes ORDER BY updatedAt DESC")
+    fun observeAll(): Flow<List<Note>>
+
+    @Query("SELECT * FROM notes WHERE itemId = :itemId ORDER BY updatedAt DESC")
+    fun observeFor(itemId: Long): Flow<List<Note>>
+
+    @Query("SELECT * FROM notes")
+    suspend fun getAll(): List<Note>
+
+    @Insert suspend fun insert(note: Note): Long
+    @Update suspend fun update(note: Note)
+    @Delete suspend fun delete(note: Note)
+    @Insert(onConflict = OnConflictStrategy.REPLACE) suspend fun insertAll(list: List<Note>)
+    @Query("DELETE FROM notes") suspend fun clear()
+    @Query("UPDATE notes SET itemId = NULL WHERE itemId = :itemId") suspend fun detachItem(itemId: Long)
+}
+
+/** v5 moves each library item's single notes box into a real note linked to that item. */
+class NotesMigration : AutoMigrationSpec {
+    override fun onPostMigrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            "INSERT INTO notes (title, body, itemId, createdAt, updatedAt) " +
+                "SELECT '', TRIM(notes), id, addedAt, addedAt FROM items WHERE TRIM(notes) != ''"
+        )
+        db.execSQL("UPDATE items SET notes = ''")
+    }
+}
+
 @Database(
     entities = [
         Subject::class, StudySession::class, LearningItem::class, Goal::class, UnlockedMilestone::class,
-        CustomCategory::class,
+        CustomCategory::class, Note::class,
     ],
-    version = 4,
+    version = 5,
     exportSchema = true,
     autoMigrations = [
         // v2: custom library categories (new table + categoryId on items and goals).
@@ -133,6 +165,8 @@ interface MilestoneDao {
         AutoMigration(from = 2, to = 3),
         // v4: a web link on library items.
         AutoMigration(from = 3, to = 4),
+        // v5: notes, optionally linked to a library item.
+        AutoMigration(from = 4, to = 5, spec = NotesMigration::class),
     ],
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -142,6 +176,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun items(): ItemDao
     abstract fun goals(): GoalDao
     abstract fun milestones(): MilestoneDao
+    abstract fun notes(): NoteDao
 
     companion object {
         fun build(context: Context): AppDatabase =

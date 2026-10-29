@@ -72,6 +72,39 @@ class ScreenshotTest {
         tab("Goals"); shot("4_goals")
         tab("Laurels"); shot("5_laurels")
         tab("Sessions"); shot("8_sessions")
+        tab("Notes"); shot("22_notes")
+    }
+
+    @Test fun pausedTimerFitsWithLargeText() {
+        val app = ApplicationProvider.getApplicationContext<SophinityApp>()
+        runBlocking {
+            app.container.settingsStore.update { it.copy(textScale = 1.5f) }
+            app.container.timer.start(com.rayaurelius.sophinity.timer.TimerMode.STOPWATCH, null, audiobookId)
+            app.container.timer.pause()
+        }
+        compose.mainClock.advanceTimeBy(1_000)
+        // Resume is an icon button now, so its label can never be clipped.
+        compose.onNode(hasContentDescription("Resume")).assertExists()
+        compose.onNode(hasText("Stop & save")).assertExists()
+        shot("23_paused_timer_large_text")
+    }
+
+    @Test fun notesLinkToLibraryItems() {
+        tab("Notes")
+        compose.onNode(hasText("Questions to try on myself")).assertExists()
+        compose.onAllNodes(hasTestTag("note"))[0].performClick()
+        compose.waitForIdle()
+        compose.onNode(hasTestTag("note_body")).assertExists()
+        shot("24_note_editor")
+    }
+
+    @Test fun libraryItemShowsItsNotes() {
+        tab("Library")
+        compose.onNode(hasText("Habits of Curious People"), useUnmergedTree = true).performClick()
+        compose.waitForIdle()
+        compose.onNode(hasScrollAction() and hasAnyDescendant(hasText("Run time"))).performScrollToNode(hasText("Write a note"))
+        compose.onNode(hasText("Questions to try on myself")).assertExists()
+        shot("25_item_notes")
     }
 
     @Test fun deleteAsksFirst() {

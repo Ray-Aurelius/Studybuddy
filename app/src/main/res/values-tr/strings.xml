@@ -620,6 +620,28 @@
     <string name="tb_today_sub">Her zaman görünür: ana ekranın burası</string>
     <string name="tb_always_on">Her zaman açık</string>
     <string name="tb_hidden_sub">Gizli olsa da Bugün\'den ulaşılabilir</string>
+    <string name="nav_notes">Notlar</string>
+    <string name="notes_title">Notlar</string>
+    <string name="notes_new">Yeni not</string>
+    <string name="notes_edit">Notu düzenle</string>
+    <string name="notes_write">Not yaz</string>
+    <string name="notes_field_title">Başlık (isteğe bağlı)</string>
+    <string name="notes_field_body">Not</string>
+    <string name="notes_linked_to">Bağlı olduğu öğe</string>
+    <string name="notes_link_hint">Bir notu kitaplığındaki bir kitaba, kursa ya da başka bir öğeye bağla; onu orada da bulursun.</string>
+    <string name="notes_all">Tüm notlar</string>
+    <string name="notes_unlinked">Bağlantısız</string>
+    <string name="notes_search">Notlarda ara</string>
+    <string name="notes_clear_search">Aramayı temizle</string>
+    <string name="notes_untitled">Başlıksız not</string>
+    <string name="notes_empty_title">Henüz not yok</string>
+    <string name="notes_empty_body">Öğrenirken fikirleri, alıntıları ve soruları not al, sonra çalıştığın şeye bağla.</string>
+    <string name="notes_no_match_title">Eşleşen not yok</string>
+    <string name="notes_no_match_body">Başka bir kelime dene ya da tüm notları göster.</string>
+    <string name="notes_delete_title">Bu not silinsin mi?</string>
+    <string name="notes_delete_body">Kalıcı olarak silinecek.</string>
+    <string name="tb_notes_hidden_sub">Gizliyken de her kitaplık öğesinden erişilebilir</string>
+    <string name="notes_save_item_first">Önce bu öğeyi kaydet, sonra burada onunla ilgili not yazabilirsin.</string>
     <plurals name="count_book">
         <item quantity="one">%d kitap</item>
         <item quantity="other">%d kitap</item>
@@ -719,5 +741,9 @@
     <plurals name="set_cat_items">
         <item quantity="one">%1$d öğe · ilerleme: %2$s</item>
         <item quantity="other">%1$d öğe · ilerleme: %2$s</item>
+    </plurals>
+    <plurals name="notes_count">
+        <item quantity="one">%d not</item>
+        <item quantity="other">%d not</item>
     </plurals>
 </resources>

@@ -620,6 +620,28 @@
     <string name="tb_today_sub">แสดงเสมอ: นี่คือหน้าหลักของคุณ</string>
     <string name="tb_always_on">เปิดตลอด</string>
     <string name="tb_hidden_sub">ยังเปิดได้จากหน้าวันนี้แม้จะซ่อนไว้</string>
+    <string name="nav_notes">โน้ต</string>
+    <string name="notes_title">โน้ต</string>
+    <string name="notes_new">โน้ตใหม่</string>
+    <string name="notes_edit">แก้ไขโน้ต</string>
+    <string name="notes_write">เขียนโน้ต</string>
+    <string name="notes_field_title">ชื่อเรื่อง (ไม่บังคับ)</string>
+    <string name="notes_field_body">โน้ต</string>
+    <string name="notes_linked_to">ลิงก์กับ</string>
+    <string name="notes_link_hint">ลิงก์โน้ตกับหนังสือ คอร์ส หรืออะไรก็ได้ในคลังของคุณ แล้วคุณจะเห็นโน้ตนั้นที่นั่นด้วย</string>
+    <string name="notes_all">โน้ตทั้งหมด</string>
+    <string name="notes_unlinked">ไม่ได้ลิงก์</string>
+    <string name="notes_search">ค้นหาโน้ต</string>
+    <string name="notes_clear_search">ล้างการค้นหา</string>
+    <string name="notes_untitled">โน้ตไม่มีชื่อ</string>
+    <string name="notes_empty_title">ยังไม่มีโน้ต</string>
+    <string name="notes_empty_body">จดไอเดีย คำคม และคำถามระหว่างเรียน แล้วลิงก์กับสิ่งที่คุณกำลังศึกษา</string>
+    <string name="notes_no_match_title">ไม่มีโน้ตที่ตรงกัน</string>
+    <string name="notes_no_match_body">ลองคำอื่น หรือแสดงโน้ตทั้งหมด</string>
+    <string name="notes_delete_title">ลบโน้ตนี้ไหม</string>
+    <string name="notes_delete_body">โน้ตจะถูกลบถาวร</string>
+    <string name="tb_notes_hidden_sub">ยังเปิดได้จากทุกรายการในคลังเมื่อซ่อนไว้</string>
+    <string name="notes_save_item_first">บันทึกรายการนี้ก่อน แล้วคุณจะเขียนโน้ตเกี่ยวกับรายการนี้ได้ที่นี่</string>
     <plurals name="count_book">
         <item quantity="other">หนังสือ %d เล่ม</item>
     </plurals>
@@ -694,5 +716,8 @@
     </plurals>
     <plurals name="set_cat_items">
         <item quantity="other">%1$d รายการ · ความคืบหน้าเป็น%2$s</item>
+    </plurals>
+    <plurals name="notes_count">
+        <item quantity="other">%d โน้ต</item>
     </plurals>
 </resources>
