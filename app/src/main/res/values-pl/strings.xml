@@ -647,6 +647,10 @@
     <string name="link_timer_started">Stoper uruchomiony: %1$s</string>
     <string name="link_timer_resumed">Stoper wznowiony: %1$s</string>
     <string name="link_timer_switched">Poprzednia sesja zapisana. Stoper uruchomiony: %1$s</string>
+    <string name="discard_title">Odrzucić zmiany?</string>
+    <string name="discard_body">To, co tu wpisano, nie zostało jeszcze zapisane.</string>
+    <string name="discard_keep">Edytuj dalej</string>
+    <string name="discard_confirm">Odrzuć</string>
     <plurals name="count_book">
         <item quantity="one">%d książka</item>
         <item quantity="few">%d książki</item>

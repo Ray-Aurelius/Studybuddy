@@ -269,7 +269,7 @@ fun ItemEditorSheet(
     var newCategory by remember { mutableStateOf(false) }
     val isNew = initial.id == 0L
     val cat = snap.categoryOf(item)
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+    com.rayaurelius.sophinity.ui.components.EditorSheet(dirty = item != remember { initial }, onDismiss = onDismiss) {
         Column(
             Modifier.padding(horizontal = 24.dp).padding(bottom = 24.dp).verticalScroll(rememberScrollState()).imePadding(),
             verticalArrangement = Arrangement.spacedBy(14.dp),

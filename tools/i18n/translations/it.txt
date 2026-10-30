@@ -723,3 +723,7 @@ set_link_timer_sub = Aprire il link di un elemento della libreria avvia il crono
 link_timer_started = Timer avviato per %1$s
 link_timer_resumed = Timer ripreso per %1$s
 link_timer_switched = Sessione precedente salvata. Timer avviato per %1$s
+discard_title = Annullare le modifiche?
+discard_body = Quello che hai inserito qui non è ancora stato salvato.
+discard_keep = Continua a modificare
+discard_confirm = Annulla modifiche

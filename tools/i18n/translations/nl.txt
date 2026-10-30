@@ -697,3 +697,7 @@ set_link_timer_sub = Als je de weblink van een bibliotheekitem opent, start de s
 link_timer_started = Timer gestart voor %1$s
 link_timer_resumed = Timer hervat voor %1$s
 link_timer_switched = Vorige sessie opgeslagen. Timer gestart voor %1$s
+discard_title = Wijzigingen weggooien?
+discard_body = Wat je hier hebt ingevuld, is nog niet opgeslagen.
+discard_keep = Verder bewerken
+discard_confirm = Weggooien

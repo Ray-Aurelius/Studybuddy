@@ -647,6 +647,10 @@
     <string name="link_timer_started">بدأ المؤقت لـ %1$s</string>
     <string name="link_timer_resumed">استُؤنف المؤقت لـ %1$s</string>
     <string name="link_timer_switched">حُفظت الجلسة السابقة. بدأ المؤقت لـ %1$s</string>
+    <string name="discard_title">هل تريد تجاهل التغييرات؟</string>
+    <string name="discard_body">ما أدخلته هنا لم يُحفظ بعد.</string>
+    <string name="discard_keep">متابعة التعديل</string>
+    <string name="discard_confirm">تجاهل</string>
     <plurals name="count_book">
         <item quantity="zero">لا كتب</item>
         <item quantity="one">كتاب واحد</item>

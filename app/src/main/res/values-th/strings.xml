@@ -647,6 +647,10 @@
     <string name="link_timer_started">เริ่มจับเวลาสำหรับ %1$s แล้ว</string>
     <string name="link_timer_resumed">จับเวลาต่อสำหรับ %1$s แล้ว</string>
     <string name="link_timer_switched">บันทึกเซสชันก่อนหน้าแล้ว เริ่มจับเวลาสำหรับ %1$s</string>
+    <string name="discard_title">ทิ้งการเปลี่ยนแปลงไหม</string>
+    <string name="discard_body">สิ่งที่คุณกรอกไว้ที่นี่ยังไม่ได้บันทึก</string>
+    <string name="discard_keep">แก้ไขต่อ</string>
+    <string name="discard_confirm">ทิ้ง</string>
     <plurals name="count_book">
         <item quantity="other">หนังสือ %d เล่ม</item>
     </plurals>

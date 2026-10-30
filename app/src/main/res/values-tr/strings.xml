@@ -647,6 +647,10 @@
     <string name="link_timer_started">Zamanlayıcı başladı: %1$s</string>
     <string name="link_timer_resumed">Zamanlayıcı devam ediyor: %1$s</string>
     <string name="link_timer_switched">Önceki oturum kaydedildi. Zamanlayıcı başladı: %1$s</string>
+    <string name="discard_title">Değişiklikler silinsin mi?</string>
+    <string name="discard_body">Buraya girdiklerin henüz kaydedilmedi.</string>
+    <string name="discard_keep">Düzenlemeye devam et</string>
+    <string name="discard_confirm">Sil</string>
     <plurals name="count_book">
         <item quantity="one">%d kitap</item>
         <item quantity="other">%d kitap</item>

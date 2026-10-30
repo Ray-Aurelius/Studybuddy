@@ -723,3 +723,7 @@ set_link_timer_sub = Abrir o link de um item da biblioteca inicia o cronômetro 
 link_timer_started = Timer iniciado para %1$s
 link_timer_resumed = Timer retomado para %1$s
 link_timer_switched = Sessão anterior salva. Timer iniciado para %1$s
+discard_title = Descartar as alterações?
+discard_body = O que você preencheu aqui ainda não foi salvo.
+discard_keep = Continuar editando
+discard_confirm = Descartar

@@ -723,3 +723,7 @@ set_link_timer_sub = Ouvrir le lien d'un élément de la bibliothèque lance le 
 link_timer_started = Minuteur lancé pour %1$s
 link_timer_resumed = Minuteur repris pour %1$s
 link_timer_switched = Session précédente enregistrée. Minuteur lancé pour %1$s
+discard_title = Abandonner les modifications ?
+discard_body = Ce que tu as saisi ici n'est pas encore enregistré.
+discard_keep = Continuer
+discard_confirm = Abandonner

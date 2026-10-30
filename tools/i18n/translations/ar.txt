@@ -801,3 +801,7 @@ set_link_timer_sub = فتح رابط عنصر في المكتبة يشغّل س�
 link_timer_started = بدأ المؤقت لـ %1$s
 link_timer_resumed = استُؤنف المؤقت لـ %1$s
 link_timer_switched = حُفظت الجلسة السابقة. بدأ المؤقت لـ %1$s
+discard_title = هل تريد تجاهل التغييرات؟
+discard_body = ما أدخلته هنا لم يُحفظ بعد.
+discard_keep = متابعة التعديل
+discard_confirm = تجاهل

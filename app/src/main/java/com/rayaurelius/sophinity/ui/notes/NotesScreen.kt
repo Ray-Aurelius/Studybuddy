@@ -233,7 +233,7 @@ fun NoteCard(snap: Snapshot, note: Note, onOpen: () -> Unit, showItem: Boolean =
 fun NoteEditorSheet(snap: Snapshot, initial: Note, onDismiss: () -> Unit, onSave: (Note) -> Unit, onDelete: () -> Unit) {
     var n by remember { mutableStateOf(initial) }
     val isNew = initial.id == 0L
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+    com.rayaurelius.sophinity.ui.components.EditorSheet(dirty = n != remember { initial }, onDismiss = onDismiss) {
         Column(
             Modifier.padding(horizontal = 24.dp).padding(bottom = 24.dp).verticalScroll(rememberScrollState()).imePadding(),
             verticalArrangement = Arrangement.spacedBy(14.dp),

@@ -21,8 +21,8 @@ android {
         applicationId = "com.rayaurelius.sophinity"
         minSdk = 26
         targetSdk = 37
-        versionCode = 14
-        versionName = "1.11.0"
+        versionCode = 15
+        versionName = "1.11.1"
     }
 
     signingConfigs {

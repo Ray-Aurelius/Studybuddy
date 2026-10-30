@@ -647,6 +647,10 @@
     <string name="link_timer_started">Το χρονόμετρο ξεκίνησε: %1$s</string>
     <string name="link_timer_resumed">Το χρονόμετρο συνεχίζει: %1$s</string>
     <string name="link_timer_switched">Η προηγούμενη συνεδρία αποθηκεύτηκε. Το χρονόμετρο ξεκίνησε: %1$s</string>
+    <string name="discard_title">Απόρριψη αλλαγών;</string>
+    <string name="discard_body">Όσα έγραψες εδώ δεν έχουν αποθηκευτεί ακόμα.</string>
+    <string name="discard_keep">Συνέχεια επεξεργασίας</string>
+    <string name="discard_confirm">Απόρριψη</string>
     <plurals name="count_book">
         <item quantity="one">%d βιβλίο</item>
         <item quantity="other">%d βιβλία</item>

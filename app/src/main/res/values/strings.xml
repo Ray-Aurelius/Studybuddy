@@ -794,4 +794,9 @@
     <string name="link_timer_started">Timer started for %1$s</string>
     <string name="link_timer_resumed">Timer resumed for %1$s</string>
     <string name="link_timer_switched">Last session saved. Timer started for %1$s</string>
+    <!-- Leaving an editor with unsaved changes -->
+    <string name="discard_title">Discard your changes?</string>
+    <string name="discard_body">What you\'ve entered here hasn\'t been saved yet.</string>
+    <string name="discard_keep">Keep editing</string>
+    <string name="discard_confirm">Discard</string>
 </resources>

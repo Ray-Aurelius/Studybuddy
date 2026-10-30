@@ -697,3 +697,7 @@ set_link_timer_sub = लाइब्रेरी आइटम का वेब �
 link_timer_started = %1$s के लिए टाइमर शुरू हुआ
 link_timer_resumed = %1$s के लिए टाइमर फिर से शुरू हुआ
 link_timer_switched = पिछला सेशन सेव हुआ। %1$s के लिए टाइमर शुरू हुआ
+discard_title = बदलाव छोड़ दें?
+discard_body = आपने यहाँ जो भरा है, वह अभी सेव नहीं हुआ है।
+discard_keep = एडिट करते रहें
+discard_confirm = छोड़ दें

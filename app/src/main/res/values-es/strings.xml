@@ -647,6 +647,10 @@
     <string name="link_timer_started">Temporizador iniciado para %1$s</string>
     <string name="link_timer_resumed">Temporizador reanudado para %1$s</string>
     <string name="link_timer_switched">Sesión anterior guardada. Temporizador iniciado para %1$s</string>
+    <string name="discard_title">¿Descartar los cambios?</string>
+    <string name="discard_body">Lo que has escrito aquí todavía no se ha guardado.</string>
+    <string name="discard_keep">Seguir editando</string>
+    <string name="discard_confirm">Descartar</string>
     <plurals name="count_book">
         <item quantity="one">%d libro</item>
         <item quantity="many">%d de libros</item>

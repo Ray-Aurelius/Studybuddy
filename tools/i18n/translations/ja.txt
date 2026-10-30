@@ -671,3 +671,7 @@ set_link_timer_sub = ライブラリ項目のWebリンクを開くと、その�
 link_timer_started = %1$sのタイマーを開始しました
 link_timer_resumed = %1$sのタイマーを再開しました
 link_timer_switched = 前のセッションを保存しました。%1$sのタイマーを開始しました
+discard_title = 変更を破棄しますか？
+discard_body = ここで入力した内容はまだ保存されていません。
+discard_keep = 編集を続ける
+discard_confirm = 破棄

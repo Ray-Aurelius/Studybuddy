@@ -749,3 +749,7 @@ set_link_timer_sub = Если открыть ссылку элемента би�
 link_timer_started = Таймер запущен: %1$s
 link_timer_resumed = Таймер продолжен: %1$s
 link_timer_switched = Прошлая сессия сохранена. Таймер запущен: %1$s
+discard_title = Отменить изменения?
+discard_body = То, что вы здесь ввели, ещё не сохранено.
+discard_keep = Продолжить
+discard_confirm = Отменить

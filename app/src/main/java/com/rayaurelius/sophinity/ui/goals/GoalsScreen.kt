@@ -200,7 +200,7 @@ private fun GoalEditor(snap: Snapshot, initial: Goal, onDismiss: () -> Unit, onS
     var g by remember { mutableStateOf(initial) }
     var pickDate by remember { mutableStateOf(false) }
     val isNew = initial.id == 0L
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+    com.rayaurelius.sophinity.ui.components.EditorSheet(dirty = g != remember { initial }, onDismiss = onDismiss) {
         Column(
             Modifier.padding(horizontal = 24.dp).padding(bottom = 24.dp).verticalScroll(rememberScrollState()).imePadding(),
             verticalArrangement = Arrangement.spacedBy(14.dp),

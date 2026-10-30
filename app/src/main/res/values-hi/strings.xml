@@ -647,6 +647,10 @@
     <string name="link_timer_started">%1$s के लिए टाइमर शुरू हुआ</string>
     <string name="link_timer_resumed">%1$s के लिए टाइमर फिर से शुरू हुआ</string>
     <string name="link_timer_switched">पिछला सेशन सेव हुआ। %1$s के लिए टाइमर शुरू हुआ</string>
+    <string name="discard_title">बदलाव छोड़ दें?</string>
+    <string name="discard_body">आपने यहाँ जो भरा है, वह अभी सेव नहीं हुआ है।</string>
+    <string name="discard_keep">एडिट करते रहें</string>
+    <string name="discard_confirm">छोड़ दें</string>
     <plurals name="count_book">
         <item quantity="one">%d किताब</item>
         <item quantity="other">%d किताबें</item>

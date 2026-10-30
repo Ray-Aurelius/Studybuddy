@@ -647,6 +647,10 @@
     <string name="link_timer_started">Timer gestart voor %1$s</string>
     <string name="link_timer_resumed">Timer hervat voor %1$s</string>
     <string name="link_timer_switched">Vorige sessie opgeslagen. Timer gestart voor %1$s</string>
+    <string name="discard_title">Wijzigingen weggooien?</string>
+    <string name="discard_body">Wat je hier hebt ingevuld, is nog niet opgeslagen.</string>
+    <string name="discard_keep">Verder bewerken</string>
+    <string name="discard_confirm">Weggooien</string>
     <plurals name="count_book">
         <item quantity="one">%d boek</item>
         <item quantity="other">%d boeken</item>

@@ -749,3 +749,7 @@ set_link_timer_sub = Якщо відкрити посилання елемент
 link_timer_started = Таймер запущено: %1$s
 link_timer_resumed = Таймер продовжено: %1$s
 link_timer_switched = Попередню сесію збережено. Таймер запущено: %1$s
+discard_title = Скасувати зміни?
+discard_body = Те, що ви тут ввели, ще не збережено.
+discard_keep = Продовжити
+discard_confirm = Скасувати

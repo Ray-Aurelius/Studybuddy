@@ -647,6 +647,10 @@
     <string name="link_timer_started">已開始為「%1$s」計時</string>
     <string name="link_timer_resumed">已繼續為「%1$s」計時</string>
     <string name="link_timer_switched">已儲存上一段紀錄。已開始為「%1$s」計時</string>
+    <string name="discard_title">要捨棄變更嗎？</string>
+    <string name="discard_body">你在這裡填寫的內容還沒有儲存。</string>
+    <string name="discard_keep">繼續編輯</string>
+    <string name="discard_confirm">捨棄</string>
     <plurals name="count_book">
         <item quantity="other">%d 本書</item>
     </plurals>

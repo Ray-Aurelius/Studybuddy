@@ -671,3 +671,7 @@ set_link_timer_sub = 開啟資料庫項目的網頁連結時，會為該項目�
 link_timer_started = 已開始為「%1$s」計時
 link_timer_resumed = 已繼續為「%1$s」計時
 link_timer_switched = 已儲存上一段紀錄。已開始為「%1$s」計時
+discard_title = 要捨棄變更嗎？
+discard_body = 你在這裡填寫的內容還沒有儲存。
+discard_keep = 繼續編輯
+discard_confirm = 捨棄

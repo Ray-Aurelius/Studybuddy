@@ -647,6 +647,10 @@
     <string name="link_timer_started">%1$sのタイマーを開始しました</string>
     <string name="link_timer_resumed">%1$sのタイマーを再開しました</string>
     <string name="link_timer_switched">前のセッションを保存しました。%1$sのタイマーを開始しました</string>
+    <string name="discard_title">変更を破棄しますか？</string>
+    <string name="discard_body">ここで入力した内容はまだ保存されていません。</string>
+    <string name="discard_keep">編集を続ける</string>
+    <string name="discard_confirm">破棄</string>
     <plurals name="count_book">
         <item quantity="other">%d冊の本</item>
     </plurals>

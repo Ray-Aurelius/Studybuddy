@@ -647,6 +647,10 @@
     <string name="link_timer_started">Timer dimulai untuk %1$s</string>
     <string name="link_timer_resumed">Timer dilanjutkan untuk %1$s</string>
     <string name="link_timer_switched">Sesi sebelumnya disimpan. Timer dimulai untuk %1$s</string>
+    <string name="discard_title">Buang perubahan?</string>
+    <string name="discard_body">Yang kamu isi di sini belum disimpan.</string>
+    <string name="discard_keep">Lanjutkan mengedit</string>
+    <string name="discard_confirm">Buang</string>
     <plurals name="count_book">
         <item quantity="other">%d buku</item>
     </plurals>

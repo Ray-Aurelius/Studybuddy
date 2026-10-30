@@ -697,3 +697,7 @@ set_link_timer_sub = Bir kitaplık öğesinin web bağlantısını açmak, o ö�
 link_timer_started = Zamanlayıcı başladı: %1$s
 link_timer_resumed = Zamanlayıcı devam ediyor: %1$s
 link_timer_switched = Önceki oturum kaydedildi. Zamanlayıcı başladı: %1$s
+discard_title = Değişiklikler silinsin mi?
+discard_body = Buraya girdiklerin henüz kaydedilmedi.
+discard_keep = Düzenlemeye devam et
+discard_confirm = Sil

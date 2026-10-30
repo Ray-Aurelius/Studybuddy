@@ -697,3 +697,7 @@ set_link_timer_sub = Αν ανοίξεις τον σύνδεσμο ενός στ
 link_timer_started = Το χρονόμετρο ξεκίνησε: %1$s
 link_timer_resumed = Το χρονόμετρο συνεχίζει: %1$s
 link_timer_switched = Η προηγούμενη συνεδρία αποθηκεύτηκε. Το χρονόμετρο ξεκίνησε: %1$s
+discard_title = Απόρριψη αλλαγών;
+discard_body = Όσα έγραψες εδώ δεν έχουν αποθηκευτεί ακόμα.
+discard_keep = Συνέχεια επεξεργασίας
+discard_confirm = Απόρριψη

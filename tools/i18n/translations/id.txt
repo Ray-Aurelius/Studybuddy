@@ -671,3 +671,7 @@ set_link_timer_sub = Membuka tautan web item pustaka akan memulai stopwatch untu
 link_timer_started = Timer dimulai untuk %1$s
 link_timer_resumed = Timer dilanjutkan untuk %1$s
 link_timer_switched = Sesi sebelumnya disimpan. Timer dimulai untuk %1$s
+discard_title = Buang perubahan?
+discard_body = Yang kamu isi di sini belum disimpan.
+discard_keep = Lanjutkan mengedit
+discard_confirm = Buang

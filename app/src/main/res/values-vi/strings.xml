@@ -647,6 +647,10 @@
     <string name="link_timer_started">Đã bắt đầu hẹn giờ cho %1$s</string>
     <string name="link_timer_resumed">Đã tiếp tục hẹn giờ cho %1$s</string>
     <string name="link_timer_switched">Đã lưu phiên trước. Đã bắt đầu hẹn giờ cho %1$s</string>
+    <string name="discard_title">Bỏ các thay đổi?</string>
+    <string name="discard_body">Những gì bạn đã nhập ở đây chưa được lưu.</string>
+    <string name="discard_keep">Tiếp tục chỉnh sửa</string>
+    <string name="discard_confirm">Bỏ</string>
     <plurals name="count_book">
         <item quantity="other">%d cuốn sách</item>
     </plurals>

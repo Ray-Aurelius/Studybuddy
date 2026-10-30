@@ -671,3 +671,7 @@ set_link_timer_sub = 라이브러리 항목의 웹 링크를 열면 그 항목�
 link_timer_started = %1$s 타이머를 시작했어요
 link_timer_resumed = %1$s 타이머를 다시 시작했어요
 link_timer_switched = 이전 세션을 저장했어요. %1$s 타이머를 시작했어요
+discard_title = 변경사항을 삭제할까요?
+discard_body = 여기에 입력한 내용은 아직 저장되지 않았어요.
+discard_keep = 계속 편집
+discard_confirm = 삭제

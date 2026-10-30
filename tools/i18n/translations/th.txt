@@ -671,3 +671,7 @@ set_link_timer_sub = การเปิดลิงก์เว็บของ�
 link_timer_started = เริ่มจับเวลาสำหรับ %1$s แล้ว
 link_timer_resumed = จับเวลาต่อสำหรับ %1$s แล้ว
 link_timer_switched = บันทึกเซสชันก่อนหน้าแล้ว เริ่มจับเวลาสำหรับ %1$s
+discard_title = ทิ้งการเปลี่ยนแปลงไหม
+discard_body = สิ่งที่คุณกรอกไว้ที่นี่ยังไม่ได้บันทึก
+discard_keep = แก้ไขต่อ
+discard_confirm = ทิ้ง

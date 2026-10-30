@@ -14,6 +14,9 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeDown
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.takahirom.roborazzi.captureRoboImage
@@ -183,6 +186,34 @@ class ScreenshotTest {
         compose.onNode(hasContentDescription("Settings")).performClick()
         compose.onNode(hasScrollAction()).performScrollToNode(hasText("Automatic daily backups"))
         shot("15_backups")
+    }
+
+    @Test fun swipingAwayAHalfFilledItemAsksFirst() {
+        compose.onNode(hasText("Add to library")).performClick()
+        compose.waitForIdle()
+        compose.onNode(hasSetTextAction() and hasText("Title")).performTextInput("Meditations")
+        // A fast drag down from the top of the form is what used to close the sheet and lose everything.
+        compose.onNode(hasScrollAction() and hasAnyDescendant(hasText("Title"))).performTouchInput {
+            swipeDown(startY = top + 20f, endY = bottom, durationMillis = 120)
+        }
+        compose.waitForIdle()
+        compose.onNode(hasText("Discard your changes?")).assertExists()
+        shot("27_discard_changes")
+        compose.onNode(hasText("Keep editing")).performClick()
+        compose.waitForIdle()
+        compose.onNode(hasText("Discard your changes?")).assertDoesNotExist()
+        compose.onNode(hasText("Meditations")).assertExists()
+    }
+
+    @Test fun anUntouchedEditorStillSwipesAway() {
+        compose.onNode(hasText("Add to library")).performClick()
+        compose.waitForIdle()
+        compose.onNode(hasScrollAction() and hasAnyDescendant(hasText("Title"))).performTouchInput {
+            swipeDown(startY = top + 20f, endY = bottom, durationMillis = 120)
+        }
+        compose.waitForIdle()
+        compose.onNode(hasText("Discard your changes?")).assertDoesNotExist()
+        compose.onNode(hasSetTextAction() and hasText("Title")).assertDoesNotExist()
     }
 
     @Test fun addMediaFromTimer() {

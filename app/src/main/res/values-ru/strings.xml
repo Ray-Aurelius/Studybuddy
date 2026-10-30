@@ -647,6 +647,10 @@
     <string name="link_timer_started">Таймер запущен: %1$s</string>
     <string name="link_timer_resumed">Таймер продолжен: %1$s</string>
     <string name="link_timer_switched">Прошлая сессия сохранена. Таймер запущен: %1$s</string>
+    <string name="discard_title">Отменить изменения?</string>
+    <string name="discard_body">То, что вы здесь ввели, ещё не сохранено.</string>
+    <string name="discard_keep">Продолжить</string>
+    <string name="discard_confirm">Отменить</string>
     <plurals name="count_book">
         <item quantity="one">%d книга</item>
         <item quantity="few">%d книги</item>

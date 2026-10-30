@@ -318,7 +318,7 @@ private fun DeleteDialog(snap: Snapshot, s: StudySession, onConfirm: () -> Unit,
 private fun SessionEditor(snap: Snapshot, initial: StudySession, onDismiss: () -> Unit, onSave: (StudySession) -> Unit, onDelete: () -> Unit) {
     var s by remember { mutableStateOf(initial) }
     val time = Instant.ofEpochMilli(s.startedAt).atZone(snap.zone)
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+    com.rayaurelius.sophinity.ui.components.EditorSheet(dirty = s != remember { initial }, onDismiss = onDismiss) {
         Column(
             Modifier.padding(horizontal = 24.dp).padding(bottom = 24.dp).verticalScroll(rememberScrollState()).imePadding(),
             verticalArrangement = Arrangement.spacedBy(14.dp),

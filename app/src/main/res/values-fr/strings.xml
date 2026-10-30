@@ -647,6 +647,10 @@
     <string name="link_timer_started">Minuteur lancé pour %1$s</string>
     <string name="link_timer_resumed">Minuteur repris pour %1$s</string>
     <string name="link_timer_switched">Session précédente enregistrée. Minuteur lancé pour %1$s</string>
+    <string name="discard_title">Abandonner les modifications ?</string>
+    <string name="discard_body">Ce que tu as saisi ici n\'est pas encore enregistré.</string>
+    <string name="discard_keep">Continuer</string>
+    <string name="discard_confirm">Abandonner</string>
     <plurals name="count_book">
         <item quantity="one">%d livre</item>
         <item quantity="many">%d de livres</item>
