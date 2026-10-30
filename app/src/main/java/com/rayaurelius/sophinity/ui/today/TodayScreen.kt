@@ -46,6 +46,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.outlined.EditCalendar
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.AlertDialog
@@ -138,19 +139,44 @@ fun TodayScreen(
     var addingItem by remember { mutableStateOf(false) }
     var added by remember { mutableStateOf<AddedItem?>(null) }
 
+    // A link shared to Sophinity (YouTube's Share → "Start at 15:16", say): time that item from there,
+    // or, if it isn't in the library yet, open "Add to library" with the link filled in.
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val resources = androidx.compose.ui.platform.LocalResources.current
+    val container = (context.applicationContext as com.rayaurelius.sophinity.SophinityApp).container
+    var sharedNew by remember { mutableStateOf<String?>(null) }
+    // One long-lived collector: clearing the pending link must not cancel the work it started.
+    androidx.compose.runtime.LaunchedEffect(Unit) { container.pendingShare.collect { url ->
+        if (url == null) return@collect
+        container.pendingShare.value = null
+        val message = when (val r = vm.handleShare(url)) {
+            is TodayViewModel.ShareResult.Matched -> r.positionSec
+                ?.let { resources.getString(R.string.share_now_at, StudyMath.formatClock(it * 1000), r.item.title) }
+                ?: resources.getString(R.string.link_timer_started, r.item.title)
+            is TodayViewModel.ShareResult.NotFound -> {
+                sharedNew = url; addingItem = true
+                resources.getString(R.string.share_add_first)
+            }
+        }
+        android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_LONG).show()
+    } }
+
     if (snap == null || timer == null) return
 
     if (addingItem) {
         val library = appViewModel { LibraryViewModel(it) }
+        val fromShare = sharedNew
         ItemEditorSheet(
-            snap, LearningItem(type = ItemType.BOOK, title = "", status = ItemStatus.ACTIVE, subjectId = snap.settings.lastSubjectId),
-            onDismiss = { addingItem = false },
+            snap, LearningItem(type = ItemType.BOOK, title = "", status = ItemStatus.ACTIVE, subjectId = snap.settings.lastSubjectId, url = fromShare.orEmpty()),
+            onDismiss = { addingItem = false; sharedNew = null },
             onSave = { item ->
-                library.save(item) { id -> added = AddedItem(id, item.subjectId) }
-                addingItem = false
+                // Added from a share: they're watching or listening now, so start timing it.
+                library.save(item) { id -> if (fromShare != null) vm.startOn(id, item.subjectId) else added = AddedItem(id, item.subjectId) }
+                addingItem = false; sharedNew = null
             },
-            onDelete = { addingItem = false },
+            onDelete = { addingItem = false; sharedNew = null },
             onCreateCategory = { cat, picked -> library.saveCategory(cat, picked) },
+            lookUpInitialLink = fromShare != null,
         )
     }
 
@@ -385,6 +411,20 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel, add
                                 )
                             }
                         }
+                    }
+                    // The timer can't see inside YouTube or Audible, so the learner can say where they are.
+                    val timedItem = timer.itemId?.let { snap.itemsById[it] }
+                    if (media != null && timedItem != null) {
+                        var settingPosition by remember { mutableStateOf(false) }
+                        TextButton(onClick = { settingPosition = true }) {
+                            Icon(Icons.Default.Edit, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp))
+                            Text(stringResource(R.string.timer_set_position))
+                        }
+                        if (settingPosition) PositionSheet(
+                            title = timedItem.title, currentSec = media.completedSec, totalSec = media.totalSec,
+                            onDismiss = { settingPosition = false },
+                            onSet = { sec -> vm.setPosition(timedItem.id, sec); settingPosition = false },
+                        )
                     }
                     Spacer(Modifier.height(20.dp))
                     // Labels shrink rather than wrap, so large text never breaks a word across lines.
@@ -816,6 +856,40 @@ private fun HeadStartSheet(initialMin: Int, onDismiss: () -> Unit, onSet: (Int) 
                 Spacer(Modifier.weight(1f))
                 TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
                 Button(onClick = { onSet(total) }, enabled = total > 0) { Text(stringResource(R.string.common_ok)) }
+            }
+        }
+    }
+}
+
+/** "Where are you in it?": hours, minutes and seconds into the video, seminar or audiobook. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PositionSheet(title: String, currentSec: Long, totalSec: Long, onDismiss: () -> Unit, onSet: (Long) -> Unit) {
+    val start = currentSec.coerceIn(0, totalSec)
+    var hours by remember { mutableStateOf<Int?>((start / 3600).toInt()) }
+    var minutes by remember { mutableStateOf<Int?>(((start % 3600) / 60).toInt()) }
+    var seconds by remember { mutableStateOf<Int?>((start % 60).toInt()) }
+    val chosen = ((hours ?: 0) * 3600L + (minutes ?: 0) * 60L + (seconds ?: 0)).coerceAtMost(totalSec)
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+        Column(
+            Modifier.padding(horizontal = 24.dp).padding(bottom = 24.dp).imePadding(),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            Text(stringResource(R.string.position_title), style = MaterialTheme.typography.headlineSmall)
+            Text(stringResource(R.string.position_body, title), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                NumberField(stringResource(R.string.field_hours), hours, { hours = it?.coerceAtMost(999) }, Modifier.weight(1f))
+                NumberField(stringResource(R.string.field_minutes), minutes, { minutes = it?.coerceAtMost(59) }, Modifier.weight(1f))
+                NumberField(stringResource(R.string.field_seconds), seconds, { seconds = it?.coerceAtMost(59) }, Modifier.weight(1f))
+            }
+            Text(
+                stringResource(R.string.position_of_total, StudyMath.formatClock(chosen * 1000), StudyMath.formatClock(totalSec * 1000)),
+                style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary,
+            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Spacer(Modifier.weight(1f))
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
+                Button(onClick = { onSet(chosen) }) { Text(stringResource(R.string.common_ok)) }
             }
         }
     }

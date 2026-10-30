@@ -659,6 +659,13 @@
     <string name="lib_link_filled">Detalhes preenchidos de %1$s</string>
     <string name="lib_link_nothing">Nenhum detalhe encontrado nessa página. Você pode preenchê-los.</string>
     <string name="common_undo">Desfazer</string>
+    <string name="timer_set_position">Estou em…</string>
+    <string name="position_title">Onde você está?</string>
+    <string name="position_body">Defina onde você está em %1$s. O tempo de estudo registrado continua o mesmo.</string>
+    <string name="field_seconds">Segundos</string>
+    <string name="position_of_total">%1$s de %2$s</string>
+    <string name="share_now_at">Agora em %1$s de %2$s. Timer rodando.</string>
+    <string name="share_add_first">Ainda não está na sua biblioteca. Adicione e o timer começa ao salvar.</string>
     <plurals name="count_book">
         <item quantity="one">%d livro</item>
         <item quantity="many">%d de livros</item>

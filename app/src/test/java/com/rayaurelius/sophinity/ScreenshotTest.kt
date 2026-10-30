@@ -15,6 +15,9 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performTextReplacement
+import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
 import androidx.test.core.app.ApplicationProvider
@@ -225,6 +228,55 @@ class ScreenshotTest {
         compose.waitForIdle()
         compose.onNode(hasText("How Memory Works")).assertDoesNotExist()
         compose.onNode(hasText("Book")).assertExists()
+    }
+
+    @Test fun sharingALinkWithAStartTimeMovesYourPlace() {
+        val app = ApplicationProvider.getApplicationContext<SophinityApp>()
+        // As YouTube's Share → "Start at" would send it: 6 hours in.
+        app.container.pendingShare.value = "https://audiobooks.example.com/habits-of-curious-people?t=21600"
+        compose.waitUntil(5_000) { runBlocking { app.container.timer.current() }.isActive }
+        val t = runBlocking { app.container.timer.current() }
+        org.junit.Assert.assertEquals(audiobookId, t.itemId)
+        compose.waitUntil(5_000) { compose.onAllNodes(hasText("6:00:0", substring = true)).fetchSemanticsNodes().isNotEmpty() }
+        // Logged study time is unchanged: only the earlier part moved.
+        val item = runBlocking { app.container.repo.snapshot.first().itemsById[audiobookId]!! }
+        org.junit.Assert.assertEquals(21600L - 3 * 40 * 60 * 3 / 2, item.priorSec)
+        shot("29_shared_start_time")
+    }
+
+    @Test fun imAtSetsThePlaceWhileTiming() {
+        val app = ApplicationProvider.getApplicationContext<SophinityApp>()
+        runBlocking { app.container.timer.start(com.rayaurelius.sophinity.timer.TimerMode.STOPWATCH, null, audiobookId) }
+        compose.mainClock.advanceTimeBy(1_000)
+        compose.onNode(hasText("I'm at…")).performClick()
+        compose.waitForIdle()
+        compose.onNode(hasText("Where are you in it?")).assertExists()
+        compose.onNode(hasSetTextAction() and hasText("Hours")).performTextReplacement("7")
+        compose.onNode(hasSetTextAction() and hasText("Minutes")).performTextReplacement("15")
+        compose.onNode(hasSetTextAction() and hasText("Seconds")).performTextReplacement("16")
+        compose.onNode(hasText("7:15:16 of 9:30:00")).assertExists()
+        shot("30_im_at_sheet")
+        compose.onNode(hasText("OK")).performClick()
+        compose.waitUntil(5_000) { compose.onAllNodes(hasText("7:15:1", substring = true)).fetchSemanticsNodes().isNotEmpty() }
+    }
+
+    @Test fun sharingANewLinkOffersToAddIt() {
+        val app = ApplicationProvider.getApplicationContext<SophinityApp>()
+        app.container.linkFetcher = com.rayaurelius.sophinity.data.LinkFetcher { null }
+        app.container.pendingShare.value = "https://vimeo.com/987654#t=90"
+        // The share is handled off the main thread; give it a moment, then the editor is open.
+        Thread.sleep(1_500); compose.waitForIdle()
+        compose.onNode(hasTestTag("link_field")).assertTextContains("vimeo.com/987654", substring = true)
+        shot("31_share_new_link")
+        compose.onNode(hasSetTextAction() and hasText("Title")).performTextInput("A talk")
+        compose.onNode(hasText("Save")).performScrollTo().performClick()
+        Thread.sleep(1_000); compose.waitForIdle()
+        org.junit.Assert.assertTrue(runBlocking { app.container.timer.current() }.isActive)
+        val item = runBlocking { app.container.repo.snapshot.first().items.first { it.title == "A talk" } }
+        org.junit.Assert.assertEquals("https://vimeo.com/987654", item.url)
+        // The shared "#t=90" became where they are in the video.
+        org.junit.Assert.assertEquals(90L, item.priorSec)
+        org.junit.Assert.assertEquals(item.id, runBlocking { app.container.timer.current() }.itemId)
     }
 
     @Test fun anUntouchedEditorStillSwipesAway() {

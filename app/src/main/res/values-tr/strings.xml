@@ -659,6 +659,13 @@
     <string name="lib_link_filled">Ayrıntılar %1$s adresinden dolduruldu</string>
     <string name="lib_link_nothing">Bu sayfada ayrıntı bulunamadı. Kendin doldurabilirsin.</string>
     <string name="common_undo">Geri al</string>
+    <string name="timer_set_position">Şuradayım…</string>
+    <string name="position_title">Neredesin?</string>
+    <string name="position_body">%1$s içinde nerede olduğunu belirle. Kayıtlı çalışma süren değişmez.</string>
+    <string name="field_seconds">Saniye</string>
+    <string name="position_of_total">%1$s / %2$s</string>
+    <string name="share_now_at">Şimdi %2$s içinde %1$s. Zamanlayıcı çalışıyor.</string>
+    <string name="share_add_first">Henüz kitaplığında değil. Ekle, kaydettiğinde zamanlayıcı başlasın.</string>
     <plurals name="count_book">
         <item quantity="one">%d kitap</item>
         <item quantity="other">%d kitap</item>

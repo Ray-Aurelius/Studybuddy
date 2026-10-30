@@ -659,6 +659,13 @@
     <string name="lib_link_filled">Дані взято з %1$s</string>
     <string name="lib_link_nothing">На цій сторінці даних не знайдено. Можна заповнити їх вручну.</string>
     <string name="common_undo">Скасувати</string>
+    <string name="timer_set_position">Я на…</string>
+    <string name="position_title">Де ви зараз?</string>
+    <string name="position_body">Вкажіть, де ви зараз у «%1$s». Записаний час навчання не зміниться.</string>
+    <string name="field_seconds">Секунди</string>
+    <string name="position_of_total">%1$s з %2$s</string>
+    <string name="share_now_at">Зараз %1$s у «%2$s». Таймер працює.</string>
+    <string name="share_add_first">Цього ще немає в бібліотеці. Додайте, і таймер запуститься під час збереження.</string>
     <plurals name="count_book">
         <item quantity="one">%d книга</item>
         <item quantity="few">%d книги</item>

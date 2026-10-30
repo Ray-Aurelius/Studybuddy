@@ -33,6 +33,9 @@ class AppContainer(context: Context) {
     /** Reads details from links pasted into the library. Replaced with a fake in tests. */
     var linkFetcher: com.rayaurelius.sophinity.data.LinkFetcher = com.rayaurelius.sophinity.data.LinkFetcher()
 
+    /** A link shared to Sophinity from another app (e.g. YouTube's Share → "Start at"), waiting to be handled. */
+    val pendingShare = MutableStateFlow<String?>(null)
+
     /** Session id waiting for a reflection (set from a notification tap). */
     val pendingReflection = MutableStateFlow<Long?>(null)
 }

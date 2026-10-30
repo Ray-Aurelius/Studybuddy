@@ -49,6 +49,7 @@ interface SessionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE) suspend fun insertAll(list: List<StudySession>)
     @Query("DELETE FROM sessions") suspend fun clear()
     @Query("UPDATE sessions SET itemId = NULL WHERE itemId = :itemId") suspend fun detachItem(itemId: Long)
+    @Query("SELECT COALESCE(SUM(durationSec), 0) FROM sessions WHERE itemId = :itemId") suspend fun secondsForItem(itemId: Long): Long
 }
 
 @Dao
@@ -77,6 +78,9 @@ interface ItemDao {
 
     @Query("SELECT * FROM items")
     suspend fun getAll(): List<LearningItem>
+
+    @Query("SELECT * FROM items WHERE id = :id")
+    suspend fun get(id: Long): LearningItem?
 
     @Insert suspend fun insert(item: LearningItem): Long
     @Update suspend fun update(item: LearningItem)

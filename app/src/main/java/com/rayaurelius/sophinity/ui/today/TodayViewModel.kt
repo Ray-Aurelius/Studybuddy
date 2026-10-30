@@ -41,6 +41,32 @@ class TodayViewModel(private val c: AppContainer) : ViewModel() {
     fun skipBreak() = viewModelScope.launch { c.timer.endBreak(alert = false) }
     fun setSubject(subjectId: Long?, itemId: Long?) = viewModelScope.launch { c.timer.setSubject(subjectId, itemId) }
 
+    /** "I'm at 15:16": moves the learner's place in the item; logged study time is unchanged. */
+    fun setPosition(itemId: Long, positionSec: Long) = viewModelScope.launch {
+        c.repo.setMediaPosition(itemId, positionSec, c.timer.liveSecFor(itemId))
+    }
+
+    /** What sharing a link to Sophinity did. */
+    sealed interface ShareResult {
+        data class Matched(val item: com.rayaurelius.sophinity.data.db.LearningItem, val action: com.rayaurelius.sophinity.timer.LinkTimer.Action, val positionSec: Long?) : ShareResult
+        data class NotFound(val url: String) : ShareResult
+    }
+
+    /**
+     * A link shared from YouTube, Vimeo, Spotify or a browser. If it's for something in the library,
+     * time it, and if the link says where playback is ("Start at 15:16"), move the learner's place there.
+     */
+    suspend fun handleShare(url: String): ShareResult {
+        val item = c.repo.itemForLink(url) ?: return ShareResult.NotFound(url)
+        val action = c.timer.startForLink(item.id, item.subjectId)
+        val pos = com.rayaurelius.sophinity.domain.Links.timestampSec(url)
+            ?.takeIf { com.rayaurelius.sophinity.domain.MediaTime.supportsRuntime(item.type) }
+        if (pos != null) c.repo.setMediaPosition(item.id, pos, c.timer.liveSecFor(item.id))
+        return ShareResult.Matched(item, action, pos)
+    }
+
+    fun startOn(itemId: Long, subjectId: Long?) = viewModelScope.launch { c.timer.startForLink(itemId, subjectId) }
+
     fun finish() = viewModelScope.launch {
         c.timer.finish()?.let { _reflect.value = c.repo.getSession(it) }
     }

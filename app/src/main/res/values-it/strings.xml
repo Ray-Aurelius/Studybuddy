@@ -659,6 +659,13 @@
     <string name="lib_link_filled">Dettagli compilati da %1$s</string>
     <string name="lib_link_nothing">Nessun dettaglio trovato su quella pagina. Puoi inserirli tu.</string>
     <string name="common_undo">Annulla</string>
+    <string name="timer_set_position">Sono a…</string>
+    <string name="position_title">A che punto sei?</string>
+    <string name="position_body">Indica a che punto sei in %1$s. Il tempo di studio registrato non cambia.</string>
+    <string name="field_seconds">Secondi</string>
+    <string name="position_of_total">%1$s di %2$s</string>
+    <string name="share_now_at">Ora a %1$s in %2$s. Timer avviato.</string>
+    <string name="share_add_first">Non è ancora nella tua libreria. Aggiungilo e il timer partirà al salvataggio.</string>
     <plurals name="count_book">
         <item quantity="one">%d libro</item>
         <item quantity="many">%d di libri</item>

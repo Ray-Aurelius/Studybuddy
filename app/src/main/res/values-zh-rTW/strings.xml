@@ -659,6 +659,13 @@
     <string name="lib_link_filled">已從 %1$s 填寫詳細資料</string>
     <string name="lib_link_nothing">該頁面找不到詳細資料，你可以自行填寫。</string>
     <string name="common_undo">復原</string>
+    <string name="timer_set_position">我在…</string>
+    <string name="position_title">你進行到哪裡了？</string>
+    <string name="position_body">設定你在「%1$s」中的位置。已記錄的學習時間不變。</string>
+    <string name="field_seconds">秒</string>
+    <string name="position_of_total">%1$s / %2$s</string>
+    <string name="share_now_at">現在在「%2$s」的 %1$s。計時中。</string>
+    <string name="share_add_first">還不在資料庫中。新增後，儲存時會開始計時。</string>
     <plurals name="count_book">
         <item quantity="other">%d 本書</item>
     </plurals>

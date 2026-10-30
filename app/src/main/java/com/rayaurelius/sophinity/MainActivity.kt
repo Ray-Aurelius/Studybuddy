@@ -147,6 +147,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleIntent(intent: Intent?) {
+        if (intent?.action == Intent.ACTION_SEND) {
+            val text = intent.getStringExtra(Intent.EXTRA_TEXT).orEmpty()
+            com.rayaurelius.sophinity.domain.Links.firstUrl(text)?.let { container.pendingShare.value = it }
+            intent.action = null // handled once, not again on rotation
+        }
         val id = intent?.getLongExtra(TimerNotifier.EXTRA_REFLECT_SESSION, -1L) ?: -1L
         if (id > 0) {
             container.pendingReflection.value = id
@@ -168,6 +173,11 @@ private fun AppShell(settings: AppSettings) {
         launchSingleTop = true
         restoreState = true
     }
+
+    // A link shared in from another app is handled on Today, where the timer is.
+    val pendingShare = (androidx.compose.ui.platform.LocalContext.current.applicationContext as SophinityApp).container.pendingShare
+    val shared by pendingShare.collectAsStateWithLifecycle()
+    androidx.compose.runtime.LaunchedEffect(shared) { if (shared != null && dest != null && !dest.hasRoute(TodayRoute::class)) go(TodayRoute) }
 
     val showRail = onTab && settings.navPosition != NavPosition.BOTTOM
     val rail: @Composable () -> Unit = {

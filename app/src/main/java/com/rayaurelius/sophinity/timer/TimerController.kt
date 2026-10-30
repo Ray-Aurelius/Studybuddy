@@ -168,6 +168,12 @@ class TimerController(
         action
     }
 
+    /** Seconds of study on [itemId] in the session running now (0 if the timer is on something else). */
+    suspend fun liveSecFor(itemId: Long): Long {
+        val s = current()
+        return if (s.isActive && s.itemId == itemId) s.elapsedMs() / 1000 else 0
+    }
+
     suspend fun pause() = mutex.withLock {
         val s = current()
         if (s.status != TimerStatus.RUNNING) return@withLock

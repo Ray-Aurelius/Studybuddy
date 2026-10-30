@@ -659,6 +659,13 @@
     <string name="lib_link_filled">%1$s에서 세부정보를 채웠어요</string>
     <string name="lib_link_nothing">이 페이지에서 세부정보를 찾지 못했어요. 직접 입력할 수 있어요.</string>
     <string name="common_undo">실행취소</string>
+    <string name="timer_set_position">지금 위치…</string>
+    <string name="position_title">어디까지 봤나요?</string>
+    <string name="position_body">%1$s에서 현재 위치를 설정해요. 기록된 공부 시간은 그대로예요.</string>
+    <string name="field_seconds">초</string>
+    <string name="position_of_total">%1$s / %2$s</string>
+    <string name="share_now_at">지금 %2$s의 %1$s. 타이머 작동 중.</string>
+    <string name="share_add_first">아직 라이브러리에 없어요. 추가하면 저장할 때 타이머가 시작돼요.</string>
     <plurals name="count_book">
         <item quantity="other">책 %d권</item>
     </plurals>

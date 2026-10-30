@@ -659,6 +659,13 @@
     <string name="lib_link_filled">%1$s से जानकारी भरी गई</string>
     <string name="lib_link_nothing">उस पेज पर कोई जानकारी नहीं मिली। आप इसे खुद भर सकते हैं।</string>
     <string name="common_undo">पहले जैसा करें</string>
+    <string name="timer_set_position">मैं यहाँ हूँ…</string>
+    <string name="position_title">आप कहाँ तक पहुँचे?</string>
+    <string name="position_body">%1$s में अपनी जगह सेट करें। दर्ज किया गया पढ़ाई का समय वही रहता है।</string>
+    <string name="field_seconds">सेकंड</string>
+    <string name="position_of_total">%2$s में से %1$s</string>
+    <string name="share_now_at">अब %2$s में %1$s पर। टाइमर चल रहा है।</string>
+    <string name="share_add_first">यह अभी आपकी लाइब्रेरी में नहीं है। इसे जोड़ें, सेव करते ही टाइमर शुरू होगा।</string>
     <plurals name="count_book">
         <item quantity="one">%d किताब</item>
         <item quantity="other">%d किताबें</item>

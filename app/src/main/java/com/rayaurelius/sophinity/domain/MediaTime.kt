@@ -43,4 +43,14 @@ object MediaTime {
 
     fun formatSpeed(speed: Float): String =
         if (speed == speed.toInt().toFloat()) "${speed.toInt()}×" else "${"%.2f".format(speed).trimEnd('0').trimEnd('.')}×"
+
+    /**
+     * The "completed before tracking" amount that puts the learner at [positionSec] in the media,
+     * given the study time already logged on it (and any still running). Logged time is never
+     * changed. If they've gone back to before what was logged, this bottoms out at zero.
+     */
+    fun priorForPosition(item: LearningItem, positionSec: Long, loggedSec: Long, liveSec: Long = 0): Long {
+        val speed = item.playbackSpeed.takeIf { it > 0f } ?: 1f
+        return (positionSec - ((loggedSec + liveSec) * speed).roundToLong()).coerceAtLeast(0)
+    }
 }

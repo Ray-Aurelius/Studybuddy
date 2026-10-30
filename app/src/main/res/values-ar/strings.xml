@@ -659,6 +659,13 @@
     <string name="lib_link_filled">مُلئت التفاصيل من %1$s</string>
     <string name="lib_link_nothing">لم يُعثر على تفاصيل في تلك الصفحة. يمكنك ملؤها بنفسك.</string>
     <string name="common_undo">تراجع</string>
+    <string name="timer_set_position">أنا عند…</string>
+    <string name="position_title">أين وصلت؟</string>
+    <string name="position_body">حدّد موضعك في %1$s. وقت الدراسة المسجّل لا يتغيّر.</string>
+    <string name="field_seconds">ثوانٍ</string>
+    <string name="position_of_total">%1$s من %2$s</string>
+    <string name="share_now_at">الآن عند %1$s في %2$s. المؤقت يعمل.</string>
+    <string name="share_add_first">ليس في مكتبتك بعد. أضفه وسيبدأ المؤقت عند الحفظ.</string>
     <plurals name="count_book">
         <item quantity="zero">لا كتب</item>
         <item quantity="one">كتاب واحد</item>

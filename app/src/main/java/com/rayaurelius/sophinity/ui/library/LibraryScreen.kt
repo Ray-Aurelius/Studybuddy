@@ -267,6 +267,8 @@ fun ItemEditorSheet(
     onSave: (LearningItem) -> Unit,
     onDelete: (LearningItem) -> Unit,
     onCreateCategory: (CustomCategory, (Long) -> Unit) -> Unit,
+    /** Look up the link it opens with (a link shared from another app) rather than only one typed here. */
+    lookUpInitialLink: Boolean = false,
 ) {
     var item by remember { mutableStateOf(initial) }
     var newCategory by remember { mutableStateOf(false) }
@@ -279,7 +281,7 @@ fun ItemEditorSheet(
     var lookup by remember { mutableStateOf<LinkLookup>(LinkLookup.Idle) }
     var typePicked by remember { mutableStateOf(false) }
     val linkUrl = com.rayaurelius.sophinity.domain.Links.normalize(item.url)
-    val startUrl = remember { com.rayaurelius.sophinity.domain.Links.normalize(initial.url) }
+    val startUrl = remember { if (lookUpInitialLink) "" else com.rayaurelius.sophinity.domain.Links.normalize(initial.url) }
     androidx.compose.runtime.LaunchedEffect(linkUrl) {
         val wanted = snap.settings.linkAutofill && app != null && linkUrl != startUrl &&
             com.rayaurelius.sophinity.domain.Links.isOpenable(linkUrl) && (lookup as? LinkLookup.Filled)?.url != linkUrl
@@ -388,7 +390,7 @@ fun ItemEditorSheet(
                 Spacer(Modifier.weight(1f))
                 TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
                 Spacer(Modifier.width(8.dp))
-                Button(enabled = item.title.isNotBlank(), onClick = { onSave(item.copy(title = item.title.trim(), creator = item.creator.trim())) }) {
+                Button(enabled = item.title.isNotBlank(), onClick = { onSave(withLinkTime(item.copy(title = item.title.trim(), creator = item.creator.trim()), startUrl, snap)) }) {
                     Text(stringResource(R.string.common_save))
                 }
             }
@@ -439,4 +441,19 @@ private fun LinkLookupStatus(state: LinkLookup, onUndo: (LinkLookup.Filled) -> U
             }
         }
     }
+}
+
+/**
+ * A link that carries a start time ("…?t=916", from Share → "Start at 15:16") puts the learner at
+ * that spot in timed media. The time is then dropped from the stored link so later opens don't jump
+ * back to it. Only a link entered or changed now counts (or one shared in), never one already saved.
+ */
+internal fun withLinkTime(item: LearningItem, savedUrl: String, snap: Snapshot): LearningItem {
+    val links = com.rayaurelius.sophinity.domain.Links
+    val url = links.normalize(item.url)
+    if (url == savedUrl) return item
+    val at = links.timestampSec(url) ?: return item
+    val clean = item.copy(url = links.withoutTimestamp(url))
+    if (!com.rayaurelius.sophinity.domain.MediaTime.supportsRuntime(item.type)) return clean
+    return clean.copy(priorSec = com.rayaurelius.sophinity.domain.MediaTime.priorForPosition(item, at, if (item.id == 0L) 0 else snap.secondsForItem(item.id)))
 }

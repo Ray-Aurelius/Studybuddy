@@ -659,6 +659,13 @@
     <string name="lib_link_filled">Dane uzupełnione z %1$s</string>
     <string name="lib_link_nothing">Na tej stronie nie znaleziono danych. Możesz wpisać je sam(a).</string>
     <string name="common_undo">Cofnij</string>
+    <string name="timer_set_position">Jestem na…</string>
+    <string name="position_title">W którym miejscu jesteś?</string>
+    <string name="position_body">Ustaw, w którym miejscu jesteś w %1$s. Zapisany czas nauki się nie zmienia.</string>
+    <string name="field_seconds">Sekundy</string>
+    <string name="position_of_total">%1$s z %2$s</string>
+    <string name="share_now_at">Teraz %1$s w %2$s. Stoper działa.</string>
+    <string name="share_add_first">Jeszcze nie ma tego w bibliotece. Dodaj, a stoper ruszy po zapisaniu.</string>
     <plurals name="count_book">
         <item quantity="one">%d książka</item>
         <item quantity="few">%d książki</item>

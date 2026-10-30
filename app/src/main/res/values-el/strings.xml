@@ -659,6 +659,13 @@
     <string name="lib_link_filled">Στοιχεία από %1$s</string>
     <string name="lib_link_nothing">Δεν βρέθηκαν στοιχεία σε αυτή τη σελίδα. Μπορείς να τα συμπληρώσεις εσύ.</string>
     <string name="common_undo">Αναίρεση</string>
+    <string name="timer_set_position">Είμαι στο…</string>
+    <string name="position_title">Πού βρίσκεσαι;</string>
+    <string name="position_body">Όρισε πού βρίσκεσαι στο %1$s. Ο καταγεγραμμένος χρόνος μελέτης μένει ίδιος.</string>
+    <string name="field_seconds">Δευτερόλεπτα</string>
+    <string name="position_of_total">%1$s από %2$s</string>
+    <string name="share_now_at">Τώρα στο %1$s του %2$s. Το χρονόμετρο τρέχει.</string>
+    <string name="share_add_first">Δεν είναι ακόμα στη βιβλιοθήκη σου. Πρόσθεσέ το και το χρονόμετρο θα ξεκινήσει μόλις το αποθηκεύσεις.</string>
     <plurals name="count_book">
         <item quantity="one">%d βιβλίο</item>
         <item quantity="other">%d βιβλία</item>

@@ -659,6 +659,13 @@
     <string name="lib_link_filled">Detail diisi dari %1$s</string>
     <string name="lib_link_nothing">Tidak ada detail di halaman itu. Kamu bisa mengisinya sendiri.</string>
     <string name="common_undo">Urungkan</string>
+    <string name="timer_set_position">Aku di…</string>
+    <string name="position_title">Sudah sampai mana?</string>
+    <string name="position_body">Atur posisimu di %1$s. Waktu belajar yang tercatat tidak berubah.</string>
+    <string name="field_seconds">Detik</string>
+    <string name="position_of_total">%1$s dari %2$s</string>
+    <string name="share_now_at">Sekarang di %1$s pada %2$s. Timer berjalan.</string>
+    <string name="share_add_first">Belum ada di pustakamu. Tambahkan, dan timer mulai saat disimpan.</string>
     <plurals name="count_book">
         <item quantity="other">%d buku</item>
     </plurals>

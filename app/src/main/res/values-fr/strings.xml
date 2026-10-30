@@ -659,6 +659,13 @@
     <string name="lib_link_filled">Détails remplis depuis %1$s</string>
     <string name="lib_link_nothing">Aucun détail trouvé sur cette page. Tu peux les saisir toi-même.</string>
     <string name="common_undo">Annuler</string>
+    <string name="timer_set_position">J\'en suis à…</string>
+    <string name="position_title">Où en es-tu ?</string>
+    <string name="position_body">Indique où tu en es dans %1$s. Le temps d\'étude enregistré ne change pas.</string>
+    <string name="field_seconds">Secondes</string>
+    <string name="position_of_total">%1$s sur %2$s</string>
+    <string name="share_now_at">Maintenant à %1$s dans %2$s. Minuteur lancé.</string>
+    <string name="share_add_first">Pas encore dans ta bibliothèque. Ajoute-le et le minuteur démarrera à l\'enregistrement.</string>
     <plurals name="count_book">
         <item quantity="one">%d livre</item>
         <item quantity="many">%d de livres</item>

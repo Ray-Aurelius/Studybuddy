@@ -659,6 +659,13 @@
     <string name="lib_link_filled">%1$sから詳細を入力しました</string>
     <string name="lib_link_nothing">このページでは詳細が見つかりませんでした。手動で入力できます。</string>
     <string name="common_undo">元に戻す</string>
+    <string name="timer_set_position">今ここ…</string>
+    <string name="position_title">どこまで進みましたか？</string>
+    <string name="position_body">%1$sの現在位置を設定します。記録された学習時間は変わりません。</string>
+    <string name="field_seconds">秒</string>
+    <string name="position_of_total">%1$s / %2$s</string>
+    <string name="share_now_at">%2$sの%1$sから。タイマー作動中。</string>
+    <string name="share_add_first">まだライブラリにありません。追加すると、保存時にタイマーが始まります。</string>
     <plurals name="count_book">
         <item quantity="other">%d冊の本</item>
     </plurals>

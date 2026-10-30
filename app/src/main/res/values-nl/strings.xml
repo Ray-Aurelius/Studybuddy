@@ -659,6 +659,13 @@
     <string name="lib_link_filled">Gegevens ingevuld vanaf %1$s</string>
     <string name="lib_link_nothing">Geen gegevens gevonden op die pagina. Je kunt ze zelf invullen.</string>
     <string name="common_undo">Ongedaan maken</string>
+    <string name="timer_set_position">Ik ben bij…</string>
+    <string name="position_title">Waar ben je?</string>
+    <string name="position_body">Geef aan waar je bent in %1$s. Je geregistreerde studietijd blijft gelijk.</string>
+    <string name="field_seconds">Seconden</string>
+    <string name="position_of_total">%1$s van %2$s</string>
+    <string name="share_now_at">Nu bij %1$s in %2$s. Timer loopt.</string>
+    <string name="share_add_first">Nog niet in je bibliotheek. Voeg het toe en de timer start bij opslaan.</string>
     <plurals name="count_book">
         <item quantity="one">%d boek</item>
         <item quantity="other">%d boeken</item>

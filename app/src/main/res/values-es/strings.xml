@@ -659,6 +659,13 @@
     <string name="lib_link_filled">Datos completados desde %1$s</string>
     <string name="lib_link_nothing">No se encontraron datos en esa página. Puedes completarlos tú.</string>
     <string name="common_undo">Deshacer</string>
+    <string name="timer_set_position">Voy por…</string>
+    <string name="position_title">¿Por dónde vas?</string>
+    <string name="position_body">Indica por dónde vas en %1$s. El tiempo de estudio registrado no cambia.</string>
+    <string name="field_seconds">Segundos</string>
+    <string name="position_of_total">%1$s de %2$s</string>
+    <string name="share_now_at">Ahora en %1$s de %2$s. Temporizador en marcha.</string>
+    <string name="share_add_first">Aún no está en tu biblioteca. Añádelo y el temporizador empezará al guardar.</string>
     <plurals name="count_book">
         <item quantity="one">%d libro</item>
         <item quantity="many">%d de libros</item>

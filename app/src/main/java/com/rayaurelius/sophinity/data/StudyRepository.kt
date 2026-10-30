@@ -140,6 +140,26 @@ class StudyRepository(private val db: AppDatabase, val settingsStore: SettingsSt
     suspend fun saveItem(item: LearningItem): Long =
         if (item.id == 0L) db.items().insert(item) else { db.items().update(item); item.id }
 
+    /**
+     * Puts the learner at [positionSec] in a piece of timed media ("I'm at 15:16"), by adjusting how
+     * much was done before tracking. Logged study time is untouched. [liveSec] is time on a session
+     * for this item still running on the timer.
+     */
+    suspend fun setMediaPosition(itemId: Long, positionSec: Long, liveSec: Long = 0): LearningItem? {
+        val item = db.items().get(itemId) ?: return null
+        val logged = db.sessions().secondsForItem(itemId)
+        val updated = item.copy(priorSec = com.rayaurelius.sophinity.domain.MediaTime.priorForPosition(item, positionSec, logged, liveSec))
+        if (updated != item) db.items().update(updated)
+        return updated
+    }
+
+    /** The library item a shared link is for (same video, episode or page), if any. */
+    suspend fun itemForLink(url: String): LearningItem? {
+        val key = com.rayaurelius.sophinity.domain.Links.mediaKey(url)
+        return db.items().getAll().filter { it.url.isNotBlank() && com.rayaurelius.sophinity.domain.Links.mediaKey(it.url) == key }
+            .minByOrNull { if (it.status == ItemStatus.ACTIVE) 0 else if (it.status == ItemStatus.WANT) 1 else 2 }
+    }
+
     suspend fun deleteItem(item: LearningItem) = db.withTransaction {
         db.sessions().detachItem(item.id)
         db.notes().detachItem(item.id)

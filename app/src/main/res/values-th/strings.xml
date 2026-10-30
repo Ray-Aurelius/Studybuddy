@@ -659,6 +659,13 @@
     <string name="lib_link_filled">กรอกรายละเอียดจาก %1$s แล้ว</string>
     <string name="lib_link_nothing">ไม่พบรายละเอียดในหน้านั้น คุณกรอกเองได้</string>
     <string name="common_undo">เลิกทำ</string>
+    <string name="timer_set_position">ฉันอยู่ที่…</string>
+    <string name="position_title">คุณอยู่ตรงไหนแล้ว</string>
+    <string name="position_body">ตั้งตำแหน่งของคุณใน %1$s เวลาเรียนที่บันทึกไว้จะไม่เปลี่ยน</string>
+    <string name="field_seconds">วินาที</string>
+    <string name="position_of_total">%1$s จาก %2$s</string>
+    <string name="share_now_at">ตอนนี้อยู่ที่ %1$s ใน %2$s กำลังจับเวลา</string>
+    <string name="share_add_first">ยังไม่มีในคลังของคุณ เพิ่มเลย แล้วจะเริ่มจับเวลาเมื่อบันทึก</string>
     <plurals name="count_book">
         <item quantity="other">หนังสือ %d เล่ม</item>
     </plurals>

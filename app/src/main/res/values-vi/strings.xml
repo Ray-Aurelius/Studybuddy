@@ -659,6 +659,13 @@
     <string name="lib_link_filled">Đã điền thông tin từ %1$s</string>
     <string name="lib_link_nothing">Không tìm thấy thông tin trên trang đó. Bạn có thể tự điền.</string>
     <string name="common_undo">Hoàn tác</string>
+    <string name="timer_set_position">Tôi đang ở…</string>
+    <string name="position_title">Bạn đang ở đâu?</string>
+    <string name="position_body">Đặt vị trí của bạn trong %1$s. Thời gian học đã ghi vẫn giữ nguyên.</string>
+    <string name="field_seconds">Giây</string>
+    <string name="position_of_total">%1$s / %2$s</string>
+    <string name="share_now_at">Đang ở %1$s trong %2$s. Đang hẹn giờ.</string>
+    <string name="share_add_first">Chưa có trong thư viện. Hãy thêm vào, hẹn giờ sẽ bắt đầu khi lưu.</string>
     <plurals name="count_book">
         <item quantity="other">%d cuốn sách</item>
     </plurals>
