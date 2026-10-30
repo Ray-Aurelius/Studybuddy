@@ -64,6 +64,14 @@ data class Snapshot(
         com.rayaurelius.sophinity.domain.MediaTime.progress(item, secondsForItem(item.id), liveSec)
 }
 
+/** What a "Mark as completed" did, so it can be undone. */
+data class Completion(
+    val creditSec: Long,
+    val itemBefore: LearningItem,
+    val addedSessionId: Long? = null,
+    val sessionBefore: StudySession? = null,
+)
+
 class StudyRepository(private val db: AppDatabase, val settingsStore: SettingsStore) {
 
     /** Bumped at midnight / on resume so "today" stays correct while the app is open. */
@@ -166,28 +174,35 @@ class StudyRepository(private val db: AppDatabase, val settingsStore: SettingsSt
      * "Mark as completed" from the library: logs the rest of the item's length as a session ending
      * now, so it counts in full, and moves it to Finished. Returns the seconds credited.
      */
-    suspend fun completeItem(itemId: Long, now: Long = System.currentTimeMillis()): Long = db.withTransaction {
-        val item = db.items().get(itemId) ?: return@withTransaction 0L
+    suspend fun completeItem(itemId: Long, now: Long = System.currentTimeMillis()): Completion? = db.withTransaction {
+        val item = db.items().get(itemId) ?: return@withTransaction null
         val credit = com.rayaurelius.sophinity.domain.MediaTime.creditToCompleteSec(item, db.sessions().secondsForItem(itemId)) ?: 0L
-        if (credit > 0) db.sessions().insert(
+        val added = if (credit > 0) db.sessions().insert(
             StudySession(subjectId = item.subjectId, itemId = itemId, startedAt = now - credit * 1000, durationSec = credit,
                 source = com.rayaurelius.sophinity.data.db.SessionSource.MANUAL)
-        )
+        ) else null
         db.items().update(finished(item, now))
-        credit
+        Completion(credit, item, addedSessionId = added)
     }
 
     /**
      * "Mark as completed" on a logged session: that session is stretched to cover the rest of its
      * item's length, and the item moves to Finished. Returns the seconds credited.
      */
-    suspend fun completeFromSession(sessionId: Long, now: Long = System.currentTimeMillis()): Long = db.withTransaction {
-        val session = db.sessions().get(sessionId) ?: return@withTransaction 0L
-        val item = session.itemId?.let { db.items().get(it) } ?: return@withTransaction 0L
+    suspend fun completeFromSession(sessionId: Long, now: Long = System.currentTimeMillis()): Completion? = db.withTransaction {
+        val session = db.sessions().get(sessionId) ?: return@withTransaction null
+        val item = session.itemId?.let { db.items().get(it) } ?: return@withTransaction null
         val credit = com.rayaurelius.sophinity.domain.MediaTime.creditToCompleteSec(item, db.sessions().secondsForItem(item.id)) ?: 0L
         if (credit > 0) db.sessions().update(session.copy(durationSec = session.durationSec + credit))
         db.items().update(finished(item, now))
-        credit
+        Completion(credit, item, sessionBefore = session)
+    }
+
+    /** Takes back a "Mark as completed": the item as it was, and the added time removed. */
+    suspend fun undo(c: Completion) = db.withTransaction {
+        c.addedSessionId?.let { id -> db.sessions().get(id)?.let { db.sessions().delete(it) } }
+        c.sessionBefore?.let { before -> db.sessions().get(before.id)?.let { db.sessions().update(before) } }
+        db.items().update(c.itemBefore)
     }
 
     /** The library item a shared link is for (same video, episode or page), if any. */

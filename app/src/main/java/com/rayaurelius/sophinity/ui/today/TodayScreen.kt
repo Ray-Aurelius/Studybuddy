@@ -87,6 +87,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -146,6 +147,7 @@ fun TodayScreen(
     val resources = androidx.compose.ui.platform.LocalResources.current
     val container = (context.applicationContext as com.rayaurelius.sophinity.SophinityApp).container
     var sharedNew by remember { mutableStateOf<String?>(null) }
+    val announcer = com.rayaurelius.sophinity.ui.components.rememberAnnouncer()
     // One long-lived collector: clearing the pending link must not cancel the work it started.
     androidx.compose.runtime.LaunchedEffect(Unit) { container.pendingShare.collect { url ->
         if (url == null) return@collect
@@ -159,7 +161,7 @@ fun TodayScreen(
                 resources.getString(R.string.share_add_first)
             }
         }
-        android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_LONG).show()
+        announcer.show(message)
     } }
 
     if (snap == null || timer == null) return
@@ -259,7 +261,10 @@ private fun Header(snap: Snapshot, onOpenSettings: () -> Unit, onOpenBadges: () 
 private data class AddedItem(val id: Long, val subjectId: Long?)
 
 @Composable
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel, added: AddedItem?, onAddedConsumed: () -> Unit) {
+    // A light tap confirms starting, stopping and completing without needing to look.
+    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
     LaunchedEffect(timer.status) {
         while (timer.status == TimerStatus.RUNNING || timer.status == TimerStatus.BREAK) {
@@ -329,7 +334,12 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel, add
                         }
                     }
                     Spacer(Modifier.height(20.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    // Wraps onto two lines when both don't fit, rather than cutting "What are you learning?" short.
+                    androidx.compose.foundation.layout.FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        itemVerticalAlignment = Alignment.CenterVertically,
+                    ) {
                         SubjectPicker(snap.activeSubjects, subjectId, { subjectId = it; itemId = null })
                         ItemPicker(snap.items.filter { it.status != ItemStatus.DONE }.sortedBy { it.status != ItemStatus.ACTIVE }, itemId, { snap.categoryOf(it).glyph }) { id ->
                             itemId = id
@@ -337,7 +347,7 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel, add
                         }
                     }
                     Spacer(Modifier.height(16.dp))
-                    Button(onClick = { vm.start(mode, subjectId, itemId, if (mode == TimerMode.STOPWATCH) headStartMin * 60_000L else 0); headStartMin = 0 }, modifier = Modifier.fillMaxWidth().height(56.dp)) {
+                    Button(onClick = { haptics.performHapticFeedback(HapticFeedbackType.Confirm); vm.start(mode, subjectId, itemId, if (mode == TimerMode.STOPWATCH) headStartMin * 60_000L else 0); headStartMin = 0 }, modifier = Modifier.fillMaxWidth().height(56.dp)) {
                         Icon(Icons.Default.PlayArrow, null)
                         Spacer(Modifier.width(8.dp))
                         Text(stringResource(R.string.timer_start), style = MaterialTheme.typography.titleMedium)
@@ -446,7 +456,7 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel, add
                                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                             ),
                         ) { Icon(if (running) Icons.Default.Pause else Icons.Default.PlayArrow, pauseLabel, Modifier.size(28.dp)) }
-                        Button(onClick = { vm.finish() }, modifier = Modifier.weight(1f).heightIn(min = 52.dp), contentPadding = PaddingValues(horizontal = 12.dp)) {
+                        Button(onClick = { haptics.performHapticFeedback(HapticFeedbackType.Confirm); vm.finish() }, modifier = Modifier.weight(1f).heightIn(min = 52.dp), contentPadding = PaddingValues(horizontal = 12.dp)) {
                             Icon(Icons.Default.Stop, null); Spacer(Modifier.width(6.dp))
                             Text(stringResource(R.string.timer_stop_save), maxLines = 2, textAlign = TextAlign.Center, autoSize = autoSize)
                         }
@@ -463,7 +473,7 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel, add
                         }
                         if (confirmComplete) com.rayaurelius.sophinity.ui.components.CompleteDialog(
                             completable.title, credit, completable.runtimeMin!! * 60L,
-                            onConfirm = { confirmComplete = false; vm.finishCompleted() },
+                            onConfirm = { confirmComplete = false; haptics.performHapticFeedback(HapticFeedbackType.Confirm); vm.finishCompleted() },
                             onDismiss = { confirmComplete = false },
                         )
                     }
@@ -505,7 +515,7 @@ private fun ItemPicker(items: List<LearningItem>, selectedId: Long?, glyphOf: (L
             onClick = { open = true },
             label = { Text(sel?.title ?: stringResource(R.string.item_pick), maxLines = 1, overflow = TextOverflow.Ellipsis) },
             leadingIcon = { Glyph(sel?.let(glyphOf) ?: "scroll", size = 18.dp, fallback = Glyphs.CATEGORY_DEFAULT) },
-            modifier = Modifier.width(170.dp),
+            modifier = Modifier.widthIn(max = 300.dp),
         )
         DropdownMenu(open, { open = false }) {
             DropdownMenuItem(text = { Text(stringResource(R.string.item_nothing)) }, onClick = { onSelect(null); open = false })
@@ -583,7 +593,7 @@ private fun ContinueLearning(snap: Snapshot, timer: TimerState, vm: TodayViewMod
                             val credit = com.rayaurelius.sophinity.domain.MediaTime.creditToCompleteSec(item, snap.secondsForItem(item.id))
                             if (credit != null) {
                                 var confirmComplete by remember { mutableStateOf(false) }
-                                val ctx = androidx.compose.ui.platform.LocalContext.current
+                                val announcer = com.rayaurelius.sophinity.ui.components.rememberAnnouncer()
                                 val res = androidx.compose.ui.platform.LocalResources.current
                                 IconButton(onClick = { confirmComplete = true }, modifier = Modifier.size(36.dp)) {
                                     Icon(Icons.Default.TaskAlt, stringResource(R.string.complete_action), tint = MaterialTheme.colorScheme.primary)
@@ -592,7 +602,9 @@ private fun ContinueLearning(snap: Snapshot, timer: TimerState, vm: TodayViewMod
                                     item.title, credit, item.runtimeMin!! * 60L,
                                     onConfirm = {
                                         confirmComplete = false
-                                        vm.completeItem(item.id) { added -> if (added >= 0) android.widget.Toast.makeText(ctx, completedMessage(res, item.title, added), android.widget.Toast.LENGTH_SHORT).show() }
+                                        vm.completeItem(item.id) { result ->
+                                            result?.let { r -> announcer.show(completedMessage(res, item.title, r.creditSec), res.getString(R.string.common_undo)) { vm.undo(r) } }
+                                        }
                                     },
                                     onDismiss = { confirmComplete = false },
                                 )

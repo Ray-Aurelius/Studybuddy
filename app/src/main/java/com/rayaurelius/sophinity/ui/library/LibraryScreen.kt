@@ -90,15 +90,17 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class LibraryViewModel(private val c: AppContainer) : ViewModel() {
-    val snapshot = c.repo.snapshot.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+    val snapshot = c.snapshot
     /** Keeps any edits, then credits the rest of the item's length and moves it to Finished. */
-    fun saveAndComplete(item: LearningItem, onDone: (Long) -> Unit = {}) = viewModelScope.launch {
+    fun saveAndComplete(item: LearningItem, onDone: (com.rayaurelius.sophinity.data.Completion?) -> Unit = {}) = viewModelScope.launch {
         c.repo.saveItem(item.copy(url = com.rayaurelius.sophinity.domain.Links.normalize(item.url)))
         // If it's the one on the timer, end that session (its time is kept) before completing.
         val t = c.timer.current()
-        if (t.isActive && t.itemId == item.id) { c.timer.finishCompleted(); onDone(-1); return@launch }
+        if (t.isActive && t.itemId == item.id) { c.timer.finishCompleted(); onDone(null); return@launch }
         onDone(c.repo.completeItem(item.id))
     }
+
+    fun undo(done: com.rayaurelius.sophinity.data.Completion) = viewModelScope.launch { c.repo.undo(done) }
 
     fun save(item: LearningItem, onSaved: (Long) -> Unit = {}) = viewModelScope.launch {
         val now = System.currentTimeMillis()
@@ -127,7 +129,11 @@ fun LibraryScreen(contentPadding: PaddingValues) {
     val list = snap.items.filter { it.status == status && (filter == null || filter.matches(it)) }
 
     Box(Modifier.fillMaxSize()) {
+        // The floating button shrinks to its icon once the list scrolls, so it doesn't cover card titles.
+        val listState = androidx.compose.foundation.lazy.rememberLazyListState()
+        val fabExpanded by remember { androidx.compose.runtime.derivedStateOf { listState.firstVisibleItemIndex == 0 } }
         LazyColumn(
+            state = listState,
             contentPadding = PaddingValues(16.dp, contentPadding.calculateTopPadding() + 8.dp, 16.dp, contentPadding.calculateBottomPadding() + 96.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.fillMaxSize(),
@@ -179,14 +185,15 @@ fun LibraryScreen(contentPadding: PaddingValues) {
             }
         }
         ExtendedFloatingActionButton(
+            expanded = fabExpanded,
             onClick = { editing = LearningItem(type = filter?.type ?: ItemType.BOOK, categoryId = filter?.customId, title = "", status = status) },
-            icon = { Icon(Icons.Default.Add, null) },
+            icon = { Icon(Icons.Default.Add, if (fabExpanded) null else stringResource(R.string.common_add)) },
             text = { Text(stringResource(R.string.common_add)) },
             modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = contentPadding.calculateBottomPadding() + 16.dp),
         )
     }
 
-    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val announcer = com.rayaurelius.sophinity.ui.components.rememberAnnouncer()
     val res = androidx.compose.ui.platform.LocalResources.current
     editing?.let { item ->
         ItemEditorSheet(
@@ -196,8 +203,8 @@ fun LibraryScreen(contentPadding: PaddingValues) {
             onDelete = { vm.delete(it); editing = null },
             onCreateCategory = { cat, picked -> vm.saveCategory(cat, picked) },
             onComplete = { done ->
-                vm.saveAndComplete(done) { added ->
-                    if (added >= 0) android.widget.Toast.makeText(ctx, com.rayaurelius.sophinity.ui.today.completedMessage(res, done.title, added), android.widget.Toast.LENGTH_SHORT).show()
+                vm.saveAndComplete(done) { result ->
+                    result?.let { r -> announcer.show(com.rayaurelius.sophinity.ui.today.completedMessage(res, done.title, r.creditSec), res.getString(R.string.common_undo)) { vm.undo(r) } }
                 }
                 editing = null
             },

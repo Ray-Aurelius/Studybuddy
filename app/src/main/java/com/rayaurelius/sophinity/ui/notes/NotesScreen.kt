@@ -69,8 +69,8 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 
 class NotesViewModel(private val c: AppContainer) : ViewModel() {
-    val snapshot = c.repo.snapshot.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
-    val notes = c.repo.notes.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+    val snapshot = c.snapshot
+    val notes = c.notes
     fun save(note: Note) = viewModelScope.launch { c.repo.saveNote(note) }
     fun delete(note: Note) = viewModelScope.launch { c.repo.deleteNote(note) }
 }
@@ -117,7 +117,11 @@ fun NotesScreen(contentPadding: PaddingValues) {
     val shown = NoteFilter.apply(notes, itemFilter, query) { snap.itemsById[it]?.title }
 
     Box(Modifier.fillMaxSize()) {
+        // The floating button shrinks to its icon once the list scrolls, so it doesn't cover card titles.
+        val listState = androidx.compose.foundation.lazy.rememberLazyListState()
+        val fabExpanded by remember { androidx.compose.runtime.derivedStateOf { listState.firstVisibleItemIndex == 0 } }
         LazyColumn(
+            state = listState,
             contentPadding = PaddingValues(16.dp, contentPadding.calculateTopPadding() + 8.dp, 16.dp, contentPadding.calculateBottomPadding() + 96.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier.fillMaxSize(),
@@ -172,11 +176,12 @@ fun NotesScreen(contentPadding: PaddingValues) {
             items(shown, key = { it.id }) { n -> NoteCard(snap, n, onOpen = { editing = n }) }
         }
         ExtendedFloatingActionButton(
+            expanded = fabExpanded,
             onClick = {
                 // A new note starts linked to whatever item the list is filtered to.
                 editing = Note(itemId = itemFilter?.takeIf { it != UNLINKED })
             },
-            icon = { Glyph("quill", size = 22.dp) }, text = { Text(stringResource(R.string.notes_new)) },
+            icon = { Glyph("quill", size = 22.dp, contentDescription = if (fabExpanded) null else stringResource(R.string.notes_new)) }, text = { Text(stringResource(R.string.notes_new)) },
             modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = contentPadding.calculateBottomPadding() + 16.dp),
         )
     }

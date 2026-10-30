@@ -73,7 +73,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 
 class StatsViewModel(private val c: AppContainer) : ViewModel() {
-    val snapshot = c.repo.snapshot.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+    val snapshot = c.snapshot
     fun delete(s: StudySession) = viewModelScope.launch { c.repo.deleteSession(s) }
 }
 

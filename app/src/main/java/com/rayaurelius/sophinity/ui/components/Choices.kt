@@ -27,6 +27,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.layout.onSizeChanged
 import com.rayaurelius.sophinity.data.ChoiceStyle
 
 /** Drop-down menus by default; the learner can switch every choice back to bubbles in Appearance. */
@@ -75,9 +77,26 @@ fun <T> Choices(
         return
     }
     var open by remember { mutableStateOf(false) }
-    ExposedDropdownMenuBox(open, { open = it }, modifier) {
+    val text = label(selected)
+    // Two drop-downs side by side leave little room ("Any subjec…"). Shrink the shown choice to fit,
+    // down to a readable floor, instead of cutting it off. Measured against the real space left
+    // once the icons and padding are taken.
+    val measurer = androidx.compose.ui.text.rememberTextMeasurer()
+    val density = androidx.compose.ui.platform.LocalDensity.current
+    val base = MaterialTheme.typography.bodyLarge
+    var fieldWidthPx by remember { mutableStateOf(0) }
+    val textStyle = remember(text, fieldWidthPx, base, icon != null) {
+        if (fieldWidthPx == 0) base else with(density) {
+            val reserved = (16 + 16 + 48 + (if (icon != null) 48 else 0)).dp.roundToPx()
+            val room = (fieldWidthPx - reserved).coerceAtLeast(1)
+            val natural = measurer.measure(text, base, maxLines = 1, softWrap = false).size.width
+            if (natural <= room) base
+            else base.copy(fontSize = (base.fontSize.value * room / natural).coerceAtLeast(12f).sp)
+        }
+    }
+    ExposedDropdownMenuBox(open, { open = it }, modifier.onSizeChanged { fieldWidthPx = it.width }) {
         OutlinedTextField(
-            value = label(selected), onValueChange = {}, readOnly = true, singleLine = true,
+            value = text, onValueChange = {}, readOnly = true, singleLine = true, textStyle = textStyle,
             label = title?.let { t -> { Text(t) } },
             leadingIcon = icon?.let { ic -> { ic(selected) } },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(open) },

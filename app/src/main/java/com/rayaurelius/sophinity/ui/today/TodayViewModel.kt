@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class TodayViewModel(private val c: AppContainer) : ViewModel() {
-    val snapshot: StateFlow<Snapshot?> = c.repo.snapshot.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+    val snapshot: StateFlow<Snapshot?> = c.snapshot
     val timer: StateFlow<TimerState?> = c.timer.state
 
     private val _reflect = MutableStateFlow<StudySession?>(null)
@@ -73,12 +73,14 @@ class TodayViewModel(private val c: AppContainer) : ViewModel() {
     }
 
     /** "Mark as completed" from a Continue card: credit the rest of the item and move it to Finished. */
-    fun completeItem(itemId: Long, onDone: (Long) -> Unit) = viewModelScope.launch {
+    fun completeItem(itemId: Long, onDone: (com.rayaurelius.sophinity.data.Completion?) -> Unit) = viewModelScope.launch {
         // If it's the one being timed, end that session first so its time is kept.
         val t = c.timer.current()
-        if (t.isActive && t.itemId == itemId) { c.timer.finishCompleted()?.let { _reflect.value = c.repo.getSession(it) }; onDone(-1); return@launch }
+        if (t.isActive && t.itemId == itemId) { c.timer.finishCompleted()?.let { _reflect.value = c.repo.getSession(it) }; onDone(null); return@launch }
         onDone(c.repo.completeItem(itemId))
     }
+
+    fun undo(done: com.rayaurelius.sophinity.data.Completion) = viewModelScope.launch { c.repo.undo(done) }
 
     fun finish() = viewModelScope.launch {
         c.timer.finish()?.let { _reflect.value = c.repo.getSession(it) }

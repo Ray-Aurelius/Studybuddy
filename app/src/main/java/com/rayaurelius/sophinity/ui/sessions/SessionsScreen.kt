@@ -91,13 +91,14 @@ import java.time.Instant
 import java.time.LocalDate
 
 class SessionsViewModel(private val c: AppContainer) : ViewModel() {
-    val snapshot = c.repo.snapshot.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+    val snapshot = c.snapshot
     fun delete(s: StudySession) = viewModelScope.launch { c.repo.deleteSession(s) }
     /** Saves the edits, then stretches the session to cover the rest of its item and finishes the item. */
-    fun complete(s: StudySession, onDone: (Long) -> Unit) = viewModelScope.launch {
+    fun complete(s: StudySession, onDone: (com.rayaurelius.sophinity.data.Completion?) -> Unit) = viewModelScope.launch {
         c.repo.updateSession(s)
         onDone(c.repo.completeFromSession(s.id))
     }
+    fun undo(done: com.rayaurelius.sophinity.data.Completion) = viewModelScope.launch { c.repo.undo(done) }
     fun update(s: StudySession) = viewModelScope.launch { c.repo.updateSession(s) }
     fun addManual(subjectId: Long?, itemId: Long?, startedAt: Long, minutes: Int, note: String) = viewModelScope.launch {
         if (minutes <= 0) return@launch
@@ -140,7 +141,11 @@ fun SessionsScreen(contentPadding: PaddingValues) {
     val subjects = snap.subjects.filter { it.id in usedSubjects }
 
     Box(Modifier.fillMaxSize()) {
+        // The floating button shrinks to its icon once the list scrolls, so it doesn't cover card titles.
+        val listState = androidx.compose.foundation.lazy.rememberLazyListState()
+        val fabExpanded by remember { androidx.compose.runtime.derivedStateOf { listState.firstVisibleItemIndex == 0 } }
         LazyColumn(
+            state = listState,
             contentPadding = PaddingValues(16.dp, contentPadding.calculateTopPadding() + 8.dp, 16.dp, contentPadding.calculateBottomPadding() + 96.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxSize(),
@@ -187,14 +192,15 @@ fun SessionsScreen(contentPadding: PaddingValues) {
             }
         }
         ExtendedFloatingActionButton(
+            expanded = fabExpanded,
             onClick = { showManual = true },
-            icon = { Glyph("quill", size = 22.dp) }, text = { Text(stringResource(R.string.manual_title)) },
+            icon = { Glyph("quill", size = 22.dp, contentDescription = if (fabExpanded) null else stringResource(R.string.manual_title)) }, text = { Text(stringResource(R.string.manual_title)) },
             modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = contentPadding.calculateBottomPadding() + 16.dp),
         )
     }
 
     editing?.let { s ->
-        val ctx = androidx.compose.ui.platform.LocalContext.current
+        val announcer = com.rayaurelius.sophinity.ui.components.rememberAnnouncer()
         val res = androidx.compose.ui.platform.LocalResources.current
         SessionEditor(
             snap, s, onDismiss = { editing = null },
@@ -202,7 +208,9 @@ fun SessionsScreen(contentPadding: PaddingValues) {
             onDelete = { editing = null; confirmDelete = s },
             onComplete = { done ->
                 val title = done.itemId?.let { snap.itemsById[it]?.title }.orEmpty()
-                vm.complete(done) { added -> android.widget.Toast.makeText(ctx, com.rayaurelius.sophinity.ui.today.completedMessage(res, title, added), android.widget.Toast.LENGTH_SHORT).show() }
+                vm.complete(done) { result ->
+                    result?.let { r -> announcer.show(com.rayaurelius.sophinity.ui.today.completedMessage(res, title, r.creditSec), res.getString(R.string.common_undo)) { vm.undo(r) } }
+                }
                 editing = null
             },
         )

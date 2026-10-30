@@ -87,7 +87,7 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 class GoalsViewModel(private val c: AppContainer) : ViewModel() {
-    val snapshot = c.repo.snapshot.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+    val snapshot = c.snapshot
     /** Untitled goals keep a blank title and are described in the current language when shown. */
     fun save(g: Goal) = viewModelScope.launch { c.repo.saveGoal(g.copy(title = g.title.trim())) }
     fun delete(g: Goal) = viewModelScope.launch { c.repo.deleteGoal(g) }
@@ -115,7 +115,11 @@ fun GoalsScreen(contentPadding: PaddingValues) {
     var editing by remember { mutableStateOf<Goal?>(null) }
 
     Box(Modifier.fillMaxSize()) {
+        // The floating button shrinks to its icon once the list scrolls, so it doesn't cover card titles.
+        val listState = androidx.compose.foundation.lazy.rememberLazyListState()
+        val fabExpanded by remember { androidx.compose.runtime.derivedStateOf { listState.firstVisibleItemIndex == 0 } }
         LazyColumn(
+            state = listState,
             contentPadding = PaddingValues(16.dp, contentPadding.calculateTopPadding() + 8.dp, 16.dp, contentPadding.calculateBottomPadding() + 96.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.fillMaxSize(),
@@ -139,8 +143,9 @@ fun GoalsScreen(contentPadding: PaddingValues) {
             }
         }
         ExtendedFloatingActionButton(
+            expanded = fabExpanded,
             onClick = { editing = Goal(title = "", kind = GoalKind.TIME, period = GoalPeriod.WEEKLY, target = 180) },
-            icon = { Icon(Icons.Default.Add, null) }, text = { Text(stringResource(R.string.goals_new)) },
+            icon = { Icon(Icons.Default.Add, if (fabExpanded) null else stringResource(R.string.goals_new)) }, text = { Text(stringResource(R.string.goals_new)) },
             modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = contentPadding.calculateBottomPadding() + 16.dp),
         )
     }

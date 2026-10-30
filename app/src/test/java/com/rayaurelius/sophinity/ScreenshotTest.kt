@@ -66,6 +66,12 @@ class ScreenshotTest {
         hasText(label) and SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Tab)
     ).performClick()
 
+    /** Waits (up to 5 s) for work that finishes off the main thread, such as database writes. */
+    private fun settle(done: () -> Boolean) {
+        repeat(50) { if (done()) return; compose.waitForIdle(); Thread.sleep(100) }
+        compose.waitForIdle()
+    }
+
     private fun shot(name: String) {
         compose.waitForIdle()
         compose.onRoot().captureRoboImage("build/screenshots/$name.png")
@@ -116,8 +122,7 @@ class ScreenshotTest {
         runBlocking { app.container.settingsStore.update { it.copy(linkStartsTimer = false) } }
         tab("Library")
         compose.onNode(hasContentDescription("Open link on audiobooks.example.com")).performClick()
-        compose.waitForIdle()
-        Thread.sleep(500)
+        repeat(10) { compose.waitForIdle(); Thread.sleep(100) } // give a wrongly started timer time to show up
         org.junit.Assert.assertFalse(runBlocking { app.container.timer.current() }.isActive)
     }
 
@@ -264,13 +269,13 @@ class ScreenshotTest {
         val app = ApplicationProvider.getApplicationContext<SophinityApp>()
         app.container.linkFetcher = com.rayaurelius.sophinity.data.LinkFetcher { null }
         app.container.pendingShare.value = "https://vimeo.com/987654#t=90"
-        // The share is handled off the main thread; give it a moment, then the editor is open.
-        Thread.sleep(1_500); compose.waitForIdle()
+        // The share is handled off the main thread; wait for the editor to open.
+        settle { compose.onAllNodes(hasTestTag("link_field")).fetchSemanticsNodes(atLeastOneRootRequired = false).isNotEmpty() }
         compose.onNode(hasTestTag("link_field")).assertTextContains("vimeo.com/987654", substring = true)
         shot("31_share_new_link")
         compose.onNode(hasSetTextAction() and hasText("Title")).performTextInput("A talk")
         compose.onNode(hasText("Save")).performScrollTo().performClick()
-        Thread.sleep(1_000); compose.waitForIdle()
+        settle { runBlocking { app.container.timer.current() }.isActive }
         org.junit.Assert.assertTrue(runBlocking { app.container.timer.current() }.isActive)
         val item = runBlocking { app.container.repo.snapshot.first().items.first { it.title == "A talk" } }
         org.junit.Assert.assertEquals("https://vimeo.com/987654", item.url)
@@ -290,9 +295,7 @@ class ScreenshotTest {
         compose.onNode(hasText("counts as 9h 30m in total", substring = true)).assertExists()
         shot("32_mark_completed")
         compose.onNode(hasText("Complete")).performClick()
-        // Saving runs off the main thread; let it settle (up to 5 s) rather than guess a fixed wait.
-        repeat(50) { if (!runBlocking { app.container.timer.current() }.isActive) return@repeat; compose.waitForIdle(); Thread.sleep(100) }
-        compose.waitForIdle()
+        settle { !runBlocking { app.container.timer.current() }.isActive }
         org.junit.Assert.assertFalse(runBlocking { app.container.timer.current() }.isActive)
         org.junit.Assert.assertEquals(9 * 3600L + 30 * 60, runBlocking { app.container.repo.secondsForItem(audiobookId) })
     }

@@ -35,18 +35,33 @@ class CompletionTest {
     @Test fun completingFromTheLibraryLogsTheRestAndFinishesIt() = runBlocking {
         val id = c.repo.saveItem(video)
         c.repo.addSession(StudySession(itemId = id, startedAt = 1_000, durationSec = 20 * 60))
-        assertEquals(21 * 60L, c.repo.completeItem(id, now = 10_000_000))
+        assertEquals(21 * 60L, c.repo.completeItem(id, now = 10_000_000)!!.creditSec)
         assertEquals(41 * 60L, c.repo.secondsForItem(id))
         assertEquals(ItemStatus.DONE, c.repo.getItem(id)!!.status)
         // Completing again adds nothing more.
-        assertEquals(0L, c.repo.completeItem(id))
+        val again = c.repo.completeItem(id)!!
+        assertEquals(0L, again.creditSec)
         assertEquals(41 * 60L, c.repo.secondsForItem(id))
+    }
+
+    @Test fun completingCanBeUndone() = runBlocking {
+        val id = c.repo.saveItem(video)
+        val sid = c.repo.addSession(StudySession(itemId = id, startedAt = 1_000, durationSec = 20 * 60))
+        val fromLibrary = c.repo.completeItem(id)!!
+        c.repo.undo(fromLibrary)
+        assertEquals(20 * 60L, c.repo.secondsForItem(id))
+        assertEquals(ItemStatus.ACTIVE, c.repo.getItem(id)!!.status)
+        val fromSession = c.repo.completeFromSession(sid)!!
+        assertEquals(41 * 60L, c.repo.getSession(sid)!!.durationSec)
+        c.repo.undo(fromSession)
+        assertEquals(20 * 60L, c.repo.getSession(sid)!!.durationSec)
+        assertEquals(ItemStatus.ACTIVE, c.repo.getItem(id)!!.status)
     }
 
     @Test fun completingALoggedSessionStretchesIt() = runBlocking {
         val id = c.repo.saveItem(video)
         val sid = c.repo.addSession(StudySession(itemId = id, startedAt = 1_000, durationSec = 15 * 60))
-        assertEquals(26 * 60L, c.repo.completeFromSession(sid))
+        assertEquals(26 * 60L, c.repo.completeFromSession(sid)!!.creditSec)
         assertEquals(41 * 60L, c.repo.getSession(sid)!!.durationSec)
         assertEquals(1, c.repo.sessions.first().count { it.itemId == id })
         assertEquals(ItemStatus.DONE, c.repo.getItem(id)!!.status)

@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 /** Hand-rolled DI: small app, few singletons, no annotation processing to debug. */
@@ -30,6 +31,16 @@ class AppContainer(context: Context) {
     val settingsStore = SettingsStore(context)
     val repo = StudyRepository(db, settingsStore)
     val timer = TimerController(context, repo, appScope)
+    /**
+     * One live view of the learner's data for the whole app, kept warm and computed off the main
+     * thread. Every screen reads it, so switching tabs shows content at once instead of a blank
+     * frame while each screen recomputed streaks, goals and stats from scratch.
+     */
+    val snapshot: kotlinx.coroutines.flow.StateFlow<com.rayaurelius.sophinity.data.Snapshot?> =
+        repo.snapshot.stateIn(appScope, kotlinx.coroutines.flow.SharingStarted.Eagerly, null)
+    val notes: kotlinx.coroutines.flow.StateFlow<List<com.rayaurelius.sophinity.data.db.Note>?> =
+        repo.notes.stateIn(appScope, kotlinx.coroutines.flow.SharingStarted.Eagerly, null)
+
     /** Reads details from links pasted into the library. Replaced with a fake in tests. */
     var linkFetcher: com.rayaurelius.sophinity.data.LinkFetcher = com.rayaurelius.sophinity.data.LinkFetcher()
 

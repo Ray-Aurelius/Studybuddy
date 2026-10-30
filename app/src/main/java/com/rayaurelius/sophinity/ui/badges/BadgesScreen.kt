@@ -54,7 +54,7 @@ import java.time.Instant
 import java.time.format.DateTimeFormatter
 
 class BadgesViewModel(c: AppContainer) : ViewModel() {
-    val snapshot = c.repo.snapshot.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+    val snapshot = c.snapshot
 }
 
 @Composable

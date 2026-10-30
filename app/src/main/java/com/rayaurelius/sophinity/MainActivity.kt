@@ -71,6 +71,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.indication
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -205,7 +207,12 @@ private fun AppShell(settings: AppSettings) {
                 if (showRail && settings.navPosition == NavPosition.LEFT) RestoreDirection { rail() }
                 Box(Modifier.weight(1f).fillMaxHeight()) {
                     RestoreDirection {
+                        val snackbars = androidx.compose.runtime.remember { androidx.compose.material3.SnackbarHostState() }
+                        val shellScope = androidx.compose.runtime.rememberCoroutineScope()
+                        val ctx = androidx.compose.ui.platform.LocalContext.current
+                        val announcer = androidx.compose.runtime.remember { com.rayaurelius.sophinity.ui.components.Announcer(snackbars, shellScope, ctx) }
                         Scaffold(
+                            snackbarHost = { androidx.compose.material3.SnackbarHost(snackbars) },
                             modifier = Modifier.fillMaxSize(),
                             containerColor = Color.Transparent,
                             contentColor = MaterialTheme.colorScheme.onBackground,
@@ -217,7 +224,10 @@ private fun AppShell(settings: AppSettings) {
                                 }
                             },
                         ) { pad ->
-                            CompositionLocalProvider(LocalOpenSettings provides { nav.navigate(SettingsRoute) { launchSingleTop = true } }) {
+                            CompositionLocalProvider(
+                                LocalOpenSettings provides { nav.navigate(SettingsRoute) { launchSingleTop = true } },
+                                com.rayaurelius.sophinity.ui.components.LocalAnnouncer provides announcer,
+                            ) {
                             NavHost(nav, startDestination = TodayRoute) {
                                 composable<TodayRoute> {
                                     TodayScreen(pad, onOpenSettings = { nav.navigate(SettingsRoute) }, onOpenGoals = { go(GoalsRoute) }, onOpenBadges = { go(BadgesRoute) })
@@ -288,16 +298,20 @@ private fun BottomBar(tabs: List<Tab>, isSelected: (Tab) -> Boolean, showLabels:
             tabs.forEach { t ->
                 val selected = isSelected(t)
                 val label = stringResource(t.label)
+                // The press ripple belongs inside the pill (as in Material's own navigation bar),
+                // not across the whole tab, which left a grey box behind the last tab tapped.
+                val press = androidx.compose.runtime.remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
                 Column(
                     Modifier.weight(1f).fillMaxHeight()
-                        .selectable(selected = selected, role = Role.Tab, onClick = { onClick(t) })
+                        .selectable(selected = selected, role = Role.Tab, interactionSource = press, indication = null, onClick = { onClick(t) })
                         .semantics { if (!showLabels) contentDescription = label },
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
                     Box(
                         Modifier.fillMaxWidth(0.86f).widthIn(max = 64.dp).height(32.dp).clip(CircleShape)
-                            .background(if (selected) scheme.secondaryContainer else Color.Transparent),
+                            .background(animateColorAsState(if (selected) scheme.secondaryContainer else Color.Transparent, label = "pill").value)
+                            .indication(press, androidx.compose.material3.ripple()),
                         contentAlignment = Alignment.Center,
                     ) {
                         Glyph(t.glyph, size = 24.dp, tint = if (selected) scheme.onSecondaryContainer else scheme.onSurfaceVariant)
