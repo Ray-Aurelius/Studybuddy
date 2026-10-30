@@ -651,6 +651,14 @@
     <string name="discard_body">สิ่งที่คุณกรอกไว้ที่นี่ยังไม่ได้บันทึก</string>
     <string name="discard_keep">แก้ไขต่อ</string>
     <string name="discard_confirm">ทิ้ง</string>
+    <string name="set_links">ลิงก์เว็บ</string>
+    <string name="set_link_autofill">กรอกรายละเอียดจากลิงก์</string>
+    <string name="set_link_autofill_sub">เมื่อคุณวางลิงก์ในคลัง Sophinity จะอ่านหน้านั้นเพื่อกรอกช่องที่ว่าง เช่น ชื่อเรื่อง ผู้แต่ง และความยาว โดยติดต่อเฉพาะเว็บไซต์นั้นเท่านั้น</string>
+    <string name="lib_link_hint_autofill">วางลิงก์แล้วรายละเอียดจะกรอกให้อัตโนมัติ</string>
+    <string name="lib_link_looking">กำลังค้นหารายละเอียด…</string>
+    <string name="lib_link_filled">กรอกรายละเอียดจาก %1$s แล้ว</string>
+    <string name="lib_link_nothing">ไม่พบรายละเอียดในหน้านั้น คุณกรอกเองได้</string>
+    <string name="common_undo">เลิกทำ</string>
     <plurals name="count_book">
         <item quantity="other">หนังสือ %d เล่ม</item>
     </plurals>

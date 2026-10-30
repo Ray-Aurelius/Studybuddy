@@ -30,6 +30,8 @@ class AppContainer(context: Context) {
     val settingsStore = SettingsStore(context)
     val repo = StudyRepository(db, settingsStore)
     val timer = TimerController(context, repo, appScope)
+    /** Reads details from links pasted into the library. Replaced with a fake in tests. */
+    var linkFetcher: com.rayaurelius.sophinity.data.LinkFetcher = com.rayaurelius.sophinity.data.LinkFetcher()
 
     /** Session id waiting for a reflection (set from a notification tap). */
     val pendingReflection = MutableStateFlow<Long?>(null)

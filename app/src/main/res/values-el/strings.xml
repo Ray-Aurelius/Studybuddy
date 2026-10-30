@@ -651,6 +651,14 @@
     <string name="discard_body">Όσα έγραψες εδώ δεν έχουν αποθηκευτεί ακόμα.</string>
     <string name="discard_keep">Συνέχεια επεξεργασίας</string>
     <string name="discard_confirm">Απόρριψη</string>
+    <string name="set_links">Σύνδεσμοι</string>
+    <string name="set_link_autofill">Συμπλήρωση στοιχείων από συνδέσμους</string>
+    <string name="set_link_autofill_sub">Όταν επικολλάς σύνδεσμο στη βιβλιοθήκη, το Sophinity διαβάζει εκείνη τη σελίδα για να συμπληρώσει κενά πεδία, όπως τίτλο, συγγραφέα και διάρκεια. Επικοινωνεί μόνο με αυτόν τον ιστότοπο.</string>
+    <string name="lib_link_hint_autofill">Επικόλλησε έναν σύνδεσμο και τα στοιχεία συμπληρώνονται μόνα τους</string>
+    <string name="lib_link_looking">Αναζήτηση στοιχείων…</string>
+    <string name="lib_link_filled">Στοιχεία από %1$s</string>
+    <string name="lib_link_nothing">Δεν βρέθηκαν στοιχεία σε αυτή τη σελίδα. Μπορείς να τα συμπληρώσεις εσύ.</string>
+    <string name="common_undo">Αναίρεση</string>
     <plurals name="count_book">
         <item quantity="one">%d βιβλίο</item>
         <item quantity="other">%d βιβλία</item>

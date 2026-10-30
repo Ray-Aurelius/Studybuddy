@@ -651,6 +651,14 @@
     <string name="discard_body">Yang kamu isi di sini belum disimpan.</string>
     <string name="discard_keep">Lanjutkan mengedit</string>
     <string name="discard_confirm">Buang</string>
+    <string name="set_links">Tautan web</string>
+    <string name="set_link_autofill">Isi detail dari tautan</string>
+    <string name="set_link_autofill_sub">Saat kamu menempelkan tautan ke pustaka, Sophinity membaca halaman itu untuk mengisi kolom kosong seperti judul, penulis, dan durasi. Hanya situs itu yang dihubungi.</string>
+    <string name="lib_link_hint_autofill">Tempel tautan dan detailnya terisi otomatis</string>
+    <string name="lib_link_looking">Mencari detail…</string>
+    <string name="lib_link_filled">Detail diisi dari %1$s</string>
+    <string name="lib_link_nothing">Tidak ada detail di halaman itu. Kamu bisa mengisinya sendiri.</string>
+    <string name="common_undo">Urungkan</string>
     <plurals name="count_book">
         <item quantity="other">%d buku</item>
     </plurals>

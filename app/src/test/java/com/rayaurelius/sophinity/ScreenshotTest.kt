@@ -205,6 +205,28 @@ class ScreenshotTest {
         compose.onNode(hasText("Meditations")).assertExists()
     }
 
+    @Test fun pastingALinkFillsInTheDetails() {
+        val app = ApplicationProvider.getApplicationContext<SophinityApp>()
+        app.container.linkFetcher = object : com.rayaurelius.sophinity.data.LinkFetcher({ null }) {
+            override suspend fun lookup(url: String) = com.rayaurelius.sophinity.domain.LinkDetails(
+                title = "How Memory Works", creator = "Brain Lab", type = com.rayaurelius.sophinity.data.db.ItemType.VIDEO, durationSec = 3_750,
+            )
+        }
+        compose.onNode(hasText("Add to library")).performClick()
+        compose.waitForIdle()
+        compose.onNode(hasTestTag("link_field")).performTextInput("youtube.com/watch?v=abc")
+        compose.mainClock.advanceTimeBy(1_000)
+        compose.waitUntil(5_000) { compose.onAllNodes(hasText("Details filled in from youtube.com")).fetchSemanticsNodes().isNotEmpty() }
+        compose.onNode(hasText("How Memory Works")).assertExists()
+        compose.onNode(hasText("Brain Lab")).assertExists()
+        compose.onNode(hasText("Video")).assertExists()
+        shot("28_link_autofill")
+        compose.onNode(hasText("Undo")).performClick()
+        compose.waitForIdle()
+        compose.onNode(hasText("How Memory Works")).assertDoesNotExist()
+        compose.onNode(hasText("Book")).assertExists()
+    }
+
     @Test fun anUntouchedEditorStillSwipesAway() {
         compose.onNode(hasText("Add to library")).performClick()
         compose.waitForIdle()

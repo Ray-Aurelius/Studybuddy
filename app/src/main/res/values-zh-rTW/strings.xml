@@ -651,6 +651,14 @@
     <string name="discard_body">你在這裡填寫的內容還沒有儲存。</string>
     <string name="discard_keep">繼續編輯</string>
     <string name="discard_confirm">捨棄</string>
+    <string name="set_links">網頁連結</string>
+    <string name="set_link_autofill">從連結填寫詳細資料</string>
+    <string name="set_link_autofill_sub">在資料庫中貼上連結時，Sophinity 會讀取該頁面，填寫標題、作者、時長等空白欄位。只會連線到該網站。</string>
+    <string name="lib_link_hint_autofill">貼上連結即可自動填寫詳細資料</string>
+    <string name="lib_link_looking">正在查詢詳細資料…</string>
+    <string name="lib_link_filled">已從 %1$s 填寫詳細資料</string>
+    <string name="lib_link_nothing">該頁面找不到詳細資料，你可以自行填寫。</string>
+    <string name="common_undo">復原</string>
     <plurals name="count_book">
         <item quantity="other">%d 本書</item>
     </plurals>

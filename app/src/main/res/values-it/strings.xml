@@ -651,6 +651,14 @@
     <string name="discard_body">Quello che hai inserito qui non è ancora stato salvato.</string>
     <string name="discard_keep">Continua a modificare</string>
     <string name="discard_confirm">Annulla modifiche</string>
+    <string name="set_links">Link web</string>
+    <string name="set_link_autofill">Compila i dettagli dai link</string>
+    <string name="set_link_autofill_sub">Quando incolli un link nella libreria, Sophinity legge quella pagina per compilare i campi vuoti come titolo, autore e durata. Viene contattato solo quel sito.</string>
+    <string name="lib_link_hint_autofill">Incolla un link e i dettagli vengono compilati per te</string>
+    <string name="lib_link_looking">Ricerca dei dettagli…</string>
+    <string name="lib_link_filled">Dettagli compilati da %1$s</string>
+    <string name="lib_link_nothing">Nessun dettaglio trovato su quella pagina. Puoi inserirli tu.</string>
+    <string name="common_undo">Annulla</string>
     <plurals name="count_book">
         <item quantity="one">%d libro</item>
         <item quantity="many">%d di libri</item>

@@ -651,6 +651,14 @@
     <string name="discard_body">आपने यहाँ जो भरा है, वह अभी सेव नहीं हुआ है।</string>
     <string name="discard_keep">एडिट करते रहें</string>
     <string name="discard_confirm">छोड़ दें</string>
+    <string name="set_links">वेब लिंक</string>
+    <string name="set_link_autofill">लिंक से जानकारी भरें</string>
+    <string name="set_link_autofill_sub">जब आप अपनी लाइब्रेरी में लिंक पेस्ट करते हैं, तो Sophinity उस पेज को पढ़कर शीर्षक, लेखक और अवधि जैसे खाली फ़ील्ड भरता है। सिर्फ़ उसी वेबसाइट से संपर्क होता है।</string>
+    <string name="lib_link_hint_autofill">लिंक पेस्ट करें, जानकारी अपने-आप भर जाएगी</string>
+    <string name="lib_link_looking">जानकारी खोजी जा रही है…</string>
+    <string name="lib_link_filled">%1$s से जानकारी भरी गई</string>
+    <string name="lib_link_nothing">उस पेज पर कोई जानकारी नहीं मिली। आप इसे खुद भर सकते हैं।</string>
+    <string name="common_undo">पहले जैसा करें</string>
     <plurals name="count_book">
         <item quantity="one">%d किताब</item>
         <item quantity="other">%d किताबें</item>

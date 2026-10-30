@@ -651,6 +651,14 @@
     <string name="discard_body">Những gì bạn đã nhập ở đây chưa được lưu.</string>
     <string name="discard_keep">Tiếp tục chỉnh sửa</string>
     <string name="discard_confirm">Bỏ</string>
+    <string name="set_links">Liên kết web</string>
+    <string name="set_link_autofill">Điền thông tin từ liên kết</string>
+    <string name="set_link_autofill_sub">Khi bạn dán liên kết vào thư viện, Sophinity đọc trang đó để điền các ô còn trống như tiêu đề, tác giả và thời lượng. Chỉ trang web đó được truy cập.</string>
+    <string name="lib_link_hint_autofill">Dán liên kết và thông tin sẽ được điền sẵn</string>
+    <string name="lib_link_looking">Đang tìm thông tin…</string>
+    <string name="lib_link_filled">Đã điền thông tin từ %1$s</string>
+    <string name="lib_link_nothing">Không tìm thấy thông tin trên trang đó. Bạn có thể tự điền.</string>
+    <string name="common_undo">Hoàn tác</string>
     <plurals name="count_book">
         <item quantity="other">%d cuốn sách</item>
     </plurals>

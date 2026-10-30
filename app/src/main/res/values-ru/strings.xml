@@ -651,6 +651,14 @@
     <string name="discard_body">То, что вы здесь ввели, ещё не сохранено.</string>
     <string name="discard_keep">Продолжить</string>
     <string name="discard_confirm">Отменить</string>
+    <string name="set_links">Веб-ссылки</string>
+    <string name="set_link_autofill">Заполнять данные по ссылке</string>
+    <string name="set_link_autofill_sub">Когда вы вставляете ссылку в библиотеку, Sophinity читает эту страницу и заполняет пустые поля: название, автора, длительность. Связь идёт только с этим сайтом.</string>
+    <string name="lib_link_hint_autofill">Вставьте ссылку — данные заполнятся сами</string>
+    <string name="lib_link_looking">Ищем данные…</string>
+    <string name="lib_link_filled">Данные взяты с %1$s</string>
+    <string name="lib_link_nothing">На этой странице данных не нашлось. Можно заполнить их вручную.</string>
+    <string name="common_undo">Отменить</string>
     <plurals name="count_book">
         <item quantity="one">%d книга</item>
         <item quantity="few">%d книги</item>

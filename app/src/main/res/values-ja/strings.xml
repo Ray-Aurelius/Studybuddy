@@ -651,6 +651,14 @@
     <string name="discard_body">ここで入力した内容はまだ保存されていません。</string>
     <string name="discard_keep">編集を続ける</string>
     <string name="discard_confirm">破棄</string>
+    <string name="set_links">Webリンク</string>
+    <string name="set_link_autofill">リンクから詳細を入力</string>
+    <string name="set_link_autofill_sub">ライブラリにリンクを貼り付けると、Sophinityがそのページを読み取り、タイトル・著者・再生時間などの空欄を埋めます。通信するのはそのWebサイトだけです。</string>
+    <string name="lib_link_hint_autofill">リンクを貼り付けると詳細が自動で入力されます</string>
+    <string name="lib_link_looking">詳細を検索しています…</string>
+    <string name="lib_link_filled">%1$sから詳細を入力しました</string>
+    <string name="lib_link_nothing">このページでは詳細が見つかりませんでした。手動で入力できます。</string>
+    <string name="common_undo">元に戻す</string>
     <plurals name="count_book">
         <item quantity="other">%d冊の本</item>
     </plurals>

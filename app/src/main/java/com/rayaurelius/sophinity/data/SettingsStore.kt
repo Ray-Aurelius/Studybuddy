@@ -68,6 +68,8 @@ data class AppSettings(
     val choiceStyle: ChoiceStyle = ChoiceStyle.DROPDOWN,
     /** Opening a library item's web link starts (or switches) the stopwatch to that item. */
     val linkStartsTimer: Boolean = true,
+    /** Pasting a link into a library item reads that page to fill in empty fields. */
+    val linkAutofill: Boolean = true,
     val lastSubjectId: Long? = null,
     /** Highest title rank already celebrated, so each new title is celebrated once. */
     val seenTitleRank: Int = 1,
@@ -113,6 +115,7 @@ class SettingsStore(private val context: Context) {
         val seenTitle = intPreferencesKey("seen_title_rank")
         val choiceStyle = stringPreferencesKey("choice_style")
         val linkTimer = booleanPreferencesKey("link_starts_timer")
+        val linkAutofill = booleanPreferencesKey("link_autofill")
         val autoBackup = booleanPreferencesKey("auto_backup")
         val backupFolder = stringPreferencesKey("backup_folder")
         val lastBackup = longPreferencesKey("last_backup_at")
@@ -155,6 +158,7 @@ class SettingsStore(private val context: Context) {
             if (s.lastSubjectId != null) prefs[K.lastSubject] = s.lastSubjectId else prefs.remove(K.lastSubject)
             prefs[K.choiceStyle] = s.choiceStyle.name
             prefs[K.linkTimer] = s.linkStartsTimer
+            prefs[K.linkAutofill] = s.linkAutofill
             prefs[K.autoBackup] = s.autoBackup
             if (s.backupFolder != null) prefs[K.backupFolder] = s.backupFolder else prefs.remove(K.backupFolder)
             if (s.lastBackupAt != null) prefs[K.lastBackup] = s.lastBackupAt else prefs.remove(K.lastBackup)
@@ -193,6 +197,7 @@ class SettingsStore(private val context: Context) {
             seenTitleRank = this[K.seenTitle] ?: d.seenTitleRank,
             choiceStyle = this[K.choiceStyle]?.let { runCatching { ChoiceStyle.valueOf(it) }.getOrNull() } ?: d.choiceStyle,
             linkStartsTimer = this[K.linkTimer] ?: d.linkStartsTimer,
+            linkAutofill = this[K.linkAutofill] ?: d.linkAutofill,
             autoBackup = this[K.autoBackup] ?: d.autoBackup,
             backupFolder = this[K.backupFolder],
             lastBackupAt = this[K.lastBackup],

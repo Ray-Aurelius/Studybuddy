@@ -35,6 +35,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.ui.platform.testTag
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
@@ -269,6 +272,29 @@ fun ItemEditorSheet(
     var newCategory by remember { mutableStateOf(false) }
     val isNew = initial.id == 0L
     val cat = snap.categoryOf(item)
+
+    // Pasting a link fills in what the page says (title, author, kind, run time, pages), but only
+    // into empty fields, only for a link the person entered here, and it can be undone.
+    val app = androidx.compose.ui.platform.LocalContext.current.applicationContext as? com.rayaurelius.sophinity.SophinityApp
+    var lookup by remember { mutableStateOf<LinkLookup>(LinkLookup.Idle) }
+    var typePicked by remember { mutableStateOf(false) }
+    val linkUrl = com.rayaurelius.sophinity.domain.Links.normalize(item.url)
+    val startUrl = remember { com.rayaurelius.sophinity.domain.Links.normalize(initial.url) }
+    androidx.compose.runtime.LaunchedEffect(linkUrl) {
+        val wanted = snap.settings.linkAutofill && app != null && linkUrl != startUrl &&
+            com.rayaurelius.sophinity.domain.Links.isOpenable(linkUrl) && (lookup as? LinkLookup.Filled)?.url != linkUrl
+        if (!wanted) { if (lookup == LinkLookup.Looking) lookup = LinkLookup.Idle; return@LaunchedEffect }
+        kotlinx.coroutines.delay(700) // wait until they've finished typing or pasting
+        lookup = LinkLookup.Looking
+        val details = app!!.container.linkFetcher.lookup(linkUrl)
+        if (details == null) { lookup = LinkLookup.NothingFound; return@LaunchedEffect }
+        val before = item
+        val (after, fields) = com.rayaurelius.sophinity.domain.LinkAutofill.apply(before, details, allowTypeChange = isNew && !typePicked)
+        if (fields.isEmpty()) { lookup = LinkLookup.Idle; return@LaunchedEffect }
+        item = after
+        lookup = LinkLookup.Filled(linkUrl, before, fields)
+    }
+
     com.rayaurelius.sophinity.ui.components.EditorSheet(dirty = item != remember { initial }, onDismiss = onDismiss) {
         Column(
             Modifier.padding(horizontal = 24.dp).padding(bottom = 24.dp).verticalScroll(rememberScrollState()).imePadding(),
@@ -278,23 +304,17 @@ fun ItemEditorSheet(
             val catOptions = snap.categories + listOfNotNull(cat.takeIf { it == com.rayaurelius.sophinity.domain.Categories.OTHER })
             Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Choices(
-                    catOptions, cat, { c -> if (c != com.rayaurelius.sophinity.domain.Categories.OTHER) item = item.copy(type = c.type, categoryId = c.customId) },
+                    catOptions, cat, { c -> if (c != com.rayaurelius.sophinity.domain.Categories.OTHER) { item = item.copy(type = c.type, categoryId = c.customId); typePicked = true } },
                     label = { it.label.str() }, icon = { Glyph(it.glyph, size = 20.dp, fallback = Glyphs.CATEGORY_DEFAULT) },
                     title = stringResource(R.string.choice_type), modifier = Modifier.weight(1f),
                 )
                 IconButton(onClick = { newCategory = true }) { Icon(Icons.Default.Add, stringResource(R.string.lib_new_category)) }
             }
-            OutlinedTextField(item.title, { item = item.copy(title = it) }, label = { Text(stringResource(R.string.lib_field_title)) }, singleLine = true, modifier = Modifier.fillMaxWidth())
-            OutlinedTextField(
-                item.creator, { item = item.copy(creator = it) },
-                label = { Text(stringResource(when (item.type) { ItemType.BOOK, ItemType.ARTICLE -> R.string.lib_author; ItemType.AUDIOBOOK -> R.string.lib_author_narrator; ItemType.PODCAST -> R.string.lib_host; ItemType.SEMINAR -> R.string.lib_speaker; else -> R.string.lib_creator })) },
-                singleLine = true, modifier = Modifier.fillMaxWidth(),
-            )
             OutlinedTextField(
                 item.url, { item = item.copy(url = it.take(2000)) },
                 label = { Text(stringResource(R.string.lib_link)) },
                 placeholder = { Text("https://") },
-                supportingText = { Text(stringResource(R.string.lib_link_hint)) },
+                supportingText = { Text(stringResource(if (snap.settings.linkAutofill && linkUrl == startUrl && item.url.isBlank()) R.string.lib_link_hint_autofill else R.string.lib_link_hint)) },
                 singleLine = true,
                 keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Uri),
                 trailingIcon = {
@@ -306,7 +326,17 @@ fun ItemEditorSheet(
                         }
                     }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().testTag("link_field"),
+            )
+            LinkLookupStatus(lookup, onUndo = { f ->
+                item = com.rayaurelius.sophinity.domain.LinkAutofill.undo(item, f.before, f.fields)
+                lookup = LinkLookup.Idle
+            })
+            OutlinedTextField(item.title, { item = item.copy(title = it) }, label = { Text(stringResource(R.string.lib_field_title)) }, singleLine = true, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(
+                item.creator, { item = item.copy(creator = it) },
+                label = { Text(stringResource(when (item.type) { ItemType.BOOK, ItemType.ARTICLE -> R.string.lib_author; ItemType.AUDIOBOOK -> R.string.lib_author_narrator; ItemType.PODCAST -> R.string.lib_host; ItemType.SEMINAR -> R.string.lib_speaker; else -> R.string.lib_creator })) },
+                singleLine = true, modifier = Modifier.fillMaxWidth(),
             )
             Choices(
                 ItemStatus.entries, item.status, { item = item.copy(status = it) }, label = { stringResource(it.labelRes) },
@@ -374,5 +404,39 @@ fun ItemEditorSheet(
                 newCategory = false
             },
         )
+    }
+}
+
+/** Where looking up a pasted link has got to. */
+private sealed interface LinkLookup {
+    data object Idle : LinkLookup
+    data object Looking : LinkLookup
+    data object NothingFound : LinkLookup
+    data class Filled(val url: String, val before: LearningItem, val fields: Set<com.rayaurelius.sophinity.domain.LinkAutofill.Field>) : LinkLookup
+}
+
+@Composable
+private fun LinkLookupStatus(state: LinkLookup, onUndo: (LinkLookup.Filled) -> Unit) {
+    val muted = MaterialTheme.colorScheme.onSurfaceVariant
+    when (state) {
+        LinkLookup.Idle -> Unit
+        LinkLookup.Looking -> Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 4.dp)) {
+            androidx.compose.material3.CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
+            Spacer(Modifier.width(10.dp))
+            Text(stringResource(R.string.lib_link_looking), style = MaterialTheme.typography.bodySmall, color = muted)
+        }
+        LinkLookup.NothingFound -> Text(stringResource(R.string.lib_link_nothing), style = MaterialTheme.typography.bodySmall, color = muted,
+            modifier = Modifier.padding(start = 4.dp))
+        is LinkLookup.Filled -> androidx.compose.material3.Surface(
+            shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.secondaryContainer, modifier = Modifier.fillMaxWidth(),
+        ) {
+            Row(Modifier.padding(start = 12.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Default.Check, null, Modifier.size(18.dp), tint = MaterialTheme.colorScheme.onSecondaryContainer)
+                Spacer(Modifier.width(10.dp))
+                Text(stringResource(R.string.lib_link_filled, com.rayaurelius.sophinity.domain.Links.host(state.url)),
+                    style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSecondaryContainer, modifier = Modifier.weight(1f))
+                TextButton(onClick = { onUndo(state) }) { Text(stringResource(R.string.common_undo)) }
+            }
+        }
     }
 }

@@ -651,6 +651,14 @@
     <string name="discard_body">ما أدخلته هنا لم يُحفظ بعد.</string>
     <string name="discard_keep">متابعة التعديل</string>
     <string name="discard_confirm">تجاهل</string>
+    <string name="set_links">روابط الويب</string>
+    <string name="set_link_autofill">ملء التفاصيل من الروابط</string>
+    <string name="set_link_autofill_sub">عند لصق رابط في مكتبتك، يقرأ Sophinity تلك الصفحة لملء الحقول الفارغة مثل العنوان والمؤلف والمدة. لا يتم الاتصال إلا بذلك الموقع.</string>
+    <string name="lib_link_hint_autofill">الصق رابطًا وستُملأ التفاصيل تلقائيًا</string>
+    <string name="lib_link_looking">جارٍ البحث عن التفاصيل…</string>
+    <string name="lib_link_filled">مُلئت التفاصيل من %1$s</string>
+    <string name="lib_link_nothing">لم يُعثر على تفاصيل في تلك الصفحة. يمكنك ملؤها بنفسك.</string>
+    <string name="common_undo">تراجع</string>
     <plurals name="count_book">
         <item quantity="zero">لا كتب</item>
         <item quantity="one">كتاب واحد</item>

@@ -651,6 +651,14 @@
     <string name="discard_body">To, co tu wpisano, nie zostało jeszcze zapisane.</string>
     <string name="discard_keep">Edytuj dalej</string>
     <string name="discard_confirm">Odrzuć</string>
+    <string name="set_links">Linki</string>
+    <string name="set_link_autofill">Uzupełniaj dane z linków</string>
+    <string name="set_link_autofill_sub">Po wklejeniu linku do biblioteki Sophinity odczytuje tę stronę i uzupełnia puste pola, takie jak tytuł, autor i czas trwania. Łączy się tylko z tą witryną.</string>
+    <string name="lib_link_hint_autofill">Wklej link, a dane uzupełnią się same</string>
+    <string name="lib_link_looking">Wyszukiwanie danych…</string>
+    <string name="lib_link_filled">Dane uzupełnione z %1$s</string>
+    <string name="lib_link_nothing">Na tej stronie nie znaleziono danych. Możesz wpisać je sam(a).</string>
+    <string name="common_undo">Cofnij</string>
     <plurals name="count_book">
         <item quantity="one">%d książka</item>
         <item quantity="few">%d książki</item>

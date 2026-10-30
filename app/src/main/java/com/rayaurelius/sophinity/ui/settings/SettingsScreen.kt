@@ -322,13 +322,6 @@ fun SettingsScreen(
 
             item { Header(stringResource(R.string.set_timer)) }
             item { Stepper(stringResource(R.string.set_focus_block), StudyMath.formatDuration(s.focusMinutes * 60L), s.focusMinutes, 5, 120, step = 5) { v -> vm.update { it.copy(focusMinutes = v) } } }
-            item {
-                ListItem(
-                    headlineContent = { Text(stringResource(R.string.set_link_timer)) },
-                    supportingContent = { Text(stringResource(R.string.set_link_timer_sub)) },
-                    trailingContent = { Switch(s.linkStartsTimer, { on -> vm.update { it.copy(linkStartsTimer = on) } }) },
-                )
-            }
             item { Stepper(stringResource(R.string.set_break), StudyMath.formatDuration(s.breakMinutes * 60L), s.breakMinutes, 1, 30) { v -> vm.update { it.copy(breakMinutes = v) } } }
             if (!TimerAlarms.canBeExact(ctx) && Build.VERSION.SDK_INT >= 31) {
                 item {
@@ -340,6 +333,23 @@ fun SettingsScreen(
                         },
                     )
                 }
+            }
+            item { HorizontalDivider() }
+
+            item { Header(stringResource(R.string.set_links)) }
+            item {
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.set_link_autofill)) },
+                    supportingContent = { Text(stringResource(R.string.set_link_autofill_sub)) },
+                    trailingContent = { Switch(s.linkAutofill, { on -> vm.update { it.copy(linkAutofill = on) } }) },
+                )
+            }
+            item {
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.set_link_timer)) },
+                    supportingContent = { Text(stringResource(R.string.set_link_timer_sub)) },
+                    trailingContent = { Switch(s.linkStartsTimer, { on -> vm.update { it.copy(linkStartsTimer = on) } }) },
+                )
             }
             item { HorizontalDivider() }
 

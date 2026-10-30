@@ -651,6 +651,14 @@
     <string name="discard_body">Wat je hier hebt ingevuld, is nog niet opgeslagen.</string>
     <string name="discard_keep">Verder bewerken</string>
     <string name="discard_confirm">Weggooien</string>
+    <string name="set_links">Weblinks</string>
+    <string name="set_link_autofill">Gegevens invullen vanuit links</string>
+    <string name="set_link_autofill_sub">Als je een link in je bibliotheek plakt, leest Sophinity die pagina om lege velden zoals titel, auteur en duur in te vullen. Alleen die website wordt benaderd.</string>
+    <string name="lib_link_hint_autofill">Plak een link en de gegevens worden voor je ingevuld</string>
+    <string name="lib_link_looking">Gegevens opzoeken…</string>
+    <string name="lib_link_filled">Gegevens ingevuld vanaf %1$s</string>
+    <string name="lib_link_nothing">Geen gegevens gevonden op die pagina. Je kunt ze zelf invullen.</string>
+    <string name="common_undo">Ongedaan maken</string>
     <plurals name="count_book">
         <item quantity="one">%d boek</item>
         <item quantity="other">%d boeken</item>
