@@ -206,11 +206,12 @@ class TimerController(
         val item = s.itemId?.let { repo.getItem(it) } ?: return@withLock finishLocked()
         val elapsedSec = s.elapsedMs() / 1000
         val credit = com.rayaurelius.sophinity.domain.MediaTime.creditToCompleteSec(item, repo.secondsForItem(item.id), elapsedSec) ?: 0
-        save(TimerState())
+        // Save the session and the item first, then clear the timer: a crash in between keeps the time.
         val id = if (elapsedSec + credit > 0) repo.addSession(
             StudySession(subjectId = s.subjectId, itemId = item.id, startedAt = s.startedAt, durationSec = elapsedSec + credit, source = SessionSource.TIMER)
         ) else null
         repo.saveItem(repo.finished(item))
+        save(TimerState())
         id
     }
 
@@ -218,14 +219,15 @@ class TimerController(
         val s = current()
         if (!s.isActive) return null
         val elapsed = s.elapsedMs()
-        save(TimerState())
-        if (elapsed < 60_000) return null // under a minute isn't worth a record
-        return repo.addSession(
+        // Save the session before clearing the timer, so a crash in between can't lose the time.
+        val id = if (elapsed < 60_000) null else repo.addSession( // under a minute isn't worth a record
             StudySession(
                 subjectId = s.subjectId, itemId = s.itemId, startedAt = s.startedAt,
                 durationSec = elapsed / 1000, source = SessionSource.TIMER,
             )
         )
+        save(TimerState())
+        return id
     }
 
     /** Called by the alarm and the on-screen ticker; safe to call repeatedly. */

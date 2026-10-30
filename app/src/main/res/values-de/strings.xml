@@ -674,6 +674,23 @@
     <string name="complete_session_hint">Fügt dieser Sitzung %1$s hinzu, damit der Eintrag voll zählt.</string>
     <string name="complete_toast">%1$s abgeschlossen. %2$s zur Lernzeit hinzugefügt.</string>
     <string name="complete_toast_none">%1$s abgeschlossen.</string>
+    <string name="review_toggle">Später wiederholen</string>
+    <string name="review_toggle_sub">Kommt morgen wieder, dann nach 3 Tagen, einer Woche, zwei Wochen, einem Monat … Erinnern ist, was es festigt.</string>
+    <string name="review_next_on">Nächste Wiederholung: %1$s</string>
+    <string name="review_due_now">Wiederholen fällig</string>
+    <string name="review_tomorrow">Morgen</string>
+    <string name="review_card_sub">Eine Minute Erinnern bringt mehr als eine Stunde Nachlesen.</string>
+    <string name="review_start">Wiederholen</string>
+    <string name="review_title">Wiederholung</string>
+    <string name="review_progress">%1$d von %2$d</string>
+    <string name="review_cue_untitled">Deine Notiz zu %1$s</string>
+    <string name="review_try_recall">Versuch dich zu erinnern, bevor du nachsiehst.</string>
+    <string name="review_show">Notiz zeigen</string>
+    <string name="review_not_yet">Noch nicht</string>
+    <string name="review_remembered">Gewusst</string>
+    <string name="review_why">Gewusste Notizen kommen immer später wieder, vergessene morgen.</string>
+    <string name="review_done_title">Alles erledigt</string>
+    <string name="review_done_body">Du wusstest %1$d von %2$d.</string>
     <plurals name="count_book">
         <item quantity="one">%d Buch</item>
         <item quantity="other">%d Bücher</item>
@@ -777,5 +794,13 @@
     <plurals name="notes_count">
         <item quantity="one">%d Notiz</item>
         <item quantity="other">%d Notizen</item>
+    </plurals>
+    <plurals name="review_due_count">
+        <item quantity="one">%d Notiz zum Wiederholen</item>
+        <item quantity="other">%d Notizen zum Wiederholen</item>
+    </plurals>
+    <plurals name="reminder_review_extra">
+        <item quantity="one">%d Notiz wartet aufs Wiederholen.</item>
+        <item quantity="other">%d Notizen warten aufs Wiederholen.</item>
     </plurals>
 </resources>

@@ -674,6 +674,23 @@
     <string name="complete_session_hint">เพิ่ม %1$s ให้เซสชันนี้เพื่อให้นับรายการเต็ม</string>
     <string name="complete_toast">%1$s เสร็จแล้ว เพิ่ม %2$s ลงในเวลาเรียน</string>
     <string name="complete_toast_none">%1$s เสร็จแล้ว</string>
+    <string name="review_toggle">ทบทวนภายหลัง</string>
+    <string name="review_toggle_sub">จะกลับมาพรุ่งนี้ แล้วอีก 3 วัน หนึ่งสัปดาห์ สองสัปดาห์ หนึ่งเดือน… การนึกทบทวนคือสิ่งที่ทำให้จำได้นาน</string>
+    <string name="review_next_on">ทบทวนครั้งถัดไป: %1$s</string>
+    <string name="review_due_now">ถึงเวลาทบทวน</string>
+    <string name="review_tomorrow">พรุ่งนี้</string>
+    <string name="review_card_sub">นึกทบทวนหนึ่งนาทีได้ผลกว่าอ่านซ้ำหนึ่งชั่วโมง</string>
+    <string name="review_start">ทบทวน</string>
+    <string name="review_title">ทบทวน</string>
+    <string name="review_progress">%1$d จาก %2$d</string>
+    <string name="review_cue_untitled">โน้ตของคุณเกี่ยวกับ %1$s</string>
+    <string name="review_try_recall">ลองนึกให้ออกก่อนดู</string>
+    <string name="review_show">ดูโน้ต</string>
+    <string name="review_not_yet">ยังจำไม่ได้</string>
+    <string name="review_remembered">จำได้</string>
+    <string name="review_why">โน้ตที่จำได้จะกลับมาห่างขึ้น ส่วนที่ลืมจะกลับมาพรุ่งนี้</string>
+    <string name="review_done_title">ทบทวนครบแล้ว</string>
+    <string name="review_done_body">คุณจำได้ %1$d จาก %2$d</string>
     <plurals name="count_book">
         <item quantity="other">หนังสือ %d เล่ม</item>
     </plurals>
@@ -751,5 +768,11 @@
     </plurals>
     <plurals name="notes_count">
         <item quantity="other">%d โน้ต</item>
+    </plurals>
+    <plurals name="review_due_count">
+        <item quantity="other">โน้ตที่ต้องทบทวน %d รายการ</item>
+    </plurals>
+    <plurals name="reminder_review_extra">
+        <item quantity="other">มีโน้ต %d รายการรอทบทวน</item>
     </plurals>
 </resources>

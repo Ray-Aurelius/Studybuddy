@@ -29,7 +29,7 @@ data class BackupData(
     val restDaysPerWeek: Int = 1,
 ) {
     companion object {
-        const val CURRENT_VERSION = 5
+        const val CURRENT_VERSION = 6
         const val APP_ID = "sophinity"
         /** Backups made before the rename (as "studybuddy") still restore. */
         val ACCEPTED_APP_IDS = setOf(APP_ID, "studybuddy")

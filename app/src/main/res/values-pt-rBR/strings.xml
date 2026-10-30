@@ -674,6 +674,23 @@
     <string name="complete_session_hint">Soma %1$s a esta sessão para o item contar por inteiro.</string>
     <string name="complete_toast">%1$s concluído. %2$s somados ao seu tempo de aprendizado.</string>
     <string name="complete_toast_none">%1$s concluído.</string>
+    <string name="review_toggle">Revisar depois</string>
+    <string name="review_toggle_sub">Volta amanhã, depois em 3 dias, uma semana, duas semanas, um mês… Lembrar é o que fixa.</string>
+    <string name="review_next_on">Próxima revisão: %1$s</string>
+    <string name="review_due_now">Revisão pendente</string>
+    <string name="review_tomorrow">Amanhã</string>
+    <string name="review_card_sub">Um minuto lembrando vale mais que uma hora relendo.</string>
+    <string name="review_start">Revisar</string>
+    <string name="review_title">Revisão</string>
+    <string name="review_progress">%1$d de %2$d</string>
+    <string name="review_cue_untitled">Sua nota sobre %1$s</string>
+    <string name="review_try_recall">Tente lembrar antes de olhar.</string>
+    <string name="review_show">Ver nota</string>
+    <string name="review_not_yet">Ainda não</string>
+    <string name="review_remembered">Lembrei</string>
+    <string name="review_why">Notas lembradas voltam cada vez mais tarde; as esquecidas, amanhã.</string>
+    <string name="review_done_title">Tudo em dia</string>
+    <string name="review_done_body">Você lembrou %1$d de %2$d.</string>
     <plurals name="count_book">
         <item quantity="one">%d livro</item>
         <item quantity="many">%d de livros</item>
@@ -803,5 +820,15 @@
         <item quantity="one">%d nota</item>
         <item quantity="many">%d de notas</item>
         <item quantity="other">%d notas</item>
+    </plurals>
+    <plurals name="review_due_count">
+        <item quantity="one">%d nota para revisar</item>
+        <item quantity="many">%d de notas para revisar</item>
+        <item quantity="other">%d notas para revisar</item>
+    </plurals>
+    <plurals name="reminder_review_extra">
+        <item quantity="one">%d nota aguarda revisão.</item>
+        <item quantity="many">%d de notas aguardam revisão.</item>
+        <item quantity="other">%d notas aguardam revisão.</item>
     </plurals>
 </resources>

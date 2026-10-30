@@ -166,6 +166,18 @@ fun TodayScreen(
 
     if (snap == null || timer == null) return
 
+    // Spaced review: notes due today, and the queue for a review in progress.
+    val allNotes = vm.notes.collectAsStateWithLifecycle().value.orEmpty()
+    val today = snap.today.toEpochDay()
+    val dueNotes = remember(allNotes, today) { com.rayaurelius.sophinity.domain.Review.due(allNotes, today) }
+    var reviewing by remember { mutableStateOf<List<com.rayaurelius.sophinity.data.db.Note>?>(null) }
+    reviewing?.let { queue ->
+        com.rayaurelius.sophinity.ui.notes.ReviewSheet(
+            snap, queue, nextAfter = com.rayaurelius.sophinity.domain.Review.nextDueDay(allNotes, today),
+            onAnswer = { n, ok -> vm.reviewed(n, ok) }, onDismiss = { reviewing = null },
+        )
+    }
+
     if (addingItem) {
         val library = appViewModel { LibraryViewModel(it) }
         val fromShare = sharedNew
@@ -193,6 +205,8 @@ fun TodayScreen(
         modifier = Modifier.fillMaxSize(),
     ) {
         item { Header(snap, onOpenSettings, onOpenBadges, onAddToLibrary = { addingItem = true }) }
+        // Reviews take a minute and matter most when done on the day, so they sit above the timer.
+        if (dueNotes.isNotEmpty()) item { ReviewCard(dueNotes.size, onStart = { reviewing = dueNotes }) }
         item { TimerCard(snap, timer, vm, added, onAddedConsumed = { added = null }) }
         item { QuickStats(snap) }
         item { GoalsGlance(snap, snap.goalProgress, onOpenGoals) }
@@ -945,3 +959,25 @@ private fun PositionSheet(title: String, currentSec: Long, totalSec: Long, onDis
 fun completedMessage(res: android.content.res.Resources, title: String, addedSec: Long): String =
     if (addedSec > 0) res.getString(R.string.complete_toast, title, StudyMath.formatDuration(addedSec))
     else res.getString(R.string.complete_toast_none, title)
+
+/** "3 notes to review": a minute of recall that does more for memory than an hour of re-reading. */
+@Composable
+private fun ReviewCard(count: Int, onStart: () -> Unit) {
+    androidx.compose.material3.Surface(
+        onClick = onStart, shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.secondaryContainer,
+        modifier = Modifier.fillMaxWidth().testTag("review_card"),
+    ) {
+        Row(Modifier.padding(start = 14.dp, end = 8.dp, top = 8.dp, bottom = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Glyph("owl", size = 28.dp, tint = MaterialTheme.colorScheme.onSecondaryContainer)
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f)) {
+                Text(pluralStringResource(R.plurals.review_due_count, count, count), style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer)
+                Text(stringResource(R.string.review_card_sub), style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f))
+            }
+            Spacer(Modifier.width(8.dp))
+            Button(onClick = onStart, contentPadding = PaddingValues(horizontal = 16.dp)) { Text(stringResource(R.string.review_start)) }
+        }
+    }
+}

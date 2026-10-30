@@ -157,7 +157,16 @@ data class Note(
     val itemId: Long? = null,
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long = createdAt,
+    /** Spaced review (DB v6): how many times in a row it's been recalled; null = not being reviewed. */
+    val reviewStage: Int? = null,
+    /** The day (epoch day) it's next due for review. */
+    val reviewDueDay: Long? = null,
+    /** Reviews done in total, remembered or not. */
+    @ColumnInfo(defaultValue = "0") val reviewCount: Int = 0,
 ) {
+    val isReviewing: Boolean get() = reviewDueDay != null
+    fun isDue(today: Long): Boolean = reviewDueDay != null && reviewDueDay <= today
+
     /** The title, or the note's first line when it has none. */
     val heading: String get() = title.ifBlank { body.trim().lineSequence().firstOrNull().orEmpty() }
     val isEmpty: Boolean get() = title.isBlank() && body.isBlank()

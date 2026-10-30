@@ -674,6 +674,23 @@
     <string name="complete_session_hint">Додає %1$s до цієї сесії, щоб елемент зарахувався повністю.</string>
     <string name="complete_toast">«%1$s» завершено. Додано %2$s до часу навчання.</string>
     <string name="complete_toast_none">«%1$s» завершено.</string>
+    <string name="review_toggle">Повторити пізніше</string>
+    <string name="review_toggle_sub">Повернеться завтра, потім за 3 дні, тиждень, два тижні, місяць… Саме пригадування закріплює пам’ять.</string>
+    <string name="review_next_on">Наступне повторення: %1$s</string>
+    <string name="review_due_now">Час повторити</string>
+    <string name="review_tomorrow">Завтра</string>
+    <string name="review_card_sub">Хвилина пригадування корисніша за годину перечитування.</string>
+    <string name="review_start">Повторити</string>
+    <string name="review_title">Повторення</string>
+    <string name="review_progress">%1$d з %2$d</string>
+    <string name="review_cue_untitled">Ваша нотатка про «%1$s»</string>
+    <string name="review_try_recall">Спробуйте пригадати, перш ніж дивитися.</string>
+    <string name="review_show">Показати нотатку</string>
+    <string name="review_not_yet">Ще ні</string>
+    <string name="review_remembered">Пам’ятаю</string>
+    <string name="review_why">Пригадані нотатки повертаються все рідше, забуті — завтра.</string>
+    <string name="review_done_title">Усе повторено</string>
+    <string name="review_done_body">Пригадано %1$d з %2$d.</string>
     <plurals name="count_book">
         <item quantity="one">%d книга</item>
         <item quantity="few">%d книги</item>
@@ -829,5 +846,17 @@
         <item quantity="few">%d нотатки</item>
         <item quantity="many">%d нотаток</item>
         <item quantity="other">%d нотатки</item>
+    </plurals>
+    <plurals name="review_due_count">
+        <item quantity="one">%d нотатка для повторення</item>
+        <item quantity="few">%d нотатки для повторення</item>
+        <item quantity="many">%d нотаток для повторення</item>
+        <item quantity="other">%d нотатки для повторення</item>
+    </plurals>
+    <plurals name="reminder_review_extra">
+        <item quantity="one">%d нотатка чекає на повторення.</item>
+        <item quantity="few">%d нотатки чекають на повторення.</item>
+        <item quantity="many">%d нотаток чекають на повторення.</item>
+        <item quantity="other">%d нотатки чекають на повторення.</item>
     </plurals>
 </resources>

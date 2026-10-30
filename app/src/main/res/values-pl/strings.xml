@@ -674,6 +674,23 @@
     <string name="complete_session_hint">Dodaje %1$s do tej sesji, by element liczył się w całości.</string>
     <string name="complete_toast">Ukończono %1$s. Dodano %2$s do czasu nauki.</string>
     <string name="complete_toast_none">Ukończono %1$s.</string>
+    <string name="review_toggle">Powtórz później</string>
+    <string name="review_toggle_sub">Wróci jutro, potem po 3 dniach, tygodniu, dwóch tygodniach, miesiącu… To przypominanie utrwala wiedzę.</string>
+    <string name="review_next_on">Następna powtórka: %1$s</string>
+    <string name="review_due_now">Do powtórki</string>
+    <string name="review_tomorrow">Jutro</string>
+    <string name="review_card_sub">Minuta przypominania daje więcej niż godzina czytania od nowa.</string>
+    <string name="review_start">Powtórz</string>
+    <string name="review_title">Powtórka</string>
+    <string name="review_progress">%1$d z %2$d</string>
+    <string name="review_cue_untitled">Twoja notatka o %1$s</string>
+    <string name="review_try_recall">Spróbuj przypomnieć sobie, zanim spojrzysz.</string>
+    <string name="review_show">Pokaż notatkę</string>
+    <string name="review_not_yet">Jeszcze nie</string>
+    <string name="review_remembered">Pamiętałem</string>
+    <string name="review_why">Zapamiętane notatki wracają coraz później, zapomniane – jutro.</string>
+    <string name="review_done_title">Wszystko powtórzone</string>
+    <string name="review_done_body">Pamiętane: %1$d z %2$d.</string>
     <plurals name="count_book">
         <item quantity="one">%d książka</item>
         <item quantity="few">%d książki</item>
@@ -829,5 +846,17 @@
         <item quantity="few">%d notatki</item>
         <item quantity="many">%d notatek</item>
         <item quantity="other">%d notatki</item>
+    </plurals>
+    <plurals name="review_due_count">
+        <item quantity="one">%d notatka do powtórki</item>
+        <item quantity="few">%d notatki do powtórki</item>
+        <item quantity="many">%d notatek do powtórki</item>
+        <item quantity="other">%d notatki do powtórki</item>
+    </plurals>
+    <plurals name="reminder_review_extra">
+        <item quantity="one">%d notatka czeka na powtórkę.</item>
+        <item quantity="few">%d notatki czekają na powtórkę.</item>
+        <item quantity="many">%d notatek czeka na powtórkę.</item>
+        <item quantity="other">%d notatki czeka na powtórkę.</item>
     </plurals>
 </resources>

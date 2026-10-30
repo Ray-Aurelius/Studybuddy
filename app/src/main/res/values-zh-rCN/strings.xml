@@ -674,6 +674,23 @@
     <string name="complete_session_hint">为这段学习加上 %1$s，使该条目完整计入。</string>
     <string name="complete_toast">已完成“%1$s”。学习时间增加了 %2$s。</string>
     <string name="complete_toast_none">已完成“%1$s”。</string>
+    <string name="review_toggle">稍后复习</string>
+    <string name="review_toggle_sub">明天会再出现，之后隔 3 天、一周、两周、一个月……正是回忆让它记得牢。</string>
+    <string name="review_next_on">下次复习：%1$s</string>
+    <string name="review_due_now">该复习了</string>
+    <string name="review_tomorrow">明天</string>
+    <string name="review_card_sub">一分钟回忆，胜过一小时重读。</string>
+    <string name="review_start">复习</string>
+    <string name="review_title">复习</string>
+    <string name="review_progress">%1$d / %2$d</string>
+    <string name="review_cue_untitled">你关于“%1$s”的笔记</string>
+    <string name="review_try_recall">先试着回想，再看答案。</string>
+    <string name="review_show">显示笔记</string>
+    <string name="review_not_yet">还没记住</string>
+    <string name="review_remembered">记住了</string>
+    <string name="review_why">记住的笔记间隔越来越长，忘记的明天再来。</string>
+    <string name="review_done_title">全部完成</string>
+    <string name="review_done_body">你记住了 %2$d 条中的 %1$d 条。</string>
     <plurals name="count_book">
         <item quantity="other">%d 本书</item>
     </plurals>
@@ -751,5 +768,11 @@
     </plurals>
     <plurals name="notes_count">
         <item quantity="other">%d 条笔记</item>
+    </plurals>
+    <plurals name="review_due_count">
+        <item quantity="other">%d 条笔记待复习</item>
+    </plurals>
+    <plurals name="reminder_review_extra">
+        <item quantity="other">有 %d 条笔记等待复习。</item>
     </plurals>
 </resources>

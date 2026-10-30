@@ -825,4 +825,30 @@
     <string name="complete_session_hint">Adds %1$s to this session so the item counts in full.</string>
     <string name="complete_toast">%1$s completed. %2$s added to your time learned.</string>
     <string name="complete_toast_none">%1$s completed.</string>
+    <!-- Spaced review of notes -->
+    <string name="review_toggle">Review this later</string>
+    <string name="review_toggle_sub">Comes back tomorrow, then after 3 days, a week, two weeks, a month… Recalling it is what makes it stick.</string>
+    <string name="review_next_on">Next review: %1$s</string>
+    <string name="review_due_now">Review due</string>
+    <string name="review_tomorrow">Tomorrow</string>
+    <plurals name="review_due_count">
+        <item quantity="one">%d note to review</item>
+        <item quantity="other">%d notes to review</item>
+    </plurals>
+    <string name="review_card_sub">A minute of recall beats an hour of re-reading.</string>
+    <string name="review_start">Review</string>
+    <string name="review_title">Review</string>
+    <string name="review_progress">%1$d of %2$d</string>
+    <string name="review_cue_untitled">Your note on %1$s</string>
+    <string name="review_try_recall">Try to recall it before you look.</string>
+    <string name="review_show">Show note</string>
+    <string name="review_not_yet">Not yet</string>
+    <string name="review_remembered">I remembered</string>
+    <string name="review_why">Remembered notes come back later and later; missed ones come back tomorrow.</string>
+    <string name="review_done_title">All caught up</string>
+    <string name="review_done_body">You remembered %1$d of %2$d.</string>
+    <plurals name="reminder_review_extra">
+        <item quantity="one">%d note is waiting for review.</item>
+        <item quantity="other">%d notes are waiting for review.</item>
+    </plurals>
 </resources>

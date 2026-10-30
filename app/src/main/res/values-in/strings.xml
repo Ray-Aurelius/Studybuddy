@@ -674,6 +674,23 @@
     <string name="complete_session_hint">Menambahkan %1$s ke sesi ini agar item dihitung penuh.</string>
     <string name="complete_toast">%1$s selesai. %2$s ditambahkan ke waktu belajarmu.</string>
     <string name="complete_toast_none">%1$s selesai.</string>
+    <string name="review_toggle">Ulas nanti</string>
+    <string name="review_toggle_sub">Kembali besok, lalu setelah 3 hari, seminggu, dua minggu, sebulan… Mengingat-ingatlah yang membuatnya melekat.</string>
+    <string name="review_next_on">Ulasan berikutnya: %1$s</string>
+    <string name="review_due_now">Waktunya mengulas</string>
+    <string name="review_tomorrow">Besok</string>
+    <string name="review_card_sub">Semenit mengingat lebih baik daripada sejam membaca ulang.</string>
+    <string name="review_start">Ulas</string>
+    <string name="review_title">Ulasan</string>
+    <string name="review_progress">%1$d dari %2$d</string>
+    <string name="review_cue_untitled">Catatanmu tentang %1$s</string>
+    <string name="review_try_recall">Coba ingat sebelum melihat.</string>
+    <string name="review_show">Lihat catatan</string>
+    <string name="review_not_yet">Belum</string>
+    <string name="review_remembered">Aku ingat</string>
+    <string name="review_why">Catatan yang diingat kembali makin lama; yang lupa kembali besok.</string>
+    <string name="review_done_title">Semua beres</string>
+    <string name="review_done_body">Kamu ingat %1$d dari %2$d.</string>
     <plurals name="count_book">
         <item quantity="other">%d buku</item>
     </plurals>
@@ -751,5 +768,11 @@
     </plurals>
     <plurals name="notes_count">
         <item quantity="other">%d catatan</item>
+    </plurals>
+    <plurals name="review_due_count">
+        <item quantity="other">%d catatan untuk diulas</item>
+    </plurals>
+    <plurals name="reminder_review_extra">
+        <item quantity="other">%d catatan menunggu diulas.</item>
     </plurals>
 </resources>

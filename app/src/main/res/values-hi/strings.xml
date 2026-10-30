@@ -674,6 +674,23 @@
     <string name="complete_session_hint">इस सेशन में %1$s जोड़ता है ताकि आइटम पूरा गिना जाए।</string>
     <string name="complete_toast">%1$s पूरा हुआ। सीखने के समय में %2$s जुड़ा।</string>
     <string name="complete_toast_none">%1$s पूरा हुआ।</string>
+    <string name="review_toggle">बाद में दोहराएँ</string>
+    <string name="review_toggle_sub">यह कल लौटेगा, फिर 3 दिन, एक हफ़्ते, दो हफ़्ते, एक महीने बाद… याद करने की कोशिश ही इसे पक्का करती है।</string>
+    <string name="review_next_on">अगली दोहराई: %1$s</string>
+    <string name="review_due_now">दोहराने का समय</string>
+    <string name="review_tomorrow">कल</string>
+    <string name="review_card_sub">एक मिनट याद करना, एक घंटे दोबारा पढ़ने से बेहतर है।</string>
+    <string name="review_start">दोहराएँ</string>
+    <string name="review_title">दोहराई</string>
+    <string name="review_progress">%2$d में से %1$d</string>
+    <string name="review_cue_untitled">%1$s पर आपका नोट</string>
+    <string name="review_try_recall">देखने से पहले याद करने की कोशिश करें।</string>
+    <string name="review_show">नोट दिखाएँ</string>
+    <string name="review_not_yet">अभी नहीं</string>
+    <string name="review_remembered">याद था</string>
+    <string name="review_why">याद रहे नोट और देर से लौटते हैं; भूले हुए कल।</string>
+    <string name="review_done_title">सब हो गया</string>
+    <string name="review_done_body">आपको %2$d में से %1$d याद रहे।</string>
     <plurals name="count_book">
         <item quantity="one">%d किताब</item>
         <item quantity="other">%d किताबें</item>
@@ -777,5 +794,13 @@
     <plurals name="notes_count">
         <item quantity="one">%d नोट</item>
         <item quantity="other">%d नोट्स</item>
+    </plurals>
+    <plurals name="review_due_count">
+        <item quantity="one">दोहराने के लिए %d नोट</item>
+        <item quantity="other">दोहराने के लिए %d नोट्स</item>
+    </plurals>
+    <plurals name="reminder_review_extra">
+        <item quantity="one">%d नोट दोहराई का इंतज़ार कर रहा है।</item>
+        <item quantity="other">%d नोट्स दोहराई का इंतज़ार कर रहे हैं।</item>
     </plurals>
 </resources>

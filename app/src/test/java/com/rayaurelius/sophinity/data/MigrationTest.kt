@@ -105,12 +105,26 @@ class MigrationTest {
     }
 
     @Test
+    fun v5ToV6LeavesNotesUnscheduled() {
+        helper.createDatabase(dbName, 5).apply {
+            execSQL("INSERT INTO notes (id, title, body, itemId, createdAt, updatedAt) VALUES (1, 'T', 'B', NULL, 5, 5)")
+            close()
+        }
+        val db = helper.runMigrationsAndValidate(dbName, 6, true)
+        db.query("SELECT reviewStage, reviewDueDay, reviewCount FROM notes").use { c ->
+            assertTrue(c.moveToFirst())
+            assertTrue(c.isNull(0)); assertTrue(c.isNull(1)); assertEquals(0, c.getInt(2))
+        }
+        db.close()
+    }
+
+    @Test
     fun v1AllTheWayToCurrent() {
         helper.createDatabase(dbName, 1).apply {
             execSQL("INSERT INTO items (id, type, title, creator, status, progressUnits, takeaway, notes, addedAt) VALUES (1, 'BOOK', 'B', '', 'DONE', 0, '', '', 0)")
             close()
         }
-        helper.runMigrationsAndValidate(dbName, 5, true).use { db ->
+        helper.runMigrationsAndValidate(dbName, 6, true).use { db ->
             db.query("SELECT COUNT(*) FROM items").use { c -> c.moveToFirst(); assertEquals(1, c.getInt(0)) }
         }
     }

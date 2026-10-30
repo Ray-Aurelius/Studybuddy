@@ -76,14 +76,17 @@ object DemoData {
         repo.saveItem(LearningItem(type = ItemType.SEMINAR, title = "Local Investing Meetup", status = ItemStatus.DONE, rating = 4, completedAt = now - 86_400_000L * 10))
         repo.saveItem(LearningItem(type = ItemType.BOOK, title = "Thinking in Systems Primer", status = ItemStatus.WANT))
         val day = 86_400_000L
+        val todayDay = today.toEpochDay()
         repo.saveNote(com.rayaurelius.sophinity.data.db.Note(title = "Questions to try on myself", itemId = audiobookId,
-            body = "What did I wonder about today?\nWhich question did I let go unanswered?\nWho could I ask?"), now - day / 2)
+            body = "What did I wonder about today?\nWhich question did I let go unanswered?\nWho could I ask?",
+            reviewStage = 2, reviewDueDay = todayDay + 5), now - day / 2)
         repo.saveNote(com.rayaurelius.sophinity.data.db.Note(itemId = handbookId,
-            body = "Spacing beats cramming\nReview after 1 day, 3 days, then a week. Chapter 7 has the forgetting curve."), now - day * 2)
+            body = "Spacing beats cramming\nReview after 1 day, 3 days, then a week. Chapter 7 has the forgetting curve.",
+            reviewStage = 1, reviewDueDay = todayDay), now - day * 2)
         repo.saveNote(com.rayaurelius.sophinity.data.db.Note(title = "Ideas for the pottery class",
             body = "Bring photos of the bowls I liked. Ask about glaze temperatures."), now - day * 5)
         repo.saveNote(com.rayaurelius.sophinity.data.db.Note(title = "Ch. 2: fixed vs. growth", itemId = handbookId,
-            body = "Praise the process, not the person."), now - day * 9)
+            body = "Praise the process, not the person.", reviewStage = 0, reviewDueDay = todayDay - 1), now - day * 9)
         val created = today.minusWeeks(10).atStartOfDay(zone).toInstant().toEpochMilli()
         repo.saveGoal(Goal(title = "5 hours a week", kind = GoalKind.TIME, period = GoalPeriod.WEEKLY, target = 300, createdAt = created))
         repo.saveGoal(Goal(title = "30 minutes a day", kind = GoalKind.TIME, period = GoalPeriod.DAILY, target = 30, createdAt = created))

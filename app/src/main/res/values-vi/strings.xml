@@ -674,6 +674,23 @@
     <string name="complete_session_hint">Cộng %1$s vào phiên này để mục được tính trọn vẹn.</string>
     <string name="complete_toast">Đã hoàn thành %1$s. Đã cộng %2$s vào thời gian học.</string>
     <string name="complete_toast_none">Đã hoàn thành %1$s.</string>
+    <string name="review_toggle">Ôn lại sau</string>
+    <string name="review_toggle_sub">Quay lại vào ngày mai, rồi sau 3 ngày, một tuần, hai tuần, một tháng… Chính việc nhớ lại giúp ghi nhớ lâu.</string>
+    <string name="review_next_on">Lần ôn tiếp theo: %1$s</string>
+    <string name="review_due_now">Đến lúc ôn</string>
+    <string name="review_tomorrow">Ngày mai</string>
+    <string name="review_card_sub">Một phút nhớ lại hiệu quả hơn một giờ đọc lại.</string>
+    <string name="review_start">Ôn</string>
+    <string name="review_title">Ôn tập</string>
+    <string name="review_progress">%1$d / %2$d</string>
+    <string name="review_cue_untitled">Ghi chú của bạn về %1$s</string>
+    <string name="review_try_recall">Hãy thử nhớ lại trước khi xem.</string>
+    <string name="review_show">Xem ghi chú</string>
+    <string name="review_not_yet">Chưa nhớ</string>
+    <string name="review_remembered">Đã nhớ</string>
+    <string name="review_why">Ghi chú nhớ được sẽ quay lại thưa dần; ghi chú quên sẽ quay lại ngày mai.</string>
+    <string name="review_done_title">Đã ôn xong</string>
+    <string name="review_done_body">Bạn nhớ được %1$d / %2$d.</string>
     <plurals name="count_book">
         <item quantity="other">%d cuốn sách</item>
     </plurals>
@@ -751,5 +768,11 @@
     </plurals>
     <plurals name="notes_count">
         <item quantity="other">%d ghi chú</item>
+    </plurals>
+    <plurals name="review_due_count">
+        <item quantity="other">%d ghi chú cần ôn</item>
+    </plurals>
+    <plurals name="reminder_review_extra">
+        <item quantity="other">%d ghi chú đang chờ ôn.</item>
     </plurals>
 </resources>

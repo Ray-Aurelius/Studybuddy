@@ -62,8 +62,10 @@ class ReminderWorker(context: Context, params: WorkerParameters) : CoroutineWork
             else -> ctx.getString(R.string.reminder_title)
         }
         val minimum = StudyMath.formatDuration(settings.streakMinutes * 60L)
-        val body = if (place.isNotEmpty()) ctx.getString(R.string.reminder_body_place, place, minimum)
-            else ctx.getString(R.string.reminder_body, minimum)
+        val due = repo.dueNoteCount(java.time.LocalDate.now().toEpochDay())
+        val body = (if (place.isNotEmpty()) ctx.getString(R.string.reminder_body_place, place, minimum)
+            else ctx.getString(R.string.reminder_body, minimum)) +
+            (if (due > 0) " " + ctx.resources.getQuantityString(R.plurals.reminder_review_extra, due, due) else "")
         val pi = PendingIntent.getActivity(
             applicationContext, 7, Intent(applicationContext, MainActivity::class.java),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,

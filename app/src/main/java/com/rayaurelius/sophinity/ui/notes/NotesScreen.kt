@@ -55,6 +55,7 @@ import com.rayaurelius.sophinity.AppContainer
 import com.rayaurelius.sophinity.R
 import com.rayaurelius.sophinity.data.Snapshot
 import com.rayaurelius.sophinity.data.db.Note
+import com.rayaurelius.sophinity.domain.Review
 import com.rayaurelius.sophinity.ui.components.Choices
 import com.rayaurelius.sophinity.ui.components.EmptyState
 import com.rayaurelius.sophinity.ui.components.LibraryItemPicker
@@ -73,6 +74,7 @@ class NotesViewModel(private val c: AppContainer) : ViewModel() {
     val notes = c.notes
     fun save(note: Note) = viewModelScope.launch { c.repo.saveNote(note) }
     fun delete(note: Note) = viewModelScope.launch { c.repo.deleteNote(note) }
+    fun reviewed(note: Note, remembered: Boolean, today: Long) = viewModelScope.launch { c.repo.reviewed(note, remembered, today) }
 }
 
 /** Filter value meaning "notes not linked to anything". `null` means every note. */
@@ -108,6 +110,11 @@ fun NotesScreen(contentPadding: PaddingValues) {
     var query by rememberSaveable { mutableStateOf("") }
     var editing by remember { mutableStateOf<Note?>(null) }
     var confirmDelete by remember { mutableStateOf<Note?>(null) }
+    var reviewing by remember { mutableStateOf<List<Note>?>(null) }
+    reviewing?.let { queue ->
+        ReviewSheet(snap, queue, nextAfter = Review.nextDueDay(notes, snap.today.toEpochDay()),
+            onAnswer = { n, ok -> vm.reviewed(n, ok, snap.today.toEpochDay()) }, onDismiss = { reviewing = null })
+    }
 
     // Only items that have notes are worth filtering by; a stale filter falls back to "all".
     val linkedIds = notes.mapNotNull { it.itemId }.toSet()
@@ -127,6 +134,13 @@ fun NotesScreen(contentPadding: PaddingValues) {
             modifier = Modifier.fillMaxSize(),
         ) {
             item { PageHeader(stringResource(R.string.notes_title)) }
+            val due = Review.due(notes, snap.today.toEpochDay())
+            if (due.isNotEmpty()) item {
+                androidx.compose.material3.FilledTonalButton(onClick = { reviewing = due }, modifier = Modifier.fillMaxWidth()) {
+                    Glyph("owl", size = 20.dp); Spacer(Modifier.width(8.dp))
+                    Text(pluralStringResource(R.plurals.review_due_count, due.size, due.size))
+                }
+            }
             if (notes.isNotEmpty()) {
                 item {
                     OutlinedTextField(
@@ -223,6 +237,17 @@ fun NoteCard(snap: Snapshot, note: Note, onOpen: () -> Unit, showItem: Boolean =
                     Spacer(Modifier.width(10.dp))
                 }
                 Spacer(Modifier.weight(1f))
+                note.reviewDueDay?.let { due ->
+                    val isDue = due <= snap.today.toEpochDay()
+                    Glyph("owl", size = 14.dp, tint = if (isDue) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline)
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        if (isDue) stringResource(R.string.review_due_now) else reviewDay(snap, due),
+                        style = MaterialTheme.typography.labelMedium, maxLines = 1,
+                        color = if (isDue) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
+                    )
+                    Spacer(Modifier.width(10.dp))
+                }
                 Text(
                     edited.format(rememberDateFormat(if (sameYear) "MMMd" else "yMMMd")),
                     style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.outline, maxLines = 1,
@@ -236,9 +261,12 @@ fun NoteCard(snap: Snapshot, note: Note, onOpen: () -> Unit, showItem: Boolean =
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteEditorSheet(snap: Snapshot, initial: Note, onDismiss: () -> Unit, onSave: (Note) -> Unit, onDelete: () -> Unit) {
-    var n by remember { mutableStateOf(initial) }
+    val today = snap.today.toEpochDay()
+    // New notes are reviewed by default: recalling them later is what makes them stick.
+    val start = remember { if (initial.id == 0L && !initial.isReviewing) Review.start(initial, today) else initial }
+    var n by remember { mutableStateOf(start) }
     val isNew = initial.id == 0L
-    com.rayaurelius.sophinity.ui.components.EditorSheet(dirty = n != remember { initial }, onDismiss = onDismiss) {
+    com.rayaurelius.sophinity.ui.components.EditorSheet(dirty = n != start, onDismiss = onDismiss) {
         Column(
             Modifier.padding(horizontal = 24.dp).padding(bottom = 24.dp).verticalScroll(rememberScrollState()).imePadding(),
             verticalArrangement = Arrangement.spacedBy(14.dp),
@@ -255,6 +283,23 @@ fun NoteEditorSheet(snap: Snapshot, initial: Note, onDismiss: () -> Unit, onSave
             Text(stringResource(R.string.notes_linked_to), style = MaterialTheme.typography.titleSmall)
             LibraryItemPicker(snap, n.itemId) { n = n.copy(itemId = it) }
             Text(stringResource(R.string.notes_link_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Glyph("owl", size = 24.dp, tint = MaterialTheme.colorScheme.primary)
+                Spacer(Modifier.width(14.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(stringResource(R.string.review_toggle), style = MaterialTheme.typography.bodyLarge)
+                    Text(
+                        n.reviewDueDay?.takeIf { !isNew && initial.isReviewing && it == initial.reviewDueDay }
+                            ?.let { stringResource(R.string.review_next_on, reviewDay(snap, it)) }
+                            ?: stringResource(R.string.review_toggle_sub),
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                Spacer(Modifier.width(12.dp))
+                androidx.compose.material3.Switch(n.isReviewing, { on ->
+                    n = if (!on) Review.stop(n) else if (initial.isReviewing) n.copy(reviewStage = initial.reviewStage, reviewDueDay = initial.reviewDueDay) else Review.start(n, today)
+                }, modifier = Modifier.testTag("review_switch"))
+            }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                 if (!isNew) TextButton(onClick = onDelete) { Text(stringResource(R.string.common_delete), color = MaterialTheme.colorScheme.error) }
                 Spacer(Modifier.weight(1f))

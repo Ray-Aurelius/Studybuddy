@@ -674,6 +674,23 @@
     <string name="complete_session_hint">Öğe tam sayılsın diye bu oturuma %1$s ekler.</string>
     <string name="complete_toast">%1$s tamamlandı. Öğrenme süresine %2$s eklendi.</string>
     <string name="complete_toast_none">%1$s tamamlandı.</string>
+    <string name="review_toggle">Sonra tekrar et</string>
+    <string name="review_toggle_sub">Yarın, sonra 3 gün, bir hafta, iki hafta, bir ay sonra geri gelir… Kalıcı yapan, hatırlamaya çalışmaktır.</string>
+    <string name="review_next_on">Sonraki tekrar: %1$s</string>
+    <string name="review_due_now">Tekrar zamanı</string>
+    <string name="review_tomorrow">Yarın</string>
+    <string name="review_card_sub">Bir dakika hatırlamak, bir saat yeniden okumaktan iyidir.</string>
+    <string name="review_start">Tekrar et</string>
+    <string name="review_title">Tekrar</string>
+    <string name="review_progress">%1$d / %2$d</string>
+    <string name="review_cue_untitled">%1$s hakkındaki notun</string>
+    <string name="review_try_recall">Bakmadan önce hatırlamaya çalış.</string>
+    <string name="review_show">Notu göster</string>
+    <string name="review_not_yet">Henüz değil</string>
+    <string name="review_remembered">Hatırladım</string>
+    <string name="review_why">Hatırlanan notlar giderek daha geç, unutulanlar yarın geri gelir.</string>
+    <string name="review_done_title">Hepsi tamam</string>
+    <string name="review_done_body">%2$d nottan %1$d tanesini hatırladın.</string>
     <plurals name="count_book">
         <item quantity="one">%d kitap</item>
         <item quantity="other">%d kitap</item>
@@ -777,5 +794,13 @@
     <plurals name="notes_count">
         <item quantity="one">%d not</item>
         <item quantity="other">%d not</item>
+    </plurals>
+    <plurals name="review_due_count">
+        <item quantity="one">Tekrar edilecek %d not</item>
+        <item quantity="other">Tekrar edilecek %d not</item>
+    </plurals>
+    <plurals name="reminder_review_extra">
+        <item quantity="one">%d not tekrar bekliyor.</item>
+        <item quantity="other">%d not tekrar bekliyor.</item>
     </plurals>
 </resources>

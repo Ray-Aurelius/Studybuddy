@@ -674,6 +674,23 @@
     <string name="complete_session_hint">このセッションに%1$sを追加し、項目全体を計上します。</string>
     <string name="complete_toast">%1$sを完了しました。学習時間に%2$sを追加しました。</string>
     <string name="complete_toast_none">%1$sを完了しました。</string>
+    <string name="review_toggle">あとで復習する</string>
+    <string name="review_toggle_sub">明日、その後3日後、1週間後、2週間後、1か月後…と戻ってきます。思い出すことが記憶を定着させます。</string>
+    <string name="review_next_on">次の復習：%1$s</string>
+    <string name="review_due_now">復習の時間</string>
+    <string name="review_tomorrow">明日</string>
+    <string name="review_card_sub">1分の想起は、1時間の読み直しに勝ります。</string>
+    <string name="review_start">復習する</string>
+    <string name="review_title">復習</string>
+    <string name="review_progress">%1$d / %2$d</string>
+    <string name="review_cue_untitled">%1$sについてのノート</string>
+    <string name="review_try_recall">見る前に思い出してみましょう。</string>
+    <string name="review_show">ノートを表示</string>
+    <string name="review_not_yet">まだ</string>
+    <string name="review_remembered">覚えていた</string>
+    <string name="review_why">覚えていたノートは間隔を広げて、忘れたものは明日また出てきます。</string>
+    <string name="review_done_title">すべて完了</string>
+    <string name="review_done_body">%2$d件中%1$d件を覚えていました。</string>
     <plurals name="count_book">
         <item quantity="other">%d冊の本</item>
     </plurals>
@@ -751,5 +768,11 @@
     </plurals>
     <plurals name="notes_count">
         <item quantity="other">%d件のノート</item>
+    </plurals>
+    <plurals name="review_due_count">
+        <item quantity="other">復習するノートが%d件</item>
+    </plurals>
+    <plurals name="reminder_review_extra">
+        <item quantity="other">復習待ちのノートが%d件あります。</item>
     </plurals>
 </resources>

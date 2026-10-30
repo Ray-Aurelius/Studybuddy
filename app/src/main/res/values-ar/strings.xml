@@ -674,6 +674,23 @@
     <string name="complete_session_hint">يضيف %1$s إلى هذه الجلسة ليُحتسب العنصر كاملًا.</string>
     <string name="complete_toast">اكتمل %1$s. أُضيفت %2$s إلى وقت تعلّمك.</string>
     <string name="complete_toast_none">اكتمل %1$s.</string>
+    <string name="review_toggle">راجِع لاحقًا</string>
+    <string name="review_toggle_sub">تعود غدًا، ثم بعد 3 أيام، وأسبوع، وأسبوعين، وشهر… الاسترجاع هو ما يثبّتها.</string>
+    <string name="review_next_on">المراجعة القادمة: %1$s</string>
+    <string name="review_due_now">حان وقت المراجعة</string>
+    <string name="review_tomorrow">غدًا</string>
+    <string name="review_card_sub">دقيقة من الاسترجاع أنفع من ساعة من إعادة القراءة.</string>
+    <string name="review_start">راجِع</string>
+    <string name="review_title">مراجعة</string>
+    <string name="review_progress">%1$d من %2$d</string>
+    <string name="review_cue_untitled">ملاحظتك عن %1$s</string>
+    <string name="review_try_recall">حاول تذكّرها قبل أن تنظر.</string>
+    <string name="review_show">اعرض الملاحظة</string>
+    <string name="review_not_yet">ليس بعد</string>
+    <string name="review_remembered">تذكّرتها</string>
+    <string name="review_why">الملاحظات التي تتذكّرها تعود بعد مدد أطول، والمنسية تعود غدًا.</string>
+    <string name="review_done_title">أنجزت كل شيء</string>
+    <string name="review_done_body">تذكّرت %1$d من %2$d.</string>
     <plurals name="count_book">
         <item quantity="zero">لا كتب</item>
         <item quantity="one">كتاب واحد</item>
@@ -881,5 +898,21 @@
         <item quantity="few">%d ملاحظات</item>
         <item quantity="many">%d ملاحظة</item>
         <item quantity="other">%d ملاحظة</item>
+    </plurals>
+    <plurals name="review_due_count">
+        <item quantity="zero">لا ملاحظات للمراجعة</item>
+        <item quantity="one">ملاحظة واحدة للمراجعة</item>
+        <item quantity="two">ملاحظتان للمراجعة</item>
+        <item quantity="few">%d ملاحظات للمراجعة</item>
+        <item quantity="many">%d ملاحظة للمراجعة</item>
+        <item quantity="other">%d ملاحظة للمراجعة</item>
+    </plurals>
+    <plurals name="reminder_review_extra">
+        <item quantity="zero">لا ملاحظات بانتظار المراجعة.</item>
+        <item quantity="one">ملاحظة واحدة بانتظار المراجعة.</item>
+        <item quantity="two">ملاحظتان بانتظار المراجعة.</item>
+        <item quantity="few">%d ملاحظات بانتظار المراجعة.</item>
+        <item quantity="many">%d ملاحظة بانتظار المراجعة.</item>
+        <item quantity="other">%d ملاحظة بانتظار المراجعة.</item>
     </plurals>
 </resources>

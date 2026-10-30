@@ -16,10 +16,13 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
+import androidx.compose.ui.test.swipeUp
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.takahirom.roborazzi.captureRoboImage
@@ -298,6 +301,47 @@ class ScreenshotTest {
         settle { !runBlocking { app.container.timer.current() }.isActive }
         org.junit.Assert.assertFalse(runBlocking { app.container.timer.current() }.isActive)
         org.junit.Assert.assertEquals(9 * 3600L + 30 * 60, runBlocking { app.container.repo.secondsForItem(audiobookId) })
+    }
+
+    @Test fun reviewingDueNotes() {
+        val app = ApplicationProvider.getApplicationContext<SophinityApp>()
+        // Two demo notes are due today (one overdue). The card waits for the notes to load.
+        settle { compose.onAllNodes(hasTestTag("review_card")).fetchSemanticsNodes().isNotEmpty() }
+        compose.onNode(hasText("2 notes to review")).assertExists()
+        shot("33_review_card")
+        // Tap through the card's click action: it may sit partly under the bottom bar.
+        compose.onNode(hasTestTag("review_card")).performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
+        compose.waitForIdle()
+        // Overdue first: the title is the cue, the text stays hidden until asked for.
+        compose.onNode(hasText("Ch. 2: fixed vs. growth")).assertExists()
+        compose.onNode(hasTestTag("review_answer")).assertDoesNotExist()
+        shot("34_review_cue")
+        compose.onNode(hasText("Show note")).performClick()
+        compose.waitForIdle()
+        compose.onNode(hasText("Praise the process, not the person.")).assertExists()
+        shot("35_review_revealed")
+        compose.onNode(hasText("I remembered")).performClick()
+        compose.waitForIdle()
+        // Untitled note: its first line is the cue.
+        compose.onNode(hasText("Spacing beats cramming")).assertExists()
+        compose.onNode(hasText("Show note")).performClick()
+        compose.onNode(hasText("Not yet")).performClick()
+        compose.waitForIdle()
+        compose.onNode(hasText("All caught up")).assertExists()
+        compose.onNode(hasText("You remembered 1 of 2.")).assertExists()
+        shot("36_review_done")
+        val notes = runBlocking { app.container.repo.notes.first() }
+        val today = java.time.LocalDate.now().toEpochDay()
+        org.junit.Assert.assertEquals(today + 3, notes.first { it.title == "Ch. 2: fixed vs. growth" }.reviewDueDay)
+        org.junit.Assert.assertEquals(today + 1, notes.first { it.body.startsWith("Spacing") }.reviewDueDay)
+    }
+
+    @Test fun newNotesAreReviewedByDefault() {
+        tab("Notes")
+        settle { compose.onAllNodes(hasTestTag("note")).fetchSemanticsNodes().isNotEmpty() }
+        compose.onNode(hasText("New note"), useUnmergedTree = true).performClick()
+        compose.waitForIdle()
+        compose.onNode(hasTestTag("review_switch")).performScrollTo().assertIsOn()
     }
 
     @Test fun anUntouchedEditorStillSwipesAway() {

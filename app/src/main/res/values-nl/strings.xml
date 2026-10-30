@@ -674,6 +674,23 @@
     <string name="complete_session_hint">Telt %1$s op bij deze sessie zodat het item volledig meetelt.</string>
     <string name="complete_toast">%1$s voltooid. %2$s opgeteld bij je leertijd.</string>
     <string name="complete_toast_none">%1$s voltooid.</string>
+    <string name="review_toggle">Later herhalen</string>
+    <string name="review_toggle_sub">Komt morgen terug, dan na 3 dagen, een week, twee weken, een maand… Ophalen is wat het laat beklijven.</string>
+    <string name="review_next_on">Volgende herhaling: %1$s</string>
+    <string name="review_due_now">Herhalen</string>
+    <string name="review_tomorrow">Morgen</string>
+    <string name="review_card_sub">Een minuut ophalen werkt beter dan een uur herlezen.</string>
+    <string name="review_start">Herhalen</string>
+    <string name="review_title">Herhaling</string>
+    <string name="review_progress">%1$d van %2$d</string>
+    <string name="review_cue_untitled">Je notitie over %1$s</string>
+    <string name="review_try_recall">Probeer het te herinneren voor je kijkt.</string>
+    <string name="review_show">Notitie tonen</string>
+    <string name="review_not_yet">Nog niet</string>
+    <string name="review_remembered">Wist ik nog</string>
+    <string name="review_why">Onthouden notities komen steeds later terug, vergeten notities morgen.</string>
+    <string name="review_done_title">Helemaal bij</string>
+    <string name="review_done_body">Je wist er %1$d van %2$d.</string>
     <plurals name="count_book">
         <item quantity="one">%d boek</item>
         <item quantity="other">%d boeken</item>
@@ -777,5 +794,13 @@
     <plurals name="notes_count">
         <item quantity="one">%d notitie</item>
         <item quantity="other">%d notities</item>
+    </plurals>
+    <plurals name="review_due_count">
+        <item quantity="one">%d notitie om te herhalen</item>
+        <item quantity="other">%d notities om te herhalen</item>
+    </plurals>
+    <plurals name="reminder_review_extra">
+        <item quantity="one">%d notitie wacht op herhaling.</item>
+        <item quantity="other">%d notities wachten op herhaling.</item>
     </plurals>
 </resources>

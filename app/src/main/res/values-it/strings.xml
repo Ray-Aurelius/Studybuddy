@@ -674,6 +674,23 @@
     <string name="complete_session_hint">Aggiunge %1$s a questa sessione così l\'elemento conta per intero.</string>
     <string name="complete_toast">%1$s completato. Aggiunti %2$s al tuo tempo di apprendimento.</string>
     <string name="complete_toast_none">%1$s completato.</string>
+    <string name="review_toggle">Ripassa più tardi</string>
+    <string name="review_toggle_sub">Torna domani, poi dopo 3 giorni, una settimana, due settimane, un mese… È il ricordare che la fissa.</string>
+    <string name="review_next_on">Prossimo ripasso: %1$s</string>
+    <string name="review_due_now">Da ripassare</string>
+    <string name="review_tomorrow">Domani</string>
+    <string name="review_card_sub">Un minuto di richiamo vale più di un\'ora di rilettura.</string>
+    <string name="review_start">Ripassa</string>
+    <string name="review_title">Ripasso</string>
+    <string name="review_progress">%1$d di %2$d</string>
+    <string name="review_cue_untitled">La tua nota su %1$s</string>
+    <string name="review_try_recall">Prova a ricordarla prima di guardare.</string>
+    <string name="review_show">Mostra nota</string>
+    <string name="review_not_yet">Non ancora</string>
+    <string name="review_remembered">Me la ricordavo</string>
+    <string name="review_why">Le note ricordate tornano sempre più tardi; quelle dimenticate, domani.</string>
+    <string name="review_done_title">Tutto in pari</string>
+    <string name="review_done_body">Ne hai ricordate %1$d su %2$d.</string>
     <plurals name="count_book">
         <item quantity="one">%d libro</item>
         <item quantity="many">%d di libri</item>
@@ -803,5 +820,15 @@
         <item quantity="one">%d nota</item>
         <item quantity="many">%d di note</item>
         <item quantity="other">%d note</item>
+    </plurals>
+    <plurals name="review_due_count">
+        <item quantity="one">%d nota da ripassare</item>
+        <item quantity="many">%d di note da ripassare</item>
+        <item quantity="other">%d note da ripassare</item>
+    </plurals>
+    <plurals name="reminder_review_extra">
+        <item quantity="one">%d nota aspetta il ripasso.</item>
+        <item quantity="many">%d di note aspettano il ripasso.</item>
+        <item quantity="other">%d note aspettano il ripasso.</item>
     </plurals>
 </resources>

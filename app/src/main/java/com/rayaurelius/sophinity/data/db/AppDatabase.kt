@@ -136,6 +136,12 @@ interface NoteDao {
     @Query("SELECT * FROM notes")
     suspend fun getAll(): List<Note>
 
+    @Query("SELECT * FROM notes WHERE id = :id")
+    suspend fun get(id: Long): Note?
+
+    @Query("SELECT COUNT(*) FROM notes WHERE reviewDueDay IS NOT NULL AND reviewDueDay <= :today")
+    suspend fun dueCount(today: Long): Int
+
     @Insert suspend fun insert(note: Note): Long
     @Update suspend fun update(note: Note)
     @Delete suspend fun delete(note: Note)
@@ -160,7 +166,7 @@ class NotesMigration : AutoMigrationSpec {
         Subject::class, StudySession::class, LearningItem::class, Goal::class, UnlockedMilestone::class,
         CustomCategory::class, Note::class,
     ],
-    version = 5,
+    version = 6,
     exportSchema = true,
     autoMigrations = [
         // v2: custom library categories (new table + categoryId on items and goals).
@@ -171,6 +177,8 @@ class NotesMigration : AutoMigrationSpec {
         AutoMigration(from = 3, to = 4),
         // v5: notes, optionally linked to a library item.
         AutoMigration(from = 4, to = 5, spec = NotesMigration::class),
+        // v6: spaced review on notes.
+        AutoMigration(from = 5, to = 6),
     ],
 )
 abstract class AppDatabase : RoomDatabase() {

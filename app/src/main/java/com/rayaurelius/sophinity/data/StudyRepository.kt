@@ -228,6 +228,17 @@ class StudyRepository(private val db: AppDatabase, val settingsStore: SettingsSt
     }
     suspend fun deleteNote(note: Note) = db.notes().delete(note)
 
+    suspend fun dueNoteCount(today: Long): Int = db.notes().dueCount(today)
+
+    /** Records a review's outcome without touching the note's "edited" date. */
+    suspend fun reviewed(note: Note, remembered: Boolean, today: Long) {
+        val current = db.notes().get(note.id) ?: return
+        db.notes().update(
+            if (remembered) com.rayaurelius.sophinity.domain.Review.remembered(current, today)
+            else com.rayaurelius.sophinity.domain.Review.again(current, today)
+        )
+    }
+
     // --- Goals
     suspend fun saveGoal(goal: Goal): Long =
         if (goal.id == 0L) db.goals().insert(goal) else { db.goals().update(goal); goal.id }

@@ -19,6 +19,11 @@ import kotlinx.coroutines.launch
 class TodayViewModel(private val c: AppContainer) : ViewModel() {
     val snapshot: StateFlow<Snapshot?> = c.snapshot
     val timer: StateFlow<TimerState?> = c.timer.state
+    val notes: StateFlow<List<com.rayaurelius.sophinity.data.db.Note>?> = c.notes
+
+    fun reviewed(note: com.rayaurelius.sophinity.data.db.Note, remembered: Boolean) = viewModelScope.launch {
+        c.repo.reviewed(note, remembered, java.time.LocalDate.now().toEpochDay())
+    }
 
     private val _reflect = MutableStateFlow<StudySession?>(null)
     /** A just-finished session waiting for the person's quick reflection. */
