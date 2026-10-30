@@ -666,6 +666,14 @@
     <string name="position_of_total">%1$s von %2$s</string>
     <string name="share_now_at">Jetzt bei %1$s in %2$s. Timer läuft.</string>
     <string name="share_add_first">Noch nicht in deiner Bibliothek. Füge es hinzu, dann startet der Timer beim Speichern.</string>
+    <string name="complete_action">Als abgeschlossen markieren</string>
+    <string name="complete_title">Als abgeschlossen markieren?</string>
+    <string name="complete_body">%1$s wird zu „Abgeschlossen“ verschoben und %2$s werden deiner Lernzeit hinzugefügt, insgesamt also %3$s.</string>
+    <string name="complete_body_none">%1$s wird zu „Abgeschlossen“ verschoben. Die volle Länge ist schon erfasst, daher wird keine Zeit hinzugefügt.</string>
+    <string name="complete_confirm">Abschließen</string>
+    <string name="complete_session_hint">Fügt dieser Sitzung %1$s hinzu, damit der Eintrag voll zählt.</string>
+    <string name="complete_toast">%1$s abgeschlossen. %2$s zur Lernzeit hinzugefügt.</string>
+    <string name="complete_toast_none">%1$s abgeschlossen.</string>
     <plurals name="count_book">
         <item quantity="one">%d Buch</item>
         <item quantity="other">%d Bücher</item>

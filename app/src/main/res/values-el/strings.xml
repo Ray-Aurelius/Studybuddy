@@ -666,6 +666,14 @@
     <string name="position_of_total">%1$s από %2$s</string>
     <string name="share_now_at">Τώρα στο %1$s του %2$s. Το χρονόμετρο τρέχει.</string>
     <string name="share_add_first">Δεν είναι ακόμα στη βιβλιοθήκη σου. Πρόσθεσέ το και το χρονόμετρο θα ξεκινήσει μόλις το αποθηκεύσεις.</string>
+    <string name="complete_action">Σήμανση ως ολοκληρωμένο</string>
+    <string name="complete_title">Σήμανση ως ολοκληρωμένο;</string>
+    <string name="complete_body">Το %1$s πηγαίνει στα Ολοκληρωμένα και προστίθενται %2$s στον χρόνο μάθησής σου, συνολικά %3$s.</string>
+    <string name="complete_body_none">Το %1$s πηγαίνει στα Ολοκληρωμένα. Έχεις ήδη καταγράψει όλη τη διάρκεια, οπότε δεν προστίθεται χρόνος.</string>
+    <string name="complete_confirm">Ολοκλήρωση</string>
+    <string name="complete_session_hint">Προσθέτει %1$s σε αυτή τη συνεδρία ώστε το στοιχείο να μετρά ολόκληρο.</string>
+    <string name="complete_toast">Το %1$s ολοκληρώθηκε. Προστέθηκαν %2$s στον χρόνο μάθησης.</string>
+    <string name="complete_toast_none">Το %1$s ολοκληρώθηκε.</string>
     <plurals name="count_book">
         <item quantity="one">%d βιβλίο</item>
         <item quantity="other">%d βιβλία</item>

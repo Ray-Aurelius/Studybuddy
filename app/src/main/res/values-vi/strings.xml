@@ -666,6 +666,14 @@
     <string name="position_of_total">%1$s / %2$s</string>
     <string name="share_now_at">Đang ở %1$s trong %2$s. Đang hẹn giờ.</string>
     <string name="share_add_first">Chưa có trong thư viện. Hãy thêm vào, hẹn giờ sẽ bắt đầu khi lưu.</string>
+    <string name="complete_action">Đánh dấu đã hoàn thành</string>
+    <string name="complete_title">Đánh dấu đã hoàn thành?</string>
+    <string name="complete_body">%1$s chuyển sang Đã xong và %2$s được cộng vào thời gian học, tổng cộng %3$s.</string>
+    <string name="complete_body_none">%1$s chuyển sang Đã xong. Bạn đã ghi đủ thời lượng nên không cộng thêm thời gian.</string>
+    <string name="complete_confirm">Hoàn thành</string>
+    <string name="complete_session_hint">Cộng %1$s vào phiên này để mục được tính trọn vẹn.</string>
+    <string name="complete_toast">Đã hoàn thành %1$s. Đã cộng %2$s vào thời gian học.</string>
+    <string name="complete_toast_none">Đã hoàn thành %1$s.</string>
     <plurals name="count_book">
         <item quantity="other">%d cuốn sách</item>
     </plurals>

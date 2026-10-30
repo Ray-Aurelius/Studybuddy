@@ -47,6 +47,7 @@ import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.TaskAlt
 import androidx.compose.material.icons.outlined.EditCalendar
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.AlertDialog
@@ -450,6 +451,22 @@ private fun TimerCard(snap: Snapshot, timer: TimerState, vm: TodayViewModel, add
                             Text(stringResource(R.string.timer_stop_save), maxLines = 2, textAlign = TextAlign.Center, autoSize = autoSize)
                         }
                     }
+                    // Finished the video or audiobook? Count all of it, not just what the timer caught.
+                    val completable = timedItem?.takeIf { it.status != ItemStatus.DONE }
+                    val credit = completable?.let { com.rayaurelius.sophinity.domain.MediaTime.creditToCompleteSec(it, snap.secondsForItem(it.id), elapsed / 1000) }
+                    if (completable != null && credit != null) {
+                        var confirmComplete by remember { mutableStateOf(false) }
+                        Spacer(Modifier.height(4.dp))
+                        TextButton(onClick = { confirmComplete = true }, modifier = Modifier.fillMaxWidth().testTag("timer_complete")) {
+                            Icon(Icons.Default.TaskAlt, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp))
+                            Text(stringResource(R.string.complete_action))
+                        }
+                        if (confirmComplete) com.rayaurelius.sophinity.ui.components.CompleteDialog(
+                            completable.title, credit, completable.runtimeMin!! * 60L,
+                            onConfirm = { confirmComplete = false; vm.finishCompleted() },
+                            onDismiss = { confirmComplete = false },
+                        )
+                    }
                     if (confirmDiscard) AlertDialog(
                         onDismissRequest = { confirmDiscard = false },
                         title = { Text(stringResource(R.string.timer_discard_title)) },
@@ -563,6 +580,23 @@ private fun ContinueLearning(snap: Snapshot, timer: TimerState, vm: TodayViewMod
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             GlyphTile(snap.categoryOf(item).glyph, size = 36.dp, fallback = Glyphs.CATEGORY_DEFAULT)
                             Spacer(Modifier.weight(1f))
+                            val credit = com.rayaurelius.sophinity.domain.MediaTime.creditToCompleteSec(item, snap.secondsForItem(item.id))
+                            if (credit != null) {
+                                var confirmComplete by remember { mutableStateOf(false) }
+                                val ctx = androidx.compose.ui.platform.LocalContext.current
+                                val res = androidx.compose.ui.platform.LocalResources.current
+                                IconButton(onClick = { confirmComplete = true }, modifier = Modifier.size(36.dp)) {
+                                    Icon(Icons.Default.TaskAlt, stringResource(R.string.complete_action), tint = MaterialTheme.colorScheme.primary)
+                                }
+                                if (confirmComplete) com.rayaurelius.sophinity.ui.components.CompleteDialog(
+                                    item.title, credit, item.runtimeMin!! * 60L,
+                                    onConfirm = {
+                                        confirmComplete = false
+                                        vm.completeItem(item.id) { added -> if (added >= 0) android.widget.Toast.makeText(ctx, completedMessage(res, item.title, added), android.widget.Toast.LENGTH_SHORT).show() }
+                                    },
+                                    onDismiss = { confirmComplete = false },
+                                )
+                            }
                             if (com.rayaurelius.sophinity.domain.Links.isOpenable(item.url)) {
                                 val openLink = com.rayaurelius.sophinity.ui.components.rememberItemLinkOpener()
                                 IconButton(onClick = { openLink(item) }, modifier = Modifier.size(36.dp)) {
@@ -894,3 +928,8 @@ private fun PositionSheet(title: String, currentSec: Long, totalSec: Long, onDis
         }
     }
 }
+
+/** "Completed. 21m added to your time learned." */
+fun completedMessage(res: android.content.res.Resources, title: String, addedSec: Long): String =
+    if (addedSec > 0) res.getString(R.string.complete_toast, title, StudyMath.formatDuration(addedSec))
+    else res.getString(R.string.complete_toast_none, title)

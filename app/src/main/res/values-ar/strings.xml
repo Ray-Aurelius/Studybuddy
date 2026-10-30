@@ -666,6 +666,14 @@
     <string name="position_of_total">%1$s من %2$s</string>
     <string name="share_now_at">الآن عند %1$s في %2$s. المؤقت يعمل.</string>
     <string name="share_add_first">ليس في مكتبتك بعد. أضفه وسيبدأ المؤقت عند الحفظ.</string>
+    <string name="complete_action">وضع علامة مكتمل</string>
+    <string name="complete_title">وضع علامة مكتمل؟</string>
+    <string name="complete_body">سينتقل %1$s إلى المكتملة، وستُضاف %2$s إلى وقت تعلّمك ليُحتسب %3$s إجمالًا.</string>
+    <string name="complete_body_none">سينتقل %1$s إلى المكتملة. سجّلت مدته كاملة بالفعل، لذا لن يُضاف وقت.</string>
+    <string name="complete_confirm">إكمال</string>
+    <string name="complete_session_hint">يضيف %1$s إلى هذه الجلسة ليُحتسب العنصر كاملًا.</string>
+    <string name="complete_toast">اكتمل %1$s. أُضيفت %2$s إلى وقت تعلّمك.</string>
+    <string name="complete_toast_none">اكتمل %1$s.</string>
     <plurals name="count_book">
         <item quantity="zero">لا كتب</item>
         <item quantity="one">كتاب واحد</item>

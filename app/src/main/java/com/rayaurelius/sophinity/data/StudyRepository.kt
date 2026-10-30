@@ -153,6 +153,43 @@ class StudyRepository(private val db: AppDatabase, val settingsStore: SettingsSt
         return updated
     }
 
+    suspend fun getItem(id: Long): LearningItem? = db.items().get(id)
+    suspend fun secondsForItem(itemId: Long): Long = db.sessions().secondsForItem(itemId)
+
+    /** The item moved to Finished (keeping any earlier dates). */
+    fun finished(item: LearningItem, now: Long = System.currentTimeMillis()) = item.copy(
+        status = ItemStatus.DONE, completedAt = item.completedAt ?: now, startedAt = item.startedAt ?: now,
+        progressUnits = item.totalUnits ?: item.progressUnits,
+    )
+
+    /**
+     * "Mark as completed" from the library: logs the rest of the item's length as a session ending
+     * now, so it counts in full, and moves it to Finished. Returns the seconds credited.
+     */
+    suspend fun completeItem(itemId: Long, now: Long = System.currentTimeMillis()): Long = db.withTransaction {
+        val item = db.items().get(itemId) ?: return@withTransaction 0L
+        val credit = com.rayaurelius.sophinity.domain.MediaTime.creditToCompleteSec(item, db.sessions().secondsForItem(itemId)) ?: 0L
+        if (credit > 0) db.sessions().insert(
+            StudySession(subjectId = item.subjectId, itemId = itemId, startedAt = now - credit * 1000, durationSec = credit,
+                source = com.rayaurelius.sophinity.data.db.SessionSource.MANUAL)
+        )
+        db.items().update(finished(item, now))
+        credit
+    }
+
+    /**
+     * "Mark as completed" on a logged session: that session is stretched to cover the rest of its
+     * item's length, and the item moves to Finished. Returns the seconds credited.
+     */
+    suspend fun completeFromSession(sessionId: Long, now: Long = System.currentTimeMillis()): Long = db.withTransaction {
+        val session = db.sessions().get(sessionId) ?: return@withTransaction 0L
+        val item = session.itemId?.let { db.items().get(it) } ?: return@withTransaction 0L
+        val credit = com.rayaurelius.sophinity.domain.MediaTime.creditToCompleteSec(item, db.sessions().secondsForItem(item.id)) ?: 0L
+        if (credit > 0) db.sessions().update(session.copy(durationSec = session.durationSec + credit))
+        db.items().update(finished(item, now))
+        credit
+    }
+
     /** The library item a shared link is for (same video, episode or page), if any. */
     suspend fun itemForLink(url: String): LearningItem? {
         val key = com.rayaurelius.sophinity.domain.Links.mediaKey(url)

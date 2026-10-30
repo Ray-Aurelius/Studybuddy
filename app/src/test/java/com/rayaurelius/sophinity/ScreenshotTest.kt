@@ -279,6 +279,24 @@ class ScreenshotTest {
         org.junit.Assert.assertEquals(item.id, runBlocking { app.container.timer.current() }.itemId)
     }
 
+    @Test fun markAsCompletedFromTheTimer() {
+        val app = ApplicationProvider.getApplicationContext<SophinityApp>()
+        runBlocking { app.container.timer.start(com.rayaurelius.sophinity.timer.TimerMode.STOPWATCH, null, audiobookId) }
+        compose.mainClock.advanceTimeBy(1_000)
+        compose.onNode(hasTestTag("timer_complete")).performScrollTo().performClick()
+        compose.waitForIdle()
+        // 9h 30m audiobook with 2h logged: 7h 30m is added (less the second or two just timed).
+        compose.onNode(hasText("Mark as completed?")).assertExists()
+        compose.onNode(hasText("counts as 9h 30m in total", substring = true)).assertExists()
+        shot("32_mark_completed")
+        compose.onNode(hasText("Complete")).performClick()
+        // Saving runs off the main thread; let it settle (up to 5 s) rather than guess a fixed wait.
+        repeat(50) { if (!runBlocking { app.container.timer.current() }.isActive) return@repeat; compose.waitForIdle(); Thread.sleep(100) }
+        compose.waitForIdle()
+        org.junit.Assert.assertFalse(runBlocking { app.container.timer.current() }.isActive)
+        org.junit.Assert.assertEquals(9 * 3600L + 30 * 60, runBlocking { app.container.repo.secondsForItem(audiobookId) })
+    }
+
     @Test fun anUntouchedEditorStillSwipesAway() {
         compose.onNode(hasText("Add to library")).performClick()
         compose.waitForIdle()

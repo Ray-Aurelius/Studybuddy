@@ -666,6 +666,14 @@
     <string name="position_of_total">%1$s van %2$s</string>
     <string name="share_now_at">Nu bij %1$s in %2$s. Timer loopt.</string>
     <string name="share_add_first">Nog niet in je bibliotheek. Voeg het toe en de timer start bij opslaan.</string>
+    <string name="complete_action">Markeren als voltooid</string>
+    <string name="complete_title">Markeren als voltooid?</string>
+    <string name="complete_body">%1$s gaat naar Voltooid en %2$s wordt opgeteld bij je leertijd, zodat het in totaal %3$s telt.</string>
+    <string name="complete_body_none">%1$s gaat naar Voltooid. De volledige duur is al geregistreerd, dus er komt geen tijd bij.</string>
+    <string name="complete_confirm">Voltooien</string>
+    <string name="complete_session_hint">Telt %1$s op bij deze sessie zodat het item volledig meetelt.</string>
+    <string name="complete_toast">%1$s voltooid. %2$s opgeteld bij je leertijd.</string>
+    <string name="complete_toast_none">%1$s voltooid.</string>
     <plurals name="count_book">
         <item quantity="one">%d boek</item>
         <item quantity="other">%d boeken</item>

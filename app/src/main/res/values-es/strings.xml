@@ -666,6 +666,14 @@
     <string name="position_of_total">%1$s de %2$s</string>
     <string name="share_now_at">Ahora en %1$s de %2$s. Temporizador en marcha.</string>
     <string name="share_add_first">Aún no está en tu biblioteca. Añádelo y el temporizador empezará al guardar.</string>
+    <string name="complete_action">Marcar como completado</string>
+    <string name="complete_title">¿Marcar como completado?</string>
+    <string name="complete_body">%1$s pasa a Terminados y se suman %2$s a tu tiempo de aprendizaje, así cuenta como %3$s en total.</string>
+    <string name="complete_body_none">%1$s pasa a Terminados. Ya registraste toda su duración, así que no se suma tiempo.</string>
+    <string name="complete_confirm">Completar</string>
+    <string name="complete_session_hint">Suma %1$s a esta sesión para que el elemento cuente completo.</string>
+    <string name="complete_toast">%1$s completado. Se sumaron %2$s a tu tiempo de aprendizaje.</string>
+    <string name="complete_toast_none">%1$s completado.</string>
     <plurals name="count_book">
         <item quantity="one">%d libro</item>
         <item quantity="many">%d de libros</item>

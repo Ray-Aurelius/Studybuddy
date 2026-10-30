@@ -67,6 +67,19 @@ class TodayViewModel(private val c: AppContainer) : ViewModel() {
 
     fun startOn(itemId: Long, subjectId: Long?) = viewModelScope.launch { c.timer.startForLink(itemId, subjectId) }
 
+    /** Stop the timer and count the rest of the item's length; the reflection follows as usual. */
+    fun finishCompleted() = viewModelScope.launch {
+        c.timer.finishCompleted()?.let { _reflect.value = c.repo.getSession(it) }
+    }
+
+    /** "Mark as completed" from a Continue card: credit the rest of the item and move it to Finished. */
+    fun completeItem(itemId: Long, onDone: (Long) -> Unit) = viewModelScope.launch {
+        // If it's the one being timed, end that session first so its time is kept.
+        val t = c.timer.current()
+        if (t.isActive && t.itemId == itemId) { c.timer.finishCompleted()?.let { _reflect.value = c.repo.getSession(it) }; onDone(-1); return@launch }
+        onDone(c.repo.completeItem(itemId))
+    }
+
     fun finish() = viewModelScope.launch {
         c.timer.finish()?.let { _reflect.value = c.repo.getSession(it) }
     }

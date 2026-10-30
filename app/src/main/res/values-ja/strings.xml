@@ -666,6 +666,14 @@
     <string name="position_of_total">%1$s / %2$s</string>
     <string name="share_now_at">%2$sの%1$sから。タイマー作動中。</string>
     <string name="share_add_first">まだライブラリにありません。追加すると、保存時にタイマーが始まります。</string>
+    <string name="complete_action">完了にする</string>
+    <string name="complete_title">完了にしますか？</string>
+    <string name="complete_body">%1$sを完了済みに移し、学習時間に%2$sを追加して合計%3$sにします。</string>
+    <string name="complete_body_none">%1$sを完了済みに移します。全体の長さはすでに記録済みなので、時間は追加されません。</string>
+    <string name="complete_confirm">完了</string>
+    <string name="complete_session_hint">このセッションに%1$sを追加し、項目全体を計上します。</string>
+    <string name="complete_toast">%1$sを完了しました。学習時間に%2$sを追加しました。</string>
+    <string name="complete_toast_none">%1$sを完了しました。</string>
     <plurals name="count_book">
         <item quantity="other">%d冊の本</item>
     </plurals>

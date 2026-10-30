@@ -666,6 +666,14 @@
     <string name="position_of_total">%1$s / %2$s</string>
     <string name="share_now_at">Şimdi %2$s içinde %1$s. Zamanlayıcı çalışıyor.</string>
     <string name="share_add_first">Henüz kitaplığında değil. Ekle, kaydettiğinde zamanlayıcı başlasın.</string>
+    <string name="complete_action">Tamamlandı olarak işaretle</string>
+    <string name="complete_title">Tamamlandı olarak işaretlensin mi?</string>
+    <string name="complete_body">%1$s Bitenler\'e taşınır ve öğrenme sürene %2$s eklenir; toplamda %3$s sayılır.</string>
+    <string name="complete_body_none">%1$s Bitenler\'e taşınır. Tüm süresini zaten kaydettin, bu yüzden süre eklenmez.</string>
+    <string name="complete_confirm">Tamamla</string>
+    <string name="complete_session_hint">Öğe tam sayılsın diye bu oturuma %1$s ekler.</string>
+    <string name="complete_toast">%1$s tamamlandı. Öğrenme süresine %2$s eklendi.</string>
+    <string name="complete_toast_none">%1$s tamamlandı.</string>
     <plurals name="count_book">
         <item quantity="one">%d kitap</item>
         <item quantity="other">%d kitap</item>

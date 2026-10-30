@@ -33,6 +33,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.filled.TaskAlt
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -91,6 +93,11 @@ import java.time.LocalDate
 class SessionsViewModel(private val c: AppContainer) : ViewModel() {
     val snapshot = c.repo.snapshot.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
     fun delete(s: StudySession) = viewModelScope.launch { c.repo.deleteSession(s) }
+    /** Saves the edits, then stretches the session to cover the rest of its item and finishes the item. */
+    fun complete(s: StudySession, onDone: (Long) -> Unit) = viewModelScope.launch {
+        c.repo.updateSession(s)
+        onDone(c.repo.completeFromSession(s.id))
+    }
     fun update(s: StudySession) = viewModelScope.launch { c.repo.updateSession(s) }
     fun addManual(subjectId: Long?, itemId: Long?, startedAt: Long, minutes: Int, note: String) = viewModelScope.launch {
         if (minutes <= 0) return@launch
@@ -187,10 +194,17 @@ fun SessionsScreen(contentPadding: PaddingValues) {
     }
 
     editing?.let { s ->
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        val res = androidx.compose.ui.platform.LocalResources.current
         SessionEditor(
             snap, s, onDismiss = { editing = null },
             onSave = { vm.update(it); editing = null },
             onDelete = { editing = null; confirmDelete = s },
+            onComplete = { done ->
+                val title = done.itemId?.let { snap.itemsById[it]?.title }.orEmpty()
+                vm.complete(done) { added -> android.widget.Toast.makeText(ctx, com.rayaurelius.sophinity.ui.today.completedMessage(res, title, added), android.widget.Toast.LENGTH_SHORT).show() }
+                editing = null
+            },
         )
     }
     confirmDelete?.let { s -> DeleteDialog(snap, s, onConfirm = { vm.delete(s); confirmDelete = null }, onDismiss = { confirmDelete = null }) }
@@ -315,7 +329,10 @@ private fun DeleteDialog(snap: Snapshot, s: StudySession, onConfirm: () -> Unit,
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SessionEditor(snap: Snapshot, initial: StudySession, onDismiss: () -> Unit, onSave: (StudySession) -> Unit, onDelete: () -> Unit) {
+private fun SessionEditor(
+    snap: Snapshot, initial: StudySession, onDismiss: () -> Unit, onSave: (StudySession) -> Unit, onDelete: () -> Unit,
+    onComplete: (StudySession) -> Unit,
+) {
     var s by remember { mutableStateOf(initial) }
     val time = Instant.ofEpochMilli(s.startedAt).atZone(snap.zone)
     com.rayaurelius.sophinity.ui.components.EditorSheet(dirty = s != remember { initial }, onDismiss = onDismiss) {
@@ -335,6 +352,24 @@ private fun SessionEditor(snap: Snapshot, initial: StudySession, onDismiss: () -
                 s = s.copy(itemId = id, subjectId = s.subjectId ?: item?.subjectId)
             }
             Text(stringResource(R.string.sessions_link_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            // Finished that video or audiobook? Stretch this session to count all of it.
+            val linked = s.itemId?.let { snap.itemsById[it] }
+            val alreadyLogged = linked?.let { snap.secondsForItem(it.id) + if (initial.itemId != it.id) s.durationSec else 0 } ?: 0
+            val credit = linked?.let { com.rayaurelius.sophinity.domain.MediaTime.creditToCompleteSec(it, alreadyLogged) }
+            if (linked != null && credit != null && (credit > 0 || linked.status != ItemStatus.DONE)) {
+                var confirmComplete by remember { mutableStateOf(false) }
+                androidx.compose.material3.OutlinedButton(onClick = { confirmComplete = true }, modifier = Modifier.fillMaxWidth()) {
+                    Icon(Icons.Default.TaskAlt, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.complete_action))
+                }
+                if (credit > 0) Text(stringResource(R.string.complete_session_hint, StudyMath.formatDuration(credit)),
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                if (confirmComplete) com.rayaurelius.sophinity.ui.components.CompleteDialog(
+                    linked.title, credit, linked.runtimeMin!! * 60L,
+                    onConfirm = { confirmComplete = false; onComplete(s.copy(note = s.note.trim())) },
+                    onDismiss = { confirmComplete = false },
+                )
+            }
             SubjectPicker(snap.activeSubjects, s.subjectId, { s = s.copy(subjectId = it) })
             Text(stringResource(R.string.reflect_focus_q), style = MaterialTheme.typography.titleSmall)
             FocusRating(s.focus) { s = s.copy(focus = it) }

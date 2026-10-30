@@ -666,6 +666,14 @@
     <string name="position_of_total">%1$s з %2$s</string>
     <string name="share_now_at">Зараз %1$s у «%2$s». Таймер працює.</string>
     <string name="share_add_first">Цього ще немає в бібліотеці. Додайте, і таймер запуститься під час збереження.</string>
+    <string name="complete_action">Позначити як завершене</string>
+    <string name="complete_title">Позначити як завершене?</string>
+    <string name="complete_body">«%1$s» перейде до «Завершених», а до часу навчання додасться %2$s — усього %3$s.</string>
+    <string name="complete_body_none">«%1$s» перейде до «Завершених». Усю тривалість уже записано, тож час не додається.</string>
+    <string name="complete_confirm">Завершити</string>
+    <string name="complete_session_hint">Додає %1$s до цієї сесії, щоб елемент зарахувався повністю.</string>
+    <string name="complete_toast">«%1$s» завершено. Додано %2$s до часу навчання.</string>
+    <string name="complete_toast_none">«%1$s» завершено.</string>
     <plurals name="count_book">
         <item quantity="one">%d книга</item>
         <item quantity="few">%d книги</item>

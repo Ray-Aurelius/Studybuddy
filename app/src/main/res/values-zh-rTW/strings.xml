@@ -666,6 +666,14 @@
     <string name="position_of_total">%1$s / %2$s</string>
     <string name="share_now_at">現在在「%2$s」的 %1$s。計時中。</string>
     <string name="share_add_first">還不在資料庫中。新增後，儲存時會開始計時。</string>
+    <string name="complete_action">標記為已完成</string>
+    <string name="complete_title">標記為已完成？</string>
+    <string name="complete_body">「%1$s」將移到已完成，並在學習時間中加上 %2$s，總計 %3$s。</string>
+    <string name="complete_body_none">「%1$s」將移到已完成。你已記錄了全部時長，因此不會增加時間。</string>
+    <string name="complete_confirm">完成</string>
+    <string name="complete_session_hint">為這段學習加上 %1$s，使該項目完整計入。</string>
+    <string name="complete_toast">已完成「%1$s」。學習時間增加了 %2$s。</string>
+    <string name="complete_toast_none">已完成「%1$s」。</string>
     <plurals name="count_book">
         <item quantity="other">%d 本書</item>
     </plurals>

@@ -195,6 +195,25 @@ class TimerController(
     /** Ends the session and saves it immediately (so nothing is lost). Returns the new session id. */
     suspend fun finish(): Long? = mutex.withLock { finishLocked() }
 
+    /**
+     * "Mark as completed" while timing: ends the session and stretches it to cover the rest of the
+     * item's length (so the item counts in full), then moves the item to Finished. Returns the
+     * session id, or null if nothing was running.
+     */
+    suspend fun finishCompleted(): Long? = mutex.withLock {
+        val s = current()
+        if (!s.isActive) return@withLock null
+        val item = s.itemId?.let { repo.getItem(it) } ?: return@withLock finishLocked()
+        val elapsedSec = s.elapsedMs() / 1000
+        val credit = com.rayaurelius.sophinity.domain.MediaTime.creditToCompleteSec(item, repo.secondsForItem(item.id), elapsedSec) ?: 0
+        save(TimerState())
+        val id = if (elapsedSec + credit > 0) repo.addSession(
+            StudySession(subjectId = s.subjectId, itemId = item.id, startedAt = s.startedAt, durationSec = elapsedSec + credit, source = SessionSource.TIMER)
+        ) else null
+        repo.saveItem(repo.finished(item))
+        id
+    }
+
     private suspend fun finishLocked(): Long? {
         val s = current()
         if (!s.isActive) return null

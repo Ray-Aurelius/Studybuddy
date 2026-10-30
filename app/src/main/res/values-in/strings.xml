@@ -666,6 +666,14 @@
     <string name="position_of_total">%1$s dari %2$s</string>
     <string name="share_now_at">Sekarang di %1$s pada %2$s. Timer berjalan.</string>
     <string name="share_add_first">Belum ada di pustakamu. Tambahkan, dan timer mulai saat disimpan.</string>
+    <string name="complete_action">Tandai selesai</string>
+    <string name="complete_title">Tandai selesai?</string>
+    <string name="complete_body">%1$s pindah ke Selesai, dan %2$s ditambahkan ke waktu belajarmu sehingga totalnya %3$s.</string>
+    <string name="complete_body_none">%1$s pindah ke Selesai. Durasi penuhnya sudah tercatat, jadi tidak ada waktu yang ditambahkan.</string>
+    <string name="complete_confirm">Selesaikan</string>
+    <string name="complete_session_hint">Menambahkan %1$s ke sesi ini agar item dihitung penuh.</string>
+    <string name="complete_toast">%1$s selesai. %2$s ditambahkan ke waktu belajarmu.</string>
+    <string name="complete_toast_none">%1$s selesai.</string>
     <plurals name="count_book">
         <item quantity="other">%d buku</item>
     </plurals>

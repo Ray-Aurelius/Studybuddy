@@ -53,4 +53,14 @@ object MediaTime {
         val speed = item.playbackSpeed.takeIf { it > 0f } ?: 1f
         return (positionSec - ((loggedSec + liveSec) * speed).roundToLong()).coerceAtLeast(0)
     }
+
+    /**
+     * Marking an item completed credits its full length: the study time still needed for the item
+     * to total its run time, whatever the playback speed (a 41-minute video counts as 41 minutes).
+     * Time already logged, or running now ([liveSec]), is not counted twice. Null without a run time.
+     */
+    fun creditToCompleteSec(item: LearningItem, loggedSec: Long, liveSec: Long = 0): Long? {
+        val runtime = item.runtimeMin?.takeIf { it > 0 } ?: return null
+        return (runtime * 60L - loggedSec - liveSec).coerceAtLeast(0)
+    }
 }

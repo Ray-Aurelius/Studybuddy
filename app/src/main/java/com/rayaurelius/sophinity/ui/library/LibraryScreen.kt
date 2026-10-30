@@ -36,6 +36,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.TaskAlt
 import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AssistChip
@@ -90,6 +91,15 @@ import kotlinx.coroutines.launch
 
 class LibraryViewModel(private val c: AppContainer) : ViewModel() {
     val snapshot = c.repo.snapshot.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+    /** Keeps any edits, then credits the rest of the item's length and moves it to Finished. */
+    fun saveAndComplete(item: LearningItem, onDone: (Long) -> Unit = {}) = viewModelScope.launch {
+        c.repo.saveItem(item.copy(url = com.rayaurelius.sophinity.domain.Links.normalize(item.url)))
+        // If it's the one on the timer, end that session (its time is kept) before completing.
+        val t = c.timer.current()
+        if (t.isActive && t.itemId == item.id) { c.timer.finishCompleted(); onDone(-1); return@launch }
+        onDone(c.repo.completeItem(item.id))
+    }
+
     fun save(item: LearningItem, onSaved: (Long) -> Unit = {}) = viewModelScope.launch {
         val now = System.currentTimeMillis()
         val fixed = item.copy(
@@ -176,6 +186,8 @@ fun LibraryScreen(contentPadding: PaddingValues) {
         )
     }
 
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val res = androidx.compose.ui.platform.LocalResources.current
     editing?.let { item ->
         ItemEditorSheet(
             snap, item,
@@ -183,6 +195,12 @@ fun LibraryScreen(contentPadding: PaddingValues) {
             onSave = { vm.save(it); editing = null },
             onDelete = { vm.delete(it); editing = null },
             onCreateCategory = { cat, picked -> vm.saveCategory(cat, picked) },
+            onComplete = { done ->
+                vm.saveAndComplete(done) { added ->
+                    if (added >= 0) android.widget.Toast.makeText(ctx, com.rayaurelius.sophinity.ui.today.completedMessage(res, done.title, added), android.widget.Toast.LENGTH_SHORT).show()
+                }
+                editing = null
+            },
         )
     }
     if (newCategory) {
@@ -269,6 +287,8 @@ fun ItemEditorSheet(
     onCreateCategory: (CustomCategory, (Long) -> Unit) -> Unit,
     /** Look up the link it opens with (a link shared from another app) rather than only one typed here. */
     lookUpInitialLink: Boolean = false,
+    /** Saves the edits, credits the rest of the item's length and moves it to Finished. */
+    onComplete: ((LearningItem) -> Unit)? = null,
 ) {
     var item by remember { mutableStateOf(initial) }
     var newCategory by remember { mutableStateOf(false) }
@@ -385,6 +405,21 @@ fun ItemEditorSheet(
                 )
             }
             com.rayaurelius.sophinity.ui.notes.ItemNotesSection(snap, initial.id)
+            // Finished it? Count the whole thing, not only what was timed.
+            val credit = if (isNew || onComplete == null || item.status == ItemStatus.DONE) null
+                else com.rayaurelius.sophinity.domain.MediaTime.creditToCompleteSec(item, snap.secondsForItem(item.id))
+            if (credit != null) {
+                var confirmComplete by remember { mutableStateOf(false) }
+                androidx.compose.material3.OutlinedButton(onClick = { confirmComplete = true }, modifier = Modifier.fillMaxWidth()) {
+                    Icon(Icons.Default.TaskAlt, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.complete_action))
+                }
+                if (confirmComplete) com.rayaurelius.sophinity.ui.components.CompleteDialog(
+                    item.title, credit, item.runtimeMin!! * 60L,
+                    onConfirm = { confirmComplete = false; onComplete!!(withLinkTime(item.copy(title = item.title.trim(), creator = item.creator.trim()), startUrl, snap)) },
+                    onDismiss = { confirmComplete = false },
+                )
+            }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (!isNew) TextButton(onClick = { onDelete(initial) }) { Text(stringResource(R.string.common_delete), color = MaterialTheme.colorScheme.error) }
                 Spacer(Modifier.weight(1f))

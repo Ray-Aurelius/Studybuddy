@@ -666,6 +666,14 @@
     <string name="position_of_total">%1$s / %2$s</string>
     <string name="share_now_at">지금 %2$s의 %1$s. 타이머 작동 중.</string>
     <string name="share_add_first">아직 라이브러리에 없어요. 추가하면 저장할 때 타이머가 시작돼요.</string>
+    <string name="complete_action">완료로 표시</string>
+    <string name="complete_title">완료로 표시할까요?</string>
+    <string name="complete_body">%1$s이(가) 완료로 이동하고 학습 시간에 %2$s이 추가되어 총 %3$s로 계산돼요.</string>
+    <string name="complete_body_none">%1$s이(가) 완료로 이동해요. 전체 길이를 이미 기록해서 시간은 추가되지 않아요.</string>
+    <string name="complete_confirm">완료</string>
+    <string name="complete_session_hint">항목 전체가 계산되도록 이 세션에 %1$s을 추가해요.</string>
+    <string name="complete_toast">%1$s 완료. 학습 시간에 %2$s을 추가했어요.</string>
+    <string name="complete_toast_none">%1$s 완료.</string>
     <plurals name="count_book">
         <item quantity="other">책 %d권</item>
     </plurals>

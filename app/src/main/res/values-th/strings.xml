@@ -666,6 +666,14 @@
     <string name="position_of_total">%1$s จาก %2$s</string>
     <string name="share_now_at">ตอนนี้อยู่ที่ %1$s ใน %2$s กำลังจับเวลา</string>
     <string name="share_add_first">ยังไม่มีในคลังของคุณ เพิ่มเลย แล้วจะเริ่มจับเวลาเมื่อบันทึก</string>
+    <string name="complete_action">ทำเครื่องหมายว่าเสร็จแล้ว</string>
+    <string name="complete_title">ทำเครื่องหมายว่าเสร็จแล้วไหม</string>
+    <string name="complete_body">%1$s จะย้ายไปที่ เสร็จแล้ว และจะเพิ่ม %2$s ลงในเวลาเรียน รวมเป็น %3$s</string>
+    <string name="complete_body_none">%1$s จะย้ายไปที่ เสร็จแล้ว คุณบันทึกความยาวครบแล้ว จึงไม่เพิ่มเวลา</string>
+    <string name="complete_confirm">เสร็จสิ้น</string>
+    <string name="complete_session_hint">เพิ่ม %1$s ให้เซสชันนี้เพื่อให้นับรายการเต็ม</string>
+    <string name="complete_toast">%1$s เสร็จแล้ว เพิ่ม %2$s ลงในเวลาเรียน</string>
+    <string name="complete_toast_none">%1$s เสร็จแล้ว</string>
     <plurals name="count_book">
         <item quantity="other">หนังสือ %d เล่ม</item>
     </plurals>
